@@ -69,9 +69,49 @@ RSpec.describe "Support provider schools" do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("St Joseph")
       expect(response.body).to include("Catholic Primary School")
-      expect(response.body).to include("School code")
-      expect(response.body).to include("112992")
-      expect(response.body).to include("1 School Lane")
+      expect(response.body).to include("1 School Lane, Leeds, LS1 1AA")
+      expect(response.body).to include("School code: A")
+      expect(response.body).to include("URN: 112992")
+      expect(response.body).to include("This school is not attached to any courses.")
+      expect(response.body).to include("Remove St Joseph")
+      expect(response.body).to include("Catholic Primary School from your account")
+      expect(response.body).not_to include("govuk-summary-list")
+      expect(response.body).not_to include("govuk-table")
+    end
+
+    it "lists attached courses with their information and status" do
+      course = create(
+        :course,
+        :published_postgraduate,
+        provider:,
+        name: "Biology",
+        course_code: "B123",
+        start_date: Time.zone.local(recruitment_cycle.year.to_i, 9, 1),
+      )
+      create(:course_school, course:, provider_school:, gias_school:)
+      create(
+        :course,
+        :published_postgraduate,
+        provider:,
+        name: "History",
+        course_code: "H100",
+      )
+
+      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Biology (B123)")
+      expect(response.body).to include("Course information")
+      expect(response.body).to include("Fee-paying")
+      expect(response.body).to include("QTS with PGCE")
+      expect(response.body).to include("Full time")
+      expect(response.body).to include("September #{recruitment_cycle.year}")
+      expect(response.parsed_body.at_css(".govuk-tag")).to be_present
+      expect(response.body).to include(
+        publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, "B123"),
+      )
+      expect(response.body).not_to include("History (H100)")
+      expect(response.body).not_to include("This school is not attached to any courses.")
     end
 
     it "returns not found for another provider's school" do

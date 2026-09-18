@@ -15,6 +15,7 @@ module Support
       end
 
       def show
+        @school_courses = Publish::Courses::Query.call(provider:, school:).map(&:decorate)
         render locals: { school: }
       end
 
