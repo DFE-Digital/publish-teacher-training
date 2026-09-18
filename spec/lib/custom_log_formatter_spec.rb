@@ -19,16 +19,47 @@ RSpec.describe CustomLogFormatter do
     )
   end
 
-  it "redacts Solid Queue job arguments" do
-    log.message = "Performed TestJob::DispatcherCanaryJob"
-    log.payload = {
-      job_class: "TestJob::DispatcherCanaryJob",
-      adapter: "SolidQueue",
-      arguments: [{ email: "secret@example.com", token: "abc" }],
-    }
+  describe "Solid Queue argument redaction" do
+    # Keys covered by filter_parameters and Mission Control's extra argument names.
+    {
+      email: "secret@example.com",
+      email_address: "secret@example.com",
+      token: "abc",
+      password: "s3cret",
+      secret: "shh",
+      first_name: "Sam",
+      last_name: "Johnson",
+      code: "magic-link",
+      data: { nested: true },
+      body: "mail body",
+      hidden_data: "x",
+      headers: { "Authorization" => "Bearer x" },
+    }.each do |key, value|
+      it "redacts #{key} and leaves non-sensitive args" do
+        log.message = "Performed TestJob::DispatcherCanaryJob"
+        log.payload = {
+          job_class: "TestJob::DispatcherCanaryJob",
+          adapter: "SolidQueue",
+          arguments: [{ key => value, course_id: 123 }],
+        }
 
-    expect(log_hash[:payload][:arguments]).to eq("[REDACTED]")
-    expect(log_hash[:payload][:job_class]).to eq("TestJob::DispatcherCanaryJob")
+        expect(log_hash[:payload][:arguments]).to eq(
+          [{ key => "[REDACTED]", course_id: 123 }],
+        )
+        expect(log_hash[:payload][:job_class]).to eq("TestJob::DispatcherCanaryJob")
+      end
+    end
+
+    it "leaves wholly non-sensitive arguments unredacted" do
+      log.message = "Performed UpdateCourseSchoolsJob"
+      log.payload = {
+        job_class: "UpdateCourseSchoolsJob",
+        adapter: "SolidQueue",
+        arguments: [42, %w[uuid-1 uuid-2]],
+      }
+
+      expect(log_hash[:payload][:arguments]).to eq([42, %w[uuid-1 uuid-2]])
+    end
   end
 
   it "does not redact arguments for non-Solid Queue adapters" do
