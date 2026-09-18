@@ -72,10 +72,16 @@ RSpec.describe "Support provider schools" do
       expect(response.body).to include("1 School Lane, Leeds, LS1 1AA")
       expect(response.body).to include("School code: A")
       expect(response.body).to include("URN: 112992")
-      expect(response.body).to include("This school is not attached to any courses.")
       expect(response.body).to include("Remove St Joseph")
       expect(response.body).to include("Catholic Primary School from your account")
       expect(response.body).not_to include("govuk-summary-list")
+    end
+
+    it "shows the no-courses message instead of an empty table" do
+      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("This school is not attached to any courses.")
       expect(response.body).not_to include("govuk-table")
     end
 
