@@ -30,6 +30,15 @@ RSpec.describe CourseSearchServiceSchools do
           provider: %i[recruitment_cycle ucas_preferences],
         ).and_return(course_with_includes)
 
+      allow(course_with_includes).to receive(:preload)
+        .with(
+          :latest_enrichment,
+          :latest_published_enrichment,
+          :subjects,
+          { provider: :recruitment_cycle },
+          :accrediting_provider,
+        ).and_return(course_with_includes)
+
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
       allow(scope).to receive(:with_degree_type).and_return(scope)
     end
