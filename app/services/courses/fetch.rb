@@ -10,9 +10,13 @@ module Courses
                         .find_by(course_code:)
       end
 
+      # The accrediting_provider scope depends on each course's recruitment
+      # cycle, so the provider and cycle must be preloaded before it or
+      # evaluating that scope loads them once per course.
       def by_accrediting_provider(provider)
         provider
           .courses
+          .preload({ provider: :recruitment_cycle }, :accrediting_provider)
           .group_by { |course|
             begin
               course.accrediting_provider&.provider_name || provider.provider_name
