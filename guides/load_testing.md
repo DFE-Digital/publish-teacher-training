@@ -10,4 +10,4 @@ We use **k6** (by Grafana) for load testing, with results visualized in **Grafan
 
 ## Quick Start
 
-See more details on [./load_testing/README.md](./load_testing/README.md)
+See more details on [./load_testing/README.md](../load_testing/README.md)
