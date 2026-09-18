@@ -12,6 +12,6 @@ export const stressTestScenario = {
   tags: {
     service: 'find',
     scenario: 'stress',
-    description: 'Find stress test - 4000+ concurrent users, breaking point'
+    description: 'Find stress test - 400 concurrent users, breaking point'
   }
 }
