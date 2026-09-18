@@ -40,7 +40,7 @@ jobs:
           echo "::group::Quick Test"
           DASHBOARD_URL=$(k6 cloud --quiet \
             --env SCENARIO=quick --env ENVIRONMENT=staging \
-            find/find-load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
+            find/load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
           echo "QUICK_DASHBOARD_URL=$DASHBOARD_URL" >> $GITHUB_ENV
           echo "K6 Quick Load Test Dashboard: $DASHBOARD_URL"
           echo "::endgroup::"
@@ -57,7 +57,7 @@ jobs:
           echo "::group::Baseline"
           DASHBOARD_URL=$(k6 cloud --quiet \
             --env SCENARIO=baseline --env ENVIRONMENT=staging \
-            find/find-load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
+            find/load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
           echo "BASELINE_DASHBOARD_URL=$DASHBOARD_URL" >> $GITHUB_ENV
           echo "K6 Baseline Dashboard: $DASHBOARD_URL"
           echo "::endgroup::"
@@ -74,7 +74,7 @@ jobs:
           echo "::group::Peak Surge"
           DASHBOARD_URL=$(k6 cloud --quiet \
             --env SCENARIO=peak-surge --env ENVIRONMENT=staging \
-            find/find-load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
+            find/load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
           echo "PEAK_DASHBOARD_URL=$DASHBOARD_URL" >> $GITHUB_ENV
           echo "K6 Peak Dashboard: $DASHBOARD_URL"
           echo "::endgroup::"
@@ -91,7 +91,7 @@ jobs:
           echo "::group::Stress Test"
           DASHBOARD_URL=$(k6 cloud --quiet \
             --env SCENARIO=stress --env ENVIRONMENT=staging \
-            find/find-load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
+            find/load-test.js | grep -Eo 'https://app.k6.io/runs/[0-9]+' | head -1)
           echo "STRESS_DASHBOARD_URL=$DASHBOARD_URL" >> $GITHUB_ENV
           echo "K6 Stress Dashboard: $DASHBOARD_URL"
           echo "::endgroup::"
