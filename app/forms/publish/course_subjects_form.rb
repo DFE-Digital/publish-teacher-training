@@ -5,7 +5,10 @@ module Publish
     alias_method :subject_ids, :params
 
     def initialize(model, params: {})
-      @previous_subject_names = model.course_subjects.map { |cs| cs.subject.subject_name }
+      # Through course_subjects rather than model.subjects: after_successful_save_action
+      # reads course.subjects once the new subjects are saved, and loading it
+      # here would cache the old list and hide the change.
+      @previous_subject_names = model.course_subjects.includes(:subject).map { |cs| cs.subject.subject_name }
       @previous_course_name = model.name
       super
     end
