@@ -145,6 +145,12 @@ variable "enable_sanitised_storage" {
   default     = false
 }
 
+variable "enable_fd_log_collection" {
+  description = "Enable FD log collection storage account"
+  type        = bool
+  default     = false
+}
+
 variable "uploads_storage_account_name" {
   type    = string
   default = null
