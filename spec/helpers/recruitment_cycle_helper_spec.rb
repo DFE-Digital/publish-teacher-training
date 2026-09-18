@@ -19,35 +19,29 @@ RSpec.describe RecruitmentCycleHelper do
         expect(helper.previous_recruitment_cycle_period_text).to eq("2023 to 2024")
       end
     end
+  end
 
-    describe "#hint_text_for_mid_cycle" do
-      it "returns text with correct dates" do
-        expect(helper.hint_text_for_mid_cycle).to eq("Candidates can see upcoming application deadlines (9am on 1 October 2024 to 16 September 2025)")
-      end
+  describe "#hint_for_phase" do
+    it "uses the phase's own boundaries" do
+      allow(Find::CycleTimetable).to receive(:cycle_year_for_time).and_return(2026)
+
+      hint = helper.hint_for_phase(:today_is_mid_cycle)
+
+      expect(hint).to eq(
+        "<strong>2026 cycle.</strong> Candidates can see upcoming application deadlines " \
+        "(9am on 12 July 2026 to 15 September 2026)",
+      )
     end
 
-    describe "#hint_text_for_after_apply_deadline_passed" do
-      it "returns text with correct dates" do
-        expect(helper.hint_text_for_after_apply_deadline_passed).to eq("Candidates can no longer submit any subsequent applications (16 September 2025 to 29 September 2025)")
-      end
-    end
+    it "names the next cycle year and shows the real closed window for now_is_before_find_opens" do
+      allow(Find::CycleTimetable).to receive(:cycle_year_for_time).and_return(2026)
 
-    describe "#hint_text_for_now_is_before_find_opens" do
-      it "returns text with correct dates" do
-        expect(helper.hint_text_for_now_is_before_find_opens).to eq("Candidates can no longer browse courses on Find (11:59pm on 29 September 2025 to 9am on 30 September 2025)")
-      end
-    end
+      hint = helper.hint_for_phase(:now_is_before_find_opens)
 
-    describe "#hint_text_for_today_is_after_find_opens" do
-      it "returns text with correct dates" do
-        expect(helper.hint_text_for_today_is_after_find_opens).to eq("Candidates can browse courses on Find. Courses returned are from the next recruitment cycle (30 September 2025)")
-      end
-    end
-
-    describe "#hint_text_for_today_is_between_find_opening_and_apply_opening" do
-      it "returns text with correct dates" do
-        expect(helper.hint_text_for_today_is_between_find_opening_and_apply_opening).to eq("Candidates are able to apply for the courses in the new cycle. (30 September 2025)")
-      end
+      expect(hint).to eq(
+        "<strong>2027 cycle.</strong> Candidates can no longer browse courses on Find " \
+        "(11:59pm on 28 September 2026 to 29 September 2026)",
+      )
     end
   end
 end

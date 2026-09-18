@@ -6,12 +6,18 @@
       legend: { text: "Current point in the recruitment cycle" } do %>
       <%= f.govuk_radio_button :cycle_schedule_name, "real", label: { text: t("find.cycles.real.name") } %>
       <%= f.govuk_radio_divider %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_mid_cycle", label: { text: t("find.cycles.today_is_mid_cycle.name") }, hint: { text: hint_text_for_mid_cycle } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_apply_deadline_passed", label: { text: t("find.cycles.today_is_after_apply_deadline_passed.name") }, hint: { text: hint_text_for_after_apply_deadline_passed } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "now_is_before_find_opens", label: { text: t("find.cycles.now_is_before_find_opens.name") }, hint: { text: hint_text_for_now_is_before_find_opens } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_between_find_opening_and_apply_opening", label: { text: t("find.cycles.today_is_between_find_opening_and_apply_opening.name") }, hint: { text: hint_text_for_today_is_after_find_opens } %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "today_is_after_find_opens", label: { text: t("find.cycles.today_is_after_find_opens.name") }, hint: { text: hint_text_for_today_is_between_find_opening_and_apply_opening } %>
-
+      <% previous_phase_year = nil %>
+      <% Find::CycleTimetable::PHASES.each_key do |phase| %>
+        <% phase_year = Find::CycleTimetable.year_for_phase(phase) %>
+        <% if previous_phase_year && phase_year != previous_phase_year %>
+          <%= f.govuk_radio_divider "#{phase_year} cycle" %>
+        <% end %>
+        <%= f.govuk_radio_button :cycle_schedule_name,
+              phase.to_s,
+              label: { text: t("find.cycles.#{phase}.name") },
+              hint: -> { hint_for_phase(phase, phase_year) } %>
+        <% previous_phase_year = phase_year %>
+      <% end %>
     <% end %>
 
     <%= f.govuk_submit "Update point in recruitment cycle" %>
