@@ -246,9 +246,7 @@ class CourseDecorator < ApplicationDecorator
   end
 
   def subject_present?(subject_to_find)
-    course_subjects.any? do |course_subject|
-      course_subject.subject.id == subject_to_find.id
-    end
+    course_subjects.any? { |course_subject| course_subject.subject_id == subject_to_find.id }
   end
 
   def length_and_fees_or_salary_heading
