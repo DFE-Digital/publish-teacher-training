@@ -87,11 +87,11 @@ class Provider < ApplicationRecord
   delegate :year, to: :recruitment_cycle, prefix: true
 
   def rollable_courses?
-    courses.any?(&:rollable?)
+    courses.includes(:latest_enrichment).any?(&:rollable?)
   end
 
   def rollable_accredited_courses?
-    accredited_courses.any?(&:rollable?)
+    accredited_courses.includes(:latest_enrichment).any?(&:rollable?)
   end
 
   def rollable?
