@@ -1,17 +1,21 @@
 # frozen_string_literal: true
 
 class ApplicationJob < ActiveJob::Base
-  retry_on ActiveRecord::Deadlocked
-
   discard_on ActiveJob::DeserializationError
 
-  # No Active Job retries for StandardError. The terminal block reports and does
-  # not re-raise: a bare `retry_on ..., attempts: 0` re-raises after AJ gives up,
-  # and Sidekiq's JobWrapper (retry: true) would then apply its default retries
-  # while the global adapter is still :sidekiq.
+  retry_on ActiveRecord::Deadlocked
+
+  # Opt-in: discard StandardError with no Active Job / Sidekiq auto-retries.
+  # A bare `retry_on ..., attempts: 0` re-raises into Sidekiq's JobWrapper
+  # (retry: true) while the global adapter is still :sidekiq.
+  #
+  # `report: true` sends failures through ActiveSupport::ErrorReporter (Sentry
+  # when `config.rails.register_error_subscriber` is enabled).
+  #
+  # Re-declare Deadlocked retry after the StandardError discard so LIFO
+  # `rescue_from` still retries deadlocks (Deadlocked < StandardError).
   def self.without_auto_retry
-    retry_on StandardError, attempts: 0 do |_job, error|
-      Rails.error.report(error, source: "application.active_job")
-    end
+    discard_on StandardError, report: true
+    retry_on ActiveRecord::Deadlocked
   end
 end

@@ -15,6 +15,10 @@ end
 Sentry.init do |config|
   filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
 
+  # So Active Job `discard_on ..., report: true` (and other Rails.error.report
+  # calls) reach Sentry. Default in sentry-rails is false.
+  config.rails.register_error_subscriber = true
+
   config.before_send = lambda do |event, hint|
     filter_record_not_unique_exception_messages!(event, hint)
 
