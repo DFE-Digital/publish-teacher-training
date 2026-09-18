@@ -31,10 +31,18 @@ module Exports
       course.decorate.age_range
     end
 
-    # Use status as CourseEnrichment#draft? also counts rolled_over
+    # Use status as CourseEnrichment#draft? also counts rolled_over.
+    #
+    # The fallback is the newest enrichment of any status, picked from the
+    # rows the export already preloaded rather than through latest_enrichment,
+    # which would query once per never-published course.
     def reported_enrichment(course)
       settled = course.enrichments.reject { |enrichment| enrichment.status == "draft" }
-      settled.max_by { |enrichment| [enrichment.created_at, enrichment.id] } || course.latest_enrichment
+      most_recent(settled) || most_recent(course.enrichments)
+    end
+
+    def most_recent(enrichments)
+      enrichments.max_by { |enrichment| [enrichment.created_at, enrichment.id] }
     end
 
     def start_date(course)
