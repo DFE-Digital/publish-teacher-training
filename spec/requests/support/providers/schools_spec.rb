@@ -73,7 +73,7 @@ RSpec.describe "Support provider schools" do
       expect(response.body).to include("School code: A")
       expect(response.body).to include("URN: 112992")
       expect(response.body).to include("Remove St Joseph")
-      expect(response.body).to include("Catholic Primary School from your account")
+      expect(response.body).to include("Catholic Primary School from their account")
       expect(response.body).not_to include("govuk-summary-list")
     end
 
