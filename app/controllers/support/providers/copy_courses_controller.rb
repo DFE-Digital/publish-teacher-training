@@ -23,7 +23,7 @@ module Support
           )
 
           Provider.transaction do
-            @copy_courses_form.provider.courses.map do |course|
+            @copy_courses_form.provider.courses.includes(:provider).map do |course|
               copier.execute(course:, new_provider: @copy_courses_form.target_provider)
             end
           end
