@@ -64,7 +64,7 @@ module API
               @course ||= if schools_remodelled
                             provider.courses.includes(schools: %i[gias_school provider_school]).find_by(course_code: params[:course_code])
                           else
-                            provider.courses.includes(site_statuses: [:site]).find_by(course_code: params[:course_code])
+                            provider.courses.includes(site_statuses: { site: :provider }).find_by(course_code: params[:course_code])
                           end
             end
 
