@@ -72,7 +72,7 @@ module Courses
         :site_statuses,
         :schools,
         :latest_published_enrichment,
-        :provider,
+        provider: :recruitment_cycle,
         subjects: [:financial_incentive],
       )
     end
