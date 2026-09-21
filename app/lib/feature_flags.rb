@@ -13,6 +13,7 @@ class FeatureFlags
       [:course_sites_updated_email_notification, "Send email notifications when a course's associated schools are updated", "Find and Publish team"],
       [:wizard_add_course_flow, "Enables the wizard add course flow that uses the DfE wizard", "Find and Publish team"],
       [:course_publishing_uses_new_school_model, "Use the new school model for Find school location queries", "Find and Publish team"],
+      [:ske_courses_closed, "Show that SKE courses are closed for the academic year on Find course pages", "Find and Publish team"],
     ]
   end
 end

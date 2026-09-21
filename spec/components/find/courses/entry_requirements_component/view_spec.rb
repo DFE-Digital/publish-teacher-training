@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe Find::Courses::EntryRequirementsComponent::View, type: :component do
+  include Rails.application.routes.url_helpers
+
   let(:course) { build(:course, subjects:, accept_gcse_equivalency: false, accept_pending_gcse: false) }
   let(:subjects) { [build(:secondary_subject, subject_name)] }
   let(:result) { render_inline(described_class.new(course: course.decorate)) }
@@ -206,6 +208,41 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
 
       within(".govuk-details__summary") do
         expect(result).to have_link(ske_url_name, href: ske_url)
+      end
+    end
+  end
+
+  context "when the ske_courses_closed feature flag is active" do
+    let(:ske_closed_text) { "All subject knowledge enhancement (SKE) courses are closed for this academic year." }
+    let(:ske_closed_eligibility_text) { "If you are not already on a SKE course, you are unlikely to be eligible for a funded place with a training provider that requires one." }
+    let(:ske_closed_url_name) { "Find out more about SKE courses." }
+
+    before { FeatureFlag.activate(:ske_courses_closed) }
+    after { FeatureFlag.deactivate(:ske_courses_closed) }
+
+    context "with a SKE subject" do
+      let(:subject_name) { :mathematics }
+
+      it "renders the SKE closed message instead of the usual SKE text" do
+        expect(result.text).to include(ske_closed_text)
+        expect(result.text).to include(ske_closed_eligibility_text)
+        expect(result.text).not_to include(ske_text)
+      end
+
+      it "renders the find out more link" do
+        expect(result).to have_link(ske_closed_url_name, href: find_track_click_path(url: ske_url), visible: :all)
+        expect(result).to have_no_link(ske_url_name, visible: :all)
+      end
+    end
+
+    context "with a non-SKE subject" do
+      let(:subject_name) { :art_and_design }
+
+      it "does not render any SKE message" do
+        expect(result.text).not_to include(ske_closed_text)
+        expect(result.text).not_to include(ske_closed_eligibility_text)
+        expect(result.text).not_to include(ske_text)
+        expect(result).to have_no_link(ske_closed_url_name, visible: :all)
       end
     end
   end

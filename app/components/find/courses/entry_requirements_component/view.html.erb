@@ -38,9 +38,18 @@
                 <% end %>
 
                 <% if subject_knowledge_enhancement_content? %>
-                  <p class="govuk-body">
-                  If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
-                  </p>
+                  <% if FeatureFlag.active?(:ske_courses_closed) %>
+                    <p class="govuk-body">
+                    All subject knowledge enhancement (SKE) courses are closed for this academic year.
+                    </p>
+                    <p class="govuk-body">
+                    If you are not already on a SKE course, you are unlikely to be eligible for a funded place with a training provider that requires one. <%= govuk_link_to "Find out more about SKE courses.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
+                    </p>
+                  <% else %>
+                    <p class="govuk-body">
+                    If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
+                    </p>
+                  <% end %>
                 <% end %>
               <% end %>
             <% end %>
