@@ -40,6 +40,70 @@ Set with `--env ENVIRONMENT=`:
 
 `staging` is the default.
 
+***
+
+## The recruitment cycle and the course data
+
+Find shows different pages in each part of the recruitment cycle. It also shows
+a different set of courses. Both change what a load test measures, so set them
+before you run one.
+
+### Why the real clock is a problem
+
+A cycle ends after the apply deadline. Find then closes applications and shows a
+closed cycle notice on every course page. Find also closes for about nine hours
+before it opens for the next cycle, and the moment it opens is the busiest
+moment of the year.
+
+Providers publish most of their courses in the weeks before Find opens. A
+database restore from that period holds very few published courses for the next
+cycle. A load test against those courses measures a small catalogue, and the
+result does not tell you how the service behaves at the busy moment.
+
+### Set the cycle phase
+
+A Redis key named `cycle_schedule` holds the phase. Set it to
+`today_is_after_find_opens`. In that phase Find is open, applications are open
+and Find serves the next cycle.
+
+```
+redis-cli set cycle_schedule today_is_after_find_opens
+redis-cli get cycle_schedule
+```
+
+These are the values the switcher accepts:
+
+- `real`, which uses the true dates
+- `today_is_after_find_opens`, where Find and apply are both open
+- `today_is_mid_cycle`
+- `today_is_between_find_opening_and_apply_opening`, where apply is not yet open
+- `today_is_after_apply_deadline_passed`, where the cycle is closed
+
+**The key is shared.** One value applies to everything on that environment.
+Write down the old value before you change it, and put it back when you finish.
+
+### Publish enough courses
+
+Rollover copies courses into the next cycle, but it leaves them unpublished.
+Find does not show an unpublished course. Use the rake task to publish them:
+
+```
+rake 'load_test:publish_cycle[2027,10000]'
+```
+
+The first argument is the cycle year. The second is the number of published
+courses you want. The task stops when the cycle reaches that number, so you can
+run it again without harm. Leave the second argument out to publish every course
+that is ready.
+
+The task uses `Courses::PublishService`, which is the same code a provider uses.
+It stops the emails that a publish normally sends. It counts the courses that
+fail validation and prints the total at the end.
+
+The task does not run in production.
+
+***
+
 ## Services
 
 ### Find Service
@@ -49,7 +113,9 @@ run it on. Only the GitHub Actions workflow runs `k6 cloud`.
 
 #### Local runs against a development machine
 
-The load test needs one thing: the application listening on port 3001.
+A local run needs three things: the application on port 3001, a cycle phase
+where Find serves courses, and enough published courses. The section above
+covers the phase and the courses. This section covers the application.
 
 `./bin/dev` uses `Procfile.dev` by default, which starts the Rails server on
 port 3001 and also starts Caddy. If you keep your own `Procfile.local`, then
@@ -124,13 +190,68 @@ Set `GRAFANA_PROJECT_ID` to put the results in a specific Grafana Cloud project.
 
 ***
 
-## User Journey Mix
+## User Journeys
 
-Based on production analytics:
+Every iteration picks one of three branches at random. A branch runs one or more
+journeys, and each journey makes one or more requests. The chances come from
+production analytics.
 
-- 51% Search operations (enhanced filtering)
-- 42% Course page views (detailed browsing)
-- 7% Apply clicks (conversion actions)
+| Branch | Chance | Journeys it runs | Requests |
+| --- | --- | --- | --- |
+| Search | 51% | Search and Filter, then Pagination | 13 |
+| Course | 42% | Course Detail | 4 |
+| Full | 7% | Homepage, Search and Filter, Course Detail | 8 |
+
+The chance column shows how often the test picks a branch. It does not show the
+share of the load, because each branch makes a different number of requests. An
+average iteration makes about 8.9 requests:
+
+- about 7.8 results pages, which is 88% of the load
+- about 1.0 course pages
+- about 0.07 homepages
+
+The suite loads no apply page. Find sends `/course/:provider_code/:course_code/apply`
+to the Apply service, so a candidate leaves Find at that point.
+
+### What each journey requests
+
+Every search adds `utm_source=load_test` and `utm_medium=k6_testing`. Every
+search also takes a random subject from a list of 16, and a random place from a
+list of 10, so two iterations rarely ask for the same thing.
+
+**Homepage** makes one request:
+
+- `GET /`, and checks for "Find teacher training courses" and "Search"
+
+**Search and Filter** makes three searches:
+
+- Basic: `/results?subjects[]=<subject>&location=<place>&radius=50`. It checks
+  the result count, the panel heading "Filter results", and the words "Age
+  group".
+- Multi-Filter: the same as Basic, plus `study_types[]=full_time` and
+  `order=course_name_ascending`. It checks the result count and "Remove filter".
+- Advanced: the same as Basic, plus `qualifications[]=pgce`,
+  `qualifications[]=pgde`, `funding_types[]=salary` and
+  `funding_types[]=bursary`. It checks the result count and "Remove filter".
+
+**Course Detail** makes four requests:
+
+- `GET /results?subjects[]=13`. It then reads the `/course/` links from that page
+  and loads one of the first three at random. It checks "Course summary" and
+  "Entry requirements".
+- `GET /results?subjects[]=G1`. It then loads the first course link. It records
+  the time under the name Apply Journey, but the page it loads is a course page.
+
+**Pagination** makes ten requests:
+
+- `GET /results?page=1` through to `/results?page=10`, and checks the result
+  count on each one
+
+### Think time
+
+Each journey sleeps between requests, for 1 to 3 seconds. Each iteration ends
+with a sleep of 2 to 5 seconds. This time counts towards the iteration duration,
+so an iteration lasts much longer than the requests inside it.
 
 ***
 
@@ -140,6 +261,12 @@ Based on production analytics:
 - **Error Rate**: <1% during normal load
 - **Throughput**: 150 RPS during peaks
 - **Availability**: 99.9% uptime target
+- **Empty searches**: <25% for each search
+
+`find_empty_results` counts the searches that return no courses. A single empty
+search is normal, because a subject and a place do not always have a course. A
+search that is almost always empty means the journey measures an empty page, and
+that breaks the threshold for the search which caused it.
 
 ***
 
