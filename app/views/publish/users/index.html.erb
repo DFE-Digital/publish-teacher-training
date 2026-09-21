@@ -3,24 +3,37 @@
 <%= content_for :before_content, render_breadcrumbs(:users) %>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l"><%= t("page_titles.users.index") %></h1>
       <%= govuk_button_link_to "Add user", new_publish_provider_user_path(provider_code: @provider.provider_code) %>
       <table class="govuk-table app-table--vertical-align-middle">
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header govuk-!-width-one-third">Name</th>
-          <th class="govuk-table__header">Email</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-third"><%= t(".name") %></th>
+          <th scope="col" class="govuk-table__header"><%= t(".email") %></th>
+          <th scope="col" class="govuk-table__header"><%= t(".last_signed_in") %></th>
+          <th scope="col" class="govuk-table__header"><%= t(".remove_user") %></th>
         </tr>
         </thead>
         <tbody class="govuk-table__body">
         <% @users.each do |user| %>
-          <tr class="govuk-table__row">
+          <tr class="govuk-table__row user-row">
             <td class="govuk-table__cell">
               <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", publish_provider_user_path(id: user.id)) %></a>
             </td>
             <td class="govuk-table__cell">
               <%= user.email %>
+            </td>
+            <td class="govuk-table__cell last-signed-in">
+              <%= user.last_login_date_utc&.to_fs(:month_and_year) %>
+            </td>
+            <td class="govuk-table__cell remove-user">
+              <% unless user == current_user %>
+                <%= govuk_link_to(delete_publish_provider_user_path(provider_code: @provider.provider_code, id: user.id), class: "app-link--destructive") do %>
+                  <%= t(".remove_user") %>
+                  <%= tag.span(t(".remove_user_for", name: user.full_name), class: "govuk-visually-hidden") %>
+                <% end %>
+              <% end %>
             </td>
           </tr>
         <% end %>

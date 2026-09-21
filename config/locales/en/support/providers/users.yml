@@ -1,0 +1,10 @@
+en:
+  support:
+    providers:
+      users:
+        provider_user_list:
+          name: "Name"
+          email: "Email"
+          last_signed_in: "Last signed in"
+          remove_user: "Remove user"
+          remove_user_for: "for %{name}"

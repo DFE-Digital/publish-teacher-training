@@ -123,6 +123,25 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
       and_i_confirm
       then_the_user_should_be_deleted
     end
+
+    scenario "From the users list" do
+      given_i_visit_the_publish_users_index_page
+      when_i_click_remove_user_for_user_two
+      then_i_am_taken_to_the_publish_users_delete_page
+    end
+
+    scenario "Not offered against my own row" do
+      given_i_visit_the_publish_users_index_page
+      then_my_own_row_offers_no_way_to_remove_me
+      and_other_rows_still_do
+    end
+  end
+
+  describe "Viewing when a user last signed in" do
+    scenario "With a user who has signed in" do
+      given_i_visit_the_publish_users_index_page
+      then_i_see_the_month_and_year_they_last_signed_in
+    end
   end
 
   def given_that_the_user_does_not_have_a_dfe_signin_account
@@ -133,6 +152,7 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
     @provider = create(:provider, provider_name: "Batman's Chocolate School")
     @user = create(:user, first_name: "Mr", last_name: "User", email: "mruser@fake.com", providers: [@provider])
     @user2 = create(:user, first_name: "Mr", last_name: "Cool", email: "mrcool@fake.com", providers: [@provider])
+    @user2.update!(last_login_date_utc: Time.zone.local(2024, 10, 15, 9, 30))
     given_i_am_authenticated(user: @user)
   end
 
@@ -267,6 +287,31 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
 
   def when_i_click_on_user_two
     click_link_or_button "Mr Cool"
+  end
+
+  def when_i_click_remove_user_for_user_two
+    user_two_row.remove_user_link.click
+  end
+
+  def then_i_am_taken_to_the_publish_users_delete_page
+    expect(publish_users_delete_page).to be_displayed(provider_code: @provider.provider_code, user_id: @user2.id)
+  end
+
+  def then_i_see_the_month_and_year_they_last_signed_in
+    expect(user_two_row.last_signed_in.text).to eq("October 2024")
+  end
+
+  def user_two_row
+    publish_users_index_page.users.find { |row| row.email.text == @user2.email }
+  end
+
+  def then_my_own_row_offers_no_way_to_remove_me
+    my_row = publish_users_index_page.users.find { |row| row.email.text == @user.email }
+    expect(my_row).to have_no_css(".remove-user .govuk-link")
+  end
+
+  def and_other_rows_still_do
+    expect(user_two_row).to have_css(".remove-user .govuk-link")
   end
 
   def i_should_be_on_the_publish_users_show_page
