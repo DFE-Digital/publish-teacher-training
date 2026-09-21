@@ -49,9 +49,16 @@ run it on. Only the GitHub Actions workflow runs `k6 cloud`.
 
 #### Local runs against a development machine
 
-Start the application with `./bin/dev` first. You do not need Caddy. Find only
-answers on the host `find.localhost`, so k6 resolves that name to
-`127.0.0.1:3001` for you.
+The load test needs one thing: the application listening on port 3001.
+
+`./bin/dev` uses `Procfile.dev` by default, which starts the Rails server on
+port 3001 and also starts Caddy. If you keep your own `Procfile.local`, then
+`bin/dev` uses that file instead, so check that something in it serves port
+3001.
+
+The load test does not go through Caddy, and does not need its certificate.
+Find only answers on the host `find.localhost`, so k6 resolves that name to
+`127.0.0.1:3001` itself. A Caddy that fails to start does not stop a load test.
 
 ```
 npm run find:dev:quick     # 10 users, 25 seconds
