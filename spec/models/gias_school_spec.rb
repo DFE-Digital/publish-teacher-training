@@ -54,6 +54,12 @@ describe GiasSchool do
         postcode: school.postcode,
       )
     end
+
+    it "reports the address GIAS holds, blank lines included" do
+      school = build(:gias_school, address1: "", address2: "Holbury", town: "Southampton")
+
+      expect(school.school_attributes).to include(address1: "", address2: "Holbury", town: "Southampton")
+    end
   end
 
   describe "#address" do
