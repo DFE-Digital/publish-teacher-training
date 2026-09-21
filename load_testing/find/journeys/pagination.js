@@ -1,6 +1,6 @@
 import http from 'k6/http'
 import { sleep, group } from 'k6'
-import { findPerformanceCheck, findContentCheck, findErrorHandler } from '../utils/checks.js'
+import { findPerformanceCheck, findResultCount, findErrorHandler } from '../utils/checks.js'
 
 export function paginationJourney (environment, config) {
   group('Find Pagination Journey', function () {
@@ -15,7 +15,7 @@ export function paginationJourney (environment, config) {
         config.expectedResponseTimes.pagination
       )
 
-      findContentCheck(response, 'Pagination', 'courses found')
+      findResultCount(response, 'Pagination')
 
       if (!isSuccess) {
         findErrorHandler(response, `Find Pagination Page ${page}`)
