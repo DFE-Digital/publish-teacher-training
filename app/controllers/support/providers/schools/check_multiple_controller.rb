@@ -39,36 +39,9 @@ module Support
         end
 
         def save
-          saved_schools = []
+          result = ::ProviderSchools::BulkCreator.call(provider:, gias_schools:)
 
-          # Each school would otherwise touch the provider and sweep its
-          # no-school courses on save. Suppress that and stamp them once.
-          TouchSuppression.suppress do
-            gias_schools.each do |gias_school|
-              ActiveRecord::Base.transaction do
-                saved_schools << create_provider_school_and_legacy_site(gias_school:)
-              end
-            end
-          end
-
-          ::ProviderSchools::TouchParents.call(provider:) if saved_schools.any?
-
-          schools_added_message(saved_schools)
-        end
-
-        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-        # TODO School data remodel removal - remove this legacy Site write when support creates Provider::School directly.
-        def create_provider_school_and_legacy_site(gias_school:)
-          legacy_site = provider.sites.build(gias_school.school_attributes)
-          ::ProviderSchools::LegacySiteCreator.call(site: legacy_site)
-          # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-
-          ::ProviderSchools::Creator.call(
-            provider:,
-            gias_school_id: gias_school.id,
-            site_code: legacy_site.code,
-            uuid: legacy_site.uuid,
-          )
+          schools_added_message(result.saved, result.unsaved)
         end
 
         def urn_form

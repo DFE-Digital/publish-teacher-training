@@ -1312,6 +1312,9 @@ en:
     visa_changes: "Visa sponsorship updated"
     user_removed: "User removed"
     enqueued_schools: "We are adding your schools to this course. After a minute, refresh your browser to see the schools that have been added."
+  warning:
+    schools_not_added_title: "%{items_not_added} could not be added"
+    schools_not_added_body: "The address we hold for %{urns} is incomplete. Ask the school to update its details on Get Information About Schools (GIAS)."
   links:
     find_website_url: "https://find-teacher-training-courses.service.gov.uk/"
     dfe_signin: https://services.signin.education.gov.uk
