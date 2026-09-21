@@ -1,0 +1,9 @@
+en:
+  publish:
+    users:
+      index:
+        name: "Name"
+        email: "Email"
+        last_signed_in: "Last signed in"
+        remove_user: "Remove user"
+        remove_user_for: "for %{name}"

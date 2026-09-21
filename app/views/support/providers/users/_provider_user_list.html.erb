@@ -1,8 +1,10 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-two-quarters">Email</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter"><%= t(".name") %></th>
+      <th scope="col" class="govuk-table__header"><%= t(".email") %></th>
+      <th scope="col" class="govuk-table__header"><%= t(".last_signed_in") %></th>
+      <th scope="col" class="govuk-table__header"><%= t(".remove_user") %></th>
     </tr>
   </thead>
 
@@ -19,6 +21,17 @@
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= user.email %>
           </span>
+        </td>
+
+        <td class="govuk-table__cell last-signed-in">
+          <%= user.last_login_date_utc&.to_fs(:month_and_year) %>
+        </td>
+
+        <td class="govuk-table__cell remove-user">
+          <%= govuk_link_to(delete_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider, user), class: "app-link--destructive") do %>
+            <%= t(".remove_user") %>
+            <%= tag.span(t(".remove_user_for", name: user.full_name), class: "govuk-visually-hidden") %>
+          <% end %>
         </td>
       </tr>
     <% end %>
