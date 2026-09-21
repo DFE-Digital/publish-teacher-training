@@ -19,6 +19,16 @@ RSpec.describe CustomLogFormatter do
     )
   end
 
+  # rails_semantic_logger's ActiveJob subscriber stores arguments as
+  # JSON.pretty_generate(...), not a Ruby Array.
+  def solid_queue_arguments(*args)
+    JSON.pretty_generate(args)
+  end
+
+  def parsed_arguments
+    JSON.parse(log_hash[:payload][:arguments])
+  end
+
   describe "Solid Queue argument redaction" do
     # Keys covered by filter_parameters and Mission Control's extra argument names.
     {
@@ -30,7 +40,7 @@ RSpec.describe CustomLogFormatter do
       first_name: "Sam",
       last_name: "Johnson",
       code: "magic-link",
-      data: { nested: true },
+      data: { "nested" => true },
       body: "mail body",
       hidden_data: "x",
       headers: { "Authorization" => "Bearer x" },
@@ -40,13 +50,14 @@ RSpec.describe CustomLogFormatter do
         log.payload = {
           job_class: "TestJob::DispatcherCanaryJob",
           adapter: "SolidQueue",
-          arguments: [{ key => value, course_id: 123 }],
+          arguments: solid_queue_arguments({ key.to_s => value, "course_id" => 123 }),
         }
 
-        expect(log_hash[:payload][:arguments]).to eq(
-          [{ key => "[REDACTED]", course_id: 123 }],
+        expect(parsed_arguments).to eq(
+          [{ key.to_s => "[REDACTED]", "course_id" => 123 }],
         )
         expect(log_hash[:payload][:job_class]).to eq("TestJob::DispatcherCanaryJob")
+        expect(log_hash[:payload][:arguments]).to be_a(String)
       end
     end
 
@@ -55,10 +66,21 @@ RSpec.describe CustomLogFormatter do
       log.payload = {
         job_class: "UpdateCourseSchoolsJob",
         adapter: "SolidQueue",
-        arguments: [42, %w[uuid-1 uuid-2]],
+        arguments: solid_queue_arguments(42, %w[uuid-1 uuid-2]),
       }
 
-      expect(log_hash[:payload][:arguments]).to eq([42, %w[uuid-1 uuid-2]])
+      expect(parsed_arguments).to eq([42, %w[uuid-1 uuid-2]])
+    end
+
+    it "leaves non-JSON argument strings untouched" do
+      log.message = "Performed SomeJob"
+      log.payload = {
+        job_class: "SomeJob",
+        adapter: "SolidQueue",
+        arguments: "not-json",
+      }
+
+      expect(log_hash[:payload][:arguments]).to eq("not-json")
     end
   end
 
@@ -67,9 +89,11 @@ RSpec.describe CustomLogFormatter do
     log.payload = {
       job_class: "SomeJob",
       adapter: "Sidekiq",
-      arguments: [{ email: "secret@example.com" }],
+      arguments: solid_queue_arguments({ "email" => "secret@example.com" }),
     }
 
-    expect(log_hash[:payload][:arguments]).to eq([{ email: "secret@example.com" }])
+    expect(log_hash[:payload][:arguments]).to eq(
+      solid_queue_arguments({ "email" => "secret@example.com" }),
+    )
   end
 end

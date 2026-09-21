@@ -77,9 +77,20 @@ private
       value.map { |item| filter_job_arguments(item) }
     when Hash
       job_argument_filter.filter(value)
+    when String
+      filter_json_job_arguments(value)
     else
       value
     end
+  end
+
+  # rails_semantic_logger stores Active Job args as JSON.pretty_generate(...),
+  # not a Ruby Array.
+  def filter_json_job_arguments(value)
+    filtered = filter_job_arguments(JSON.parse(value))
+    JSON.pretty_generate(filtered)
+  rescue JSON::ParserError
+    value
   end
 
   def job_argument_filter
