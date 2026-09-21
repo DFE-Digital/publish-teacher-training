@@ -9,6 +9,7 @@ const findTimeouts = new Rate('find_timeouts')
 const findRateLimited = new Rate('find_rate_limited')
 const findContentErrors = new Counter('find_content_errors')
 const findSuccessRate = new Rate('find_success_rate')
+const findEmptyResults = new Rate('find_empty_results')
 
 export function findPerformanceCheck (response, name, threshold = 3000) {
   findResponseTimes.add(response.timings.duration)
@@ -64,6 +65,33 @@ export function findContentCheck (response, checkName, expectedContent) {
 
   return check(response, {
     [`Find ${checkName}: contains expected content`]: (r) => r.body.includes(expectedContent),
+    [`Find ${checkName}: content length > 100 chars`]: (r) => r.body.length > 100
+  }, {
+    content_check: checkName,
+    service: 'find'
+  })
+}
+
+export function findResultCount (response, checkName) {
+  // A results page always prints a count, even when it reads "0 results". The
+  // check asks only that the page rendered. An empty search is normal, so the
+  // count feeds a rate instead of failing the request. A search that is always
+  // empty breaks the find_empty_results threshold, which is the real fault.
+  const match = response.body.match(/([0-9][0-9,]*) results/)
+  const rendered = match !== null
+
+  if (!rendered) {
+    findContentErrors.add(1, {
+      check_name: checkName,
+      expected_content: 'result count',
+      status: response.status
+    })
+  } else {
+    findEmptyResults.add(Number(match[1].replace(/,/g, '')) === 0, { check_name: checkName })
+  }
+
+  return check(response, {
+    [`Find ${checkName}: results page rendered`]: () => rendered,
     [`Find ${checkName}: content length > 100 chars`]: (r) => r.body.length > 100
   }, {
     content_check: checkName,

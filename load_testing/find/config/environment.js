@@ -49,7 +49,12 @@ export function getFindConfig () {
     thresholds: {
       http_req_duration: ['p(95)<3000'],
       http_req_failed: ['rate<0.01'],
-      find_error_rate: ['rate<0.01']
+      find_error_rate: ['rate<0.01'],
+      // A single empty search is normal. A search that is nearly always empty
+      // means the journey measures an empty page, which is not a load test.
+      'find_empty_results{check_name:search-results}': ['rate<0.25'],
+      'find_empty_results{check_name:filtered-results}': ['rate<0.25'],
+      'find_empty_results{check_name:advanced-results}': ['rate<0.25']
     },
     cloudOptions
   }
