@@ -19,7 +19,7 @@ GEM
     autoprefixer-rails (10.4.21.0)
       execjs (~> 2)
     base64 (0.3.0)
-    bigdecimal (4.1.2)
+    bigdecimal (4.1.3)
     capybara (3.40.0)
       addressable
       matrix
@@ -80,28 +80,28 @@ GEM
     ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
     ffi (1.17.4-x86_64-linux-musl)
-    google-protobuf (4.36.1)
+    google-protobuf (4.36.2)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-aarch64-linux-gnu)
+    google-protobuf (4.36.2-aarch64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-aarch64-linux-musl)
+    google-protobuf (4.36.2-aarch64-linux-musl)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-arm64-darwin)
+    google-protobuf (4.36.2-arm64-darwin)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-x86_64-darwin)
+    google-protobuf (4.36.2-x86_64-darwin)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-x86_64-linux-gnu)
+    google-protobuf (4.36.2-x86_64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
-    google-protobuf (4.36.1-x86_64-linux-musl)
+    google-protobuf (4.36.2-x86_64-linux-musl)
       bigdecimal
       rake (~> 13.3)
-    govuk_tech_docs (6.3.0)
+    govuk_tech_docs (6.4.1.0)
       autoprefixer-rails
       chronic
       concurrent-ruby
@@ -132,7 +132,7 @@ GEM
     http_parser.rb (0.8.1)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
-    json (3.0.0)
+    json (3.0.2)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     listen (3.10.0)
@@ -199,7 +199,7 @@ GEM
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
-    multi_json (1.21.1)
+    multi_json (1.21.2)
     mutex_m (0.3.0)
     nokogiri (1.19.4-aarch64-linux-gnu)
       racc (~> 1.4)
@@ -261,21 +261,21 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
     sass (3.4.25)
-    sass-embedded (1.104.0-aarch64-linux-gnu)
+    sass-embedded (1.104.1-aarch64-linux-gnu)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-aarch64-linux-musl)
+    sass-embedded (1.104.1-aarch64-linux-musl)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-arm-linux-gnueabihf)
+    sass-embedded (1.104.1-arm-linux-gnueabihf)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-arm-linux-musleabihf)
+    sass-embedded (1.104.1-arm-linux-musleabihf)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-arm64-darwin)
+    sass-embedded (1.104.1-arm64-darwin)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-x86_64-darwin)
+    sass-embedded (1.104.1-x86_64-darwin)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-x86_64-linux-gnu)
+    sass-embedded (1.104.1-x86_64-linux-gnu)
       google-protobuf (~> 4.31)
-    sass-embedded (1.104.0-x86_64-linux-musl)
+    sass-embedded (1.104.1-x86_64-linux-musl)
       google-protobuf (~> 4.31)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -319,7 +319,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  govuk_tech_docs (~> 6.3)
+  govuk_tech_docs (~> 6.4)
   rspec
 
 RUBY VERSION

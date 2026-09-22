@@ -8,13 +8,28 @@ module ProviderSchools
   class LegacySiteCreator
     include ServicePattern
 
+    DONOR_ADDRESS_LINES = %i[address2 address3 town].freeze
+
     def initialize(site:)
       @site = site
     end
 
     def call
+      backfill_address1
       @site.save!
       @site
+    end
+
+  private
+
+    def backfill_address1
+      return if @site.address1.present?
+
+      donor = DONOR_ADDRESS_LINES.find { |line| @site[line].present? }
+      return if donor.nil?
+
+      @site.address1 = @site[donor]
+      @site[donor] = nil
     end
   end
 end
