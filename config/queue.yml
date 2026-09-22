@@ -21,8 +21,9 @@ default: &default
       processes: <%= ENV.fetch("MAILER_QUEUE_PROCESSES", 1) %>
       polling_interval: 1
 
-    # Bulk / low-priority — kept separate so backlogs cannot starve mailers
-    - queues: [save_statistic, low_priority]
+    # Bulk / low-priority — kept separate so backlogs cannot starve mailers.
+    # solid_queue_recurring is the default queue for recurring.yml `command` tasks.
+    - queues: [save_statistic, low_priority, solid_queue_recurring]
       threads: <%= ENV.fetch("LOW_PRIORITY_QUEUE_THREADS", 1) %>
       processes: <%= ENV.fetch("LOW_PRIORITY_QUEUE_PROCESSES", 1) %>
       polling_interval: 1
@@ -38,7 +39,7 @@ non_production: &non_production
       processes: 1
       polling_interval: 3
 
-    - queues: [save_statistic, low_priority]
+    - queues: [save_statistic, low_priority, solid_queue_recurring]
       threads: 1
       processes: 1
       polling_interval: 3

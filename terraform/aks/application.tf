@@ -61,7 +61,7 @@ module "worker_application" {
   replicas        = each.value.replicas
   enable_logit    = var.enable_logit
   run_as_non_root = var.run_as_non_root
-  probe_command = ["pgrep", "-f", "sidekiq"]
+  probe_command   = ["pgrep", "-f", "sidekiq"]
 
   enable_gcp_wif = true
 }
@@ -87,12 +87,16 @@ module "solid_queue_worker" {
   # for this process so each Solid Queue fork does not open a 50-connection pool.
   # Keep this >= sum of (threads × processes) across workers in config/queue.yml
   # (DEFAULT_QUEUE_THREADS etc.) or Solid Queue will warn and contend on the pool.
+  #
+  # Skip the recurring scheduler while Sidekiq Cron remains the live schedule
+  # source. Remove SOLID_QUEUE_SKIP_RECURRING only at the adapter cutover after
+  # Sidekiq Cron entries are destroyed — see guides/solid-queue-recurring-cutover.md.
   command = [
     "/bin/sh",
     "-c",
     # $${...} so Terraform leaves the shell default for DATABASE_CONNECTION_POOL_SIZE alone.
     # start_when_ready waits for migrate/db:setup/restore so we never cache a missing PK.
-    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start_when_ready",
+    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} SOLID_QUEUE_SKIP_RECURRING=true bundle exec rake solid_queue:start_when_ready",
   ]
   max_memory      = var.solid_queue_worker_memory_max
   replicas        = var.solid_queue_worker_replicas
