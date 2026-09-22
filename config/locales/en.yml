@@ -1301,6 +1301,8 @@ en:
       detail: "Something has gone wrong, please try again in a few minutes"
   pagy:
     overflow: "The requested page param was out of range and invalid for this request."
+  jsonapi:
+    invalid_include: "The requested include param was invalid for this request."
   success:
     published: "Your changes have been published"
     saved: "%{value} updated"
