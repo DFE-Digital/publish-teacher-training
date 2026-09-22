@@ -17,11 +17,7 @@ module Find
       end
 
       def sign_in
-        @sign_in_url = if Settings.one_login.enabled
-                         "/auth/one-login"
-                       else
-                         "/auth/find-developer"
-                       end
+        @sign_in_url = Authentications::CandidateOmniAuth.sign_in_path
       end
 
       def new

@@ -43,11 +43,7 @@ module Govuk
     end
 
     def path
-      if Settings.one_login.enabled
-        "/auth/one-login"
-      else
-        "/auth/find-developer"
-      end
+      Authentications::CandidateOmniAuth.sign_in_path
     end
   end
 end

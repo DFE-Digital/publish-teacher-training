@@ -1,6 +1,15 @@
 module Authentications
   class CandidateOmniAuth
+    ONE_LOGIN_PATH = "/auth/one-login".freeze
+    DEVELOPER_PATH = "/auth/find-developer".freeze
+
     attr_reader :provider
+
+    # The path candidates sign in through. Outside production One Login is
+    # disabled and the developer strategy stands in for it.
+    def self.sign_in_path
+      Settings.one_login.enabled ? ONE_LOGIN_PATH : DEVELOPER_PATH
+    end
 
     def initialize
       @provider = set_provider

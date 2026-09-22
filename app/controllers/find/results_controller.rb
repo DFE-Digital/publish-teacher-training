@@ -31,7 +31,7 @@ module Find
         return redirect_to(return_to_after_authenticating || find_results_path)
       end
 
-      @sign_in_url = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+      @sign_in_url = Authentications::CandidateOmniAuth.sign_in_path
     end
 
   private
