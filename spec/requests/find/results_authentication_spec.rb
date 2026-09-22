@@ -9,6 +9,17 @@ RSpec.describe "Find results authentication", service: :find, travel: mid_cycle 
     create(:find_developer_candidate)
   end
 
+  it "explains why the candidate has to sign in" do
+    get find_results_path(location: "Manchester", subjects: %w[F3])
+    follow_redirect!
+
+    expect(response.parsed_body.title).to eq("Sign in to view search results - Find teacher training courses - GOV.UK")
+    expect(response.parsed_body.at_css("h1").text.strip).to eq("Sign in to view search results")
+    expect(response.body).to include("You currently need to sign in or create an account to search for teacher training courses.")
+    expect(response.body).to include("After signing in, you’ll return to your search.")
+    expect(response.body).to include("This is temporary - you will be able to search for courses without signing in soon.")
+  end
+
   it "returns a candidate to the exact search after signing in" do
     results_path = find_results_path(
       location: "Manchester",
@@ -22,9 +33,6 @@ RSpec.describe "Find results authentication", service: :find, travel: mid_cycle 
     expect(response).to redirect_to(find_results_sign_in_path)
 
     follow_redirect!
-    expect(response.parsed_body.title).to eq("Sign in to view search results - Find teacher training courses - GOV.UK")
-    expect(response.body).to include("You need a GOV.UK One Login to search for teacher training courses.")
-    expect(response.body).to include("After signing in, you’ll return to your search.")
     sign_in_form = response.parsed_body.at_css("main form[action='/auth/find-developer']")
     expect(sign_in_form["method"]).to eq("post")
     expect(sign_in_form.at_css("button").text.strip).to eq("Sign in")
