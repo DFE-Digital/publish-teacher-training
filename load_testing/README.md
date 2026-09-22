@@ -4,7 +4,7 @@ Comprehensive and scalable load testing suite for **Find** & (future) Publish Te
 
 ## Setup
 
-1. **Install k6:**
+**Install k6:**
 
 *macOS*
 ```
@@ -17,16 +17,8 @@ Comprehensive and scalable load testing suite for **Find** & (future) Publish Te
   sudo apt install k6
 ```
 
-2. **Prepare environment variables (only for running on Grafana Cloud):**
-
-```
-   cd load_testing
-   cp .env.example .env
-   # Edit .env as needed for local, staging, or cloud runs.
-
-   # Load environment variables (run this before each test session):
-   set -o allexport; source .env; set +o allexport
-```
+No other setup is necessary. Each run takes its target and its scenario from the
+command line.
 
 ## Environments
 
@@ -109,7 +101,8 @@ The task does not run in production.
 ### Find Service
 
 Every npm script runs `k6 run`, which generates the load from the machine you
-run it on. Only the GitHub Actions workflow runs `k6 cloud`.
+run it on. There is no hosted runner and no CI job, so a test needs a machine
+with a route to the target.
 
 #### Local runs against a development machine
 
@@ -144,22 +137,6 @@ npm run find:peak
 npm run find:stress
 npm run find:all           # baseline, then peak, then stress
 ```
-
-#### Runs on Grafana Cloud
-
-Start the **Find & Publish Load Tests** workflow in GitHub Actions and select a
-scenario. The workflow runs `k6 cloud` against staging from the
-`amazon:gb:london` load zone. It needs the `K6_CLOUD_API_TOKEN` secret.
-
-To run a cloud test from your own machine, authenticate first and then call
-`k6 cloud` directly:
-
-```
-npm run grafana:login
-k6 cloud --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js
-```
-
-Set `GRAFANA_PROJECT_ID` to put the results in a specific Grafana Cloud project.
 
 ***
 
@@ -270,11 +247,11 @@ that breaks the threshold for the search which caused it.
 
 ***
 
-## Output & Monitoring
+## Output
 
-- **Local:**
-  Results are printed in the terminal. Each run also writes
-  `find-load-test-summary.json` and `find-load-test-report.html` to the
-  directory you started it from.
-- **Cloud (Grafana):**
-  Real-time dashboards, historic tracking, and alerting available in Grafana Cloud (requires authentication).
+k6 prints the results in the terminal. Each run also writes
+`find-load-test-summary.json` and `find-load-test-report.html` to the directory
+you started it from. Both files are ignored by git.
+
+Keep the files if you want to compare two runs. A run does not keep a history,
+because nothing collects the results after the run stops.

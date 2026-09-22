@@ -11,8 +11,7 @@
     "find:baseline": "k6 run --env SCENARIO=baseline --env ENVIRONMENT=staging find/load-test.js",
     "find:peak": "k6 run --env SCENARIO=peak-surge --env ENVIRONMENT=staging find/load-test.js",
     "find:stress": "k6 run --env SCENARIO=stress --env ENVIRONMENT=staging find/load-test.js",
-    "find:all": "npm run find:baseline && npm run find:peak && npm run find:stress",
-    "grafana:login": "k6 cloud login --token $K6_CLOUD_API_TOKEN"
+    "find:all": "npm run find:baseline && npm run find:peak && npm run find:stress"
   },
   "keywords": ["k6", "load-testing", "teacher-training", "dfe"],
   "author": "DfE Team",
