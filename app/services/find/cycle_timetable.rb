@@ -46,10 +46,10 @@ module Find
         apply_opens: Time.zone.local(2025, 10, 7, 9),
         first_deadline_banner: Time.zone.local(2026, 7, 12, 9),
         apply_deadline: Time.zone.local(2026, 9, 15, 18),
-        find_closes: Time.zone.local(2026, 9, 28).end_of_day,
+        find_closes: Time.zone.local(2026, 9, 21).end_of_day,
       },
       2027 => {
-        find_opens: Time.zone.local(2026, 9, 29, 9),
+        find_opens: Time.zone.local(2026, 9, 22, 9),
         apply_opens: Time.zone.local(2026, 10, 6, 9),
         first_deadline_banner: Time.zone.local(2027, 7, 12, 9),
         apply_deadline: Time.zone.local(2027, 9, 21, 18),

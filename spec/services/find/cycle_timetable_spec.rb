@@ -43,17 +43,17 @@ module Find
       end
 
       it "returns 2027 for a time just after find closes 2026" do
-        time = Time.zone.local(2026, 9, 29)
+        time = Time.zone.local(2026, 9, 22)
         expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
       it "returns 2027 for a time just before find opens 2027" do
-        time = Time.zone.local(2026, 9, 29, 8, 59, 58)
+        time = Time.zone.local(2026, 9, 22, 8, 59, 58)
         expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
       it "returns 2027 for the exact time find opens" do
-        time = Time.zone.local(2026, 9, 29, 9, 0, 0)
+        time = Time.zone.local(2026, 9, 22, 9, 0, 0)
         expect(described_class.cycle_year_for_time(time)).to eq(2027)
       end
 
@@ -291,10 +291,17 @@ module Find
     describe "CYCLE_DATES" do
       let(:cycles) { described_class::CYCLE_DATES }
 
-      it "opens Apply one week after Find in every cycle" do
-        offenders = cycles.reject { |_, dates| dates[:apply_opens].to_date == dates[:find_opens].to_date + 7 }
+      it "opens Apply one week after Find in every cycle except the early 2027 opening" do
+        offenders = cycles.except(2027).reject { |_, dates| dates[:apply_opens].to_date == dates[:find_opens].to_date + 7 }
 
         expect(offenders.keys).to be_empty
+      end
+
+      it "opens the 2027 Find cycle on 22 September without moving the Apply opening" do
+        expect(cycles[2027]).to include(
+          find_opens: Time.zone.local(2026, 9, 22, 9),
+          apply_opens: Time.zone.local(2026, 10, 6, 9),
+        )
       end
 
       it "closes Find the day before the next cycle opens" do
@@ -306,8 +313,8 @@ module Find
         expect(offenders.keys).to be_empty
       end
 
-      it "closes Find thirteen days after the Apply deadline" do
-        offenders = cycles.reject do |_, dates|
+      it "closes Find thirteen days after the Apply deadline except before the early 2027 opening" do
+        offenders = cycles.except(2026).reject do |_, dates|
           deadline = dates[:apply_deadline] || dates[:apply_1_deadline]
           dates[:find_closes].to_date == deadline.to_date + 13
         end
