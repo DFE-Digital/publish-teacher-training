@@ -12,6 +12,7 @@ RSpec.describe "Solid Queue configuration" do
       geocoding
       save_statistic
       low_priority
+      solid_queue_recurring
     ]
   end
 
