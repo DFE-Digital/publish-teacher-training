@@ -121,11 +121,11 @@ RSpec.describe "Authentication with magic links" do
   end
 
   def invalid_token_message
-    I18n.t("publish.authentication.magic_link.invalid_token")
+    "Magic link could not be verified, please request a new one"
   end
 
   def expired_token_message
-    I18n.t("publish.authentication.magic_link.expired")
+    "Magic link has expired, please request a new one"
   end
 
   def disable_magic_link_auth

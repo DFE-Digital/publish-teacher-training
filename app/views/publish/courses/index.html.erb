@@ -1,15 +1,5 @@
 <% content_for :page_title, @provider.rolled_over? ? "Courses – #{@recruitment_cycle.title}" : "Courses" %>
 <%= content_for :before_content, render_breadcrumbs(:courses) %>
-<% if Find::CycleTimetable.phase_in_time?(:now_is_before_find_opens) %>
-  <%= render(NotificationBanner.new(
-    text: t("publish.rollover_notification.text"),
-    text_body: t(
-      "publish.rollover_notification.text_body_html",
-      find_path: find_root_url,
-      guidance_path: roll_over_courses_to_a_new_recruitment_cycle_path,
-    ),
-  )) %>
-<% end %>
 
 <h1 class="govuk-heading-l">Courses</h1>
 <%= render AddCourseButton.new(provider: @provider) %>

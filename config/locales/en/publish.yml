@@ -1,8 +1,6 @@
 en:
   publish:
-    rollover_notification:
-      text: "Action needed before 30 September: check and schedule your rolled over courses"
-      text_body_html: "On 30 September courses for the 2025 to 2026 recruitment cycle will be published on <a class='govuk-link' href='%{find_path}'> Find teacher training courses.</a> Before this, you need to check and schedule your rolled over courses. If you do not schedule your courses to be published, they will not be shown to candidates. <br><br> If you need help, you can read our <a class='govuk-link' href='%{guidance_path}'> guidance on rolling over courses to a new recruitment cycle</a>."
+    authentication:
       magic_link:
         invalid_token: "Magic link could not be verified, please request a new one"
         expired: "Magic link has expired, please request a new one"
