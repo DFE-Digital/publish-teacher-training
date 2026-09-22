@@ -37,12 +37,6 @@ RSpec.describe "Publishing courses errors" do
     then_i_am_on_the_course_page
 
     when_i_click_the_publish_link
-    and_i_click_the_salary_error
-    then_i_am_on_the_course_salary_page
-    when_i_complete_the_course_salary
-    then_i_am_on_the_course_page
-
-    when_i_click_the_publish_link
     and_i_click_the_degree_error
     then_i_am_on_the_degrees_page
     when_i_complete_the_degree_requirements
@@ -68,11 +62,6 @@ RSpec.describe "Publishing courses errors" do
     click_link_or_button "Update course length"
   end
 
-  def when_i_complete_the_course_salary
-    fill_in "publish-course-salary-form-salary-details-field-error", with: "About course salary details"
-    click_link_or_button "Save"
-  end
-
   def when_i_complete_the_gcse_requirements
     choose "Yes", id: "publish-gcse-requirements-form-accept-pending-gcse-field-error"
     choose "No", id: "publish-gcse-requirements-form-accept-gcse-equivalency-field"
@@ -92,7 +81,6 @@ RSpec.describe "Publishing courses errors" do
   def then_i_see_validation_errors
     within ".govuk-error-summary" do
       expect(page).to have_content("Enter course length")
-      expect(page).to have_content("Enter details about the salary for this course")
       expect(page).to have_content("Enter degree requirements")
       expect(page).to have_content("Enter GCSE and equivalency test requirements")
     end
@@ -165,12 +153,6 @@ RSpec.describe "Publishing courses errors" do
     end
   end
 
-  def and_i_click_the_salary_error
-    within ".govuk-error-summary" do
-      page.find_link("Enter details about the salary for this course").click
-    end
-  end
-
   def and_i_click_the_degree_error
     within ".govuk-error-summary" do
       page.find_link("Enter degree requirements").click
@@ -185,10 +167,6 @@ RSpec.describe "Publishing courses errors" do
 
   def then_i_am_on_the_course_length_page
     expect(page).to have_current_path(/length/)
-  end
-
-  def then_i_am_on_the_course_salary_page
-    expect(page).to have_current_path(/salary/)
   end
 
   def then_i_am_on_the_degrees_page
