@@ -18,9 +18,8 @@
           <div class="govuk-body">
             <!-- location -->
             <% if search_by_location? %>
-              <div class="govuk-!-margin-bottom-3">
+              <div class="govuk-!-margin-bottom-0">
                 <%= nearest_placement_school_text %>
-                <br>
               </div>
             <% end %>
             <!-- end location -->
@@ -34,9 +33,16 @@
                   <%= course.start_date.to_fs(:month_and_year) %>
                 <% end %>
               </p>
-              <% if save_toggle_button.present? %>
-                <%= save_toggle_button %>
-              <% end %>
+              <div>
+                <% if save_toggle_button.present? %>
+                  <%= save_toggle_button %>
+                <% end %>
+              </div>
+              <% if course.salary? || course.apprenticeship? %>
+                <div class="school-experience-requirements-box govuk-!-margin-top-3">
+                  <span class="govuk-body">School experience is required or strongly recommended</span>
+                </div>
+              <% end%>
             </div>
           <% end %>
         <% end %>
