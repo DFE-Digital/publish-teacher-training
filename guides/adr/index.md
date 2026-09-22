@@ -19,3 +19,5 @@
 * [17. Migrate school data into the new relationship model](0017-migrate-school-data-into-new-relationship-model.md)
 * [18. Roll out school relationship changes with dual writes and feature flags](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md)
 * [19. Use new school relationships in API, search, publishing and operations](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md)
+* [20. Find non-location course search](0020-find-non-location-course-search.md)
+* [21. Find location course search](0021-find-location-course-search.md)
