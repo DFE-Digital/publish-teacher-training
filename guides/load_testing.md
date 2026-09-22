@@ -1,12 +1,13 @@
 # Load Testing
 
-We use **k6** (by Grafana) for load testing, with results visualized in **Grafana Cloud** dashboards.
+We use **k6** for load testing the Find service.
 
 ## Tools
 
 - **k6**: JavaScript-based load testing framework
-- **Grafana Cloud**: Real-time dashboards and monitoring
-- **GitHub Actions**: Automated test execution
+
+A test runs on the machine you start it from. There is no hosted runner and no
+CI job, so results are not collected after a run stops.
 
 ## Quick Start
 

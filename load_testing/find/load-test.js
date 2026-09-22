@@ -35,7 +35,6 @@ const findConfig = getFindConfig()
 export const options = {
   scenarios: getSelectedScenario(),
   thresholds: findConfig.thresholds,
-  cloud: findConfig.cloudOptions,
   hosts: findEnvironment.hosts,
   tags: {
     service: 'find',

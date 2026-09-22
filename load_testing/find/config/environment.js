@@ -27,17 +27,6 @@ export function getFindEnvironment () {
 }
 
 export function getFindConfig () {
-  const cloudOptions = {
-    distribution: {
-      distributionLabel1: { loadZone: 'amazon:gb:london', percent: 100 }
-    },
-    name: 'Find Teacher Training Load Test'
-  }
-
-  if (__ENV.GRAFANA_PROJECT_ID) {
-    cloudOptions.projectID = Number(__ENV.GRAFANA_PROJECT_ID)
-  }
-
   return {
     service: 'Find Teacher Training',
     expectedResponseTimes: {
@@ -55,7 +44,6 @@ export function getFindConfig () {
       'find_empty_results{check_name:search-results}': ['rate<0.25'],
       'find_empty_results{check_name:filtered-results}': ['rate<0.25'],
       'find_empty_results{check_name:advanced-results}': ['rate<0.25']
-    },
-    cloudOptions
+    }
   }
 }
