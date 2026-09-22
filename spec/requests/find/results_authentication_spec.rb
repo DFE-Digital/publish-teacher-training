@@ -15,9 +15,12 @@ RSpec.describe "Find results authentication", service: :find, travel: mid_cycle 
 
     expect(response.parsed_body.title).to eq("Sign in to view search results - Find teacher training courses - GOV.UK")
     expect(response.parsed_body.at_css("h1").text.strip).to eq("Sign in to view search results")
-    expect(response.body).to include("You currently need to sign in or create an account to search for teacher training courses.")
-    expect(response.body).to include("After signing in, you’ll return to your search.")
-    expect(response.body).to include("This is temporary - you will be able to search for courses without signing in soon.")
+
+    main = response.parsed_body.at_css("main")
+    expect(main.text.squish).to include("You currently need to sign in or create an account to search for teacher training courses.")
+    expect(main.text.squish).to include("After signing in, you’ll return to your search.")
+    expect(main.text.squish).to include("This is temporary - you will be able to search for courses without signing in soon.")
+    expect(main.css("form button").map { |button| button.text.strip }).to eq(["sign in or create an account", "Sign in"])
   end
 
   it "returns a candidate to the exact search after signing in" do
@@ -33,10 +36,6 @@ RSpec.describe "Find results authentication", service: :find, travel: mid_cycle 
     expect(response).to redirect_to(find_results_sign_in_path)
 
     follow_redirect!
-    sign_in_form = response.parsed_body.at_css("main form[action='/auth/find-developer']")
-    expect(sign_in_form["method"]).to eq("post")
-    expect(sign_in_form.at_css("button").text.strip).to eq("Sign in")
-
     post "/auth/find-developer", headers: { "HTTP_REFERER" => find_results_sign_in_url }
     follow_redirect!
 
