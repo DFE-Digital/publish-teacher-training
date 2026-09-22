@@ -91,9 +91,11 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
       let!(:gias_school) { create(:gias_school, :open, urn:, latitude: 52.6, longitude: -1.2) }
 
       it "copies lat/lng and does NOT enqueue geocoding" do
-        expect {
-          creator.call
-        }.not_to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+        allow(GeocodeJob).to receive(:perform_later).and_call_original
+
+        creator.call
+
+        expect(GeocodeJob).not_to have_received(:perform_later).with("Site", kind_of(Integer))
 
         site = provider.reload.sites.find_by(urn:)
         expect(site.latitude).to eq(52.6)
@@ -106,9 +108,11 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
       let!(:gias_school) { create(:gias_school, :open, urn: urns.first, latitude: nil, longitude: nil) }
 
       it "does NOT copy lat/lng and DOES enqueue geocoding" do
-        expect {
-          creator.call
-        }.to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+        allow(GeocodeJob).to receive(:perform_later).and_call_original
+
+        creator.call
+
+        expect(GeocodeJob).to have_received(:perform_later).with("Site", kind_of(Integer))
 
         site = provider.reload.sites.find_by(urn:)
         expect(site.latitude).to be_nil
@@ -121,9 +125,11 @@ RSpec.describe DataHub::RegisterSchoolImporter::SchoolCreator do
       let!(:gias_school) { create(:gias_school, :open, urn:, latitude: 51.5, longitude: nil) }
 
       it "does NOT copy lat/lng and DOES enqueue geocoding" do
-        expect {
-          creator.call
-        }.to have_enqueued_job(GeocodeJob).with("Site", kind_of(Integer))
+        allow(GeocodeJob).to receive(:perform_later).and_call_original
+
+        creator.call
+
+        expect(GeocodeJob).to have_received(:perform_later).with("Site", kind_of(Integer))
 
         site = provider.reload.sites.find_by(urn:)
         expect(site.latitude).to be_nil
