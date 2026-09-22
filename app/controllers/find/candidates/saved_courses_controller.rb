@@ -13,7 +13,7 @@ module Find
 
       def sign_in
         @course = Course.find(params[:course_id])
-        @login_path = Settings.one_login.enabled ? "/auth/one-login" : "/auth/find-developer"
+        @sign_in_url = Authentications::CandidateOmniAuth.sign_in_path
         @return_to = referer_is_results_page? ? safe_results_return_to(cookies[:results_path]) : nil
         session["save_course_from_results"] = true if @return_to
       end

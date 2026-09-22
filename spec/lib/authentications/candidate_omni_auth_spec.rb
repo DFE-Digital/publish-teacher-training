@@ -4,6 +4,28 @@ module Authentications
   RSpec.describe CandidateOmniAuth do
     subject { described_class.new }
 
+    describe ".sign_in_path" do
+      context "when Setting.one_login.enabled is false" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(false)
+        end
+
+        it "signs candidates in with the developer strategy" do
+          expect(described_class.sign_in_path).to eq("/auth/find-developer")
+        end
+      end
+
+      context "when Setting.one_login.enabled is true" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(true)
+        end
+
+        it "signs candidates in with One Login" do
+          expect(described_class.sign_in_path).to eq("/auth/one-login")
+        end
+      end
+    end
+
     describe "#provider" do
       context "when Setting.one_login.enabled is false" do
         before do
