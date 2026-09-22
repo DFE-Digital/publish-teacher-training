@@ -1,0 +1,80 @@
+# Solid Queue recurring tasks — mirrors Settings.bg_jobs (Sidekiq Cron) by environment.
+#
+# Schedules use Europe/London so UK local midnight / DST behaviour matches Sidekiq Cron
+# under config.time_zone = "Europe/London".
+#
+# The Solid Queue scheduler is skipped in every deployed environment until the global
+# adapter cutover (SOLID_QUEUE_SKIP_RECURRING=true on the solid-queue-worker). Enabling
+# recurrence before destroying Sidekiq Cron entries would double-enqueue schedules.
+#
+# Cutover / rollback steps: guides/solid-queue-recurring-cutover.md
+
+# Finished-job / batch cleanup for environments that will run the scheduler after cutover.
+# Routed to low_priority so command jobs land on a consumed queue.
+cleanup: &cleanup
+  clear_solid_queue_finished_jobs:
+    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+    queue: low_priority
+  clear_solid_queue_finished_batches:
+    command: "SolidQueue::Batch.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+    queue: low_priority
+
+production:
+  <<: *cleanup
+  save_statistic:
+    class: SaveStatisticJob
+    queue: save_statistic
+    schedule: "0 0 * * * Europe/London"
+  send_entity_table_checks_to_bigquery:
+    class: DfE::Analytics::EntityTableCheckJob
+    queue: low_priority
+    schedule: "30 0 * * * Europe/London"
+  import_gias_schools:
+    class: GiasImportJob
+    queue: default
+    schedule: "30 2 * * * Europe/London"
+  cleanup_recent_searches:
+    class: CleanupRecentSearchesJob
+    queue: default
+    schedule: "0 3 * * * Europe/London"
+  cleanup_school_bulk_update_drafts:
+    class: CleanupSchoolBulkUpdateDraftsJob
+    queue: default
+    schedule: "0 3 * * * Europe/London"
+  send_weekly_email_alerts:
+    class: SendWeeklyEmailAlertsJob
+    queue: default
+    schedule: "0 3 * * 5 Europe/London"
+
+qa:
+  <<: *cleanup
+  save_statistic:
+    class: SaveStatisticJob
+    queue: save_statistic
+    schedule: "0 0 * * * Europe/London"
+  cleanup_recent_searches:
+    class: CleanupRecentSearchesJob
+    queue: default
+    schedule: "0 3 * * * Europe/London"
+  cleanup_school_bulk_update_drafts:
+    class: CleanupSchoolBulkUpdateDraftsJob
+    queue: default
+    schedule: "0 3 * * * Europe/London"
+
+staging:
+  <<: *cleanup
+  save_statistic:
+    class: SaveStatisticJob
+    queue: save_statistic
+    schedule: "0 0 * * * Europe/London"
+
+# No Sidekiq Cron schedules today — keep empty so a future SKIP_RECURRING=false
+# still does not invent production-like recurrence.
+sandbox: {}
+review: {}
+development: {}
+test: {}
+loadtest: {}
+rollover: {}
