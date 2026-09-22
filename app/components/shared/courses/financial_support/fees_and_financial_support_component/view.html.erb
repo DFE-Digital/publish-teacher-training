@@ -15,6 +15,6 @@
   <% elsif has_scholarship_and_bursary? %>
     <%= render Shared::Courses::FinancialSupport::ScholarshipAndBursaryComponent::View.new(incentive_view) %>
   <% else %>
-    <%= render partial: "shared/courses/financial_support/loan" %>
+    <%= render partial: "shared/courses/financial_support/loan", locals: { course: @course } %>
   <% end %>
 </div>

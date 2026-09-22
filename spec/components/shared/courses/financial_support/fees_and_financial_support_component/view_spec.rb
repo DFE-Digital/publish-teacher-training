@@ -84,12 +84,41 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
 
   context "Courses with student loans" do
     it "renders the student loans section if the course is not salaried, does not have a bursary or scholarship and does not meet bursary exclusion criteria" do
+      FeatureFlag.activate(:bursaries_and_scholarships_announced)
       enrichment = create(:course_enrichment)
       course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "Drama", subjects: [create(:primary_subject), create(:secondary_subject)]).decorate
 
       result = render_inline(described_class.new(course, enrichment))
 
       expect(result.text).to include("You may be eligible for student loans to cover the cost of your tuition fee or to help with living costs.")
+      expect(result.text).not_to include("Details of financial support for courses starting in the")
+    end
+  end
+
+  context "Courses with a bursary when bursaries and scholarships are not announced" do
+    it "renders the holding message in place of the bursary amount" do
+      FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+      enrichment = create(:course_enrichment)
+      course = create(:course, :secondary, funding: "fee", enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000"), build(:secondary_subject)]).decorate
+
+      result = render_inline(described_class.new(course, enrichment))
+
+      expect(result.text).to include("Bursaries")
+      expect(result.text).to include("Details of financial support for courses starting in the")
+    end
+  end
+
+  context "Courses in a later recruitment cycle when bursaries and scholarships are not announced" do
+    it "names the course's own academic year rather than the current one" do
+      FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+      recruitment_cycle = create(:recruitment_cycle, :next)
+      provider = create(:provider, recruitment_cycle:)
+      enrichment = create(:course_enrichment)
+      course = create(:course, :secondary, funding: "fee", provider:, enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000")]).decorate
+
+      result = render_inline(described_class.new(course, enrichment))
+
+      expect(result.text).to include("courses starting in the #{recruitment_cycle.year} to #{recruitment_cycle.year.to_i + 1} academic year")
     end
   end
 
