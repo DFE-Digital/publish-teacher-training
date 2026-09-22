@@ -4,7 +4,12 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl"><%= t(".heading") %></h1>
 
-    <p class="govuk-body"><%= t(".body") %></p>
+    <%= form_tag(@sign_in_url, method: :post, class: "govuk-body") do %>
+      <%= t(".body_before") %>
+      <%= button_tag(t(".sign_in_link"), type: "submit", class: "app-button-link govuk-!-padding-0") %>
+      <%= t(".body_after") %>
+    <% end %>
+
     <p class="govuk-body"><%= t(".return_to_search") %></p>
     <p class="govuk-body"><%= t(".temporary_notice") %></p>
 

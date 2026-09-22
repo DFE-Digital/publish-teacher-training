@@ -6,7 +6,9 @@ en:
       sign_in:
         page_title: Sign in to view search results
         heading: Sign in to view search results
-        body: You currently need to sign in or create an account to search for teacher training courses.
+        body_before: You currently need to
+        sign_in_link: sign in or create an account
+        body_after: to search for teacher training courses.
         return_to_search: After signing in, you’ll return to your search.
         temporary_notice: This is temporary - you will be able to search for courses without signing in soon.
         sign_in: Sign in
