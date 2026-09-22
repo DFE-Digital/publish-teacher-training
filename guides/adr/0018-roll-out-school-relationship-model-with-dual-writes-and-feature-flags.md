@@ -141,3 +141,5 @@ API, publishing, search, rollover, support UI and reporting read-path decisions 
 - [ADR 16. Model school relationships with GIAS-backed join tables](0016-model-school-relationships-with-gias-backed-join-tables.md)
 - [ADR 17. Migrate school data into the new relationship model](0017-migrate-school-data-into-new-relationship-model.md)
 - [ADR 19. Use new school relationships in API, search, publishing and operations](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md)
+- [ADR 20. Find non-location course search](0020-find-non-location-course-search.md)
+- [ADR 21. Find location course search](0021-find-location-course-search.md)

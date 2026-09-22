@@ -116,7 +116,7 @@ All API endpoints that expose school/location data should be reviewed and update
 
 ### Location-based search
 
-Location-based course search should gain a new query path using the provider-school and course-school relationship model.
+Location-based course search should gain a new query path using the provider-school and course-school relationship model. The resulting Find implementation is documented in [ADR 21](0021-find-location-course-search.md); the shared non-location pipeline is documented in [ADR 20](0020-find-non-location-course-search.md).
 
 The existing query service should remain in place while the feature flag is off. When the feature flag is on, location-based search should use the new query service and the new school data model.
 
@@ -172,3 +172,5 @@ Support UI and Blazer queries are operational dependencies of the remodel. They 
 - [ADR 16. Model school relationships with GIAS-backed join tables](0016-model-school-relationships-with-gias-backed-join-tables.md)
 - [ADR 17. Migrate school data into the new relationship model](0017-migrate-school-data-into-new-relationship-model.md)
 - [ADR 18. Roll out school relationship changes with dual writes and feature flags](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md)
+- [ADR 20. Find non-location course search](0020-find-non-location-course-search.md)
+- [ADR 21. Find location course search](0021-find-location-course-search.md)
