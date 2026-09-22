@@ -6,7 +6,7 @@ source "https://rubygems.org"
 
 ruby "~> 3.4.10"
 
-gem "govuk_tech_docs", "~> 6.3"
+gem "govuk_tech_docs", "~> 6.4"
 
 group :test do
   gem "capybara"
