@@ -112,7 +112,7 @@ RSpec.describe "Delete a provider's schools" do
     and_i_am_told_it_is_the_only_school
   end
 
-  scenario "after the schools remodel cycle without a legacy site" do
+  scenario "after the schools remodel cycle without a legacy site", travel: mid_cycle(2026) do
     given_i_am_authenticated_as_a_provider_user_after_the_schools_remodel_cycle
     and_there_is_a_provider_school_without_a_legacy_site
     and_the_future_provider_has_a_second_school

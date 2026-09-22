@@ -12,7 +12,7 @@ RSpec.describe "About Your Organisation section" do
   end
 
   def given_i_am_a_provider_user_as_a_provider_user
-    @recruitment_cycle = find_or_create(:recruitment_cycle, year: 2025)
+    @recruitment_cycle = find_or_create(:recruitment_cycle)
     @provider = create(:provider, recruitment_cycle: @recruitment_cycle)
     course = create(:course, :with_accrediting_provider, provider: @provider)
 

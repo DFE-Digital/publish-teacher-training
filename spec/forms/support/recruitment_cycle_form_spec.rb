@@ -75,17 +75,17 @@ RSpec.describe Support::RecruitmentCycleForm do
     context "when dates are valid" do
       let(:params) do
         {
-          "year" => "2027",
-          "application_start_date(1i)" => "2026",
+          "year" => "2028",
+          "application_start_date(1i)" => "2027",
           "application_start_date(2i)" => "10",
-          "application_start_date(3i)" => "06",
-          "application_end_date(1i)" => "2027",
+          "application_start_date(3i)" => "12",
+          "application_end_date(1i)" => "2028",
           "application_end_date(2i)" => "03",
           "application_end_date(3i)" => "10",
-          "available_in_publish_from(1i)" => "2026",
+          "available_in_publish_from(1i)" => "2027",
           "available_in_publish_from(2i)" => "09",
           "available_in_publish_from(3i)" => "01",
-          "available_for_support_users_from(1i)" => "2026",
+          "available_for_support_users_from(1i)" => "2027",
           "available_for_support_users_from(2i)" => "08",
           "available_for_support_users_from(3i)" => "01",
         }
