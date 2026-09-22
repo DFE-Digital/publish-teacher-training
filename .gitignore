@@ -99,8 +99,8 @@ dump.rdb
 /db/data_schema.rb
 
 # Load testing
-find-load-test-summary.json
-find-load-test-report.html
+/load_testing/find/find-load-test-summary.json
+/load_testing/find/find-load-test-report.html
 
 .yarn/*
 !.yarn/cache
