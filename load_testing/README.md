@@ -255,3 +255,98 @@ you started it from. Both files are ignored by git.
 
 Keep the files if you want to compare two runs. A run does not keep a history,
 because nothing collects the results after the run stops.
+
+***
+
+## How to report a run
+
+### Choose the scenario to report
+
+The four scenarios answer four different questions:
+
+- `quick` tests the suite. It is not a result. Do not report it.
+- `baseline` shows the health of the service at a normal load.
+- `peak` shows the behaviour at the busy moment. Report this one first.
+- `stress` shows the point where the service breaks. Report it on its own,
+  because a failed threshold is the expected result.
+
+Start `quick` first, then `baseline`, then `peak`. Start `stress` only when a
+person asks for the limit of the service.
+
+### Keep the files from each run
+
+Each run writes the same two file names:
+
+- `find-load-test-summary.json`
+- `find-load-test-report.html`
+
+A second run replaces the files from the first run. `npm run find:all` starts
+three runs, so only the files from the stress run stay. Give the files a new
+name after each run:
+
+```
+npm run find:baseline && mv find-load-test-report.html baseline-$(date +%F).html
+npm run find:peak     && mv find-load-test-report.html peak-$(date +%F).html
+```
+
+### Write down the state of the environment
+
+The same code gives very different results in different parts of the cycle.
+Record three things before each run:
+
+- the target environment
+- the value of `cycle_schedule`
+- the number of findable courses in the cycle that Find serves
+
+Tell the other people who use the environment before you start a peak run or a
+stress run.
+
+### Say where the load came from
+
+k6 makes the load on the machine you start it from. A laptop and a home network
+reach their limit before the service does.
+
+Each request receives about 135 kB, because a results page is large. A peak run
+makes 110 to 190 requests each second, so it needs 120 to 200 Mbit/s.
+
+If your line is slower than that, the run measures your laptop. Report the
+numbers as a minimum for the service, not as a measurement of it.
+
+To find out which side reached its limit, compare the parts of
+`http_req_duration`:
+
+- `http_req_waiting` is the time the server needs to answer. A high value is a
+  result about the service.
+- `http_req_blocked`, `http_req_connecting` and `http_req_tls_handshaking` are
+  times on your own machine. A high value is a limit of your laptop.
+
+### Send this
+
+Attach the HTML report. Put a short summary in the message:
+
+```
+Find load test: <scenario>
+Run:        <date and time>, from <a laptop / a pod in the cluster>
+Target:     <environment>
+Phase:      cycle_schedule = <value>
+Catalogue:  <count> findable courses in cycle <year>
+
+Thresholds: <n> of 6 passed
+  http_req_failed          <rate>   < 1%
+  find_error_rate          <rate>   < 1%
+  http_req_duration p(95)  <ms>     < 3000ms
+  find_empty_results       <three rates>   < 25% each
+
+Load made:  <requests/s>, <requests>, <iterations>
+Checks:     <passed> of <total> passed
+
+Caveat: one laptop made the load, so this is a minimum for the
+service, not a measurement of it.
+```
+
+The threshold list is the decision. k6 gives an error code when a threshold
+fails, so a reader does not need to judge the other numbers.
+
+Report the load you made as well as the response times. If you ask for 200
+users and the run makes only 60 requests each second, the report must say
+whether the service was slow or the laptop was full.
