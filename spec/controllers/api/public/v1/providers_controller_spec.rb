@@ -227,6 +227,23 @@ RSpec.describe API::Public::V1::ProvidersController do
         end
       end
 
+      context "with an invalid include" do
+        before do
+          get :index, params: {
+            recruitment_cycle_year: recruitment_cycle.year,
+            include: "recruitment_cycle' \\ -H 'accept: application/json",
+          }
+        end
+
+        it "returns a bad request response" do
+          expect(response).to have_http_status(:bad_request)
+        end
+
+        it "returns a friendly error message" do
+          expect(json_response["errors"][0]["detail"]).to eql(I18n.t("jsonapi.invalid_include"))
+        end
+      end
+
       context "with sorting" do
         let(:provider2) do
           create(:provider,

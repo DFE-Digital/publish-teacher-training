@@ -13,6 +13,10 @@ module ErrorHandlers
       end
 
       rescue_from(ActiveRecord::RecordNotFound) { render_json_error(status: 404) }
+
+      rescue_from(JSONAPI::IncludeDirective::InvalidKey) do |_exception|
+        render_json_error(status: 400, message: I18n.t("jsonapi.invalid_include"))
+      end
     end
 
   private

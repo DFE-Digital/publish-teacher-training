@@ -9,6 +9,10 @@ describe "Base" do
     def error
       raise hell
     end
+
+    def invalid_include
+      raise JSONAPI::IncludeDirective::InvalidKey, "bad'include"
+    end
   end
 
   before do
@@ -16,6 +20,7 @@ describe "Base" do
 
     routes.draw do
       get "error" => "anonymous#error"
+      get "invalid_include" => "anonymous#invalid_include"
     end
   end
 
@@ -39,6 +44,31 @@ describe "Base" do
           },
         ],
       )
+    end
+
+    context "when the include param is invalid" do
+      it "does not send the error to sentry" do
+        expect(Sentry).not_to receive(:capture_exception)
+        get :invalid_include
+      end
+
+      it "returns a bad request response" do
+        get :invalid_include
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "returns a friendly error message" do
+        get :invalid_include
+        expect(response.parsed_body).to match(
+          "errors" => [
+            {
+              "status" => 400,
+              "title" => "BAD REQUEST",
+              "detail" => I18n.t("jsonapi.invalid_include"),
+            },
+          ],
+        )
+      end
     end
   end
 
