@@ -41,16 +41,33 @@ module Courses
     def nearest_placement_school_text
       return unless search_by_location?
 
-      from_text = centre_location? ? " from the centre of " : " from "
+      address = @short_address.presence || @location
 
-      safe_join([
-        content_tag(
-          :strong,
-          pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
-        ),
-        from_text,
-        @short_address.presence || @location,
-      ])
+      location_text =
+        if centre_location?
+          "from the centre of #{address}"
+        else
+          "from #{address}"
+        end
+
+      content_tag(:div) do
+        safe_join([
+          content_tag(:p, class: "govuk-body govuk-!-margin-bottom-0") do
+            safe_join([
+              "Nearest placement school ",
+              content_tag(
+                :strong,
+                pluralize(course.minimum_distance_to_search_location.ceil, "mile"),
+              ),
+            ])
+          end,
+          content_tag(
+            :div,
+            location_text,
+            class: "govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0",
+          ),
+        ])
+      end
     end
 
     def save_toggle_button
