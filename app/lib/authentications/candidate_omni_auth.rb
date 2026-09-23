@@ -5,10 +5,13 @@ module Authentications
 
     attr_reader :provider
 
-    # The path candidates sign in through. Outside production One Login is
-    # disabled and the developer strategy stands in for it.
+    # The path candidates sign in through. Staging and review have One Login
+    # disabled and fall back to the developer strategy, which #set_provider
+    # never registers in production - so production always uses One Login.
     def self.sign_in_path
-      Settings.one_login.enabled ? ONE_LOGIN_PATH : DEVELOPER_PATH
+      return ONE_LOGIN_PATH if Settings.one_login.enabled || Rails.env.production?
+
+      DEVELOPER_PATH
     end
 
     def initialize
