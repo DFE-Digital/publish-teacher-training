@@ -1,0 +1,15 @@
+<%= govuk_inset_text classes: "app-callout app-callout--purple govuk-!-margin-top-0" do %>
+  <h2 class="govuk-heading-s"><%= t(".heading") %></h2>
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    <%= t(
+          ".body_html",
+          link: govuk_link_to(
+            t(".link_text"),
+            find_track_click_path(
+              url: t("find.get_into_teaching.url_bursaries_and_scholarships_support"),
+              utm_content: "results_salaried_course_callout_bursaries_and_scholarships",
+            ),
+          ),
+        ) %>
+  </p>
+<% end %>
