@@ -41,6 +41,18 @@ module Find
           end
         end
 
+        def show_degree_subject_requirements_details?
+          course.degree_subject_requirements.present? || engineers_teach_physics_content? || show_subject_knowledge_enhancement_content?
+        end
+
+        def engineers_teach_physics_content?
+          course.secondary_course? && course.engineers_teach_physics?
+        end
+
+        def show_subject_knowledge_enhancement_content?
+          !FeatureFlag.active?(:hide_subject_knowledge_enhancement_content) && subject_knowledge_enhancement_content?
+        end
+
         def subject_knowledge_enhancement_content?
           if course.subjects.first.subject_code.nil?
             course.subjects.any? { |subject| SUBJECT_KNOWLEDGE_ENHANCEMENTS_SUBJECT_CODES.include?(subject.subject_code) }

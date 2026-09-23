@@ -210,6 +210,63 @@ describe Find::Courses::EntryRequirementsComponent::View, type: :component do
     end
   end
 
+  context "when hide_subject_knowledge_enhancement_content is active" do
+    before { FeatureFlag.activate(:hide_subject_knowledge_enhancement_content) }
+
+    context "with an SKE subject and no degree subject requirements" do
+      let(:subjects) { [build(:secondary_subject, :mathematics)] }
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false, degree_subject_requirements: nil) }
+
+      it "does not render the degree subject requirements dropdown" do
+        expect(result).to have_no_css(".govuk-details__summary", text: "Degree subject requirements")
+      end
+
+      it "does not render the SKE text or link" do
+        expect(result.text).not_to include(ske_text)
+        expect(result).to have_no_link(ske_url_name, href: ske_url)
+      end
+    end
+
+    context "with an SKE subject and degree subject requirements" do
+      let(:subjects) { [build(:secondary_subject, :mathematics)] }
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: true, degree_subject_requirements: "A degree in a relevant subject.") }
+
+      it "renders the dropdown with the provider text only" do
+        expect(result).to have_css(".govuk-details__summary", text: "Degree subject requirements")
+        expect(result).to have_css(".govuk-details__text", text: "A degree in a relevant subject.", visible: :all)
+        expect(result.text).not_to include(ske_text)
+        expect(result).to have_no_link(ske_url_name, href: ske_url, visible: :all)
+      end
+    end
+
+    context "with an Engineers teach physics course and no degree subject requirements" do
+      let(:course) do
+        build(
+          :course,
+          :engineers_teach_physics,
+          :secondary,
+          subjects: [build(:secondary_subject, :physics)],
+          degree_subject_requirements: nil,
+        )
+      end
+
+      it "renders the dropdown with the Engineers teach physics text only" do
+        expect(result).to have_css(".govuk-details__summary", text: "Degree subject requirements")
+        expect(result).to have_css(".govuk-details__text", text: "This Engineers teach physics course is designed", visible: :all)
+        expect(result.text).not_to include(ske_text)
+      end
+    end
+
+    context "with a non-SKE subject and no degree subject requirements" do
+      let(:subjects) { [build(:secondary_subject, :drama)] }
+      let(:course) { build(:course, subjects:, additional_degree_subject_requirements: false, degree_subject_requirements: nil) }
+
+      it "does not render the degree subject requirements dropdown" do
+        expect(result).to have_no_css(".govuk-details__summary", text: "Degree subject requirements")
+      end
+    end
+  end
+
   context "when the provider accepts pending GCSEs" do
     it "renders correct message" do
       course = build(
