@@ -135,12 +135,24 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
       then_my_own_row_offers_no_way_to_remove_me
       and_other_rows_still_do
     end
+
+    scenario "Not offered on my own page" do
+      given_i_visit_the_publish_users_index_page
+      when_i_click_on_the_user
+      then_i_am_not_offered_a_way_to_remove_myself
+    end
   end
 
   describe "Viewing when a user last signed in" do
     scenario "With a user who has signed in" do
       given_i_visit_the_publish_users_index_page
       then_i_see_the_month_and_year_they_last_signed_in
+    end
+
+    scenario "With a user who has never signed in" do
+      given_there_is_a_user_who_has_never_signed_in
+      when_i_visit_the_publish_users_index_page
+      then_i_see_that_they_have_never_signed_in
     end
   end
 
@@ -290,28 +302,35 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
   end
 
   def when_i_click_remove_user_for_user_two
-    user_two_row.remove_user_link.click
+    click_link_or_button "Remove user for #{@user2.full_name}"
   end
 
   def then_i_am_taken_to_the_publish_users_delete_page
     expect(publish_users_delete_page).to be_displayed(provider_code: @provider.provider_code, user_id: @user2.id)
   end
 
-  def then_i_see_the_month_and_year_they_last_signed_in
-    expect(user_two_row.last_signed_in.text).to eq("October 2024")
+  def given_there_is_a_user_who_has_never_signed_in
+    @user3 = create(:user, first_name: "Ms", last_name: "New", providers: [@provider])
   end
 
-  def user_two_row
-    publish_users_index_page.users.find { |row| row.email.text == @user2.email }
+  def then_i_see_the_month_and_year_they_last_signed_in
+    expect(page).to have_table(with_rows: [{ "Email" => @user2.email, "Last signed in" => "October 2024" }])
+  end
+
+  def then_i_see_that_they_have_never_signed_in
+    expect(page).to have_table(with_rows: [{ "Email" => @user3.email, "Last signed in" => "Never signed in" }])
   end
 
   def then_my_own_row_offers_no_way_to_remove_me
-    my_row = publish_users_index_page.users.find { |row| row.email.text == @user.email }
-    expect(my_row).to have_no_css(".remove-user .govuk-link")
+    expect(page).to have_no_link("Remove user for #{@user.full_name}")
   end
 
   def and_other_rows_still_do
-    expect(user_two_row).to have_css(".remove-user .govuk-link")
+    expect(page).to have_link("Remove user for #{@user2.full_name}")
+  end
+
+  def then_i_am_not_offered_a_way_to_remove_myself
+    expect(page).to have_no_link("Remove user")
   end
 
   def i_should_be_on_the_publish_users_show_page
