@@ -16,9 +16,12 @@ export function searchAndFilterJourney (environment, config) {
       const response = http.get(`${environment.baseUrl}/results?${basicSearchParams}`)
       const isSuccess = findPerformanceCheck(response, 'Basic Search', config.expectedResponseTimes.search)
 
-      findResultCount(response, 'search-results')
+      const resultCount = findResultCount(response, 'search-results')
       findContentCheck(response, 'filter-options', 'Filter results')
-      findContentCheck(response, 'course-listings', 'Age group')
+
+      if (resultCount > 0) {
+        findContentCheck(response, 'course-listings', 'Age group')
+      }
 
       if (!isSuccess) {
         findErrorHandler(response, 'Basic Search')

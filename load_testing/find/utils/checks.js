@@ -79,6 +79,7 @@ export function findResultCount (response, checkName) {
   // empty breaks the find_empty_results threshold, which is the real fault.
   const match = response.body.match(/([0-9][0-9,]*) results/)
   const rendered = match !== null
+  const resultCount = rendered ? Number(match[1].replace(/,/g, '')) : null
 
   if (!rendered) {
     findContentErrors.add(1, {
@@ -87,16 +88,18 @@ export function findResultCount (response, checkName) {
       status: response.status
     })
   } else {
-    findEmptyResults.add(Number(match[1].replace(/,/g, '')) === 0, { check_name: checkName })
+    findEmptyResults.add(resultCount === 0, { check_name: checkName })
   }
 
-  return check(response, {
+  check(response, {
     [`Find ${checkName}: results page rendered`]: () => rendered,
     [`Find ${checkName}: content length > 100 chars`]: (r) => r.body.length > 100
   }, {
     content_check: checkName,
     service: 'find'
   })
+
+  return resultCount
 }
 
 export function findErrorHandler (response, context) {
