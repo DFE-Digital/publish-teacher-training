@@ -16,7 +16,9 @@ module Find
       @courses = @courses_query.call
       @courses_count = @courses_query.count
       @filter_counts = @search_courses_form.filter_counts
-      @show_start_date = (params[:start_date] & %w[jan_to_aug september oct_to_jul]).present? || params[:order] == "start_date_ascending"
+      @show_start_date =
+        Array(params[:start_date]).compact_blank.present? ||
+        params[:order] == "start_date_ascending"
 
       @pagy, @results = pagy(@courses, count: @courses_count, page:)
       respond_to do |format|

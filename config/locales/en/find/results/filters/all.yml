@@ -25,7 +25,6 @@ en:
           filter_title_visa: Visa sponsorship
           filter_title_interviews: Online interviews
           filter_title_applications_open: Applications open
-          filter_title_start_date: Start date
           filter_title_provider: Training provider
           set_up_email_alert: Email me courses like this
           apply_filter: Apply filters
@@ -58,10 +57,17 @@ en:
             fee: Fee - no salary
             salary: Salary
             apprenticeship: Teaching apprenticeship - with salary
+          filter_title_start_date: Start date
+          selected_count:
+            one: "%{count} selected"
+            other: "%{count} selected"
           start_date_options:
-            jan_to_aug: January to August %{recruitment_cycle_year}
-            september: "September %{recruitment_cycle_year} only"
-            oct_to_jul: October %{recruitment_cycle_year} to July %{next_recruitment_cycle_year}
+            jan_to_mar: January to March
+            apr_to_june: April to June
+            july_and_aug: July and August
+            september: September only
+            oct_to_dec: October to December
+            july: July only
           hint:
             primary: (ages 3 to 11)
             further_education: (ages 16 and over)
