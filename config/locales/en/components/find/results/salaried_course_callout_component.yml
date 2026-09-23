@@ -1,0 +1,7 @@
+en:
+  find:
+    results:
+      salaried_course_callout_component:
+        heading: Is a salaried course right for me?
+        body_html: Fee paying courses are less competitive, and you could receive more money if you're a UK citizen and eligible for %{link}.
+        link_text: bursaries or scholarships
