@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head> 
+    <meta charset="UTF-8" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" crossorigin="anonymous">
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/benc-uk/k6-reporter/main/assets/icon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Teacher Training Load Test Report</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 2rem;
+        color: #2d3748;
+      }
+      
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      
+      header {
+        background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+        padding: 1.5rem 2rem;
+        color: white;
+      }
+      
+      header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      header h1 svg {
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+      }
+      
+      .content {
+        padding: 1.5rem;
+      }
+      
+      footer { 
+        text-align: center;
+        padding: 1.5rem;
+        color: #718096;
+        font-size: 0.875rem;
+        border-top: 1px solid #e2e8f0;
+        background: #f7fafc;
+      }
+      
+      footer a {
+        text-decoration: none;
+        color: #7c3aed;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      
+      footer a:hover {
+        color: #5b21b6;
+      }
+      
+      /* Status classes */
+      .failed {
+        background: linear-gradient(135deg, #fc8181 0%, #f56565 100%) !important;
+        color: white !important;
+      }     
+      
+      .good {
+        background: linear-gradient(135deg, #68d391 0%, #48bb78 100%) !important;
+        color: white !important;
+      }   
+      
+      td.failed {
+        font-weight: 600;
+        color: #e53e3e;
+      }
+      
+      td.good {
+        font-weight: 600;
+        color: #38a169;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 2rem 0 1rem 0;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #2d3748;
+      }
+      
+      h4 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin: 1.5rem 0 1rem 0;
+        color: #4a5568;
+      }
+      
+      /* Metric Cards */
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 0;
+      }
+      
+      .metric-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        border: 1px solid #e2e8f0;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .metric-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      }
+      
+      .metric-card.primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      
+      .metric-card.success {
+        background: linear-gradient(135deg, #68d391 0%, #48bb78 100%);
+        color: white;
+      }
+      
+      .metric-card.danger {
+        background: linear-gradient(135deg, #fc8181 0%, #f56565 100%);
+        color: white;
+      }
+      
+      .metric-card.warning {
+        background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
+        color: white;
+      }
+      
+      .metric-card .icon {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        font-size: 4rem;
+        opacity: 0.15;
+      }
+      
+      .metric-card h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .metric-card.primary h4,
+      .metric-card.success h4,
+      .metric-card.danger h4,
+      .metric-card.warning h4 {
+        color: white;
+      }
+      
+      .metric-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .metric-subtext {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        margin-top: 0.25rem;
+      }
+      
+      /* Tabs */
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      
+      .tabs label {
+        order: 1;
+        display: block;
+        padding: 1rem 2rem;
+        cursor: pointer;
+        color: #718096;
+        background: #f7fafc;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        margin-right: 0.25rem;
+        border: 2px solid transparent;
+        border-bottom: none;
+        font-size: 0.9rem;
+      }
+      
+      .tabs label:hover {
+        background: #edf2f7;
+        color: #4a5568;
+      }
+      
+      .tabs label i {
+        margin-right: 0.5rem;
+      }
+      
+      .tabs .tab {
+        order: 99;
+        flex-grow: 1;
+        width: 100%;
+        display: none;
+        padding: 2rem;
+        background: #ffffff;
+        border-radius: 0 12px 12px 12px;
+        border: 2px solid #e2e8f0;
+        min-height: 400px;
+      }
+      
+      .tabs input[type="radio"] {
+        display: none;
+      }
+      
+      .tabs input[type="radio"]:checked + label {
+        background: #ffffff;
+        color: #7c3aed;
+        border-color: #e2e8f0;
+        border-bottom-color: #ffffff;
+        position: relative;
+        bottom: -2px;
+      }
+      
+      .tabs input[type="radio"]:checked + label + .tab {
+        display: block;
+      }
+      
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1rem 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      
+      thead th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      tbody tr {
+        background: white;
+        transition: background 0.2s;
+      }
+      
+      tbody tr:nth-child(even) {
+        background: #f7fafc;
+      }
+      
+      tbody tr:hover {
+        background: #edf2f7;
+      }
+      
+      tbody td {
+        padding: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 0.9rem;
+      }
+      
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      tbody td:first-child {
+        font-weight: 500;
+      }
+      
+      /* Detail boxes for Other Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 1rem 0;
+      }
+      
+      .stat-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        border: 1px solid #e2e8f0;
+        position: relative;
+        overflow: hidden;
+        color: white;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .stat-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      }
+      
+      .stat-box h4 {
+        margin: 0 0 1rem 0;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.9;
+        color: white;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .stat-box .icon {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        font-size: 4rem;
+        opacity: 0.15;
+      }
+      
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        position: relative;
+        z-index: 2;
+      }
+      
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+      
+      .stat-label {
+        color: white;
+        font-weight: 400;
+        font-size: 0.875rem;
+        opacity: 0.9;
+      }
+      
+      .stat-value {
+        color: white;
+        font-weight: 700;
+        font-size: 1.5rem;
+      }
+      
+      /* Groups and Checks */
+      .group-header {
+        cursor: pointer;
+        user-select: none;
+        padding: 0.75rem 1rem;
+        background: #f7fafc;
+        border-radius: 8px;
+        margin: 1rem 0;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .group-header:hover {
+        background: #edf2f7;
+      }
+      
+      .group-header::before {
+        content: '▼';
+        font-size: 0.75rem;
+        transition: transform 0.2s;
+      }
+      
+      .sub-groups {
+        padding: 0 0 0 2rem;
+        margin-top: 1rem;
+      }
+      
+      .note {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: #edf2f7;
+        border-left: 4px solid #667eea;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: #4a5568;
+      }
+      
+      @media (max-width: 768px) {
+        body {
+          padding: 0.5rem;
+        }
+        
+        header {
+          padding: 1.5rem;
+        }
+        
+        header h1 {
+          font-size: 1.5rem;
+        }
+        
+        .content {
+          padding: 1rem;
+        }
+        
+        .metrics-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .tabs label {
+          padding: 0.75rem 1rem;
+          font-size: 0.8rem;
+        }
+        
+        .tabs .tab {
+          padding: 1rem;
+        }
+        
+        .metric-value {
+          font-size: 2rem;
+        }
+      }
+    </style>
+    <script> 
+      function tabClickHandler(e) {
+        let elemSubGroup = e.target.nextElementSibling;
+        if (!elemSubGroup) return;
+        
+        let display = elemSubGroup.style.display;
+        elemSubGroup.style.display = !display || display === "block" ? "none" : "block";
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <svg width="50" height="45" viewBox="0 0 50 45" fill="none"><path d="M31.968 34.681a2.007 2.007 0 002.011-2.003c0-1.106-.9-2.003-2.011-2.003a2.007 2.007 0 00-2.012 2.003c0 1.106.9 2.003 2.012 2.003z" fill="white"></path><path d="M39.575 0L27.154 16.883 16.729 9.31 0 45h50L39.575 0zM23.663 37.17l-2.97-4.072v4.072h-2.751V22.038l2.75 1.989v7.66l3.659-5.014 2.086 1.51-3.071 4.21 3.486 4.776h-3.189v.001zm8.305.17c-2.586 0-4.681-2.088-4.681-4.662 0-1.025.332-1.972.896-2.743l4.695-6.435 2.086 1.51-2.239 3.07a4.667 4.667 0 013.924 4.6c0 2.572-2.095 4.66-4.681 4.66z" fill="white"></path></svg>
+          Find Teacher Training Load Test Report
+        </h1>
+      </header>
+
+      <div class="content">
+        <!-- Main info boxes -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <i class="fas fa-globe icon"></i>
+            <h4>Total Requests</h4>
+            <div class="metric-value">
+              24228
+              
+            </div>
+          </div>
+          
+          
+            <div class="metric-card danger">
+              <i class="fas fa-times-circle icon"></i>
+              <h4>Failed Requests</h4>
+              <div class="metric-value">77</div>
+            </div> 
+            
+          
+          <div class="metric-card danger">
+            <i class="fas fa-exclamation-triangle icon"></i>
+            <h4>Breached Thresholds</h4>
+            <div class="metric-value">2</div>
+          </div>
+          
+          <div class="metric-card danger">
+            <i class="fas fa-eye icon"></i>
+            <h4>Failed Checks</h4>
+            <div class="metric-value">7264</div>
+          </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="tabs">
+          <input type="radio" name="tabs" id="tabone" checked="checked">
+          <label for="tabone"><i class="fas fa-microscope"></i> Detailed Metrics</label>
+          <div class="tab">
+
+            
+              <h4><i class="fas fa-chart-line"></i> Trends & Times</h4>
+              <table class="pure-table pure-table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    
+                      <th>Avg</th>
+                    
+                      <th>Min</th>
+                    
+                      <th>Med</th>
+                    
+                      <th>Max</th>
+                    
+                      <th>P(90)</th>
+                    
+                      <th>P(95)</th>
+                     
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  <tr>
+                    <td><b>find_response_time_trend</b></td>
+                    
+                      <td class="">4332.12</td>
+                    
+                      <td class="">7.11</td>
+                    
+                      <td class="">1575.73</td>
+                    
+                      <td class="">60002.27</td>
+                    
+                      <td class="">9582.55</td>
+                    
+                      <td class="">19041.17</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>group_duration</b></td>
+                    
+                      <td class="">14937.91</td>
+                    
+                      <td class="">0.04</td>
+                    
+                      <td class="">4947.70</td>
+                    
+                      <td class="">285113.89</td>
+                    
+                      <td class="">47986.08</td>
+                    
+                      <td class="">65933.15</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_blocked</b></td>
+                    
+                      <td class="">1.35</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">1046.71</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_connecting</b></td>
+                    
+                      <td class="">0.43</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">1013.90</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_duration</b></td>
+                    
+                      <td class="">4293.93</td>
+                    
+                      <td class="">7.11</td>
+                    
+                      <td class="">1599.02</td>
+                    
+                      <td class="">60002.27</td>
+                    
+                      <td class="">9357.14</td>
+                    
+                      <td class="failed">18583.93</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_receiving</b></td>
+                    
+                      <td class="">4.26</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">2.88</td>
+                    
+                      <td class="">154.74</td>
+                    
+                      <td class="">7.38</td>
+                    
+                      <td class="">11.65</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_sending</b></td>
+                    
+                      <td class="">0.23</td>
+                    
+                      <td class="">0.02</td>
+                    
+                      <td class="">0.21</td>
+                    
+                      <td class="">44.30</td>
+                    
+                      <td class="">0.35</td>
+                    
+                      <td class="">0.40</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_tls_handshaking</b></td>
+                    
+                      <td class="">0.88</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">167.12</td>
+                    
+                      <td class="">0.00</td>
+                    
+                      <td class="">0.00</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_waiting</b></td>
+                    
+                      <td class="">4289.44</td>
+                    
+                      <td class="">6.85</td>
+                    
+                      <td class="">1593.75</td>
+                    
+                      <td class="">60002.13</td>
+                    
+                      <td class="">9355.40</td>
+                    
+                      <td class="">18578.73</td>
+                     
+                  </tr>
+                  
+                  <tr>
+                    <td><b>iteration_duration</b></td>
+                    
+                      <td class="">50262.97</td>
+                    
+                      <td class="">12.84</td>
+                    
+                      <td class="">42794.67</td>
+                    
+                      <td class="">287962.61</td>
+                    
+                      <td class="">96544.49</td>
+                    
+                      <td class="">115092.45</td>
+                     
+                  </tr>
+                  
+                </tbody>
+              </table>
+            
+
+            
+              <h4><i class="fas fa-percent"></i> Rates</h4>
+              <table class="pure-table pure-table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Rate %</th> 
+                    <th>Pass Count</th>
+                    <th>Fail Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  <tr>
+                    <td><b>find_empty_results</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >2.44%</td>
+                      <td class="">450.00</td>
+                      <td class="">17965.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_empty_results{check_name:advanced-results}</b></td>
+                    
+                      <td
+                        class="good"
+                        title="Success rate (aligns with Pass Count)"
+                      >15.87%</td>
+                      <td class="">252.00</td>
+                      <td class="">1336.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_empty_results{check_name:filtered-results}</b></td>
+                    
+                      <td
+                        class="good"
+                        title="Success rate (aligns with Pass Count)"
+                      >6.34%</td>
+                      <td class="">101.00</td>
+                      <td class="">1493.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_empty_results{check_name:search-results}</b></td>
+                    
+                      <td
+                        class="good"
+                        title="Success rate (aligns with Pass Count)"
+                      >6.00%</td>
+                      <td class="">97.00</td>
+                      <td class="">1520.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_error_rate</b></td>
+                    
+                      <td
+                        class="failed"
+                        title="Success rate (aligns with Pass Count)"
+                      >32.82%</td>
+                      <td class="">7039.00</td>
+                      <td class="">14406.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_errors_4xx</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >0.00%</td>
+                      <td class="">0.00</td>
+                      <td class="">21445.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_errors_5xx</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >0.00%</td>
+                      <td class="">0.00</td>
+                      <td class="">21445.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_rate_limited</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >0.00%</td>
+                      <td class="">0.00</td>
+                      <td class="">21445.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_success_rate</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >67.18%</td>
+                      <td class="">14406.00</td>
+                      <td class="">7039.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>find_timeouts</b></td>
+                    
+                      <td
+                        class=""
+                        title="Success rate (aligns with Pass Count)"
+                      >32.80%</td>
+                      <td class="">7035.00</td>
+                      <td class="">14410.00</td>
+                  </tr>
+                  
+                  <tr>
+                    <td><b>http_req_failed</b></td>
+                    
+                      <td
+                        class="good"
+                        title="Failure rate (for *_failed metrics; aligns with Fail Count)"
+                      >0.32%</td>
+                      <td class="">24151.00</td>
+                      <td class="">77.00</td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+            
+
+            
+              <h4><i class="fas fa-calculator"></i> Counters</h4>
+              <table class="pure-table pure-table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Count</th> 
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  <tr>
+                    <td><b>find_content_errors</b></td>
+                    
+                    
+                      <td class="">97.00</td>
+                      
+                  </tr>
+                  
+                </tbody>
+              </table>
+            
+
+            
+        
+          </div> 
+          <!-- ---- end tab ---- -->
+
+          <input type="radio" name="tabs" id="tabtwo">
+          <label for="tabtwo"><i class="fas fa-chart-pie"></i> Test Run Details</label>
+          <div class="tab">
+            <div class="stats-grid">
+              
+                <div class="stat-box">
+                  <h4>Checks</h4>
+                  <i class="fas fa-eye icon"></i>
+                  <div class="stat-row">
+                    <span class="stat-label">Passed</span>
+                    <span class="stat-value">182940</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label">Failed</span>
+                    <span class="stat-value">7264</span>
+                  </div>
+                </div>
+              
+
+              
+                <div class="stat-box">
+                  <h4>Iterations</h4>
+                  <i class="fas fa-redo icon"></i>
+                  <div class="stat-row">
+                    <span class="stat-label">Total</span>
+                    <span class="stat-value">2771</span>
+                  </div>
+                  <div class="stat-row">
+                    <span class="stat-label">Rate</span>
+                    <span class="stat-value">3.00/s</span>
+                  </div>
+                </div>
+              
+
+              <div class="stat-box">
+                <h4>Virtual Users</h4>
+                <i class="fas fa-user icon"></i>
+                <div class="stat-row">
+                  <span class="stat-label">Min</span>
+                  <span class="stat-value">1</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Max</span>
+                  <span class="stat-value">200</span>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <h4>Requests</h4>
+                <i class="fas fa-globe icon"></i>
+                <div class="stat-row">
+                  <span class="stat-label">Total</span>
+                  <span class="stat-value">
+                    24228
+                    
+                  </span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Rate</span>
+                  <span class="stat-value">
+                    26.26/s
+                    
+                  </span>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <h4>Data Received</h4>
+                <i class="fas fa-cloud-download-alt icon"></i>
+                <div class="stat-row">
+                  <span class="stat-label">Total</span>
+                  <span class="stat-value">3379.10 MB</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Rate</span>
+                  <span class="stat-value">3.66 mB/s</span>
+                </div>
+              </div>
+
+              <div class="stat-box">
+                <h4>Data Sent</h4>
+                <i class="fas fa-cloud-upload-alt icon"></i>
+                <div class="stat-row">
+                  <span class="stat-label">Total</span>
+                  <span class="stat-value">18.48 MB</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Rate</span>
+                  <span class="stat-value">0.02 mB/s</span>
+                </div>
+              </div>
+            </div>
+          </div>  
+          <!-- ---- end tab ---- -->     
+
+          <input type="radio" name="tabs" id="tabthree">
+          <label for="tabthree"><i class="fas fa-square-check"></i> Checks & Groups</label>
+          <div class="tab">
+            
+
+            
+              
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Service User Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Full Find User Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find: Homepage Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Homepage Load</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: status is 200</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: response time &lt; 2000ms</td>
+                          <td class="">160</td>
+                          <td class="failed">43</td>
+                          <td class="failed">78.82</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: no server errors (5xx)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: no client errors (4xx)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: not rate limited (429)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Homepage: response size &gt; 0</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find main-heading: contains expected content</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find main-heading: content length &gt; 100 chars</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-button: contains expected content</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-button: content length &gt; 100 chars</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find: Search and Filter Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Basic Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: status is 200</td>
+                          <td class="">200</td>
+                          <td class="failed">3</td>
+                          <td class="failed">98.52</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: response time &lt; 3000ms</td>
+                          <td class="">118</td>
+                          <td class="failed">85</td>
+                          <td class="failed">58.13</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: no server errors (5xx)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: no client errors (4xx)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: not rate limited (429)</td>
+                          <td class="good">203</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: response size &gt; 0</td>
+                          <td class="">200</td>
+                          <td class="failed">3</td>
+                          <td class="failed">98.52</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-results: results page rendered</td>
+                          <td class="good">200</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-results: content length &gt; 100 chars</td>
+                          <td class="good">200</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-options: contains expected content</td>
+                          <td class="good">200</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-options: content length &gt; 100 chars</td>
+                          <td class="good">200</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-listings: contains expected content</td>
+                          <td class="">191</td>
+                          <td class="failed">9</td>
+                          <td class="failed">95.50</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-listings: content length &gt; 100 chars</td>
+                          <td class="good">200</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Multi-Filter Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: status is 200</td>
+                          <td class="">197</td>
+                          <td class="failed">2</td>
+                          <td class="failed">98.99</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: response time &lt; 3000ms</td>
+                          <td class="">121</td>
+                          <td class="failed">78</td>
+                          <td class="failed">60.80</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: no server errors (5xx)</td>
+                          <td class="good">199</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: no client errors (4xx)</td>
+                          <td class="good">199</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: not rate limited (429)</td>
+                          <td class="good">199</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: response size &gt; 0</td>
+                          <td class="">197</td>
+                          <td class="failed">2</td>
+                          <td class="failed">98.99</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-validation: contains expected content</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-validation: content length &gt; 100 chars</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filtered-results: results page rendered</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filtered-results: content length &gt; 100 chars</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Advanced Filter Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: status is 200</td>
+                          <td class="">196</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.49</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: response time &lt; 3000ms</td>
+                          <td class="">121</td>
+                          <td class="failed">76</td>
+                          <td class="failed">61.42</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: no server errors (5xx)</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: no client errors (4xx)</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: not rate limited (429)</td>
+                          <td class="good">197</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: response size &gt; 0</td>
+                          <td class="">196</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.49</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-filter: contains expected content</td>
+                          <td class="good">196</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-filter: content length &gt; 100 chars</td>
+                          <td class="good">196</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-results: results page rendered</td>
+                          <td class="good">196</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-results: content length &gt; 100 chars</td>
+                          <td class="good">196</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find: Course Detail Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Course Search to Detail</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: status is 200</td>
+                          <td class="">194</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.49</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: response time &lt; 2000ms</td>
+                          <td class="">122</td>
+                          <td class="failed">73</td>
+                          <td class="failed">62.56</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: no server errors (5xx)</td>
+                          <td class="good">195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: no client errors (4xx)</td>
+                          <td class="good">195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: not rate limited (429)</td>
+                          <td class="good">195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: response size &gt; 0</td>
+                          <td class="">194</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.49</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-info: contains expected content</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-info: content length &gt; 100 chars</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-section: contains expected content</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-section: content length &gt; 100 chars</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find about-course: contains expected content</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find about-course: content length &gt; 100 chars</td>
+                          <td class="good">194</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Course Apply Journey</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-button: contains expected content</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-button: content length &gt; 100 chars</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: status is 200</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: response time &lt; 2000ms</td>
+                          <td class="">120</td>
+                          <td class="failed">73</td>
+                          <td class="failed">62.18</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: no server errors (5xx)</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: no client errors (4xx)</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: not rate limited (429)</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: response size &gt; 0</td>
+                          <td class="good">193</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find: Search and Filter Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Basic Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: status is 200</td>
+                          <td class="">1417</td>
+                          <td class="failed">13</td>
+                          <td class="failed">99.09</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: response time &lt; 3000ms</td>
+                          <td class="">859</td>
+                          <td class="failed">571</td>
+                          <td class="failed">60.07</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: no server errors (5xx)</td>
+                          <td class="good">1430</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: no client errors (4xx)</td>
+                          <td class="good">1430</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: not rate limited (429)</td>
+                          <td class="good">1430</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Basic Search: response size &gt; 0</td>
+                          <td class="">1417</td>
+                          <td class="failed">13</td>
+                          <td class="failed">99.09</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-results: results page rendered</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find search-results: content length &gt; 100 chars</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-options: contains expected content</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-options: content length &gt; 100 chars</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-listings: contains expected content</td>
+                          <td class="">1329</td>
+                          <td class="failed">88</td>
+                          <td class="failed">93.79</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-listings: content length &gt; 100 chars</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Multi-Filter Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: status is 200</td>
+                          <td class="">1397</td>
+                          <td class="failed">20</td>
+                          <td class="failed">98.59</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: response time &lt; 3000ms</td>
+                          <td class="">867</td>
+                          <td class="failed">550</td>
+                          <td class="failed">61.19</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: no server errors (5xx)</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: no client errors (4xx)</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: not rate limited (429)</td>
+                          <td class="good">1417</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Multi-Filter Search: response size &gt; 0</td>
+                          <td class="">1397</td>
+                          <td class="failed">20</td>
+                          <td class="failed">98.59</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-validation: contains expected content</td>
+                          <td class="good">1397</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filter-validation: content length &gt; 100 chars</td>
+                          <td class="good">1397</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filtered-results: results page rendered</td>
+                          <td class="good">1397</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find filtered-results: content length &gt; 100 chars</td>
+                          <td class="good">1397</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Advanced Filter Search</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: status is 200</td>
+                          <td class="">1392</td>
+                          <td class="failed">4</td>
+                          <td class="failed">99.71</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: response time &lt; 3000ms</td>
+                          <td class="">970</td>
+                          <td class="failed">426</td>
+                          <td class="failed">69.48</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: no server errors (5xx)</td>
+                          <td class="good">1396</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: no client errors (4xx)</td>
+                          <td class="good">1396</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: not rate limited (429)</td>
+                          <td class="good">1396</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Advanced Filter Search: response size &gt; 0</td>
+                          <td class="">1392</td>
+                          <td class="failed">4</td>
+                          <td class="failed">99.71</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-filter: contains expected content</td>
+                          <td class="good">1392</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-filter: content length &gt; 100 chars</td>
+                          <td class="good">1392</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-results: results page rendered</td>
+                          <td class="good">1392</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find advanced-results: content length &gt; 100 chars</td>
+                          <td class="good">1392</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find: Course Detail Journey</h2>
+              <div>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Course Search to Detail</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: status is 200</td>
+                          <td class="">1191</td>
+                          <td class="failed">4</td>
+                          <td class="failed">99.67</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: response time &lt; 2000ms</td>
+                          <td class="">812</td>
+                          <td class="failed">383</td>
+                          <td class="failed">67.95</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: no server errors (5xx)</td>
+                          <td class="good">1195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: no client errors (4xx)</td>
+                          <td class="good">1195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: not rate limited (429)</td>
+                          <td class="good">1195</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Course Detail Page: response size &gt; 0</td>
+                          <td class="">1191</td>
+                          <td class="failed">4</td>
+                          <td class="failed">99.67</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-info: contains expected content</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find course-info: content length &gt; 100 chars</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-section: contains expected content</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-section: content length &gt; 100 chars</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find about-course: contains expected content</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find about-course: content length &gt; 100 chars</td>
+                          <td class="good">1191</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Course Apply Journey</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-button: contains expected content</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find apply-button: content length &gt; 100 chars</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: status is 200</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: response time &lt; 2000ms</td>
+                          <td class="">775</td>
+                          <td class="failed">407</td>
+                          <td class="failed">65.57</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: no server errors (5xx)</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: no client errors (4xx)</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: not rate limited (429)</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Apply Journey: response size &gt; 0</td>
+                          <td class="good">1182</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Pagination Journey</h2>
+              <div>
+                
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Check Name</th>
+                        <th>Passes</th>
+                        <th>Failures</th>
+                        <th>% Pass</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: status is 200</td>
+                          <td class="">1386</td>
+                          <td class="failed">5</td>
+                          <td class="failed">99.64</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: response time &lt; 3000ms</td>
+                          <td class="">961</td>
+                          <td class="failed">430</td>
+                          <td class="failed">69.09</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: no server errors (5xx)</td>
+                          <td class="good">1391</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: no client errors (4xx)</td>
+                          <td class="good">1391</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: not rate limited (429)</td>
+                          <td class="good">1391</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 1: response size &gt; 0</td>
+                          <td class="">1386</td>
+                          <td class="failed">5</td>
+                          <td class="failed">99.64</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination: results page rendered</td>
+                          <td class="good">13616</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination: content length &gt; 100 chars</td>
+                          <td class="good">13616</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: status is 200</td>
+                          <td class="">1376</td>
+                          <td class="failed">3</td>
+                          <td class="failed">99.78</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: response time &lt; 3000ms</td>
+                          <td class="">913</td>
+                          <td class="failed">466</td>
+                          <td class="failed">66.21</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: no server errors (5xx)</td>
+                          <td class="good">1379</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: no client errors (4xx)</td>
+                          <td class="good">1379</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: not rate limited (429)</td>
+                          <td class="good">1379</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 2: response size &gt; 0</td>
+                          <td class="">1376</td>
+                          <td class="failed">3</td>
+                          <td class="failed">99.78</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: status is 200</td>
+                          <td class="">1372</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.93</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: response time &lt; 3000ms</td>
+                          <td class="">922</td>
+                          <td class="failed">451</td>
+                          <td class="failed">67.15</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: no server errors (5xx)</td>
+                          <td class="good">1373</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: no client errors (4xx)</td>
+                          <td class="good">1373</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: not rate limited (429)</td>
+                          <td class="good">1373</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 3: response size &gt; 0</td>
+                          <td class="">1372</td>
+                          <td class="failed">1</td>
+                          <td class="failed">99.93</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: status is 200</td>
+                          <td class="good">1371</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: response time &lt; 3000ms</td>
+                          <td class="">923</td>
+                          <td class="failed">448</td>
+                          <td class="failed">67.32</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: no server errors (5xx)</td>
+                          <td class="good">1371</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: no client errors (4xx)</td>
+                          <td class="good">1371</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: not rate limited (429)</td>
+                          <td class="good">1371</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 4: response size &gt; 0</td>
+                          <td class="good">1371</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: status is 200</td>
+                          <td class="good">1368</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: response time &lt; 3000ms</td>
+                          <td class="">975</td>
+                          <td class="failed">393</td>
+                          <td class="failed">71.27</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: no server errors (5xx)</td>
+                          <td class="good">1368</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: no client errors (4xx)</td>
+                          <td class="good">1368</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: not rate limited (429)</td>
+                          <td class="good">1368</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 5: response size &gt; 0</td>
+                          <td class="good">1368</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: status is 200</td>
+                          <td class="">1364</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: response time &lt; 3000ms</td>
+                          <td class="">958</td>
+                          <td class="failed">408</td>
+                          <td class="failed">70.13</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: no server errors (5xx)</td>
+                          <td class="good">1366</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: no client errors (4xx)</td>
+                          <td class="good">1366</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: not rate limited (429)</td>
+                          <td class="good">1366</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 6: response size &gt; 0</td>
+                          <td class="">1364</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: status is 200</td>
+                          <td class="">1357</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: response time &lt; 3000ms</td>
+                          <td class="">915</td>
+                          <td class="failed">444</td>
+                          <td class="failed">67.33</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: no server errors (5xx)</td>
+                          <td class="good">1359</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: no client errors (4xx)</td>
+                          <td class="good">1359</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: not rate limited (429)</td>
+                          <td class="good">1359</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 7: response size &gt; 0</td>
+                          <td class="">1357</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: status is 200</td>
+                          <td class="">1348</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: response time &lt; 3000ms</td>
+                          <td class="">925</td>
+                          <td class="failed">425</td>
+                          <td class="failed">68.52</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: no server errors (5xx)</td>
+                          <td class="good">1350</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: no client errors (4xx)</td>
+                          <td class="good">1350</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: not rate limited (429)</td>
+                          <td class="good">1350</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 8: response size &gt; 0</td>
+                          <td class="">1348</td>
+                          <td class="failed">2</td>
+                          <td class="failed">99.85</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: status is 200</td>
+                          <td class="good">1342</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: response time &lt; 3000ms</td>
+                          <td class="">934</td>
+                          <td class="failed">408</td>
+                          <td class="failed">69.60</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: no server errors (5xx)</td>
+                          <td class="good">1342</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: no client errors (4xx)</td>
+                          <td class="good">1342</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: not rate limited (429)</td>
+                          <td class="good">1342</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 9: response size &gt; 0</td>
+                          <td class="good">1342</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: status is 200</td>
+                          <td class="">1333</td>
+                          <td class="failed">3</td>
+                          <td class="failed">99.78</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: response time &lt; 3000ms</td>
+                          <td class="">939</td>
+                          <td class="failed">397</td>
+                          <td class="failed">70.28</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: no server errors (5xx)</td>
+                          <td class="good">1336</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: no client errors (4xx)</td>
+                          <td class="good">1336</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: not rate limited (429)</td>
+                          <td class="good">1336</td>
+                          <td class="">0</td>
+                          <td class="">100.00</td>
+                        </tr>
+                      
+                        <tr class="checkDetails">
+                          <td width="50%">Find Pagination Page 10: response size &gt; 0</td>
+                          <td class="">1333</td>
+                          <td class="failed">3</td>
+                          <td class="failed">99.78</td>
+                        </tr>
+                      
+                    </tbody>
+                  </table>
+                
+                
+                  <div class="sub-groups">
+                    
+                      
+              <h2 class="group-header" onclick="tabClickHandler(event)">Group - Find Error Analysis</h2>
+              <div>
+                
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+                    
+                  </div>
+                
+              </div>
+            
+            
+
+            <h2>Other Checks</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Check Name</th>
+                  <th>Passes</th>
+                  <th>Failures</th>
+                  <th>% Pass</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              </tbody>
+            </table>     
+          </div> 
+          <!-- ---- end tab ---- -->
+        </div>
+      </div>
+      
+      <footer>K6 Reporter v3.0.4 - Ben Coleman 2025 · <a href="https://github.com/benc-uk/k6-reporter">GitHub</a></footer>
+    </div>
+  </body>
+</html>
