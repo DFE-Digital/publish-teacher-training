@@ -24,6 +24,17 @@ module Authentications
           expect(described_class.sign_in_path).to eq("/auth/one-login")
         end
       end
+
+      context "when Setting.one_login.enabled is false and env is production" do
+        before do
+          allow(Settings.one_login).to receive(:enabled).and_return(false)
+          allow(Rails.env).to receive(:production?).and_return(true)
+        end
+
+        it "signs candidates in with One Login, as the developer strategy is never registered in production" do
+          expect(described_class.sign_in_path).to eq("/auth/one-login")
+        end
+      end
     end
 
     describe "#provider" do
