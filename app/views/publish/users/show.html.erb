@@ -26,9 +26,11 @@
           end
         end %>
 
-    <p class="govuk-body">
-      <%= govuk_link_to("Remove user", delete_publish_provider_user_path, class: "app-link--destructive") %>
-    </p>
+    <% unless @provider_user == current_user %>
+      <p class="govuk-body">
+        <%= govuk_link_to("Remove user", delete_publish_provider_user_path, class: "app-link--destructive") %>
+      </p>
+    <% end %>
 
   </div>
 </div>

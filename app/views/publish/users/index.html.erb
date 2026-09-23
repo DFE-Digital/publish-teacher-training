@@ -17,17 +17,17 @@
         </thead>
         <tbody class="govuk-table__body">
         <% @users.each do |user| %>
-          <tr class="govuk-table__row user-row">
+          <tr class="govuk-table__row">
             <td class="govuk-table__cell">
-              <a class="govuk-link govuk-heading-s govuk-!-margin-bottom-0"> <%= govuk_link_to("#{user.first_name} #{user.last_name}", publish_provider_user_path(id: user.id)) %></a>
+              <%= govuk_link_to("#{user.first_name} #{user.last_name}", publish_provider_user_path(id: user.id)) %>
             </td>
             <td class="govuk-table__cell">
               <%= user.email %>
             </td>
-            <td class="govuk-table__cell last-signed-in">
-              <%= user.last_login_date_utc&.to_fs(:month_and_year) %>
+            <td class="govuk-table__cell">
+              <%= user.last_login_date_utc&.to_fs(:month_and_year) || t(".never_signed_in") %>
             </td>
-            <td class="govuk-table__cell remove-user">
+            <td class="govuk-table__cell">
               <% unless user == current_user %>
                 <%= govuk_link_to(delete_publish_provider_user_path(provider_code: @provider.provider_code, id: user.id), class: "app-link--destructive") do %>
                   <%= t(".remove_user") %>
