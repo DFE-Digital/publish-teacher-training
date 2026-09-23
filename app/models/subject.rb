@@ -32,6 +32,16 @@ class Subject < ApplicationRecord
     secondary.joins(:financial_incentive).pluck(:subject_code)
   end
 
+  def self.secondary_subject_codes_with_bursary_or_scholarship
+    secondary
+      .joins(:financial_incentive)
+      .merge(
+        FinancialIncentive.where.not(bursary_amount: [nil, ""])
+          .or(FinancialIncentive.where.not(scholarship: [nil, ""])),
+      )
+      .pluck(:subject_code)
+  end
+
   def self.secondary_subjects_with_subject_groups
     secondary
       .where.not(subject_group: nil)

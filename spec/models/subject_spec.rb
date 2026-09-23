@@ -55,6 +55,41 @@ describe Subject do
     end
   end
 
+  describe ".secondary_subject_codes_with_bursary_or_scholarship" do
+    before do
+      FinancialIncentive.delete_all
+      described_class.delete_all
+    end
+
+    it "returns secondary subjects whose displayed incentive has a bursary or a scholarship" do
+      find_or_create(:secondary_subject, :physics, bursary_amount: "29000", scholarship: "31000")
+      find_or_create(:secondary_subject, :mathematics, bursary_amount: "29000")
+      find_or_create(:secondary_subject, :chemistry, scholarship: "31000")
+
+      expect(described_class.secondary_subject_codes_with_bursary_or_scholarship).to match_array(%w[F3 G1 F1])
+    end
+
+    it "excludes secondary subjects whose displayed incentive has no bursary or scholarship" do
+      find_or_create(:secondary_subject, :history)
+      find_or_create(:secondary_subject, :music, bursary_amount: "", scholarship: "")
+
+      expect(described_class.secondary_subject_codes_with_bursary_or_scholarship).to be_empty
+    end
+
+    it "excludes secondary subjects whose only incentive with a bursary is hidden" do
+      find_or_create(:secondary_subject, :physics, bursary_amount: "29000", financial_incentive_displayed: false)
+
+      expect(described_class.secondary_subject_codes_with_bursary_or_scholarship).to be_empty
+    end
+
+    it "excludes primary subjects" do
+      primary = find_or_create(:primary_subject, :primary_with_mathematics)
+      create(:financial_incentive, subject: primary, bursary_amount: "29000")
+
+      expect(described_class.secondary_subject_codes_with_bursary_or_scholarship).to be_empty
+    end
+  end
+
   describe "#match_synonyms_text" do
     context "when match_synonyms is nil" do
       subject { build(:secondary_subject, :mathematics, match_synonyms: nil) }
