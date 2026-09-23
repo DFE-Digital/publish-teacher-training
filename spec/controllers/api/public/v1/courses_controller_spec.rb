@@ -41,6 +41,20 @@ RSpec.describe API::Public::V1::CoursesController do
 
         expect(json_response["data"].size).to be(2)
       end
+
+      it "returns findable based on publication" do
+        published_course = create(:course, :published, provider:)
+        draft_course = create(:course, :draft_enrichment, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+        }
+
+        findable_by_id = json_response["data"].to_h { |course| [course["id"], course["attributes"]["findable"]] }
+
+        expect(findable_by_id[published_course.id.to_s]).to be(true)
+        expect(findable_by_id[draft_course.id.to_s]).to be(false)
+      end
     end
 
     context "when the recruitment cycle is not after the remodel cutover year" do
@@ -54,6 +68,17 @@ RSpec.describe API::Public::V1::CoursesController do
         }
 
         expect(APICourseSearchService).to have_received(:call)
+      end
+
+      it "returns findable true without inspecting SiteStatus" do
+        course = create(:course, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+        }
+
+        expect(course.site_statuses).to be_empty
+        expect(json_response["data"].sole["attributes"]["findable"]).to be(true)
       end
     end
 

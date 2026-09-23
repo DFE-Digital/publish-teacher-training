@@ -105,7 +105,49 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:fee_international).with_value(course.latest_published_enrichment.fee_international) }
   it { is_expected.to have_attribute(:fee_domestic).with_value(course.latest_published_enrichment.fee_uk_eu) }
   it { is_expected.to have_attribute(:fee_schedule).with_value(course.latest_published_enrichment.fee_schedule) }
-  it { is_expected.to have_attribute(:findable).with_value(course.findable?) }
+  context "when the course is in a historical recruitment cycle" do
+    let(:course) do
+      create(
+        :course,
+        :with_accrediting_provider,
+        enrichments: [enrichment],
+        funding: "apprenticeship",
+        provider: create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)),
+        site_statuses: [],
+      )
+    end
+
+    it "returns findable true without inspecting SiteStatus" do
+      allow(course).to receive(:findable?).and_return(false)
+
+      expect(course.site_statuses).to be_empty
+      expect(subject).to have_attribute(:findable).with_value(true)
+    end
+  end
+
+  context "when the course uses the new school model" do
+    let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+
+    context "and it is published" do
+      let(:course) { create(:course, :published, :with_accrediting_provider, provider:, funding: "apprenticeship") }
+
+      it { is_expected.to have_attribute(:findable).with_value(true) }
+    end
+
+    context "and it is not published" do
+      let(:course) do
+        create(
+          :course,
+          :with_accrediting_provider,
+          :draft_enrichment,
+          provider:,
+          funding: "apprenticeship",
+        )
+      end
+
+      it { is_expected.to have_attribute(:findable).with_value(false) }
+    end
+  end
   it { is_expected.to have_attribute(:funding_type).with_value("apprenticeship") }
   it { is_expected.to have_attribute(:gcse_subjects_required).with_value(%w[maths english science]) }
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
