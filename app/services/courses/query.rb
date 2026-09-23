@@ -238,29 +238,21 @@ module Courses
     end
 
     def start_date_scope
-      return @scope if params[:start_date].blank?
+      selected_start_dates = Array(params[:start_date]).compact_blank
 
-      @applied_scopes[:start_date] = params[:start_date]
+      return @scope if selected_start_dates.empty?
 
-      current_recruitment_cycle_year = Find::CycleTimetable.current_year
-      next_recruitment_cycle_year = Find::CycleTimetable.next_year
-      ranges = []
+      ranges = selected_start_dates.filter_map do |value|
+        year, period = value.to_s.split("_", 2)
 
-      if params[:start_date].include?("jan_to_aug")
-        jan_to_aug_range = (Time.zone.local(current_recruitment_cycle_year, 1, 1)..Time.zone.local(current_recruitment_cycle_year, 8, 31))
-        ranges << jan_to_aug_range
+        start_date_range(year.to_i, period)
       end
-      if params[:start_date].include?("september")
-        september_range = Time.zone.local(current_recruitment_cycle_year, 9, 1).all_month
-        ranges << september_range
-      end
-      if params[:start_date].include?("oct_to_jul")
-        oct_to_jul_range = (Time.zone.local(current_recruitment_cycle_year, 10, 1)..Time.zone.local(next_recruitment_cycle_year, 7, 31))
-        ranges << oct_to_jul_range
-      end
+
       return @scope if ranges.empty?
 
-      @scope = @scope.where(start_date: ranges)
+      @applied_scopes[:start_date] = selected_start_dates
+
+      @scope.where(start_date: ranges)
     end
 
     def provider_scope
@@ -562,6 +554,23 @@ module Courses
     end
 
   private
+
+    def start_date_range(year, period)
+      case period
+      when "jan_to_mar"
+        Time.zone.local(year, 1, 1)..Time.zone.local(year, 3, 31).end_of_day
+      when "apr_to_june"
+        Time.zone.local(year, 4, 1)..Time.zone.local(year, 6, 30).end_of_day
+      when "july_and_aug"
+        Time.zone.local(year, 7, 1)..Time.zone.local(year, 8, 31).end_of_day
+      when "september"
+        Time.zone.local(year, 9, 1).all_month
+      when "oct_to_dec"
+        Time.zone.local(year, 10, 1)..Time.zone.local(year, 12, 31).end_of_day
+      when "july"
+        Time.zone.local(year, 7, 1).all_month
+      end
+    end
 
     # Find shows published courses only — nothing in draft, rolled over or
     # withdrawn — regardless of whether the course has schools/sites attached.

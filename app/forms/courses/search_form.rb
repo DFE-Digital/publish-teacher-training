@@ -50,8 +50,29 @@ module Courses
     MINIMUM_DEGREE_REQUIRED_OPTIONS = %w[two_one two_two third_class pass no_degree_required].freeze
     FUNDING_OPTIONS = %w[fee salary apprenticeship].freeze
     QUALIFICATION_OPTIONS = %w[qts qts_with_pgce_or_pgde].freeze
-    START_DATE_OPTIONS = %w[jan_to_aug september oct_to_jul].freeze
+    # START_DATE_OPTIONS = %w[jan_to_mar apr_to_june july_and_aug september oct_to_dec].freeze
     STUDY_TYPE_OPTIONS = %w[full_time part_time].freeze
+
+    StartDateOption = Struct.new(
+      :year,
+      :period,
+      :value,
+      keyword_init: true,
+    )
+
+    CURRENT_YEAR_START_DATE_PERIODS = %w[
+      jan_to_mar
+      apr_to_june
+      july_and_aug
+      september
+      oct_to_dec
+    ].freeze
+
+    NEXT_YEAR_START_DATE_PERIODS = %w[
+      jan_to_mar
+      apr_to_june
+      july
+    ].freeze
 
     def initialize(attributes = {})
       super
@@ -75,7 +96,7 @@ module Courses
         secondary_subjects: secondary_subject_filter_count,
         send_courses: boolean_filter_count(send_courses),
         sponsor_visa: boolean_filter_count(can_sponsor_visa),
-        start_date: start_date&.count,
+        start_date: Array(start_date).compact_blank.count.positive? ? Array(start_date).compact_blank.count : nil,
         study_types: study_types&.count,
         teach_physics: boolean_filter_count(engineers_teach_physics),
       }
@@ -237,9 +258,9 @@ module Courses
       QUALIFICATION_OPTIONS
     end
 
-    def start_date_options
-      START_DATE_OPTIONS
-    end
+    # def start_date_options
+    #   START_DATE_OPTIONS
+    # end
 
     def study_type_options
       STUDY_TYPE_OPTIONS
@@ -254,7 +275,39 @@ module Courses
       all_subjects
     end
 
+    def start_date_options
+      current_year = Find::CycleTimetable.current_year
+      next_year = Find::CycleTimetable.next_year
+
+      build_start_date_options(
+        current_year,
+        CURRENT_YEAR_START_DATE_PERIODS,
+      ) + build_start_date_options(
+        next_year,
+        NEXT_YEAR_START_DATE_PERIODS,
+      )
+    end
+
+    def start_date_options_by_year
+      start_date_options.group_by(&:year)
+    end
+
+    # Checkboxes submit an array, even when only one is selected.
+    def start_date
+      Array(super).compact_blank.presence
+    end
+
   private
+
+    def build_start_date_options(year, periods)
+      periods.map do |period|
+        StartDateOption.new(
+          year: year,
+          period: period,
+          value: "#{year}_#{period}",
+        )
+      end
+    end
 
     def search_location
       @search_location ||= SearchLocation.new(
