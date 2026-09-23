@@ -75,6 +75,11 @@
 
     <div class="govuk-grid-column-two-thirds">
       <% if @results.present? %>
+        <%= render Find::Results::SalariedCourseCalloutComponent.new(
+          funding: @search_courses_form.funding,
+          subject_codes: @search_courses_form.subjects,
+        ) %>
+
         <ul class="app-search-results">
           <% @results.each do |course| %>
             <%= render Courses::SummaryCardComponent.new(
