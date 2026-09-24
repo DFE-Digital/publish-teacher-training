@@ -79,7 +79,9 @@ module Find
     # page changes is not a phase, which is why the deadline banner is a window
     # inside `apply_open` rather than a row here.
     #
-    # The four rows tile the cycle end to end, so one row is live at any instant.
+    # The four rows tile the cycle end to end, and `phases_in_time` reads each
+    # range as half-open, so the instant two rows share belongs to the row it
+    # opens and never to both.
     #
     # They run in the order a cycle runs, starting from Apply closing.
     #
@@ -301,12 +303,16 @@ module Find
 
     def self.option_range(option, year) = phase_range(phase_for_option(option), year)
 
+    # One instant for every row, so the answers cannot disagree about the time.
+    # Each range is half-open, which is what keeps the rows from overlapping at
+    # the boundary they share.
     def self.phases_in_time
       year = current_year
+      now = Time.zone.now
 
       PHASES.keys.index_with do |phase|
         from, to = phase_range(phase, year)
-        Time.zone.now.between?(from, to)
+        from <= now && now < to
       end
     end
 
