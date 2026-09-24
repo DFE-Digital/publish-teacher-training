@@ -19,7 +19,7 @@
   <div class="govuk-grid-column-two-thirds">
     <!--The Apply component is rendered twice, above and below the course content, to match the live Find course page.-->
 
-    <% if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <% if course.application_status_open? || !Find::CycleTimetable.can_create_application? %>
       <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="<%= @apply_action_column_class %>">
           <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) %>
@@ -41,6 +41,6 @@
 
     <%= render partial: "find/courses/advice", locals: { course: } %>
 
-    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+    <%= render Find::Courses::ApplyComponent::View.new(course, preview: true) if course.application_status_open? || !Find::CycleTimetable.can_create_application? %>
   </div>
 </div>

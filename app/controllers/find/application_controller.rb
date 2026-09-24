@@ -42,7 +42,7 @@ module Find
     end
 
     def redirect_to_cycle_has_ended_if_find_is_down
-      redirect_to find_cycle_has_ended_path if CycleTimetable.find_down?
+      redirect_to find_cycle_has_ended_path if CycleTimetable.find_closed?
     end
   end
 end

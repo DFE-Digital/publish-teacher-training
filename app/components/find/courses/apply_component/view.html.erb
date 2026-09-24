@@ -1,5 +1,5 @@
 <div class="govuk-!-margin-bottom-6" id="section-apply">
-  <% if Find::CycleTimetable.mid_cycle? %>
+  <% if Find::CycleTimetable.can_create_application? %>
     <% if application_status_open? %>
       <p class="govuk-body">
         <% if FeatureFlag.active?(:candidate_accounts) %>

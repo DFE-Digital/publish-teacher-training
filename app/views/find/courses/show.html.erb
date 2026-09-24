@@ -29,7 +29,7 @@
     <% end %>
 
     <% unless from_previous_cycle? %>
-      <% if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <% if @course.application_status_open? || !Find::CycleTimetable.can_create_application? %>
         <div class="govuk-grid-row govuk-!-margin-bottom-6">
           <div class="<%= @apply_action_column_class %>">
             <%= render Find::Courses::ApplyComponent::View.new(
@@ -65,7 +65,7 @@
         <%= render partial: "find/courses/course_closed" %>
       <% end %>
 
-      <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.mid_cycle? %>
+      <%= render Find::Courses::ApplyComponent::View.new(@course, preview: preview?(params), utm_content: "apply_course_button_bottom") if @course.application_status_open? || !Find::CycleTimetable.can_create_application? %>
     <% end %>
   </div>
 </div>

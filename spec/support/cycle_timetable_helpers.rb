@@ -14,7 +14,9 @@ module CycleTimetableHelpers
   # Without it an unpinned example inherits whatever cycle period the machine
   # happens to be in, so it asserts a different thing depending on the date.
   # mid_cycle is the ordinary state: Find open, Apply open, no banners, deadline
-  # not passed.
+  # not passed, and the 30-day rollover grace window after Find opens is over.
+  # Anchored on apply_opens, so it cannot drift into the pre-Apply week however
+  # long that week becomes.
   #
   # This pins the period but NOT the cycle year. `mid_cycle` resolves through
   # `current_year`, which reads the real clock, so on the day a cycle rolls over
