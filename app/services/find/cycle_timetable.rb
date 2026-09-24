@@ -286,6 +286,19 @@ module Find
       [definition[:from].call(year), definition[:to].call(year)]
     end
 
+    # The hints describe a fixed set of choices, so they read the real cycle year
+    # rather than `current_year`, which advances for whichever option is selected
+    # and would make the page describe itself.
+    #
+    # Returns the cycle the option loads, not the cycle the phase occurs in.
+    def self.year_for_option(option, year = cycle_year_for_time(Time.zone.now))
+      SWITCHER_OPTIONS.dig(option, :advances_cycle) ? year + 1 : year
+    end
+
+    def self.phase_for_option(option) = SWITCHER_OPTIONS.fetch(option).fetch(:phase)
+
+    def self.option_range(option, year) = phase_range(phase_for_option(option), year)
+
     def self.phases_in_time
       year = current_year
 

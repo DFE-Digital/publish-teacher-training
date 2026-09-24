@@ -404,6 +404,40 @@ module Find
       end
     end
 
+    describe ".year_for_option" do
+      it "advances the year for an option past the rollover" do
+        expect(described_class.year_for_option(:find_closed, 2026)).to eq(2027)
+      end
+
+      it "keeps the year for an option in the cycle running now" do
+        expect(described_class.year_for_option(:apply_closed, 2026)).to eq(2026)
+      end
+
+      it "gives the same phase two years, one per option" do
+        expect(described_class.phase_for_option(:apply_open)).to eq(:apply_open)
+        expect(described_class.phase_for_option(:apply_reopened)).to eq(:apply_open)
+
+        expect(described_class.year_for_option(:apply_open, 2026)).to eq(2026)
+        expect(described_class.year_for_option(:apply_reopened, 2026)).to eq(2027)
+      end
+
+      it "defaults to the real cycle year for the current time when no year is given" do
+        allow(described_class).to receive(:cycle_year_for_time).and_return(2026)
+
+        expect(described_class.year_for_option(:apply_closed)).to eq(2026)
+      end
+
+      it "does not move when a different phase is selected in the switcher" do
+        years_by_selection = described_class::SWITCHER_OPTIONS.keys.index_with do |selected|
+          allow(SiteSetting).to receive(:cycle_schedule).and_return(selected)
+
+          described_class::SWITCHER_OPTIONS.keys.index_with { |option| described_class.year_for_option(option) }
+        end
+
+        expect(years_by_selection.values.uniq.length).to eq(1)
+      end
+    end
+
     describe "the phase predicates" do
       it "turn on only the phase the switcher selects" do
         predicates = described_class::PHASES.keys.index_with { |phase| :"#{phase}?" }

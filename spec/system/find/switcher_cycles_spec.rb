@@ -17,16 +17,24 @@ RSpec.describe "switcher cycle" do
     and_i_should_see_the_page_heading
   end
 
-  scenario "Mid cycle and deadlines should be displayed" do
-    when_i_visit_switcher_cycle_page
-    and_i_choose("Mid cycle and deadlines should be displayed")
-    then_i_click_on_update_button
-    and_i_should_see_the_success_banner
-    and_i_visit_find_results_page
-    and_i_see_mid_cycle_banner
+  scenario "Says which recruitment cycle each choice leads to" do
+    visit find_cycles_path
 
-    and_i_do_not_see_the_cycle_has_closed_banner
-    and_i_do_not_see_the_apply_opens_soon_banner
+    expect(page).to have_content("2024 cycle. Candidates are able to apply for the courses in the new cycle.")
+    expect(page).to have_content("2023 cycle. Candidates can no longer submit any subsequent applications")
+  end
+
+  scenario "Emphasises the cycle year in each hint" do
+    visit find_cycles_path
+
+    expect(page).to have_css(".govuk-radios__hint strong", text: "2024 cycle.", exact_text: true)
+    expect(page).to have_css(".govuk-radios__hint strong", text: "2023 cycle.", exact_text: true)
+  end
+
+  scenario "Divides the switcher options where the recruitment cycle changes" do
+    visit find_cycles_path
+
+    expect(page).to have_css(".govuk-radios__divider", text: "2024 cycle", exact_text: true)
   end
 
   scenario "Update to Apply deadline has passed" do
@@ -50,9 +58,9 @@ RSpec.describe "switcher cycle" do
     then_i_should_see_the_applications_closed_text
   end
 
-  scenario "Find has reopened" do
+  scenario "Apply has reopened" do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Find has reopened")
+    and_i_choose("Apply has reopened")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_should_see_the_correct_previous_recruitment_cycle_year
