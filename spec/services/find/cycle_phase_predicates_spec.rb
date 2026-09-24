@@ -63,6 +63,17 @@ RSpec.describe "Find pages under each cycle phase", travel: Time.zone.local(2026
       apply_soon_banner: false,
       year: 2026,
     },
+    # An option an earlier deploy left in Redis. The switcher no longer offers
+    # it, so it has to read as the real cycle rather than as no phase at all.
+    today_is_mid_cycle: {
+      find_open: true,
+      can_create_application: false,
+      mid_cycle: false,
+      deadline_banner: false,
+      closed_banner: true,
+      apply_soon_banner: false,
+      year: 2026,
+    },
   }.each do |schedule, expected|
     context "when the cycle schedule is #{schedule}" do
       before { SiteSetting.set(name: "cycle_schedule", value: schedule) }

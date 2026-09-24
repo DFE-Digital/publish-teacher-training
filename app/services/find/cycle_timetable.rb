@@ -317,7 +317,10 @@ module Find
     end
 
     # The phases tile the cycle and never overlap, so an option forced by the
-    # switcher turns on its phase and nothing else.
+    # switcher turns on its phase and nothing else. Only :real reads the clock,
+    # and it is the only value that is not a switcher option, because
+    # `current_cycle_schedule` reads anything else the switcher does not offer
+    # as :real.
     #
     # Private, so a phase key never travels outside this class. Callers ask one
     # of the predicates above, which say why they are asking.
@@ -344,7 +347,14 @@ module Find
       # Make sure this setting only has effect on non-production environments
       return :real if Rails.env.production?
 
-      SiteSetting.cycle_schedule
+      schedule = SiteSetting.cycle_schedule
+
+      # An option the switcher does not offer, such as one an earlier deploy
+      # left in Redis, would match no phase and leave every predicate false.
+      # Read it as the real cycle instead.
+      return :real unless SWITCHER_OPTIONS.key?(schedule)
+
+      schedule
     end
 
     def self.real_schedule_for(year = current_year)
