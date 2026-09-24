@@ -905,15 +905,12 @@ class Course < ApplicationRecord
     master_subject_id.nil?
   end
 
-  # Checked on every save with subjects. The course subjects may only just
-  # have been built, so this goes by subject_id rather than loading each
-  # subject in turn.
   def has_any_modern_language_subject_type?
-    ModernLanguagesSubject.exists?(id: course_subjects.map(&:subject_id))
+    active_subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
   end
 
   def has_any_design_technology_subject_type?
-    course_subjects.any? { |cs| cs.subject.type == "DesignTechnologySubject" }
+    active_subjects.any? { |subject| subject.type == "DesignTechnologySubject" }
   end
 
   def current_published_enrichment
@@ -1187,7 +1184,8 @@ private
     raise "SecondarySubject not found" if SecondarySubject.nil?
     raise "SecondarySubject.design_technology not found" if SecondarySubject.design_technology.nil?
 
-    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.design_technology.id }
+    design_technology_id = SecondarySubject.design_technology.id
+    course_subjects.any? { |cs| cs.subject_id == design_technology_id }
   end
 
   def validate_subject_count
@@ -1204,21 +1202,35 @@ private
     end
   end
 
-  # Goes by the course subjects' subject_ids: they may only just have been
-  # built, and reading subjects then loads each one's subject in turn.
   def validate_subject_consistency
-    subject_ids = Subject.where(id: course_subjects.map(&:subject_id)).where.not(type: "DiscontinuedSubject").ids
-
-    return if subject_ids.empty?
+    return if active_subjects.empty?
 
     case level
     when "primary"
-      errors.add(:subjects, "Subject must be primary") unless PrimarySubject.exists?(id: subject_ids)
+      errors.add(:subjects, "Subject must be primary") unless has_a_subject_of_type?("PrimarySubject")
     when "secondary"
-      errors.add(:subjects, "Subject must be secondary") unless SecondarySubject.exists?(id: subject_ids)
+      errors.add(:subjects, "Subject must be secondary") unless has_a_subject_of_type?("SecondarySubject")
     when "further_education"
-      errors.add(:subjects, "Subject must be further education") unless FurtherEducationSubject.exists?(id: subject_ids)
+      errors.add(:subjects, "Subject must be further education") unless has_a_subject_of_type?("FurtherEducationSubject")
     end
+  end
+
+  def has_a_subject_of_type?(type)
+    active_subjects.any? { |subject| subject.type == type }
+  end
+
+  # The subjects the validations below ask about, in one query rather than one
+  # per course subject. Courses::AssignSubjectsService recreates the course
+  # subjects on every update, so their subjects are never already loaded, and
+  # going through subject_id covers the rows that were only just built.
+  #
+  # Keyed on the ids so a rebuilt set of course subjects is read again rather
+  # than answered from the set before it.
+  def active_subjects
+    ids = course_subjects.map(&:subject_id).compact
+    @active_subjects = nil unless @active_subject_ids == ids
+    @active_subject_ids = ids
+    @active_subjects ||= Subject.active.where(id: ids).to_a
   end
 
   def validate_custom_age_range
