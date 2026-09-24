@@ -4,12 +4,10 @@ require "rails_helper"
 require "rake"
 
 RSpec.describe "solid_queue:start_when_ready" do
-  before(:all) do
+  before do
     Rails.application.load_tasks if Rake::Task.tasks.empty?
     load Rails.root.join("lib/tasks/solid_queue_boot.rake") unless defined?(SolidQueueBoot)
-  end
 
-  before do
     Rake::Task["solid_queue:start_when_ready"].reenable
     allow(Rake::Task["solid_queue:start"]).to receive(:invoke)
   end
@@ -21,7 +19,7 @@ RSpec.describe "solid_queue:start_when_ready" do
       expect(connection.primary_key(table)).to be_present
     end
 
-    allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("qa"))
+    allow(Settings.environment).to receive(:name).and_return("qa")
 
     Rake::Task["solid_queue:start_when_ready"].invoke
 
@@ -29,7 +27,7 @@ RSpec.describe "solid_queue:start_when_ready" do
   end
 
   it "waits while schema is not ready then starts" do
-    allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("qa"))
+    allow(Settings.environment).to receive(:name).and_return("qa")
     allow(SolidQueueBoot).to receive(:schema_ready?).and_return(false, false, true)
     allow(Kernel).to receive(:sleep)
 
@@ -41,14 +39,14 @@ RSpec.describe "solid_queue:start_when_ready" do
 
   describe "SolidQueueBoot.schema_ready?" do
     it "is false in review until sanitised statistic rows exist" do
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("review"))
+      allow(Settings.environment).to receive(:name).and_return("review")
       allow(Statistic).to receive(:count).and_return(0)
 
       expect(SolidQueueBoot.schema_ready?).to be(false)
     end
 
     it "is true in review once solid_queue PKs and statistic rows exist" do
-      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("review"))
+      allow(Settings.environment).to receive(:name).and_return("review")
       allow(Statistic).to receive(:count).and_return(SolidQueueBoot::REVIEW_MIN_STATISTIC_ROWS)
 
       expect(SolidQueueBoot.schema_ready?).to be(true)

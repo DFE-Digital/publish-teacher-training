@@ -17,7 +17,7 @@ module SolidQueueBoot
   # Sanitised review restores load thousands of statistic rows; empty db:setup does not.
   REVIEW_MIN_STATISTIC_ROWS = Integer(ENV.fetch("SOLID_QUEUE_REVIEW_MIN_STATISTIC_ROWS", "100"))
 
-  module_function
+module_function
 
   def schema_ready?
     connection = ActiveRecord::Base.connection
@@ -26,14 +26,18 @@ module SolidQueueBoot
     end
     return false unless tables_ready
 
-    if Rails.env.review?
-      return false if Statistic.count < REVIEW_MIN_STATISTIC_ROWS
+    if review_environment? && Statistic.count < REVIEW_MIN_STATISTIC_ROWS
+      return false
     end
 
     true
   rescue StandardError => e
     Rails.logger.warn("[solid_queue] waiting for solid_queue schema: #{e.class}: #{e.message}")
     false
+  end
+
+  def review_environment?
+    Settings.environment.name == "review"
   end
 end
 
