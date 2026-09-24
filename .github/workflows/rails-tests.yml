@@ -113,7 +113,7 @@ jobs:
         continue-on-error: ${{ github.event_name == 'pull_request' && inputs.test-cycle-year != '' }}
         run: |
           set -o pipefail
-          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}" | tee "$RUNNER_TEMP/rspec.log"
+          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}" 2>&1 | tee "$RUNNER_TEMP/rspec.log"
         env:
           INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
           EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
@@ -124,20 +124,28 @@ jobs:
       - name: Warn about next cycle failures
         if: ${{ steps.tests.outcome == 'failure' && steps.tests.conclusion == 'success' }}
         run: |
-          failures=$(grep -E '^rspec \./' "$RUNNER_TEMP/rspec.log" | sort -u || true)
+          # RSpec colours the "rspec ./spec/..." rerun lines, so the escape
+          # codes have to come off before the anchor can match.
+          strip_colour() { sed -E 's/\x1B\[[0-9;]*[mKG]//g' "$1"; }
+
+          failures=$(strip_colour "$RUNNER_TEMP/rspec.log" | grep -E '^rspec \./' | sort -u || true)
           count=$(printf '%s' "$failures" | grep -c . || true)
 
           if [ "$count" -gt 0 ]; then
             echo "::warning title=${{ matrix.tests.name }} (next cycle)::${count} examples fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}. The job summary lists them."
+            body="$failures"
           else
-            echo "::warning title=${{ matrix.tests.name }} (next cycle)::The tests fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}, outside any example. The log of the tests step has the error."
+            # No example failed, so the run broke some other way. Put the end of
+            # the log in the summary rather than sending somebody to find it.
+            echo "::warning title=${{ matrix.tests.name }} (next cycle)::The tests fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}, outside any example. The end of the log is in the job summary."
+            body=$(strip_colour "$RUNNER_TEMP/rspec.log" | tail -40)
           fi
 
           {
             echo "### ${{ matrix.tests.name }}: ${count} next cycle failures (TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR})"
             echo
             echo '```'
-            echo "${failures:-See the log of the tests step.}"
+            echo "${body:-The log of the tests step is empty.}"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
         env:
