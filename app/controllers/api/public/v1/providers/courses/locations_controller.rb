@@ -66,7 +66,9 @@ module API
                           else
                             # sites, not site_statuses.site: they are separate
                             # associations, and sites is the one serialised.
-                            provider.courses.includes({ sites: :provider }, :site_statuses).find_by(course_code: params[:course_code])
+                            # Each location links to its provider, and a
+                            # serialised provider reads its own cycle.
+                            provider.courses.includes({ sites: { provider: :recruitment_cycle } }, :site_statuses).find_by(course_code: params[:course_code])
                           end
             end
 
