@@ -373,6 +373,13 @@ describe Course do
   end
 
   describe "validations" do
+    # Reloaded so the course subjects are the plain rows a save validates,
+    # with nothing loaded on them.
+    def validation_queries_for(subjects)
+      course = create(:course, level: "secondary", subjects:)
+      count_queries { Course.find(course.id).valid? }
+    end
+
     describe "modern languages" do
       let(:course) { build(:course, level: "secondary", subjects: []) }
 
@@ -394,17 +401,24 @@ describe Course do
       end
 
       it "checks the subjects in a constant number of queries regardless of how many languages there are" do
-        queries_for = lambda do |languages|
-          course = create(:course, level: "secondary", subjects: [modern_languages, *languages])
-          course = described_class.find(course.id)
-          count_queries { course.valid? }
-        end
-
         german = find_or_create(:modern_languages_subject, :german)
         spanish = find_or_create(:modern_languages_subject, :spanish)
 
-        many = queries_for.call([french, german, spanish])
-        few = queries_for.call([french, german])
+        many = validation_queries_for([modern_languages, french, german, spanish])
+        few = validation_queries_for([modern_languages, french, german])
+
+        expect(many).to eq(few)
+      end
+
+      # The design technology pair reads the course subjects the same way the
+      # modern languages one does.
+      it "checks a design technology course's subjects in the same number of queries" do
+        design_and_technology = find_or_create(:secondary_subject, :design_and_technology)
+        engineering = find_or_create(:design_technology_subject, :engineering)
+        product_design = find_or_create(:design_technology_subject, :product_design)
+
+        many = validation_queries_for([design_and_technology, engineering, product_design])
+        few = validation_queries_for([design_and_technology, engineering])
 
         expect(many).to eq(few)
       end
