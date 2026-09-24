@@ -105,17 +105,46 @@ jobs:
       - run: bundle exec rails parallel:setup
       - run: bundle exec rails spec:prepare
 
+      # On a pull request, a run in another cycle year warns instead of failing,
+      # because every check must pass before a merge. The scheduled run still
+      # fails, so that the Teams channel hears about it.
       - name: ${{ matrix.tests.name }} tests with feature flags
+        id: tests
+        continue-on-error: ${{ github.event_name == 'pull_request' && inputs.test-cycle-year != '' }}
         run: |
-          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"
+          set -o pipefail
+          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}" | tee "$RUNNER_TEMP/rspec.log"
         env:
           INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
           EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
           FEATURE_FLAGS: ${{ matrix.feature-flags }}
           TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
 
+      # The tests failed but continue-on-error let the job pass.
+      - name: Warn about next cycle failures
+        if: ${{ steps.tests.outcome == 'failure' && steps.tests.conclusion == 'success' }}
+        run: |
+          failures=$(grep -E '^rspec \./' "$RUNNER_TEMP/rspec.log" | sort -u || true)
+          count=$(printf '%s' "$failures" | grep -c . || true)
+
+          if [ "$count" -gt 0 ]; then
+            echo "::warning title=${{ matrix.tests.name }} (next cycle)::${count} examples fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}. The job summary lists them."
+          else
+            echo "::warning title=${{ matrix.tests.name }} (next cycle)::The tests fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}, outside any example. The log of the tests step has the error."
+          fi
+
+          {
+            echo "### ${{ matrix.tests.name }}: ${count} next cycle failures (TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR})"
+            echo
+            echo '```'
+            echo "${failures:-See the log of the tests step.}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
+
       - name: Upload screenshots
-        if: ${{ failure() }}
+        if: ${{ failure() || steps.tests.outcome == 'failure' }}
         uses: actions/upload-artifact@v7
         with:
           name: Test-screenshots

@@ -165,8 +165,8 @@ jobs:
 
   # Runs the tests as if in the next cycle year, to find what the next rollover
   # will break. Add the next-cycle label to a pull request to turn it on, and
-  # remove the label to turn it off. Nothing needs this job, so a failure here
-  # does not stop a build or a deploy.
+  # remove the label to turn it off. Its failures show as warnings, not failed
+  # checks, so the label never blocks a merge. Nothing needs this job.
   rails-tests-next-cycle:
     name: Rails Tests (next cycle)
     needs: [lint]

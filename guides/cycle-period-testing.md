@@ -617,8 +617,17 @@ workflow with a `test-cycle-year` input. Three jobs call it:
   Monday on `main` and reports a failure to the Teams channel. You can also
   start it from the Actions tab, with any year.
 
-Nothing needs the next cycle jobs, so a failure in them does not stop a build or
-a deploy. It warns about the future. It is not a fault in the code being merged.
+A failure in another cycle year warns about the future. It is not a fault in the
+code being merged, so on a pull request it must not block the merge. Every check
+must pass before a merge, so on a pull request the tests step has
+`continue-on-error` and the next cycle checks always pass. The failures show
+instead as a warning annotation on the pull request, and each job summary lists
+the failing examples. So a green next cycle check does not mean the tests pass.
+Read the warnings.
+
+The scheduled run is not a pull request, so there a failure fails the job and
+reaches the Teams channel. Nothing needs the next cycle jobs, so neither can
+stop a build or a deploy.
 
 ## Open questions
 
