@@ -86,12 +86,15 @@ class Provider < ApplicationRecord
 
   delegate :year, to: :recruitment_cycle, prefix: true
 
+  # Course#rollable? goes through content_status, which reads the latest
+  # enrichment and, for a course that has never been published, the rest of
+  # them.
   def rollable_courses?
-    courses.includes(:latest_enrichment).any?(&:rollable?)
+    courses.includes(:latest_enrichment, :enrichments).any?(&:rollable?)
   end
 
   def rollable_accredited_courses?
-    accredited_courses.includes(:latest_enrichment).any?(&:rollable?)
+    accredited_courses.includes(:latest_enrichment, :enrichments).any?(&:rollable?)
   end
 
   def rollable?
