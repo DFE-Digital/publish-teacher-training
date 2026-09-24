@@ -1,0 +1,139 @@
+name: Rails Tests
+
+# Called by build-and-deploy.yml on every build, and by next-cycle-tests.yml to
+# run the same tests in the next cycle year.
+
+on:
+  workflow_call:
+    inputs:
+      test-cycle-year:
+        description: Run as if in this cycle year, or "next". Leave empty for the real year.
+        type: string
+        default: ""
+
+jobs:
+  rails-tests:
+    name: Rails Tests
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+      PLAYWRIGHT_CLI_EXECUTABLE_PATH: ./node_modules/.bin/playwright
+
+    services:
+      postgres:
+        image: postgis/postgis:14-3.2-alpine
+        env:
+          POSTGRES_PASSWORD: developmentpassword
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - name: Unit - Models
+            include-pattern: spec/models/.*_spec.rb
+          - name: Unit - Services
+            include-pattern: spec/services/.*_spec.rb
+          - name: Unit - Forms
+            include-pattern: spec/forms/.*_spec.rb
+          - name: Unit - Components
+            include-pattern: spec/components/.*_spec.rb
+          - name: Unit - Other
+            include-pattern: spec/.*_spec.rb
+            exclude-pattern: spec/(system|smoke|models|services|forms|components)/.*_spec.rb
+
+
+          - name: System - Find (except homepage & results)
+            include-pattern: spec/system/find/.*_spec.rb
+            exclude-pattern: spec/system/find/(homepage|results)/.*_spec.rb
+          - name: System - Find (homepage & results)
+            include-pattern: spec/system/find/(homepage|results)/.*_spec.rb
+          - name: System - Publish
+            include-pattern: spec/system/publish/.*_spec.rb
+          - name: System - Support and the rest
+            include-pattern: spec/system/.*_spec.rb
+            exclude-pattern: spec/system/(find|publish)/.*_spec.rb
+        # Pass Settings compatible env vars to runs tests with
+        # feature flag(s) enables
+        # Separate mutliple flags with a space
+        feature-flags:
+          - ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+      - name: Enable Corepack (Yarn 4)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.18.0 --activate
+      - uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install Node dependencies
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --immutable; then
+              exit 0
+            fi
+            echo "yarn install failed on attempt $attempt"
+            sleep 5
+          done
+          exit 1
+
+      - name: Install Playwright
+        if: ${{ startsWith(matrix.tests.name, 'System') }}
+        run: |
+          export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
+            'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
+          yarn add --dev playwright@${PLAYWRIGHT_CLI_VERSION}
+          yarn exec playwright install chromium --with-deps
+
+      - run: bundle exec rails parallel:setup
+      - run: bundle exec rails spec:prepare
+
+      - name: ${{ matrix.tests.name }} tests with feature flags
+        run: |
+          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}"
+        env:
+          INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
+          EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
+          FEATURE_FLAGS: ${{ matrix.feature-flags }}
+          TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
+
+      - name: Upload screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: Test-screenshots
+          path: ${{ github.workspace }}/tmp/capybara/*
+
+      # - name: Upload coverage results
+      #   if: always()
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: Coverage_report
+      #     path: ${{ github.workspace }}/out/*
+
+      - name: Notify teams channel on job failure
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: ${{ inputs.test-cycle-year && 'Next cycle test failure' || 'Test failure' }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Publish Teacher Training Test failure${{ inputs.test-cycle-year && format(' with TEST_CYCLE_YEAR={0}', inputs.test-cycle-year) || '' }}
