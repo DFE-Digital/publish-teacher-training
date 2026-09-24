@@ -7,7 +7,6 @@ RSpec.describe "Salaried course callout on results page", service: :find do
 
   before do
     Timecop.travel(Find::CycleTimetable.mid_cycle)
-    FeatureFlag.activate(:bursaries_and_scholarships_announced)
     given_there_is_a_salaried_physics_course_with_a_bursary
   end
 

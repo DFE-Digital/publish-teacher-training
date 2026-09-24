@@ -11,8 +11,6 @@ module Find
       let(:history) { find_or_create(:secondary_subject, :history) }
       let(:primary) { find_or_create(:primary_subject, :primary_with_mathematics) }
 
-      before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
-
       def render_callout(funding:, subject_codes: [physics.subject_code])
         render_inline(described_class.new(funding:, subject_codes:))
       end
@@ -82,12 +80,12 @@ module Find
         expect(page).to have_no_css(".app-callout")
       end
 
-      it "does not render when bursaries and scholarships have not been announced" do
+      it "renders regardless of whether bursaries and scholarships have been announced" do
         FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
 
         render_callout(funding: %w[salary])
 
-        expect(page).to have_no_css(".app-callout")
+        expect(page).to have_css(".app-callout")
       end
     end
   end
