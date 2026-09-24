@@ -12,8 +12,7 @@ module Find
       end
 
       def render?
-        FeatureFlag.active?(:bursaries_and_scholarships_announced) &&
-          @funding.intersect?(SALARIED_FUNDING) &&
+        @funding.intersect?(SALARIED_FUNDING) &&
           @subject_codes.intersect?(Subject.secondary_subject_codes_with_bursary_or_scholarship)
       end
     end
