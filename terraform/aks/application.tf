@@ -91,13 +91,14 @@ module "solid_queue_worker" {
     "/bin/sh",
     "-c",
     # $${...} so Terraform leaves the shell default for DATABASE_CONNECTION_POOL_SIZE alone.
-    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
+    # start_when_ready waits for migrate/db:setup/restore so we never cache a missing PK.
+    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start_when_ready",
   ]
   max_memory      = var.solid_queue_worker_memory_max
   replicas        = var.solid_queue_worker_replicas
   enable_logit    = var.enable_logit
   run_as_non_root = var.run_as_non_root
-  # Match rake solid_queue:start during boot and forked processes (`.` matches `_`).
+  # Match rake solid_queue:start(_when_ready) during boot and forked processes (`.` matches `_`).
   probe_command = ["pgrep", "-f", "solid.queue"]
 
   enable_gcp_wif = true

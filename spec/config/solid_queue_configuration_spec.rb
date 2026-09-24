@@ -65,6 +65,14 @@ RSpec.describe "Solid Queue configuration" do
     expect(application_config).not_to match(/config\.active_job\.queue_adapter\s*=\s*:solid_queue/)
   end
 
+  it "boots Solid Queue via start_when_ready so workers wait for schema" do
+    Rails.application.load_tasks if Rake::Task.tasks.empty?
+    application_tf = Rails.root.join("terraform/aks/application.tf").read
+
+    expect(application_tf).to include("solid_queue:start_when_ready")
+    expect(Rake::Task.task_defined?("solid_queue:start_when_ready")).to be(true)
+  end
+
   it "derives Mission Control filter_arguments from filter_parameters" do
     expect(MissionControl::Jobs.filter_arguments).to include("email", "token", "email_address", "headers")
   end
