@@ -10,9 +10,11 @@ RSpec.describe "API::Public::V1::Providers::Courses::LocationsController#index",
 
   def render_locations_for(site_count)
     course = create(:course, provider:)
-    # The sites on a provider of their own: sites the course's own provider
-    # owns come back with that provider already loaded, which would hide this.
-    course.sites << build_list(:site, site_count, provider: create(:provider, recruitment_cycle:))
+    # Each site on a provider of its own, as the docs spec builds them: sites
+    # the course's own provider owns come back with that provider already
+    # loaded, and sites sharing one provider would hide what serialising a
+    # provider reads.
+    course.sites << Array.new(site_count) { build(:site, provider: create(:provider, recruitment_cycle:)) }
 
     count_queries do
       get "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses/#{course.course_code}/locations",
