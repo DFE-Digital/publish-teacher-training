@@ -10,7 +10,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
   context "it is mid cycle" do
     before do
-      allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(true)
+      allow(Find::CycleTimetable).to receive(:can_create_application?).and_return(true)
     end
 
     it "renders the apply button when the course is open" do
@@ -98,7 +98,7 @@ describe Find::Courses::ApplyComponent::View, type: :component do
 
   context "it is not mid cycle" do
     it "displays that courses are currently closed" do
-      allow(Find::CycleTimetable).to receive(:mid_cycle?).and_return(false)
+      allow(Find::CycleTimetable).to receive(:can_create_application?).and_return(false)
 
       course = build(:course, :closed, provider:)
 

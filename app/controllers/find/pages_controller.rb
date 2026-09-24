@@ -7,7 +7,7 @@ module Find
     before_action :redirect_to_homepage_unless_in_maintenance_mode, only: :maintenance
 
     def cycle_has_ended
-      redirect_to root_path unless CycleTimetable.find_down?
+      redirect_to root_path unless CycleTimetable.find_closed?
     end
 
     def accessibility; end

@@ -25,13 +25,24 @@ module Find
         end
       end
 
-      context "We are in the middle of the 2021 cycle and the cycle switcher has been set to 'find has reopened'" do
+      context "We are in the middle of the 2021 cycle and the cycle switcher has been set to 'apply has reopened'" do
         it "is 2022" do
-          allow(SiteSetting).to receive(:cycle_schedule).and_return(:today_is_after_find_opens)
+          allow(SiteSetting).to receive(:cycle_schedule).and_return(:apply_reopened)
 
           Timecop.travel(Time.zone.local(2020, 10, 6, 10, 0, 0)) do
             expect(described_class.current_year).to eq(2022)
           end
+        end
+      end
+
+      it "moves to the next cycle for every option past the rollover" do
+        described_class::SWITCHER_OPTIONS.each do |option, definition|
+          allow(SiteSetting).to receive(:cycle_schedule).and_return(option)
+
+          real_year = described_class.cycle_year_for_time(Time.zone.now)
+          expected = definition[:advances_cycle] ? real_year + 1 : real_year
+
+          expect(described_class.current_year).to eq(expected), "wrong year for #{option}"
         end
       end
     end
@@ -147,43 +158,83 @@ module Find
       end
     end
 
-    describe ".find_down?" do
+    describe ".find_closed?" do
       it "returns true when it is after previous Find closes and before it opens" do
         Timecop.travel(Time.zone.local(2021, 10, 5, 1, 0, 0)) do
-          expect(described_class.find_down?).to be true
+          expect(described_class.find_closed?).to be true
         end
       end
 
       it "returns false before Find closes" do
         Timecop.travel(Time.zone.local(2021, 9, 21, 17, 0, 0)) do
-          expect(described_class.find_down?).to be false
+          expect(described_class.find_closed?).to be false
         end
       end
 
       it "returns false when Find has reopened" do
         Timecop.travel(Time.zone.local(2021, 10, 5, 10, 0, 0)) do
-          expect(described_class.find_down?).to be false
+          expect(described_class.find_closed?).to be false
         end
       end
     end
 
-    describe ".mid_cycle??" do
+    describe ".can_create_application?" do
       it "returns true after Find has opened" do
         Timecop.travel(Time.zone.local(2021, 10, 5, 10, 0, 0)) do
-          expect(described_class.mid_cycle?).to be true
+          expect(described_class.can_create_application?).to be true
         end
       end
 
       it "returns false after the apply_deadline" do
         Timecop.travel(Time.zone.local(2021, 9, 21, 19, 0, 0)) do
+          expect(described_class.can_create_application?).to be false
+        end
+      end
+
+      context "when current_cycle_schedule returns `:apply_open`" do
+        it "returns true" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_open)
+          expect(described_class.can_create_application?).to be true
+        end
+      end
+
+      context "when current_cycle_schedule returns `:apply_not_open_yet`" do
+        it "returns true, because a candidate can already build an application" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_not_open_yet)
+          expect(described_class.can_create_application?).to be true
+        end
+      end
+
+      context "when current_cycle_schedule returns `:apply_closed`" do
+        it "returns false" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_closed)
+          expect(described_class.can_create_application?).to be false
+        end
+      end
+    end
+
+    describe ".mid_cycle?" do
+      it "returns true at the instant mid_cycle names" do
+        Timecop.travel(described_class.mid_cycle(2022)) do
+          expect(described_class.mid_cycle?).to be true
+        end
+      end
+
+      it "returns false during the week before Apply opens" do
+        Timecop.travel(described_class.find_opens(2022) + 1.hour) do
           expect(described_class.mid_cycle?).to be false
         end
       end
 
-      context "when current_cycle_schedule returns `:today_is_after_find_opens`" do
-        it "returns true" do
-          allow(described_class).to receive(:current_cycle_schedule).and_return(:today_is_after_find_opens)
-          expect(described_class.mid_cycle?).to be true
+      it "returns false once the deadline banner is up" do
+        Timecop.travel(described_class.first_deadline_banner(2022) + 1.day) do
+          expect(described_class.mid_cycle?).to be false
+        end
+      end
+
+      it "returns false after the apply deadline" do
+        Timecop.travel(described_class.apply_deadline(2022) + 1.hour) do
+          expect(described_class.mid_cycle?).to be false
         end
       end
     end
@@ -322,6 +373,53 @@ module Find
         end
 
         expect(offenders.keys).to be_empty
+      end
+    end
+
+    describe "PHASES" do
+      it "holds every phase that phases_in_time answers for" do
+        expect(described_class::PHASES.keys).to match_array(described_class.phases_in_time.keys)
+      end
+
+      it "runs apply_open for the whole apply window" do
+        from, to = described_class.phase_range(:apply_open, 2026)
+
+        expect(from).to eq(described_class.date(:apply_opens, 2026))
+        expect(to).to eq(described_class.date(:apply_deadline, 2026))
+      end
+
+      it "tiles the cycle end to end, with no gap and no overlap" do
+        ranges = described_class::PHASES.keys
+          .map { |phase| described_class.phase_range(phase, 2026) }
+          .sort_by(&:first)
+
+        expect(ranges.each_cons(2).map { |(_, a_to), (b_from, _)| a_to == b_from }).to all(be true)
+      end
+
+      it "runs find_closed from Find closing in the previous cycle to Find reopening" do
+        from, to = described_class.phase_range(:find_closed, 2027)
+
+        expect(from).to eq(described_class.date(:find_closes, 2026))
+        expect(to).to eq(described_class.date(:find_opens, 2027))
+      end
+    end
+
+    describe "the phase predicates" do
+      it "turn on only the phase the switcher selects" do
+        predicates = described_class::PHASES.keys.index_with { |phase| :"#{phase}?" }
+
+        result = described_class::SWITCHER_OPTIONS.each_key.index_with do |selected|
+          allow(described_class).to receive(:current_cycle_schedule).and_return(selected)
+
+          predicates.select { |_, predicate| described_class.public_send(predicate) }.keys
+        end
+
+        expected = described_class::SWITCHER_OPTIONS.transform_values { |definition| [definition[:phase]] }
+        expect(result).to eq(expected)
+      end
+
+      it "names one predicate for every phase" do
+        expect(described_class::PHASES.keys).to all(satisfy { |phase| described_class.respond_to?(:"#{phase}?") })
       end
     end
   end
