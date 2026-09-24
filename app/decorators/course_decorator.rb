@@ -215,6 +215,12 @@ class CourseDecorator < ApplicationDecorator
     next_cycle?
   end
 
+  def financial_support_not_yet_announced?
+    return false if FeatureFlag.active?(:bursaries_and_scholarships_announced)
+
+    current_cycle? || next_cycle?
+  end
+
   def cycle_range
     "#{course.recruitment_cycle.year} to #{course.recruitment_cycle.year.to_i + 1}"
   end
