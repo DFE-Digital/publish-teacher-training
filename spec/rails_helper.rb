@@ -31,6 +31,10 @@ end
 # Allows us to call `mid_cycle` in the highest context in the specs
 extend CycleTimetableHelpers # rubocop:disable Style/MixinUsage
 
+# With TEST_CYCLE_YEAR set, the spec files load in the target year. See
+# CycleTimetableHelpers.travel_to_target_year.
+CycleTimetableHelpers.travel_to_target_year
+
 # Allows response.parsed_body to parse JSONAPI responses
 # Doesn't work by default with RSpec.
 # https://github.com/jsonapi-rb/jsonapi-rails/blob/master/lib/jsonapi/rails/railtie.rb#L47
@@ -168,6 +172,7 @@ RSpec.configure do |config|
     end
   ensure
     Timecop.return
+    CycleTimetableHelpers.travel_to_target_year
   end
 
 private
