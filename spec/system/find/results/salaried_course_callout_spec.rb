@@ -14,7 +14,7 @@ RSpec.describe "Salaried course callout on results page", service: :find do
     when_i_search_for_salaried_physics_courses
     then_i_see_the_callout_above_the_first_result
 
-    when_i_click_the_bursaries_or_scholarships_link
+    when_i_click_the_bursaries_link
     then_the_click_is_tracked
     and_i_am_taken_to_get_into_teaching
   end
@@ -49,10 +49,10 @@ RSpec.describe "Salaried course callout on results page", service: :find do
     expect(page).to have_no_text("Is a salaried course right for me?")
   end
 
-  def when_i_click_the_bursaries_or_scholarships_link
+  def when_i_click_the_bursaries_link
     allow(Find::Analytics::ClickEvent).to receive(:new).and_call_original
 
-    click_link_or_button "bursaries or scholarships"
+    click_link_or_button "bursaries", exact: true
   end
 
   def then_the_click_is_tracked

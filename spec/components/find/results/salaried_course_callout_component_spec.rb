@@ -43,10 +43,11 @@ module Find
 
         expect(page).to have_css("h2", text: "Is a salaried course right for me?")
         expect(page).to have_text(
-          "Fee paying courses are less competitive, and you could receive more money if you're a UK citizen and eligible for bursaries or scholarships.",
+          "Fee paying courses are less competitive, and you could receive more money if you're a UK citizen and eligible for bursaries.",
         )
         expect(page).to have_link(
-          "bursaries or scholarships",
+          "bursaries",
+          exact: true,
           href: find_track_click_path(
             url: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries",
             utm_content: "results_salaried_course_callout_bursaries_and_scholarships",
