@@ -423,6 +423,20 @@ module Find
         expect(ranges.each_cons(2).map { |(_, a_to), (b_from, _)| a_to == b_from }).to all(be true)
       end
 
+      it "runs one phase at an instant where two phases meet" do
+        boundaries = %i[find_opens apply_opens apply_deadline].index_with do |boundary|
+          travel_to(described_class.date(boundary, 2026)) do
+            described_class.phases_in_time.select { |_, live| live }.keys
+          end
+        end
+
+        expect(boundaries).to eq(
+          find_opens: [:apply_not_open_yet],
+          apply_opens: [:apply_open],
+          apply_deadline: [:apply_closed],
+        )
+      end
+
       it "runs find_closed from Find closing in the previous cycle to Find reopening" do
         from, to = described_class.phase_range(:find_closed, 2027)
 
