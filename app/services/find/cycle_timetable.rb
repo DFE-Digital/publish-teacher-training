@@ -268,9 +268,11 @@ module Find
     end
 
     # The deadline banner is a window inside `apply_open`, not a phase: nothing a
-    # candidate can do changes when it appears.
+    # candidate can do changes when it appears. The switcher therefore toggles it
+    # on its own rather than reaching it by picking a phase.
     def self.show_apply_deadline_banner?
       return false unless apply_open?
+      return SiteSetting.deadline_banner? unless current_cycle_schedule == :real
 
       Time.zone.now.between?(first_deadline_banner, apply_deadline)
     end

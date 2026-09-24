@@ -37,6 +37,19 @@ RSpec.describe "switcher cycle" do
     expect(page).to have_css(".govuk-radios__divider", text: "2024 cycle", exact_text: true)
   end
 
+  scenario "Apply is open and the deadline banner is switched on" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose("Apply is open")
+    and_i_check("Show the apply deadline banner")
+    then_i_click_on_update_button
+    and_i_should_see_the_success_banner
+    and_i_visit_find_results_page
+    and_i_see_mid_cycle_banner
+
+    and_i_do_not_see_the_cycle_has_closed_banner
+    and_i_do_not_see_the_apply_opens_soon_banner
+  end
+
   scenario "Update to Apply deadline has passed" do
     when_i_visit_switcher_cycle_page
     and_i_choose("Apply deadline has passed")
@@ -93,6 +106,10 @@ RSpec.describe "switcher cycle" do
 
   def and_i_choose(option)
     page.choose(option)
+  end
+
+  def and_i_check(option)
+    page.check(option)
   end
 
   def then_i_click_on_update_button

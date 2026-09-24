@@ -15,7 +15,14 @@
         <%= f.govuk_radio_button :cycle_schedule_name,
               option.to_s,
               label: { text: t("find.cycles.#{option}.name") },
-              hint: -> { hint_for_option(option, option_year) } %>
+              hint: -> { hint_for_option(option, option_year) } do %>
+          <% if option == :apply_open %>
+            <%= f.govuk_check_box :deadline_banner, "1", "0",
+                  multiple: false,
+                  label: { text: t("find.cycles.deadline_banner.name") },
+                  hint: { text: t("find.cycles.deadline_banner.description") } %>
+          <% end %>
+        <% end %>
         <% previous_option_year = option_year %>
       <% end %>
     <% end %>
