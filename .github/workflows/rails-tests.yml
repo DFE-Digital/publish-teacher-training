@@ -151,11 +151,14 @@ jobs:
         env:
           TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
 
+      # An artifact name must be unique in a workflow run. The label runs this
+      # workflow twice in one run, so a shared name makes the second upload
+      # fail, which turns a job red that the warnings keep green.
       - name: Upload screenshots
         if: ${{ failure() || steps.tests.outcome == 'failure' }}
         uses: actions/upload-artifact@v7
         with:
-          name: Test-screenshots
+          name: Test-screenshots-${{ inputs.test-cycle-year || 'current' }}-${{ strategy.job-index }}
           path: ${{ github.workspace }}/tmp/capybara/*
 
       # - name: Upload coverage results
