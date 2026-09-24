@@ -19,6 +19,9 @@ en:
       apply_not_open_yet:
         name: Find has reopened, but Apply has not
         description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
+      deadline_banner:
+        name: Show the apply deadline banner
+        description: Candidates see the deadline warning. Only applies while Apply is open
       updated: Cycle schedule updated
     enic:
       statement_of_comparability:

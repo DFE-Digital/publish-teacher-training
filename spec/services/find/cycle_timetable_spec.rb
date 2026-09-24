@@ -240,6 +240,33 @@ module Find
     end
 
     describe ".show_apply_deadline_banner?" do
+      context "when the switcher forces apply_open with the banner on" do
+        it "returns true" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_open)
+          allow(SiteSetting).to receive(:deadline_banner?).and_return(true)
+
+          expect(described_class.show_apply_deadline_banner?).to be true
+        end
+      end
+
+      context "when the switcher forces apply_open with the banner off" do
+        it "returns false" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_open)
+          allow(SiteSetting).to receive(:deadline_banner?).and_return(false)
+
+          expect(described_class.show_apply_deadline_banner?).to be false
+        end
+      end
+
+      context "when the switcher forces a phase outside the apply window" do
+        it "returns false even with the banner on" do
+          allow(described_class).to receive(:current_cycle_schedule).and_return(:apply_closed)
+          allow(SiteSetting).to receive(:deadline_banner?).and_return(true)
+
+          expect(described_class.show_apply_deadline_banner?).to be false
+        end
+      end
+
       it "returns true when it is after the first_deadline_banner and before the apply_deadline" do
         Timecop.travel(Time.zone.local(2024, 7, 30, 19, 0, 0)) do
           expect(described_class.show_apply_deadline_banner?).to be true
