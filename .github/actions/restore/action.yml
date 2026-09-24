@@ -86,3 +86,11 @@ runs:
       run: |
         bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
+
+    # Sanitised restore rewrites the DB under a possibly already-running worker.
+    # Recycle so Solid Queue reloads schema (avoids poisoned PK / UndefinedTable).
+    - name: Restart solid-queue-worker after restore
+      shell: bash
+      run: |
+        kubectl -n "${NAMESPACE}" rollout restart "deployment/${{ env.app_name }}-solid-queue-worker"
+        kubectl -n "${NAMESPACE}" rollout status "deployment/${{ env.app_name }}-solid-queue-worker" --timeout=300s
