@@ -122,6 +122,21 @@ describe Shared::Courses::FinancialSupport::FeesAndFinancialSupportComponent::Vi
     end
   end
 
+  context "Courses in a recruitment cycle that has already run" do
+    it "does not hold back financial support that was announced a year ago" do
+      FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
+      recruitment_cycle = create(:recruitment_cycle, :previous)
+      provider = create(:provider, recruitment_cycle:)
+      enrichment = create(:course_enrichment)
+      course = create(:course, :secondary, funding: "fee", provider:, enrichments: [enrichment], name: "History", subjects: [build(:secondary_subject, bursary_amount: "2000")]).decorate
+
+      result = render_inline(described_class.new(course, enrichment))
+
+      expect(result.text).not_to include("will be released soon")
+      expect(result.text).to include("You may be eligible for student loans")
+    end
+  end
+
   context "Fee paying courses" do
     it "renders the fees section" do
       enrichment = create(:course_enrichment, fee_uk_eu: "5000", fee_details: "Some fee details")

@@ -1,7 +1,7 @@
 <%= govuk_accordion(html_attributes: { class: "accordion-without-controls course-accordion" }) do |accordion| %>
   <%= accordion.with_section(heading_text: content_tag(:h3, t("find.financial_support.uk_citizens.title"), class: "govuk-heading-m"), html_attributes: { class: "govuk-accordion__section--purple" }) do %>
     <div>
-      <% unless FeatureFlag.active?(:bursaries_and_scholarships_announced) %>
+      <% if course.financial_support_not_yet_announced? %>
         <h4 class="govuk-heading-s"><%= t("find.financial_support.bursaries") %></h4>
 
         <p class="govuk-body"><%= t("find.financial_support.not_yet_announced", cycle_year_range: course.cycle_range) %></p>
