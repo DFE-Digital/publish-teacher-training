@@ -64,7 +64,9 @@ module API
               @course ||= if schools_remodelled
                             provider.courses.includes(schools: %i[gias_school provider_school]).find_by(course_code: params[:course_code])
                           else
-                            provider.courses.includes(site_statuses: { site: :provider }).find_by(course_code: params[:course_code])
+                            # sites, not site_statuses.site: they are separate
+                            # associations, and sites is the one serialised.
+                            provider.courses.includes({ sites: :provider }, :site_statuses).find_by(course_code: params[:course_code])
                           end
             end
 
