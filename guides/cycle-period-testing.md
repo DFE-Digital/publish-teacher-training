@@ -29,14 +29,14 @@ For the operational process of moving data into a new cycle, see
 - [Traps](#traps)
 - [Choosing an instant](#choosing-an-instant), and when to name a year
 - [Testing the closed period](#testing-the-closed-period)
+- [Running the suite in another cycle
+  year](#running-the-suite-in-another-cycle-year), `TEST_CYCLE_YEAR` and the
+  next cycle runs in CI
 - [Open questions](#open-questions), work still to do:
-  - [You cannot run the whole suite at a different
-    time](#you-cannot-run-the-whole-suite-at-a-different-time)
   - [Audit how the specs control the
     cycle](#audit-how-the-specs-control-the-cycle)
   - [When to build data in a named cycle
     year](#when-to-build-data-in-a-named-cycle-year)
-  - [A scheduled run for the next cycle](#a-scheduled-run-for-the-next-cycle)
 - [Maintenance](#maintenance), adding next cycle's dates
 - [Checklist](#checklist)
 
@@ -254,8 +254,8 @@ bare `create(:course)` landing in a year the spec did not expect, an assertion
 naming a literal year, and behaviour gated on a year such as a route constraint.
 
 This is a real annual event with a known date, so pre-empt it rather than
-discover it. Ahead of the rollover, pin the specs that name a year and check the
-code paths gated on one.
+discover it. The weekly [next cycle run](#running-the-suite-in-another-cycle-year)
+shows these failures before the rollover.
 
 Keeping the default relative is deliberate. A fixed instant would never move,
 but it would need updating every year, it would eventually fall off the end of
@@ -549,38 +549,82 @@ moments of a cycle, give yourself real headroom with an offset such as
 `travel: 1.hour.before(find_closes)`. The same applies to any `end_of_day`
 boundary.
 
+## Running the suite in another cycle year
+
+Set `TEST_CYCLE_YEAR` to run the suite as it will behave after a rollover. It
+finds the specs the next rollover will break, weeks before the rollover, on a
+normal working day.
+
+```
+TEST_CYCLE_YEAR=next bundle exec parallel_rspec -n 8
+TEST_CYCLE_YEAR=2028 bundle exec rspec spec/models/course_spec.rb
+```
+
+It takes a year, or `next` for the year after the real current cycle. The year
+must be in `CYCLE_DATES`, otherwise the run stops before any spec loads. Unset,
+the suite runs at the ordinary `mid_cycle` default.
+
+### What moves and what stays
+
+The period stays the same. Only the year changes.
+
+| How the example is pinned | Example | With `TEST_CYCLE_YEAR` |
+| --- | --- | --- |
+| No `travel:` | | Mid cycle of the target year |
+| `travel:` with no year | `travel: 1.day.after(find_opens)` | Same position, in the target year |
+| `travel:` that names a year | `travel: mid_cycle(2026)` | Unchanged |
+| `travel:` with a literal date | `travel: Time.zone.local(2025, 3, 1)` | Unchanged |
+
+The first two rows are the specs that move on their own on rollover day, so
+they are the ones this run is for. The last two made an explicit choice and
+keep it. A stale year among them is a separate problem, see [Audit how the
+specs control the cycle](#audit-how-the-specs-control-the-cycle).
+
+### How it works
+
+`travel:` metadata is evaluated when the spec file loads, not when the example
+runs. So `travel: find_opens` becomes a fixed time against the clock at load
+time. For that reason `spec/rails_helper.rb` calls
+`CycleTimetableHelpers.travel_to_target_year` before any spec file loads, which
+moves the clock to mid cycle of the target year. Metadata with no year then
+resolves in the target year.
+
+The same method runs after each example, in the `ensure` of the `around` hook.
+Without it, code outside an example, such as `before(:all)`, would run at the
+real clock. With `TEST_CYCLE_YEAR` unset it does nothing.
+
+Every parallel worker reads the same variable, so every worker uses the same
+instant.
+
+> [!NOTE]
+> A spec that calls `Timecop.return` inside an example goes back to the real
+> clock, not to the target year. Use `Timecop.travel` or `Timecop.freeze` with a
+> block instead, which restores the previous time.
+
+### In CI
+
+The `rails-tests` job lives in `.github/workflows/rails-tests.yml`, a reusable
+workflow with a `test-cycle-year` input. Three jobs call it:
+
+- **Rails Tests**, in `build-and-deploy.yml`, with no input. It runs on every
+  build, at the same default as a local run, so that a green build means the
+  same thing in both places.
+- **Rails Tests (next cycle)**, in `build-and-deploy.yml`, with `next`. It runs
+  only on a pull request with the `next-cycle` label. Add the label to turn it
+  on and remove it to turn it off. Use it to check that a branch fixes the
+  failures the scheduled run found.
+- **Next Cycle Tests**, in `next-cycle-tests.yml`, with `next`. It runs every
+  Monday on `main` and reports a failure to the Teams channel. You can also
+  start it from the Actions tab, with any year.
+
+Nothing needs the next cycle jobs, so a failure in them does not stop a build or
+a deploy. It warns about the future. It is not a fault in the code being merged.
+
 ## Open questions
 
 The sections below are not settled practice. They record work that is still to
 do, and the reasoning behind it, so the next person does not have to derive it
 again.
-
-### You cannot run the whole suite at a different time
-
-We want to run the suite as if the date were in the next cycle. That finds the
-specs the next rollover will break, weeks before the rollover, on a normal
-working day.
-
-There is no way to do this now.
-
-One option we explored was to make the default instant configurable per run, so
-a single command could move every unpinned example to another point in the
-cycle. We chose the fixed `mid_cycle` default instead. It gives every example a
-known period without anybody having to set anything, which is what makes an
-unpinned spec trustworthy on a laptop and in CI alike. A configurable default
-does not replace that, and it is only worth adding on top of it.
-
-If somebody does add one, it must hold to these rules:
-
-- It changes the default instant only. An example with `travel:` keeps its own.
-- It takes a position in the cycle and a year, for example the mid cycle of the
-  next year. A position alone is the half that matters least, because the
-  rollover failures are year failures.
-- Unset, the suite runs at the ordinary `mid_cycle` default.
-- Every parallel worker uses the same instant.
-
-> [!NOTE]
-> Nobody has built it. Do not write a spec that depends on it.
 
 ### Audit how the specs control the cycle
 
@@ -687,32 +731,6 @@ if X is not in `CYCLE_DATES`. The factory calls
 `Find::CycleTimetable.apply_opens(X)`, `real_schedule_for` returns nil, and
 `fetch` on nil raises `NoMethodError`.
 
-### A scheduled run for the next cycle
-
-Add a scheduled workflow that runs the suite at the next cycle, once there is a
-way to move the default instant for a whole run.
-
-The cycle rolls on one morning a year, and every spec that assumed the old year
-fails together, on the branch of somebody who did not cause it. A scheduled run
-moves that discovery to a normal working day some weeks earlier.
-
-`.github/workflows/build-nocache.yml` is the pattern to copy. It already uses
-`schedule: cron`.
-
-The new workflow should:
-
-- Run weekly. This information changes slowly, so do not run it per pull
-  request.
-- Move the default instant to the mid cycle of the next year.
-- Report a failure to the team without blocking a deployment. A failure here
-  warns about the future. It is not a fault in the code being merged.
-
-Leave the `rails-tests` job in `.github/workflows/build-and-deploy.yml` alone.
-It must run at the default instant, the same as a local run, so that a green
-build means the same thing in both places. Surveying the suite at another
-instant belongs in the scheduled workflow, not in a temporary override of the
-job every pull request depends on.
-
 ## Maintenance
 
 When the policy team confirms next cycle's dates, add an entry to `CYCLE_DATES`.
@@ -726,8 +744,13 @@ Separately, the day Find opens for a new cycle moves the default's year for
 every unpinned spec, so it is a scheduled suite-wide event rather than a
 surprise. See
 [The default pins the period, not the year](#the-default-pins-the-period-not-the-year),
-and [A scheduled run for the next cycle](#a-scheduled-run-for-the-next-cycle)
-for the proposal to find those failures in advance.
+and [Running the suite in another cycle
+year](#running-the-suite-in-another-cycle-year) for how to find those failures
+in advance.
+
+`TEST_CYCLE_YEAR=next`, and so the weekly run, needs next year's entry in
+`CYCLE_DATES`. Without it the weekly run stops at boot with an error that names
+the missing year.
 
 ## Checklist
 
