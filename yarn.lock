@@ -535,13 +535,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ministryofjustice/frontend@npm:11.0.1":
-  version: 11.0.1
-  resolution: "@ministryofjustice/frontend@npm:11.0.1"
+"@ministryofjustice/frontend@npm:11.1.0":
+  version: 11.1.0
+  resolution: "@ministryofjustice/frontend@npm:11.1.0"
   peerDependencies:
     govuk-frontend: ^6.0.0
-    moment: 2.30.1
-  checksum: 10c0/db58569a6bdce434b0fef7fc9c9efca3b31d0ad289d05cadeb06ca3c00069705d45a12e19a68734c97e1999fb2e6919ef76b38ce4fcd6a53696387e02f318b33
+    moment: ^2.30.1
+  checksum: 10c0/46e7c90f93ed0ba830c6e4ea4ba30b6074be37b0b4d3673fdabb8203a757c73912f1b139e8d9912faf9f602fefee67dbe04ec7e320a358102b7c5bd98caba9c9
   languageName: node
   linkType: hard
 
@@ -5340,7 +5340,7 @@ __metadata:
   resolution: "teacher-training-api@workspace:."
   dependencies:
     "@hotwired/stimulus": "npm:^3.2.2"
-    "@ministryofjustice/frontend": "npm:11.0.1"
+    "@ministryofjustice/frontend": "npm:11.1.0"
     dfe-autocomplete: "DFE-Digital/dfe-autocomplete#v1.0.0"
     esbuild: "npm:^0.28.2"
     govuk-frontend: "npm:^6.5.1"
