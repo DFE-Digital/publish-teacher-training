@@ -19,6 +19,15 @@ RSpec.describe "Salaried course callout on results page", service: :find do
     and_i_am_taken_to_get_into_teaching
   end
 
+  scenario "the callout only shows on the first page of results" do
+    given_there_is_more_than_one_page_of_salaried_physics_courses
+    when_i_search_for_salaried_physics_courses
+    then_i_see_the_callout_above_the_first_result
+
+    when_i_go_to_the_next_page
+    then_i_do_not_see_the_callout
+  end
+
   scenario "filtering by a subject with a bursary without salary or apprenticeship hides the callout" do
     when_i_search_for_fee_paying_physics_courses
     then_i_do_not_see_the_callout
@@ -30,6 +39,16 @@ RSpec.describe "Salaried course callout on results page", service: :find do
 
     create(:course, :open, :with_full_time_sites, :secondary, funding: "salary", name: "Physics", subjects: [physics])
     create(:course, :open, :with_full_time_sites, :secondary, funding: "fee", name: "Physics", subjects: [physics])
+  end
+
+  def given_there_is_more_than_one_page_of_salaried_physics_courses
+    physics = Subject.find_by!(subject_code: "F3")
+
+    create_list(:course, Pagy::DEFAULT[:limit], :open, :with_full_time_sites, :secondary, funding: "salary", name: "Physics", subjects: [physics])
+  end
+
+  def when_i_go_to_the_next_page
+    click_link_or_button "Next"
   end
 
   def when_i_search_for_salaried_physics_courses

@@ -78,6 +78,7 @@
         <%= render Find::Results::SalariedCourseCalloutComponent.new(
           funding: @search_courses_form.funding,
           subject_codes: @search_courses_form.subjects,
+          page: @pagy.page,
         ) %>
 
         <ul class="app-search-results">
