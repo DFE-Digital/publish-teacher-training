@@ -11,8 +11,8 @@ module Find
       let(:history) { find_or_create(:secondary_subject, :history) }
       let(:primary) { find_or_create(:primary_subject, :primary_with_mathematics) }
 
-      def render_callout(funding:, subject_codes: [physics.subject_code])
-        render_inline(described_class.new(funding:, subject_codes:))
+      def render_callout(funding:, subject_codes: [physics.subject_code], page: 1)
+        render_inline(described_class.new(funding:, subject_codes:, page:))
       end
 
       context "with a secondary subject that has a bursary" do
@@ -79,6 +79,12 @@ module Find
         create(:financial_incentive, subject: primary, bursary_amount: "29000")
 
         render_callout(funding: %w[salary], subject_codes: [primary.subject_code])
+
+        expect(page).to have_no_css(".app-callout")
+      end
+
+      it "does not render after the first page of results" do
+        render_callout(funding: %w[salary], page: 2)
 
         expect(page).to have_no_css(".app-callout")
       end
