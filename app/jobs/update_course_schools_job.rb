@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UpdateCourseSchoolsJob < ApplicationJob
+  # Solid Queue pilot — rollback by removing this line (global adapter stays Sidekiq).
+  self.queue_adapter = :solid_queue
   queue_as :default
   without_auto_retry
 

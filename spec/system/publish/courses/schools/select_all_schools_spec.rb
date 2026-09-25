@@ -27,8 +27,14 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   context "when many schools" do
+    # UpdateCourseSchoolsJob sets queue_adapter = :solid_queue (card 5 pilot).
+    # perform_enqueued_jobs only drains ActiveJob::Base's :test adapter, so force
+    # this class onto the shared test adapter for the scenario.
     around do |example|
+      UpdateCourseSchoolsJob.enable_test_adapter(ActiveJob::Base.queue_adapter)
       perform_enqueued_jobs { example.run }
+    ensure
+      UpdateCourseSchoolsJob.disable_test_adapter
     end
 
     scenario "enqueue when many schools to update" do
