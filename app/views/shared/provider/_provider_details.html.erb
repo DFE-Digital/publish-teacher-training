@@ -1,5 +1,5 @@
 <div class="govuk-grid-column-two-thirds">
-  <%= render Find::Courses::ContactDetailsComponent::View.new(course) %>
+  <%= render Find::Courses::ContactDetailsComponent::View.new(course, preview: preview?(params)) %>
 
   <% is_v2 = (course.respond_to?(:version) ? (course.version&.to_i == 2) : (course.latest_enrichment&.version == 2)) %>
   <% if is_v2 %>
