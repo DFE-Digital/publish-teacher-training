@@ -5,6 +5,9 @@ require "rails_helper"
 RSpec.describe API::Public::V1::CoursesController do
   let(:provider) { create(:provider) }
   let(:recruitment_cycle) { provider.recruitment_cycle }
+  let(:course_search_service) do
+    recruitment_cycle.after?(Settings.schools_remodel_cycle_year) ? APICourseSearchServiceSchools : APICourseSearchService
+  end
 
   describe "#index" do
     context "when there are no courses" do
@@ -341,7 +344,7 @@ RSpec.describe API::Public::V1::CoursesController do
         let(:sort_attribute) { "name,provider.provider_name" }
 
         before do
-          allow(CourseSearchService).to receive(:call).and_return(Course.all)
+          allow(course_search_service).to receive(:call).and_return(Course.all)
 
           get :index, params: {
             recruitment_cycle_year: recruitment_cycle.year,
@@ -350,7 +353,7 @@ RSpec.describe API::Public::V1::CoursesController do
         end
 
         it "delegates to the CourseSearchService" do
-          expect(CourseSearchService).to have_received(:call).with(
+          expect(course_search_service).to have_received(:call).with(
             hash_including(sort: sort_attribute),
           )
         end
@@ -361,7 +364,7 @@ RSpec.describe API::Public::V1::CoursesController do
           before do
             provider.courses << build(:course, provider:)
 
-            allow(CourseSearchService).to receive(:call).and_return(Course.all)
+            allow(course_search_service).to receive(:call).and_return(Course.all)
 
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
@@ -372,7 +375,7 @@ RSpec.describe API::Public::V1::CoursesController do
           end
 
           it "delegates to the CourseSearchService" do
-            expect(CourseSearchService).to have_received(:call).with(
+            expect(course_search_service).to have_received(:call).with(
               hash_including(filter: ActionController::Parameters.new(funding_type: "salary").permit!),
             )
           end
@@ -382,7 +385,7 @@ RSpec.describe API::Public::V1::CoursesController do
           before do
             provider.courses << build(:course, provider:)
 
-            allow(CourseSearchService).to receive(:call).and_return(Course.all)
+            allow(course_search_service).to receive(:call).and_return(Course.all)
 
             get :index, params: {
               recruitment_cycle_year: recruitment_cycle.year,
@@ -397,7 +400,7 @@ RSpec.describe API::Public::V1::CoursesController do
           end
 
           it "passes the location and subject filters through to the CourseSearchService" do
-            expect(CourseSearchService).to have_received(:call).with(
+            expect(course_search_service).to have_received(:call).with(
               hash_including(
                 filter: ActionController::Parameters.new(
                   latitude: "53.950124",
@@ -442,79 +445,85 @@ RSpec.describe API::Public::V1::CoursesController do
 
         context "default fields" do
           let(:fields) do
-            %w[ accredited_body_code
-                age_maximum
-                age_minimum
-                bursary_amount
-                bursary_requirements
-                created_at
-                funding_type
-                gcse_subjects_required
-                level
-                name
-                program_type
-                qualifications
-                scholarship_amount
-                study_mode
-                uuid
-                degree_grade
-                degree_subject_requirements
-                accept_pending_gcse
-                accept_gcse_equivalency
-                accept_english_gcse_equivalency
-                accept_maths_gcse_equivalency
-                accept_science_gcse_equivalency
-                additional_gcse_equivalencies
-                about_accredited_body
-                applications_open_from
-                changed_at
-                code
-                findable
-                has_early_career_payments
-                has_scholarship
-                has_vacancies
-                is_send
-                last_published_at
-                open_for_applications
-                required_qualifications_english
-                required_qualifications_maths
-                required_qualifications_science
-                running
-                start_date
-                state
-                summary
-                subject_codes
-                required_qualifications
-                about_course
-                additional_fees
-                assessment_methods
-                course_length
-                duration_per_school
-                fee_details
-                fee_international
-                fee_domestic
-                fee_schedule
-                financial_support
-                how_school_placements_work
-                interview_process
-                interview_location
-                other_requirements
-                personal_qualities
-                placement_school_activities
-                placement_selection_criteria
-                salary_details
-                salary_fee_details
-                support_and_mentorship
-                theoretical_training_activities
-                theoretical_training_duration
-                theoretical_training_location
-                can_sponsor_skilled_worker_visa
-                can_sponsor_student_visa
-                campaign_name
-                application_status
-                training_route
-                degree_type
-                visa_sponsorship_application_deadline_at]
+            fields = %w[ accredited_body_code
+                         age_maximum
+                         age_minimum
+                         bursary_amount
+                         bursary_requirements
+                         created_at
+                         funding_type
+                         gcse_subjects_required
+                         level
+                         name
+                         program_type
+                         qualifications
+                         scholarship_amount
+                         study_mode
+                         uuid
+                         degree_grade
+                         degree_subject_requirements
+                         accept_pending_gcse
+                         accept_gcse_equivalency
+                         accept_english_gcse_equivalency
+                         accept_maths_gcse_equivalency
+                         accept_science_gcse_equivalency
+                         additional_gcse_equivalencies
+                         about_accredited_body
+                         applications_open_from
+                         changed_at
+                         code
+                         findable
+                         has_early_career_payments
+                         has_scholarship
+                         has_vacancies
+                         is_send
+                         last_published_at
+                         open_for_applications
+                         required_qualifications_english
+                         required_qualifications_maths
+                         required_qualifications_science
+                         running
+                         start_date
+                         state
+                         summary
+                         subject_codes
+                         required_qualifications
+                         about_course
+                         additional_fees
+                         assessment_methods
+                         course_length
+                         duration_per_school
+                         fee_details
+                         fee_international
+                         fee_domestic
+                         fee_schedule
+                         financial_support
+                         how_school_placements_work
+                         interview_process
+                         interview_location
+                         other_requirements
+                         personal_qualities
+                         placement_school_activities
+                         placement_selection_criteria
+                         salary_details
+                         salary_fee_details
+                         support_and_mentorship
+                         theoretical_training_activities
+                         theoretical_training_duration
+                         theoretical_training_location
+                         can_sponsor_skilled_worker_visa
+                         can_sponsor_student_visa
+                         campaign_name
+                         application_status
+                         training_route
+                         degree_type
+                         visa_sponsorship_application_deadline_at]
+
+            if recruitment_cycle.after?(2026)
+              fields.concat(%w[school_experience_required school_experience_required_content])
+            end
+
+            fields
           end
 
           before do

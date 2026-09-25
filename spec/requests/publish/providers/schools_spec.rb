@@ -29,7 +29,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
   end
 
   describe "GET /publish/organisations/:provider_code/:recruitment_cycle_year/schools" do
-    context "when the provider is before the schools remodel cycle" do
+    context "when the provider is before the schools remodel cycle", travel: mid_cycle(2026) do
       let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: remodel_cycle_year - 1) }
       let(:provider) { create(:provider, recruitment_cycle:) }
       let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: SecureRandom.uuid) }
