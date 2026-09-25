@@ -4,7 +4,7 @@ require "rails_helper"
 
 module Find
   module Results
-    describe SalariedCourseCalloutComponent, type: :component do
+    describe SalariedCourseCalloutComponent, :without_subjects, type: :component do
       include Rails.application.routes.url_helpers
 
       let(:physics) { find_or_create(:secondary_subject, :physics, bursary_amount: "29000") }

@@ -25,7 +25,8 @@ RSpec.describe "Salaried course callout on results page", service: :find do
   end
 
   def given_there_is_a_salaried_physics_course_with_a_bursary
-    physics = find_or_create(:secondary_subject, :physics, bursary_amount: "29000")
+    physics = find_or_create(:secondary_subject, :physics)
+    physics.financial_incentive.update!(bursary_amount: "29000", scholarship: nil)
 
     create(:course, :open, :with_full_time_sites, :secondary, funding: "salary", name: "Physics", subjects: [physics])
     create(:course, :open, :with_full_time_sites, :secondary, funding: "fee", name: "Physics", subjects: [physics])
