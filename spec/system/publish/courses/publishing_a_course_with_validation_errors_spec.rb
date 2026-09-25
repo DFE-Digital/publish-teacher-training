@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Publishing courses errors" do
-  scenario "The error links target the correct pages" do
+  scenario "The error links target the correct pages", travel: mid_cycle(2027) do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_an_invalid_course_i_want_to_publish
 
