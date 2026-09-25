@@ -42,7 +42,7 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
     second_row = all(:css, ".govuk-table tbody tr", visible: true)[1]
 
     within(second_row) do
-      expect(page).to have_text("2024")
+      expect(page).to have_text(previous_recruitment_cycle.year)
       expect(page).to have_text(previous_recruitment_cycle.application_start_date.to_fs(:govuk_date))
       expect(page).to have_text(previous_recruitment_cycle.application_end_date.to_fs(:govuk_date))
       expect(page).to have_css(".govuk-tag.govuk-tag--grey", text: "Past")

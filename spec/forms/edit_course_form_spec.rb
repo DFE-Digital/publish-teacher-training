@@ -7,7 +7,8 @@ module Support
     let(:course) { create(:course, course_code: "T92", name: "Universitry of Oxfords", start_date: Date.new(Find::CycleTimetable.current_year, 9, 1)) }
     let(:valid_attributes) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: Find::CycleTimetable.current_year, applications_open_from_day: "5", applications_open_from_month: "7", applications_open_from_year: Find::CycleTimetable.current_year, is_send: "true" } }
     let(:attributes_with_invalid_date_format) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "222", start_date_month: "90", start_date_year: Find::CycleTimetable.current_year, applications_open_from_day: "500x", applications_open_from_month: "7", applications_open_from_year: "2022" } }
-    let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: "2027", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "2000" } }
+    let(:invalid_start_date_year) { Find::CycleTimetable.current_year + 1 }
+    let(:attributes_with_invalid_date_year) { { course_code: "T92", name: "Universitry of Oxfords", start_date_day: "2", start_date_month: "9", start_date_year: invalid_start_date_year.to_s, applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "2000" } }
     let(:attributes_with_two_digit_date_year) { { course_code: "T92", name: "Universitry of Oxfords", applications_open_from_day: "4", applications_open_from_month: "8", applications_open_from_year: "25" } }
     let(:blank_attributes) { { course_code: "", name: "", start_date_day: "", start_date_month: "", start_date_year: "", applications_open_from_day: "", applications_open_from_month: "", applications_open_from_year: "" } }
 
@@ -93,7 +94,7 @@ module Support
           subject.valid?
 
           expect(subject.errors.messages.count).to eq(2)
-          expect(subject.errors.messages[:start_date]).to include("September 2027 is not in the #{Find::CycleTimetable.current_year} cycle")
+          expect(subject.errors.messages[:start_date]).to include("September #{invalid_start_date_year} is not in the #{Find::CycleTimetable.current_year} cycle")
           expect(subject.errors.messages[:applications_open_from]).to include("The date when applications open must be between #{course.recruitment_cycle.application_start_date.to_fs(:govuk_date)} and #{course.recruitment_cycle.application_end_date.to_fs(:govuk_date)}")
         end
       end
@@ -121,7 +122,7 @@ module Support
       context "form is assigned invalid date start_date_year" do
         it "returns a date object" do
           subject.assign_attributes(attributes_with_invalid_date_year)
-          expect(subject.start_date).to eq(Date.new(2027, 9, 2))
+          expect(subject.start_date).to eq(Date.new(invalid_start_date_year, 9, 2))
         end
       end
 

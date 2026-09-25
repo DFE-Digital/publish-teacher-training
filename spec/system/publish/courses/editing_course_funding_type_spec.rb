@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Editing funding type" do
+RSpec.describe "Editing funding type", travel: mid_cycle(2026) do
   before do
     given_i_am_authenticated_as_a_provider_user
   end

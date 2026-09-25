@@ -5,6 +5,14 @@ require "rails_helper"
 RSpec.describe API::Public::V1::Providers::LocationsController do
   let(:provider) { create(:provider) }
 
+  def create_locations(provider, count)
+    if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      create_list(:provider_school, count, provider:)
+    else
+      provider.sites << build_list(:site, count, provider:)
+    end
+  end
+
   describe "#index" do
     context "when a provider does not have any locations" do
       before do
@@ -21,7 +29,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
     context "when a provider has locations" do
       before do
-        provider.sites << build_list(:site, 5, provider:)
+        create_locations(provider, 5)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -213,7 +221,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
   describe "recruitment cycle" do
     context 'when "current" is specified as the recruitment cycle' do
       before do
-        provider.sites << build_list(:site, 5, provider:)
+        create_locations(provider, 5)
 
         get :index, params: {
           recruitment_cycle_year: "current",
@@ -228,7 +236,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
 
     context "when a non-existent recruitment cycle is specified" do
       before do
-        provider.sites << build_list(:site, 5, provider:)
+        create_locations(provider, 5)
 
         get :index, params: {
           recruitment_cycle_year: "1066",
