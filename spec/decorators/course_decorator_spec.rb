@@ -104,6 +104,36 @@ describe CourseDecorator do
     end
   end
 
+  describe "#financial_support_not_yet_announced?", travel: mid_cycle(2022) do
+    subject { decorated_course.financial_support_not_yet_announced? }
+
+    let(:previous_recruitment_cycle) { build_stubbed(:recruitment_cycle, :previous) }
+
+    context "when bursaries and scholarships have been announced" do
+      before { FeatureFlag.activate(:bursaries_and_scholarships_announced) }
+
+      it { is_expected.to be(false) }
+    end
+
+    context "when bursaries and scholarships have not been announced" do
+      before { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
+
+      it { is_expected.to be(true) }
+
+      context "for a course in the next cycle" do
+        let(:provider) { build_stubbed(:provider, recruitment_cycle: next_recruitment_cycle) }
+
+        it { is_expected.to be(true) }
+      end
+
+      context "for a course in a cycle that has already run" do
+        let(:provider) { build_stubbed(:provider, recruitment_cycle: previous_recruitment_cycle) }
+
+        it { is_expected.to be(false) }
+      end
+    end
+  end
+
   describe "#saved_status_tag" do
     subject(:decorated) { course.decorate }
 
