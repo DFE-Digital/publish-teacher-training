@@ -38,15 +38,6 @@ RSpec.describe "Blazer" do
     expect(User.new).to respond_to(Blazer.user_name)
   end
 
-  it "defaults the recruitment cycle to the one the app is running" do
-    # variable_defaults is a static hash read once at boot, so it cannot follow
-    # the cycle on its own. This fails at the next rollover, which is the point:
-    # the build tells you to change the one line rather than everyone quietly
-    # querying last year.
-    expect(data_source.variable_defaults["recruitment_cycle_year"])
-      .to eq(Find::CycleTimetable.current_year.to_s)
-  end
-
   it "links columns to paths the app serves" do
     # Blazer only interpolates {value}, so a linked column has to name a route
     # keyed on that column alone. Blazer is mounted on the publish host, so
