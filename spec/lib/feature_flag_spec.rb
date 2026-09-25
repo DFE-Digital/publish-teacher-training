@@ -23,6 +23,35 @@ describe FeatureFlag do
     it "returns false if the feature does not exist" do
       expect(described_class.active?("test_feature")).to be(false)
     end
+
+    it "only checks Redis once when the feature does not exist" do
+      expect(RedisClient.current).to receive(:get).with("feature_flags_test_feature").once.and_call_original
+
+      2.times { expect(described_class.active?("test_feature")).to be(false) }
+    end
+
+    it "only reads a feature from Redis once per request" do
+      RedisClient.current.set(
+        "feature_flags_test_feature",
+        { state: true, updated_at: Time.zone.now }.to_json,
+      )
+      expect(RedisClient.current).to receive(:get).with("feature_flags_test_feature").once.and_call_original
+
+      2.times { expect(described_class.active?("test_feature")).to be(true) }
+    end
+
+    it "updates the request cache when the feature changes" do
+      RedisClient.current.set(
+        "feature_flags_test_feature",
+        { state: true, updated_at: Time.zone.now }.to_json,
+      )
+
+      expect(described_class.active?("test_feature")).to be(true)
+
+      described_class.deactivate("test_feature")
+
+      expect(described_class.active?("test_feature")).to be(false)
+    end
   end
 
   describe ".deactivate" do
