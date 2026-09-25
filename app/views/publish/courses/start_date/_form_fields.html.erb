@@ -1,7 +1,7 @@
 <%= render "publish/shared/error_wrapper", error_keys: [:start_date], data_qa: "course__start_date" do %>
   <fieldset class="govuk-fieldset">
     <h1 class="govuk-heading-l">
-        <%= render CaptionText.new(text: course.course_code.present? ? course.name_and_code : t("course.add_course")) %>
+        <%= render CaptionText.new(text: course.name_and_code) %>
       Course start date
     </h1>
     <%= render "publish/shared/error_messages", error_keys: [:start_date] %>
