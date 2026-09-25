@@ -30,6 +30,21 @@
         <%= form.hidden_field :utm_source, value: "results" %>
         <%= form.hidden_field :previous_location_category, value: @search_courses_form.location_category %>
         <div class="app-find-search">
+          <div class="govuk-form-group" data-controller="dfe-autocomplete" data-dfe-autocomplete-name-value="subject_name" data-dfe-autocomplete-min-length-value="2">
+            <%= render DfE::Autocomplete::View.new(
+              form,
+              attribute_name: :subject_code,
+              form_field: form.govuk_select(
+                :subject_code,
+                options_for_select(
+                  dfe_autocomplete_options(form.object.all_subjects, synonyms_fields: %i[subject_code match_synonyms]),
+                  form.object.subject_code,
+                ),
+                label: { text: t("helpers.label.courses_search_form.subject_name"), size: "s" },
+                form: "find-search-form",
+              ),
+            ) %>
+          </div>
           <%= form.govuk_text_field :location,
               label: { text: t("helpers.label.courses_search_form.location"), size: "s" },
               form_group: {
@@ -53,7 +68,7 @@
           Is a salaried course right for me?
         </h3>
         <p class="govuk-body">
-          Fee paying courses are less competitive, and you could receive more money if you're a UK citizen and eligible for <a href="https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries" class="govuk-link govuk-link--no-visited-state">bursaries or scholarships</a>.
+          Fee paying courses are less competitive, and you could receive more money if you're a UK citizen and eligible for <a href="https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries" class="govuk-link govuk-link--no-visited-state">bursaries</a>.
         </p>
       </div>
     <% end %>
