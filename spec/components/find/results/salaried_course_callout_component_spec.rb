@@ -15,7 +15,7 @@ module Find
         render_inline(described_class.new(funding:, subject_codes:))
       end
 
-      context "with a secondary subject that has a bursary or scholarship" do
+      context "with a secondary subject that has a bursary" do
         [
           [nil, false],
           [%w[fee], false],
@@ -50,7 +50,7 @@ module Find
           exact: true,
           href: find_track_click_path(
             url: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries",
-            utm_content: "results_salaried_course_callout_bursaries_and_scholarships",
+            utm_content: "results_salaried_course_callout_bursaries",
           ),
         )
       end
@@ -61,8 +61,16 @@ module Find
         expect(page).to have_css(".app-callout")
       end
 
-      it "does not render for a secondary subject without a bursary or scholarship" do
+      it "does not render for a secondary subject without a bursary" do
         render_callout(funding: %w[salary], subject_codes: [history.subject_code])
+
+        expect(page).to have_no_css(".app-callout")
+      end
+
+      it "does not render for a secondary subject with only a scholarship" do
+        chemistry = find_or_create(:secondary_subject, :chemistry, scholarship: "31000")
+
+        render_callout(funding: %w[salary], subject_codes: [chemistry.subject_code])
 
         expect(page).to have_no_css(".app-callout")
       end
@@ -81,7 +89,7 @@ module Find
         expect(page).to have_no_css(".app-callout")
       end
 
-      it "renders regardless of whether bursaries and scholarships have been announced" do
+      it "renders regardless of the bursaries and scholarships announced flag" do
         FeatureFlag.deactivate(:bursaries_and_scholarships_announced)
 
         render_callout(funding: %w[salary])

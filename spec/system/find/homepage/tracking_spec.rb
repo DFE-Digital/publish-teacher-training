@@ -294,7 +294,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
         hash_including(
           total: 1,
           page: 1,
-          search_params: hash_including(send_courses: true, subjects: Subject.secondary_subject_codes_with_incentives),
+          search_params: hash_including(send_courses: true, subjects: SubjectsCache.new.secondary_subject_codes),
           track_params: hash_including(utm_source: "home", utm_medium: "send_secondary_courses"),
           results: array_including(
             have_attributes(course_code: "F314", provider_code: "RO1"),

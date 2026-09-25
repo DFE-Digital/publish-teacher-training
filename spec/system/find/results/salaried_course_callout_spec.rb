@@ -59,7 +59,7 @@ RSpec.describe "Salaried course callout on results page", service: :find do
   def then_the_click_is_tracked
     expect(Find::Analytics::ClickEvent).to have_received(:new).with(
       hash_including(
-        utm_content: "results_salaried_course_callout_bursaries_and_scholarships",
+        utm_content: "results_salaried_course_callout_bursaries",
         url: "https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries",
       ),
     )

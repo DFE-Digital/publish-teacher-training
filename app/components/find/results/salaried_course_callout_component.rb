@@ -13,7 +13,7 @@ module Find
 
       def render?
         @funding.intersect?(SALARIED_FUNDING) &&
-          @subject_codes.intersect?(Subject.secondary_subject_codes_with_bursary_or_scholarship)
+          @subject_codes.intersect?(Subject.secondary_subject_codes_with_bursary)
       end
     end
   end
