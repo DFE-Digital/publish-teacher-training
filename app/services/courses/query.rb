@@ -430,8 +430,8 @@ module Courses
         .order(
           {
             courses_table[:name] => :asc,
-            providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            providers_table[:provider_name] => :asc,
           },
         )
     end
