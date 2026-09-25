@@ -64,6 +64,26 @@ describe Find::Courses::ContactDetailsComponent::View, type: :component do
       expect(result.text).to include("Website")
       expect(result.text).to include("www.madeupsite.com")
     end
+
+    it "links to the Find provider website redirect via click tracking" do
+      provider = build(:provider, provider_code: "BAT", website: "www.madeupsite.com")
+      course = build(:course, course_code: "FIND", provider:).decorate
+
+      result = render_inline(described_class.new(course))
+
+      expect(result.css("a[href='/track_click?url=%2Fcourse%2FBAT%2FFIND%2Fprovider%2Fwebsite']")).to be_present
+    end
+
+    context "when previewing in Publish" do
+      it "links directly to the provider website" do
+        provider = build(:provider, provider_code: "BAT", website: "www.madeupsite.com")
+        course = build(:course, course_code: "FIND", provider:).decorate
+
+        result = render_inline(described_class.new(course, preview: true))
+
+        expect(result.css("a[href='http://www.madeupsite.com']")).to be_present
+      end
+    end
   end
 
   context "contact details for London School of Jewish Studies and the course code is X104" do

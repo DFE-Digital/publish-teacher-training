@@ -483,6 +483,7 @@ private
     expect(publish_course_preview_page).to have_content(
       provider.website,
     )
+    expect(page).to have_link(provider.decorate.website, href: provider.decorate.website)
 
     expect(publish_course_preview_page).to have_content(
       provider.address1,
