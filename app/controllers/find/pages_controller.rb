@@ -16,6 +16,8 @@ module Find
 
     def terms; end
 
+    def applications; end
+
     def maintenance; end
 
   private

@@ -1,0 +1,12 @@
+<%= content_for :page_title, t(".heading") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+
+    <p class="govuk-body"><%= t(".continue_to_apply") %></p>
+    <p class="govuk-body"><%= t(".need_to_sign_in") %></p>
+
+    <%= govuk_button_link_to(t(".continue"), "#{Settings.apply_base_url}/candidate/account") %>
+  </div>
+</div>
