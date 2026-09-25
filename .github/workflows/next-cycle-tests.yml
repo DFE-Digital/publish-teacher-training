@@ -1,0 +1,26 @@
+name: Next Cycle Tests
+
+# Runs the tests weekly as if in the next cycle year, so that the specs the next
+# rollover will break are found on a working day, weeks before the rollover.
+# A failure is reported to the Teams channel. It does not block a deploy.
+
+on:
+  workflow_dispatch:
+    inputs:
+      test-cycle-year:
+        description: Cycle year to run in, or "next"
+        type: string
+        default: next
+  schedule:
+    - cron: '0 7 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  rails-tests:
+    name: Rails Tests (next cycle)
+    uses: ./.github/workflows/rails-tests.yml
+    with:
+      test-cycle-year: ${{ inputs.test-cycle-year || 'next' }}
+    secrets: inherit

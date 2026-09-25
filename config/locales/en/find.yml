@@ -4,21 +4,24 @@ en:
     cycles:
       real:
         name: Same as production environment
-      today_is_mid_cycle:
-        name: Mid cycle and deadlines should be displayed
-        description: Candidates can see upcoming application deadlines
-      today_is_after_apply_deadline_passed:
+      apply_closed:
         name: Apply deadline has passed
         description: Candidates can no longer submit any subsequent applications
-      now_is_before_find_opens:
+      find_closed:
         name: Find has closed
         description: Candidates can no longer browse courses on Find
-      today_is_after_find_opens:
-        name: Find has reopened
-        description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
-      today_is_between_find_opening_and_apply_opening:
-        name: Find has reopened, but Apply has not
+      apply_open:
+        name: Apply is open
+        description: Candidates are able to apply for the courses in the current cycle
+      apply_reopened:
+        name: Apply has reopened
         description: Candidates are able to apply for the courses in the new cycle.
+      apply_not_open_yet:
+        name: Find has reopened, but Apply has not
+        description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
+      deadline_banner:
+        name: Show the apply deadline banner
+        description: Candidates see the deadline warning. Only applies while Apply is open
       updated: Cycle schedule updated
     enic:
       statement_of_comparability:

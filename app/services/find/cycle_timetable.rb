@@ -71,14 +71,69 @@ module Find
       },
     }.freeze
 
+    # Every recruitment cycle phase, with the boundaries it runs between.
+    # Everything else about a phase is derived from this table.
+    #
+    # A phase is a span where what a person can do differs. Find is up or down;
+    # Apply takes a submission or does not. A span where only the wording on the
+    # page changes is not a phase, which is why the deadline banner is a window
+    # inside `apply_open` rather than a row here.
+    #
+    # The four rows tile the cycle end to end, and `phases_in_time` reads each
+    # range as half-open, so the instant two rows share belongs to the row it
+    # opens and never to both.
+    #
+    # They run in the order a cycle runs, starting from Apply closing.
+    #
+    # Nothing here knows about the cycle switcher. Which cycle year an option
+    # loads is the switcher's business, and lives in SWITCHER_OPTIONS.
+    PHASES = {
+      # Closed, not merely shut to submissions: a candidate cannot create an
+      # application either. That is what separates it from `apply_not_open_yet`,
+      # where an application can be built but not sent. Find stays up throughout.
+      apply_closed: {
+        from: ->(year) { apply_deadline(year) },
+        to: ->(year) { find_closes(year) },
+      },
+      # The only row that spans two cycle entries, because Find closing and Find
+      # reopening are the seam between them. Indexed by the cycle it leads into,
+      # which is where `cycle_year_for_time` puts all but a sliver of it.
+      find_closed: {
+        from: ->(year) { previous_find_closes(year) },
+        to: ->(year) { find_opens(year) },
+      },
+      apply_not_open_yet: {
+        from: ->(year) { find_opens(year) },
+        to: ->(year) { apply_opens(year) },
+      },
+      apply_open: {
+        from: ->(year) { apply_opens(year) },
+        to: ->(year) { apply_deadline(year) },
+      },
+    }.freeze
+
+    # What the cycle switcher offers, in the order it lists them. An option is a
+    # phase plus the cycle it loads, so two options can name the same phase:
+    # `apply_open` is Apply open in the cycle running now, `apply_reopened` is
+    # Apply open in the cycle after the rollover.
+    #
+    # The walk is this cycle finishing, then the next one starting, so the
+    # divider falls where `advances_cycle` first turns true.
+    SWITCHER_OPTIONS = {
+      apply_open: { phase: :apply_open, advances_cycle: false },
+      apply_closed: { phase: :apply_closed, advances_cycle: false },
+      find_closed: { phase: :find_closed, advances_cycle: true },
+      apply_not_open_yet: { phase: :apply_not_open_yet, advances_cycle: true },
+      apply_reopened: { phase: :apply_open, advances_cycle: true },
+    }.freeze
+
     def self.current_year
       now = Time.zone.now
-
       current_year = cycle_year_for_time(now)
 
-      # If the cycle switcher has been set to 'find has reopened' then
+      # If the cycle switcher has been set to an option past the rollover then
       # we want to request next year's courses from the TTAPI
-      if SiteSetting.cycle_schedule.in?(%i[now_is_before_find_opens today_is_after_find_opens today_is_between_find_opening_and_apply_opening])
+      if SWITCHER_OPTIONS.dig(current_cycle_schedule, :advances_cycle)
         current_year + 1
       else
         current_year
@@ -128,9 +183,15 @@ module Find
       date(:find_closes, year)
     end
 
-    def self.first_deadline_banner
-      date(:first_deadline_banner)
+    # When Find last shut before this cycle. The earliest cycle in the table has
+    # nothing before it, so its closure starts where the table's knowledge starts.
+    def self.previous_find_closes(year)
+      return find_opens(year).beginning_of_day unless CYCLE_DATES.key?(year - 1)
+
+      find_closes(year - 1)
     end
+
+    def self.first_deadline_banner(year = current_year) = date(:first_deadline_banner, year)
 
     def self.apply_deadline(year = current_year)
       date(:apply_deadline, year)
@@ -164,49 +225,111 @@ module Find
       date(:apply_opens, next_year)
     end
 
+    # The stable open stage of the cycle: Apply is taking applications, Find is
+    # up, no banner is showing and the cycle has settled.
+    #
+    # Anchored on `apply_opens` rather than `find_opens` so that lengthening the
+    # pre-Apply week cannot swallow it. Two months rather than a few days because
+    # the first 30 days after Find opens are the rollover grace window, where the
+    # previous cycle is still served to support users.
     def self.mid_cycle(year = current_year)
-      date(:find_opens, year) + 2.months
+      date(:apply_opens, year) + 2.months
     end
 
     def self.preview_mode?
       Time.zone.now.between?(apply_deadline, find_closes)
     end
 
-    def self.find_open? = !phase_in_time?(:now_is_before_find_opens)
-    def self.find_down? = phase_in_time?(:now_is_before_find_opens)
+    # One predicate per phase: the timetable's own vocabulary. Everything below
+    # is expressed in terms of these rather than reaching for a phase key, so
+    # each span has a single source of truth and callers keep a name that says
+    # why they are asking.
+    def self.find_closed? = phase_in_time?(:find_closed)
+    def self.apply_not_open_yet? = phase_in_time?(:apply_not_open_yet)
+    def self.apply_open? = phase_in_time?(:apply_open)
+    def self.apply_closed? = phase_in_time?(:apply_closed)
 
-    def self.mid_cycle? = phase_in_time?(:today_is_after_find_opens)
+    def self.find_open? = !find_closed?
 
-    def self.show_apply_deadline_banner? = phase_in_time?(:today_is_mid_cycle)
-
-    def self.apply_deadline_passed = phase_in_time?(:today_is_after_apply_deadline_passed)
-
-    def self.show_cycle_closed_banner?
-      phase_in_time?(:today_is_after_apply_deadline_passed) &&
-        !phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+    # Whether a candidate can create an application for the cycle on display.
+    #
+    # This spans two phases rather than reading one. Apply accepts a part built
+    # application from the moment Find opens, a week before it accepts
+    # submissions, so the apply button belongs on the page for both. The two
+    # phases differ in whether Apply takes the finished application, but inside
+    # Find only in what the page says about the wait.
+    def self.can_create_application?
+      apply_not_open_yet? || apply_open?
     end
 
-    def self.show_apply_opens_soon_banner?
-      phase_in_time?(:today_is_between_find_opening_and_apply_opening)
+    # The stable open stage: Apply is taking applications and no deadline banner
+    # is up yet. Nothing in the app branches on this. It names the ordinary state
+    # that `mid_cycle`, the instant, sits inside.
+    def self.mid_cycle?
+      apply_open? && !show_apply_deadline_banner?
     end
 
+    # The deadline banner is a window inside `apply_open`, not a phase: nothing a
+    # candidate can do changes when it appears. The switcher therefore toggles it
+    # on its own rather than reaching it by picking a phase.
+    def self.show_apply_deadline_banner?
+      return false unless apply_open?
+      return SiteSetting.deadline_banner? unless current_cycle_schedule == :real
+
+      Time.zone.now.between?(first_deadline_banner, apply_deadline)
+    end
+
+    def self.apply_deadline_passed = apply_closed?
+
+    def self.show_cycle_closed_banner? = apply_closed?
+
+    def self.show_apply_opens_soon_banner? = apply_not_open_yet?
+
+    def self.phase_range(phase, year)
+      definition = PHASES.fetch(phase)
+      [definition[:from].call(year), definition[:to].call(year)]
+    end
+
+    # The hints describe a fixed set of choices, so they read the real cycle year
+    # rather than `current_year`, which advances for whichever option is selected
+    # and would make the page describe itself.
+    #
+    # Returns the cycle the option loads, not the cycle the phase occurs in.
+    def self.year_for_option(option, year = cycle_year_for_time(Time.zone.now))
+      SWITCHER_OPTIONS.dig(option, :advances_cycle) ? year + 1 : year
+    end
+
+    def self.phase_for_option(option) = SWITCHER_OPTIONS.fetch(option).fetch(:phase)
+
+    def self.option_range(option, year) = phase_range(phase_for_option(option), year)
+
+    # One instant for every row, so the answers cannot disagree about the time.
+    # Each range is half-open, which is what keeps the rows from overlapping at
+    # the boundary they share.
     def self.phases_in_time
-      {
-        now_is_before_find_opens: Time.zone.now.between?(find_opens.beginning_of_day, find_opens),
-        today_is_after_find_opens: Time.zone.now.between?(find_opens, apply_deadline),
-        today_is_mid_cycle: Time.zone.now.between?(first_deadline_banner, apply_deadline),
-        today_is_after_apply_deadline_passed: Time.zone.now.between?(apply_deadline, find_closes),
-        today_is_between_find_opening_and_apply_opening: Time.zone.now.between?(find_opens, apply_opens),
-      }
-    end
+      year = current_year
+      now = Time.zone.now
 
-    def self.phase_in_time?(time_period)
-      if current_cycle_schedule == :real
-        phases_in_time[time_period]
-      else
-        current_cycle_schedule == time_period
+      PHASES.keys.index_with do |phase|
+        from, to = phase_range(phase, year)
+        from <= now && now < to
       end
     end
+
+    # The phases tile the cycle and never overlap, so an option forced by the
+    # switcher turns on its phase and nothing else. Only :real reads the clock,
+    # and it is the only value that is not a switcher option, because
+    # `current_cycle_schedule` reads anything else the switcher does not offer
+    # as :real.
+    #
+    # Private, so a phase key never travels outside this class. Callers ask one
+    # of the predicates above, which say why they are asking.
+    def self.phase_in_time?(time_period)
+      return phases_in_time[time_period] if current_cycle_schedule == :real
+
+      SWITCHER_OPTIONS.dig(current_cycle_schedule, :phase) == time_period
+    end
+    private_class_method :phase_in_time?
 
     def self.date(name, year = current_year)
       real_schedule_for(year.to_i).fetch(name)
@@ -224,7 +347,14 @@ module Find
       # Make sure this setting only has effect on non-production environments
       return :real if Rails.env.production?
 
-      SiteSetting.cycle_schedule
+      schedule = SiteSetting.cycle_schedule
+
+      # An option the switcher does not offer, such as one an earlier deploy
+      # left in Redis, would match no phase and leave every predicate false.
+      # Read it as the real cycle instead.
+      return :real unless SWITCHER_OPTIONS.key?(schedule)
+
+      schedule
     end
 
     def self.real_schedule_for(year = current_year)

@@ -1,0 +1,179 @@
+name: Rails Tests
+
+# Called by build-and-deploy.yml on every build, and by next-cycle-tests.yml to
+# run the same tests in the next cycle year.
+
+on:
+  workflow_call:
+    inputs:
+      test-cycle-year:
+        description: Run as if in this cycle year, or "next". Leave empty for the real year.
+        type: string
+        default: ""
+
+jobs:
+  rails-tests:
+    name: Rails Tests
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgres://postgres:developmentpassword@localhost:5432
+      PLAYWRIGHT_CLI_EXECUTABLE_PATH: ./node_modules/.bin/playwright
+
+    services:
+      postgres:
+        image: postgis/postgis:14-3.2-alpine
+        env:
+          POSTGRES_PASSWORD: developmentpassword
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - name: Unit - Models
+            include-pattern: spec/models/.*_spec.rb
+          - name: Unit - Services
+            include-pattern: spec/services/.*_spec.rb
+          - name: Unit - Forms
+            include-pattern: spec/forms/.*_spec.rb
+          - name: Unit - Components
+            include-pattern: spec/components/.*_spec.rb
+          - name: Unit - Other
+            include-pattern: spec/.*_spec.rb
+            exclude-pattern: spec/(system|smoke|models|services|forms|components)/.*_spec.rb
+
+
+          - name: System - Find (except homepage & results)
+            include-pattern: spec/system/find/.*_spec.rb
+            exclude-pattern: spec/system/find/(homepage|results)/.*_spec.rb
+          - name: System - Find (homepage & results)
+            include-pattern: spec/system/find/(homepage|results)/.*_spec.rb
+          - name: System - Publish
+            include-pattern: spec/system/publish/.*_spec.rb
+          - name: System - Support and the rest
+            include-pattern: spec/system/.*_spec.rb
+            exclude-pattern: spec/system/(find|publish)/.*_spec.rb
+        # Pass Settings compatible env vars to runs tests with
+        # feature flag(s) enables
+        # Separate mutliple flags with a space
+        feature-flags:
+          - ""
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24.x'
+      - name: Enable Corepack (Yarn 4)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.18.0 --activate
+      - uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install Node dependencies
+        run: |
+          for attempt in 1 2 3; do
+            if yarn install --immutable; then
+              exit 0
+            fi
+            echo "yarn install failed on attempt $attempt"
+            sleep 5
+          done
+          exit 1
+
+      - name: Install Playwright
+        if: ${{ startsWith(matrix.tests.name, 'System') }}
+        run: |
+          export PLAYWRIGHT_CLI_VERSION=$(bundle exec ruby -e \
+            'require "playwright"; puts Playwright::COMPATIBLE_PLAYWRIGHT_VERSION.strip')
+          yarn add --dev playwright@${PLAYWRIGHT_CLI_VERSION}
+          yarn exec playwright install chromium --with-deps
+
+      - run: bundle exec rails parallel:setup
+      - run: bundle exec rails spec:prepare
+
+      # On a pull request, a run in another cycle year warns instead of failing,
+      # because every check must pass before a merge. The scheduled run still
+      # fails, so that the Teams channel hears about it.
+      - name: ${{ matrix.tests.name }} tests with feature flags
+        id: tests
+        continue-on-error: ${{ github.event_name == 'pull_request' && inputs.test-cycle-year != '' }}
+        run: |
+          set -o pipefail
+          ${{ env.FEATURE_FLAGS }} bundle exec --verbose parallel_rspec --pattern "${{ env.INCLUDE_PATTERN }}" --exclude-pattern "${{ env.EXCLUDE_PATTERN }}" 2>&1 | tee "$RUNNER_TEMP/rspec.log"
+        env:
+          INCLUDE_PATTERN: ${{ matrix.tests.include-pattern }}
+          EXCLUDE_PATTERN: ${{ matrix.tests.exclude-pattern || ' ' }}
+          FEATURE_FLAGS: ${{ matrix.feature-flags }}
+          TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
+
+      # The tests failed but continue-on-error let the job pass.
+      - name: Warn about next cycle failures
+        if: ${{ steps.tests.outcome == 'failure' && steps.tests.conclusion == 'success' }}
+        run: |
+          # RSpec colours the "rspec ./spec/..." rerun lines, so the escape
+          # codes have to come off before the anchor can match.
+          strip_colour() { sed -E 's/\x1B\[[0-9;]*[mKG]//g' "$1"; }
+
+          failures=$(strip_colour "$RUNNER_TEMP/rspec.log" | grep -E '^rspec \./' | sort -u || true)
+          count=$(printf '%s' "$failures" | grep -c . || true)
+
+          if [ "$count" -gt 0 ]; then
+            echo "::warning title=${{ matrix.tests.name }} (next cycle)::${count} examples fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}. The job summary lists them."
+            body="$failures"
+          else
+            # No example failed, so the run broke some other way. Put the end of
+            # the log in the summary rather than sending somebody to find it.
+            echo "::warning title=${{ matrix.tests.name }} (next cycle)::The tests fail with TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR}, outside any example. The end of the log is in the job summary."
+            body=$(strip_colour "$RUNNER_TEMP/rspec.log" | tail -40)
+          fi
+
+          {
+            echo "### ${{ matrix.tests.name }}: ${count} next cycle failures (TEST_CYCLE_YEAR=${TEST_CYCLE_YEAR})"
+            echo
+            echo '```'
+            echo "${body:-The log of the tests step is empty.}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          TEST_CYCLE_YEAR: ${{ inputs.test-cycle-year }}
+
+      # An artifact name must be unique in a workflow run. The label runs this
+      # workflow twice in one run, so a shared name makes the second upload
+      # fail, which turns a job red that the warnings keep green.
+      - name: Upload screenshots
+        if: ${{ failure() || steps.tests.outcome == 'failure' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: Test-screenshots-${{ inputs.test-cycle-year || 'current' }}-${{ strategy.job-index }}
+          path: ${{ github.workspace }}/tmp/capybara/*
+
+      # - name: Upload coverage results
+      #   if: always()
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: Coverage_report
+      #     path: ${{ github.workspace }}/out/*
+
+      - name: Notify teams channel on job failure
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        uses: DFE-Digital/github-actions/send-to-teams-channel@master
+        with:
+          teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          title: ${{ inputs.test-cycle-year && 'Next cycle test failure' || 'Test failure' }}
+          service: ${{ vars.TEAMS_MSG_SERVICE_NAME }}
+          message: |
+            Publish Teacher Training Test failure${{ inputs.test-cycle-year && format(' with TEST_CYCLE_YEAR={0}', inputs.test-cycle-year) || '' }}

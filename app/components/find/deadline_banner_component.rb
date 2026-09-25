@@ -11,7 +11,7 @@ module Find
     end
 
     def render?
-      flash_empty && !cycle_timetable.find_down?
+      flash_empty && !cycle_timetable.find_closed?
     end
 
   private

@@ -25,19 +25,19 @@
               </p>
             <% end %>
 
-            <% if course.degree_subject_requirements.present? || subject_knowledge_enhancement_content? %>
+            <% if show_degree_subject_requirements_details? %>
               <%= govuk_details(classes: ["govuk-!-margin-top-2"], summary_text: degree_requirements_title) do %>
-                <% if course.degree_subject_requirements %>
+                <% if course.degree_subject_requirements.present? %>
                   <%= helpers.markdown(course.degree_subject_requirements) %>
                 <% end %>
 
-                <% if course.secondary_course? && course.engineers_teach_physics? %>
+                <% if engineers_teach_physics_content? %>
                   <p class="govuk-body">
                   This <%= govuk_link_to "Engineers teach physics", find_track_click_path(url: t("find.get_into_teaching.url_engineers_teach_physics")) %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
                   </p>
                 <% end %>
 
-                <% if subject_knowledge_enhancement_content? %>
+                <% if show_subject_knowledge_enhancement_content? %>
                   <p class="govuk-body">
                   If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
                   </p>
