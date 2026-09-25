@@ -155,6 +155,11 @@ Each phase is independently deployable and testable. Feature flags ensure no use
 
 ---
 
+## Related decisions
+
+- [ADR 20. Find non-location course search](0020-find-non-location-course-search.md)
+- [ADR 21. Find location course search](0021-find-location-course-search.md)
+
 ## References
 
 - Product spec: `architecture.md` in this repository
