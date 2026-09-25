@@ -716,7 +716,7 @@
             "example": true
           },
           "findable": {
-            "description": "Return courses that are currently available on the Find Postgraduate Teacher Training service",
+            "description": "This filter is accepted for backwards compatibility but does not change which courses are returned.",
             "type": "boolean",
             "example": true
           },
