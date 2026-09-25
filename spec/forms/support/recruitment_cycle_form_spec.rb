@@ -73,21 +73,15 @@ RSpec.describe Support::RecruitmentCycleForm do
     end
 
     context "when dates are valid" do
+      let(:year) { Find::CycleTimetable.next_year }
+      let(:apply_opens) { Find::CycleTimetable.apply_opens(year).to_date }
       let(:params) do
         {
-          "year" => "2028",
-          "application_start_date(1i)" => "2027",
-          "application_start_date(2i)" => "10",
-          "application_start_date(3i)" => "12",
-          "application_end_date(1i)" => "2028",
-          "application_end_date(2i)" => "03",
-          "application_end_date(3i)" => "10",
-          "available_in_publish_from(1i)" => "2027",
-          "available_in_publish_from(2i)" => "09",
-          "available_in_publish_from(3i)" => "01",
-          "available_for_support_users_from(1i)" => "2027",
-          "available_for_support_users_from(2i)" => "08",
-          "available_for_support_users_from(3i)" => "01",
+          "year" => year.to_s,
+          **date_params(:application_start_date, apply_opens),
+          **date_params(:application_end_date, apply_opens + 5.months),
+          **date_params(:available_in_publish_from, apply_opens - 1.month),
+          **date_params(:available_for_support_users_from, apply_opens - 2.months),
         }
       end
 
@@ -97,48 +91,35 @@ RSpec.describe Support::RecruitmentCycleForm do
     end
 
     context "when application start date does not match the Find cycle timetable" do
+      let(:year) { Find::CycleTimetable.next_year }
+      let(:apply_opens) { Find::CycleTimetable.apply_opens(year).to_date }
       let(:params) do
         {
-          "year" => "2027",
-          "application_start_date(1i)" => "2026",
-          "application_start_date(2i)" => "10",
-          "application_start_date(3i)" => "07",
-          "application_end_date(1i)" => "2027",
-          "application_end_date(2i)" => "03",
-          "application_end_date(3i)" => "10",
-          "available_in_publish_from(1i)" => "2026",
-          "available_in_publish_from(2i)" => "09",
-          "available_in_publish_from(3i)" => "01",
-          "available_for_support_users_from(1i)" => "2026",
-          "available_for_support_users_from(2i)" => "08",
-          "available_for_support_users_from(3i)" => "01",
+          "year" => year.to_s,
+          **date_params(:application_start_date, apply_opens + 1.day),
+          **date_params(:application_end_date, apply_opens + 5.months),
+          **date_params(:available_in_publish_from, apply_opens - 1.month),
+          **date_params(:available_for_support_users_from, apply_opens - 2.months),
         }
       end
 
       it "is invalid" do
         expect(form).not_to be_valid
         expect(form.errors[:application_start_date]).to include(
-          "Application start date must be 6 October 2026, which is the date in the Find cycle timetable. Update the timetable first if this date has changed.",
+          "Application start date must be #{apply_opens.to_fs(:govuk_date)}, which is the date in the Find cycle timetable. Update the timetable first if this date has changed.",
         )
       end
     end
 
     context "when the year is not in the Find cycle timetable" do
+      let(:year) { Find::CycleTimetable::CYCLE_DATES.keys.max + 1 }
       let(:params) do
         {
-          "year" => "2051",
-          "application_start_date(1i)" => "2050",
-          "application_start_date(2i)" => "10",
-          "application_start_date(3i)" => "15",
-          "application_end_date(1i)" => "2051",
-          "application_end_date(2i)" => "03",
-          "application_end_date(3i)" => "10",
-          "available_in_publish_from(1i)" => "2050",
-          "available_in_publish_from(2i)" => "03",
-          "available_in_publish_from(3i)" => "09",
-          "available_for_support_users_from(1i)" => "2030",
-          "available_for_support_users_from(2i)" => "10",
-          "available_for_support_users_from(3i)" => "10",
+          "year" => year.to_s,
+          **date_params(:application_start_date, Date.new(year - 1, 10, 15)),
+          **date_params(:application_end_date, Date.new(year, 3, 10)),
+          **date_params(:available_in_publish_from, Date.new(year - 1, 9, 1)),
+          **date_params(:available_for_support_users_from, Date.new(year - 1, 8, 1)),
         }
       end
 
@@ -252,5 +233,13 @@ RSpec.describe Support::RecruitmentCycleForm do
         expect(form.errors[:year]).to include("Year has already been taken")
       end
     end
+  end
+
+  def date_params(attribute, date)
+    {
+      "#{attribute}(1i)" => date.year.to_s,
+      "#{attribute}(2i)" => date.month.to_s,
+      "#{attribute}(3i)" => date.day.to_s,
+    }
   end
 end
