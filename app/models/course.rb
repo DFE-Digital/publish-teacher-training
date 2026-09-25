@@ -906,11 +906,11 @@ class Course < ApplicationRecord
   end
 
   def has_any_modern_language_subject_type?
-    course_subjects.any? { |cs| cs.subject.type == "ModernLanguagesSubject" }
+    active_subjects.any? { |subject| subject.type == "ModernLanguagesSubject" }
   end
 
   def has_any_design_technology_subject_type?
-    course_subjects.any? { |cs| cs.subject.type == "DesignTechnologySubject" }
+    active_subjects.any? { |subject| subject.type == "DesignTechnologySubject" }
   end
 
   def current_published_enrichment
@@ -1008,6 +1008,9 @@ private
     site_status = site_statuses.find_or_initialize_by(site:)
     site_status.start! unless is_course_new
     site_status.save!
+    # A found row is a separate instance from the one in the loaded
+    # collection, so the next read of site_statuses must not trust the cache.
+    site_statuses.reset
   end
 
   def remove_site!(site:)
@@ -1169,7 +1172,8 @@ private
     raise "SecondarySubject not found" if SecondarySubject.nil?
     raise "SecondarySubject.modern_languages not found" if SecondarySubject.modern_languages.nil?
 
-    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.modern_languages.id }
+    modern_languages_id = SecondarySubject.modern_languages.id
+    course_subjects.any? { |cs| cs.subject_id == modern_languages_id }
   end
 
   def validate_has_languages
@@ -1180,7 +1184,8 @@ private
     raise "SecondarySubject not found" if SecondarySubject.nil?
     raise "SecondarySubject.design_technology not found" if SecondarySubject.design_technology.nil?
 
-    course_subjects.any? { |cs| cs.subject&.id == SecondarySubject.design_technology.id }
+    design_technology_id = SecondarySubject.design_technology.id
+    course_subjects.any? { |cs| cs.subject_id == design_technology_id }
   end
 
   def validate_subject_count
@@ -1198,20 +1203,34 @@ private
   end
 
   def validate_subject_consistency
-    subjects_excluding_discontinued = subjects.reject do |subject|
-      DiscontinuedSubject.exists?(id: subject.id)
-    end
-
-    return if subjects_excluding_discontinued.empty?
+    return if active_subjects.empty?
 
     case level
     when "primary"
-      errors.add(:subjects, "Subject must be primary") unless PrimarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be primary") unless has_a_subject_of_type?("PrimarySubject")
     when "secondary"
-      errors.add(:subjects, "Subject must be secondary") unless SecondarySubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be secondary") unless has_a_subject_of_type?("SecondarySubject")
     when "further_education"
-      errors.add(:subjects, "Subject must be further education") unless FurtherEducationSubject.exists?(id: subjects_excluding_discontinued.map(&:id))
+      errors.add(:subjects, "Subject must be further education") unless has_a_subject_of_type?("FurtherEducationSubject")
     end
+  end
+
+  def has_a_subject_of_type?(type)
+    active_subjects.any? { |subject| subject.type == type }
+  end
+
+  # The subjects the validations below ask about, in one query rather than one
+  # per course subject. Courses::AssignSubjectsService recreates the course
+  # subjects on every update, so their subjects are never already loaded, and
+  # going through subject_id covers the rows that were only just built.
+  #
+  # Keyed on the ids so a rebuilt set of course subjects is read again rather
+  # than answered from the set before it.
+  def active_subjects
+    ids = course_subjects.map(&:subject_id).compact
+    @active_subjects = nil unless @active_subject_ids == ids
+    @active_subject_ids = ids
+    @active_subjects ||= Subject.active.where(id: ids).to_a
   end
 
   def validate_custom_age_range

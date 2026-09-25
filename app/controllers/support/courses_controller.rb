@@ -3,7 +3,7 @@
 module Support
   class CoursesController < ApplicationController
     def index
-      @pagy, @courses = pagy(provider.courses.order(:name))
+      @pagy, @courses = pagy(courses_with_row_associations.order(:name))
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = "Provider not found"
       redirect_to support_recruitment_cycle_providers_path
@@ -28,6 +28,17 @@ module Support
 
     def provider
       @provider ||= recruitment_cycle.providers.find(params[:provider_id])
+    end
+
+    # Everything a row of the list reads: the status tag (site statuses, the
+    # enrichments, the provider's cycle) and the ratifying provider. A course
+    # that has never been published reads the enrichments as well as the
+    # latest one, through Courses::ContentStatusService. The
+    # accrediting_provider scope depends on the course's recruitment cycle, so
+    # it must come after provider: :recruitment_cycle - preloaded the other way
+    # round, evaluating that scope loads the provider and cycle per course.
+    def courses_with_row_associations
+      provider.courses.preload(:site_statuses, :latest_enrichment, :enrichments, { provider: :recruitment_cycle }, :accrediting_provider)
     end
 
     def course

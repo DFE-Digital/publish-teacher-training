@@ -93,6 +93,16 @@ module Exports
         expect(rows.first.to_h).to include("Status" => "Draft", "UK fee" => "£9,790")
       end
 
+      it "reads never-published courses in a constant number of queries" do
+        queries_for = lambda do |count|
+          create_list(:course, count, :fee, provider:, enrichments: [build(:course_enrichment, :initial_draft)])
+          export = described_class.new(provider:)
+          count_queries { export.data }
+        end
+
+        expect(queries_for.call(3)).to eq(queries_for.call(1))
+      end
+
       it "keeps a withdrawn course's own values, since withdrawing leaves no published row" do
         create(:course, :fee, provider:, name: "Physics", enrichments: [
           build(:course_enrichment, :withdrawn, fee_uk_eu: 9_250),

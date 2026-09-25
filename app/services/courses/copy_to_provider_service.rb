@@ -2,6 +2,11 @@
 
 module Courses
   class CopyToProviderService
+    # What execute reads of each course it is handed: whether it is rollable
+    # (the enrichments, through content_status), the cycle it is moving from,
+    # and the rows it copies over.
+    COURSE_ASSOCIATIONS = [:latest_enrichment, :enrichments, :course_subjects, :study_sites, { provider: :recruitment_cycle }].freeze
+
     attr_reader :courses_copied, :courses_not_copied
 
     def initialize(schools_copy_to_course:, sites_copy_to_course:, enrichments_copy_to_course:, force:)

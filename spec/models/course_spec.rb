@@ -373,6 +373,57 @@ describe Course do
   end
 
   describe "validations" do
+    # Reloaded so the course subjects are the plain rows a save validates,
+    # with nothing loaded on them.
+    def validation_queries_for(subjects)
+      course = create(:course, level: "secondary", subjects:)
+      count_queries { Course.find(course.id).valid? }
+    end
+
+    describe "modern languages" do
+      let(:course) { build(:course, level: "secondary", subjects: []) }
+
+      it "requires the modern languages subject when a language is chosen" do
+        course.course_subjects.build(subject: french)
+
+        course.valid?
+
+        expect(course.errors[:subjects]).to include("Modern languages subjects must also have the modern_languages subject")
+      end
+
+      it "accepts a language alongside the modern languages subject" do
+        course.course_subjects.build(subject: modern_languages)
+        course.course_subjects.build(subject: french)
+
+        course.valid?
+
+        expect(course.errors[:subjects]).to be_empty
+      end
+
+      it "checks the subjects in a constant number of queries regardless of how many languages there are" do
+        german = find_or_create(:modern_languages_subject, :german)
+        spanish = find_or_create(:modern_languages_subject, :spanish)
+
+        many = validation_queries_for([modern_languages, french, german, spanish])
+        few = validation_queries_for([modern_languages, french, german])
+
+        expect(many).to eq(few)
+      end
+
+      # The design technology pair reads the course subjects the same way the
+      # modern languages one does.
+      it "checks a design technology course's subjects in the same number of queries" do
+        design_and_technology = find_or_create(:secondary_subject, :design_and_technology)
+        engineering = find_or_create(:design_technology_subject, :engineering)
+        product_design = find_or_create(:design_technology_subject, :product_design)
+
+        many = validation_queries_for([design_and_technology, engineering, product_design])
+        few = validation_queries_for([design_and_technology, engineering])
+
+        expect(many).to eq(few)
+      end
+    end
+
     it { is_expected.to validate_presence_of(:course_code) }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:profpost_flag) }
@@ -763,6 +814,14 @@ describe Course do
 
       context "if subjects are empty" do
         let(:course) { create(:course) }
+
+        it "passes validation" do
+          expect(course.valid?).to be_truthy
+        end
+      end
+
+      context "if the only subject is discontinued" do
+        let(:course) { create(:course, level: "secondary", subjects: [create(:discontinued_subject)]) }
 
         it "passes validation" do
           expect(course.valid?).to be_truthy
