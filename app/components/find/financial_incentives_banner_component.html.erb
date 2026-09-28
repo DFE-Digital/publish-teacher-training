@@ -1,4 +1,0 @@
-<%= govuk_notification_banner(title_text: "Important") do |notification_banner| %>
-  <% notification_banner.with_heading(text: "Financial support") %>
-  <p class="govuk-body"><%= t("find.financial_support.not_yet_announced", cycle_year_range: Find::CycleTimetable.cycle_year_range) %></p>
-<% end %>

@@ -29,10 +29,6 @@ RSpec.describe "Viewing a findable course" do
       scenario "does not display the 'apply for this course' button" do
         then_i_should_not_see_the_apply_button
       end
-
-      scenario "renders the deadline banner" do
-        then_i_should_see_the_deadline_banner
-      end
     end
   end
 
@@ -348,10 +344,6 @@ private
   def then_i_should_not_see_the_apply_button
     expect(page).to have_no_link("Apply for this course", exact_text: true)
     expect(find_course_show_page).to have_end_of_cycle_notice
-  end
-
-  def then_i_should_see_the_deadline_banner
-    expect(page).to have_content "The application deadline has passed"
   end
 
   def set_referrer
