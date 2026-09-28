@@ -8,7 +8,7 @@ class ALevelsWizard
   delegate :any_a_levels?, :another_a_level_needed?, :has_remaining_a_levels?, to: :state_store
 
   def steps_processor
-    DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
+    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: self) do |graph|
       graph.conditional_root(potential_root: %i[add_a_level_to_a_list what_a_level_is_required]) do |_state_store|
         if any_a_levels?
           :add_a_level_to_a_list
