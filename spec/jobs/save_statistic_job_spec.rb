@@ -11,6 +11,8 @@ describe SaveStatisticJob do
     clear_performed_jobs
   end
 
+  it_behaves_like "a job routed to Solid Queue", queue: "save_statistic"
+
   it "queues the job" do
     expect { job }
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)

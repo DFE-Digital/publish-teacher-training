@@ -13,21 +13,8 @@ RSpec.describe GeocodeJob, type: :job do
            postcode: "SO45 2PA")
   end
 
-  it "uses Solid Queue explicitly for this pilot job" do
-    expect(described_class.queue_adapter).to be_a(ActiveJob::QueueAdapters::SolidQueueAdapter)
-  end
-
-  it "can be enqueued onto Solid Queue on the geocoding queue" do
-    expect {
-      described_class.perform_later("Site", site.id)
-    }.to change { SolidQueue::Job.where(class_name: "GeocodeJob").count }.by(1)
-
-    job = SolidQueue::Job.where(class_name: "GeocodeJob").order(:id).last
-    expect(job.queue_name).to eq("geocoding")
-  end
-
-  it "is put into the geocoding queue" do
-    expect(described_class.new.queue_name).to eq("geocoding")
+  it_behaves_like "a job routed to Solid Queue", queue: "geocoding" do
+    let(:solid_queue_job_args) { ["Site", site.id] }
   end
 
   it "calls the GeocoderService" do

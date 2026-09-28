@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SaveStatisticJob < ApplicationJob
+  self.queue_adapter = :solid_queue
   queue_as :save_statistic
 
   def perform

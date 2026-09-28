@@ -6,17 +6,8 @@ RSpec.describe UpdateCourseSchoolsJob, type: :job do
   let!(:course) { create(:course) }
   let(:school_uuids) { [SecureRandom.uuid] }
 
-  it "uses Solid Queue explicitly for this pilot job" do
-    expect(described_class.queue_adapter).to be_a(ActiveJob::QueueAdapters::SolidQueueAdapter)
-  end
-
-  it "can be enqueued onto Solid Queue" do
-    expect {
-      described_class.perform_later(course.id, school_uuids)
-    }.to change { SolidQueue::Job.where(class_name: "UpdateCourseSchoolsJob").count }.by(1)
-
-    job = SolidQueue::Job.where(class_name: "UpdateCourseSchoolsJob").order(:id).last
-    expect(job.queue_name).to eq("default")
+  it_behaves_like "a job routed to Solid Queue", queue: "default" do
+    let(:solid_queue_job_args) { [course.id, school_uuids] }
   end
 
   it "allows the service to skip Provider::Schools removed while the job was queued" do

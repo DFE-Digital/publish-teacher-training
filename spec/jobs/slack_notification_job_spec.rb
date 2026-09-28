@@ -3,6 +3,10 @@
 require "rails_helper"
 
 describe SlackNotificationJob do
+  it_behaves_like "a job routed to Solid Queue", queue: "default" do
+    let(:solid_queue_job_args) { ["example text"] }
+  end
+
   describe "#perform" do
     it "sends a Slack notification to this webhook if the URL is set" do
       slack_request = stub_request(:post, "https://example.com/webhook")

@@ -64,6 +64,10 @@ bg_jobs:
     cron: "0 3 * * 5" # weekly on Friday at 03:00
     class: "SendWeeklyEmailAlertsJob"
     queue: default
+  clear_solid_queue_finished_jobs:
+    cron: "12 * * * *" # hourly
+    class: "SolidQueueFinishedJobsCleanupJob"
+    queue: low_priority
 
 skylight:
   enable: true

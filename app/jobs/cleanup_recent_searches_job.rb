@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CleanupRecentSearchesJob < ApplicationJob
+  self.queue_adapter = :solid_queue
+
   def perform
     # Permanently delete discarded searches older than 1 day
     RecentSearch.discarded.where(discarded_at: ..1.day.ago).delete_all

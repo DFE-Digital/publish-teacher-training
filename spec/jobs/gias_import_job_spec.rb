@@ -26,10 +26,19 @@ describe GiasImportJob do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
+  it_behaves_like "a job routed to Solid Queue", queue: "default"
+
   it "runs the job" do
     expect {
       job
       perform_enqueued_jobs
     }.to change(GiasSchool, :count).by(1)
+  end
+
+  it "tries again later when the download fails" do
+    stub_request(:get, "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20250130.csv")
+      .to_return(status: 503)
+
+    expect { described_class.perform_now }.to have_enqueued_job(described_class)
   end
 end

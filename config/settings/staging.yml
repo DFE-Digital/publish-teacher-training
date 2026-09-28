@@ -32,6 +32,10 @@ bg_jobs:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
     queue: save_statistic
+  clear_solid_queue_finished_jobs:
+    cron: "12 * * * *" # hourly
+    class: "SolidQueueFinishedJobsCleanupJob"
+    queue: low_priority
 
 features:
   send_request_data_to_bigquery: true

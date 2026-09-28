@@ -36,6 +36,10 @@ bg_jobs:
     cron: "0 3 * * *" # daily at 03:00
     class: "CleanupSchoolBulkUpdateDraftsJob"
     queue: default
+  clear_solid_queue_finished_jobs:
+    cron: "12 * * * *" # hourly
+    class: "SolidQueueFinishedJobsCleanupJob"
+    queue: low_priority
 skylight:
   enable: true
 

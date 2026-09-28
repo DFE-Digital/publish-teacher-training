@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe CleanupRecentSearchesJob do
+  it_behaves_like "a job routed to Solid Queue", queue: "default"
+
   describe "#perform" do
     it "permanently deletes discarded searches older than 1 day" do
       old_discarded = create(:recent_search)

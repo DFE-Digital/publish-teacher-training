@@ -11,6 +11,8 @@ RSpec.describe CleanupSchoolBulkUpdateDraftsJob do
     Course::SchoolBulkUpdateDraft.start(course:, user:, school_uuids: [], baseline_uuids: [])
   end
 
+  it_behaves_like "a job routed to Solid Queue", queue: "default"
+
   it "deletes drafts past their time" do
     stale = draft
     stale.update_column(:expires_at, 1.hour.ago)

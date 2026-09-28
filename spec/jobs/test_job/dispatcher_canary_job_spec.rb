@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe TestJob::DispatcherCanaryJob do
+RSpec.describe TestJob::DispatcherCanaryJob, :solid_queue do
   it "uses Solid Queue explicitly for this canary job" do
     expect(described_class.queue_adapter).to be_a(ActiveJob::QueueAdapters::SolidQueueAdapter)
   end
