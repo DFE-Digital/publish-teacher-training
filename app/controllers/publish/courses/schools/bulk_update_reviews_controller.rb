@@ -26,7 +26,8 @@ module Publish
 
           matched = matched_courses
 
-          BulkUpdateCourseSchoolsJob.perform_async(matched.ids, @draft.added_uuids, @draft.removed_uuids)
+          queued = BulkUpdateCourseSchoolsJob.perform_later(matched.ids, @draft.added_uuids, @draft.removed_uuids)
+          return not_queued unless queued
 
           # Only once the change is safely queued. Applying the same diff twice
           # lands on the same schools, so a second press of the button costs
@@ -44,6 +45,19 @@ module Publish
         end
 
       private
+
+        # perform_later returns false rather than raising when the job cannot be
+        # queued, so the draft is kept and the provider can press the button again.
+        def not_queued
+          flash[:warning] = t("publish.courses.schools.bulk_update.not_queued")
+
+          redirect_to bulk_update_schools_review_publish_provider_recruitment_cycle_course_path(
+            provider.provider_code,
+            @course.recruitment_cycle_year,
+            @course.course_code,
+            state_key: @draft.state_key,
+          )
+        end
 
         # Reaching the review page without an answer, or with one that no longer
         # applies to the course, means going back and answering it.

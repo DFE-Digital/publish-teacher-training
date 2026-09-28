@@ -6,9 +6,6 @@ RSpec.describe "Solid Queue job routing" do
   # Moved in later card 7 tranches; remove each entry as its job moves.
   def not_yet_routed
     %w[
-      BulkUpdateCourseSchoolsJob
-      EmailAlertMailerJob
-      SendWeeklyEmailAlertsJob
       RolloverJob
       RolloverProvidersBatchJob
       RolloverProviderJob

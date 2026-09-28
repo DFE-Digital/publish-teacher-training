@@ -9,13 +9,15 @@
 #
 # A course that cannot be written does not hold up the rest, and is not dropped
 # either: the job comes back for those alone, a few times, and says so once when
-# it stops. Anything that escapes Apply entirely - a dropped connection, say -
-# still bubbles, and Sidekiq retries the job as it would any other.
-class BulkUpdateCourseSchoolsJob
-  include Sidekiq::Job
+# it stops. A dropped database connection is retried as a whole; anything else
+# that escapes Apply fails the job, where it can be retried from Mission Control.
+class BulkUpdateCourseSchoolsJob < ApplicationJob
+  self.queue_adapter = :solid_queue
 
   MAX_ATTEMPTS = 3
   RETRY_AFTER = 5.minutes
+
+  retry_on ActiveRecord::ConnectionNotEstablished, attempts: 3, wait: 1.minute
 
   def perform(course_ids, added_uuids, removed_uuids, attempt = 1)
     result = Publish::Schools::BulkUpdate::Apply.call(
@@ -27,7 +29,7 @@ class BulkUpdateCourseSchoolsJob
     return if result.failed_ids.empty?
 
     if attempt < MAX_ATTEMPTS
-      self.class.perform_in(RETRY_AFTER, result.failed_ids, added_uuids, removed_uuids, attempt + 1)
+      self.class.set(wait: RETRY_AFTER).perform_later(result.failed_ids, added_uuids, removed_uuids, attempt + 1)
     else
       report(result.failed_ids, added_uuids, removed_uuids, attempt)
     end

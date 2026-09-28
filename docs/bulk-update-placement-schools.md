@@ -87,7 +87,7 @@ sequenceDiagram
     A->>T: stamp the provider once
     A-->>J: Result(updated_ids, failed_ids)
     alt failures, attempts left
-        J->>J: perform_in(5 min, failed_ids only, attempt + 1)
+        J->>J: set(wait: 5 min).perform_later(failed_ids only, attempt + 1)
     else failures, none left
         J->>J: Sentry once, naming every course outstanding
     end
@@ -106,9 +106,13 @@ save.
 of them would be hundreds of emails saying the same thing.
 
 A course that fails does not hold up the rest and is not dropped: the job comes
-back for those alone. Anything escaping `Apply` entirely still bubbles, and
-Sidekiq retries as it would any job. Per-course failure is ours; whole-job
-failure is Sidekiq's.
+back for those alone. The job runs on Solid Queue, which does not retry on its
+own: a dropped database connection is retried as a whole (`retry_on`), and
+anything else escaping `Apply` fails the job, visible and retryable in Mission
+Control.
+
+If the job cannot be queued, the draft is kept and the provider is sent back to
+the review page to try again.
 
 ## The pieces
 

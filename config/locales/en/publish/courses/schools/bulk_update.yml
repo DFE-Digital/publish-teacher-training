@@ -12,6 +12,7 @@ en:
       schools:
         bulk_update:
           expired: Your school selection has expired. Select the schools you want again.
+          not_queued: Your schools could not be updated. Try again.
           heading: Updating %{schools}
           courses_legend: What courses do you want to apply this change to?
           continue: Continue to view the courses that will be updated

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "sidekiq/testing"
 
 RSpec.describe "Publish - Reviewing the courses a placement school change will update", type: :system do
+  include ActiveJob::TestHelper
+
   before do
     given_i_am_authenticated_as_a_provider_user
   end
@@ -122,10 +123,10 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
     and_i_continue
     review_page = page.current_path
     and_the_queue_is_down
+    and_i_confirm
 
-    expect { and_i_confirm }.to raise_error(Redis::CannotConnectError)
-
-    and_i_return_to(review_page)
+    then_i_am_told_the_schools_could_not_be_updated
+    and_i_am_on(review_page)
     then_i_still_see_the_courses_that_will_be_updated
     and_the_course_has("Ash Academy", "Beech School")
   end
@@ -297,7 +298,7 @@ private
   end
 
   def and_i_confirm
-    Sidekiq::Testing.inline! { click_button(page.find("button[type='submit']").text) }
+    perform_enqueued_jobs { click_button(page.find("button[type='submit']").text) }
   end
 
   def and_i_cancel
@@ -313,7 +314,15 @@ private
   end
 
   def and_the_queue_is_down
-    allow(BulkUpdateCourseSchoolsJob).to receive(:perform_async).and_raise(Redis::CannotConnectError)
+    allow(BulkUpdateCourseSchoolsJob.queue_adapter).to receive(:enqueue).and_raise(ActiveJob::EnqueueError)
+  end
+
+  def then_i_am_told_the_schools_could_not_be_updated
+    expect(page).to have_content("Your schools could not be updated. Try again.")
+  end
+
+  def and_i_am_on(path)
+    expect(page).to have_current_path(path)
   end
 
   def then_i_still_see_the_courses_that_will_be_updated

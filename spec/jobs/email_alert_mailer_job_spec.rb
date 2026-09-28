@@ -3,6 +3,16 @@
 require "rails_helper"
 
 RSpec.describe EmailAlertMailerJob do
+  it_behaves_like "a job routed to Solid Queue", queue: "default" do
+    let(:solid_queue_job_args) { [1, [2]] }
+  end
+
+  it "does not retry automatically, so a digest is never sent twice" do
+    allow(Candidate::EmailAlert).to receive(:find).and_raise(StandardError, "boom")
+
+    expect { described_class.perform_now(1, [2]) }.to raise_error(StandardError, "boom")
+  end
+
   describe "#perform" do
     let(:candidate) { create(:candidate) }
     let(:alert) { create(:email_alert, candidate:) }

@@ -15,6 +15,10 @@ describe BulkUpdateCourseSchoolsJob do
     allow(Publish::Schools::BulkUpdate::Apply).to receive(:call).and_return(returning)
   end
 
+  it_behaves_like "a job routed to Solid Queue", queue: "default" do
+    let(:solid_queue_job_args) { [[1], %w[added], %w[removed]] }
+  end
+
   it "applies the change to the courses it was given" do
     stub_apply(result(updated: [course.id]))
 
@@ -39,32 +43,34 @@ describe BulkUpdateCourseSchoolsJob do
 
   it "asks for nothing more when every course was updated" do
     stub_apply(result(updated: [course.id]))
-    allow(described_class).to receive(:perform_in)
 
-    described_class.new.perform([course.id], [], [])
+    expect { described_class.new.perform([course.id], [], []) }.not_to have_enqueued_job(described_class)
+  end
 
-    expect(described_class).not_to have_received(:perform_in)
+  it "comes back for the whole change when the database connection drops" do
+    allow(Publish::Schools::BulkUpdate::Apply).to receive(:call).and_raise(ActiveRecord::ConnectionNotEstablished)
+
+    expect { described_class.perform_now([course.id], %w[a], %w[b]) }
+      .to have_enqueued_job(described_class).with([course.id], %w[a], %w[b])
   end
 
   describe "when some courses could not be updated" do
     before { stub_apply(result(updated: [course.id], failed: [other_course.id])) }
 
     it "comes back for the ones that failed, and only those" do
-      allow(described_class).to receive(:perform_in)
+      freeze_time
 
-      described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1)
-
-      expect(described_class).to have_received(:perform_in)
-        .with(kind_of(ActiveSupport::Duration), [other_course.id], %w[a], %w[b], 2)
+      expect { described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1) }
+        .to have_enqueued_job(described_class)
+        .with([other_course.id], %w[a], %w[b], 2)
+        .at(described_class::RETRY_AFTER.from_now)
     end
 
     it "gives up once it has tried enough times" do
-      allow(described_class).to receive(:perform_in)
       allow(Sentry).to receive(:capture_message)
 
-      described_class.new.perform([other_course.id], [], [], described_class::MAX_ATTEMPTS)
-
-      expect(described_class).not_to have_received(:perform_in)
+      expect { described_class.new.perform([other_course.id], [], [], described_class::MAX_ATTEMPTS) }
+        .not_to have_enqueued_job(described_class)
       expect(Sentry).to have_received(:capture_message)
     end
 

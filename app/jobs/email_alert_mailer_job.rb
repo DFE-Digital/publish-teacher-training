@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class EmailAlertMailerJob < ApplicationJob
+  # No retry_on: the email goes out before last_sent_at is touched, so a retry
+  # could send the digest twice.
+  self.queue_adapter = :solid_queue
+
   def perform(email_alert_id, course_ids)
     alert = Candidate::EmailAlert.find(email_alert_id)
     courses = Course.includes(:provider)

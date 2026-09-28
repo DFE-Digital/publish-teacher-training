@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe SendWeeklyEmailAlertsJob do
+  it_behaves_like "a job routed to Solid Queue", queue: "default"
+
   describe "#perform" do
     it "calls ProcessWeeklyEmailAlertsService with default since" do
       allow(Find::ProcessWeeklyEmailAlertsService).to receive(:call)
