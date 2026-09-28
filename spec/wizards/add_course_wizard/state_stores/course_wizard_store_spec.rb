@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe CourseWizard::StateStores::CourseWizardStore do
-  subject(:store) { described_class.new(repository:, attribute_names: %w[level qualification can_sponsor_student_visa can_sponsor_skilled_worker_visa funding_type visa_sponsorship_application_deadline_required]) }
+  subject(:store) { described_class.new(repository:).tap { |store| store.attribute_names = %w[level qualification can_sponsor_student_visa can_sponsor_skilled_worker_visa funding_type visa_sponsorship_application_deadline_required] } }
 
   let(:repository) { instance_double(DfE::Wizard::Repository::InMemory) }
 

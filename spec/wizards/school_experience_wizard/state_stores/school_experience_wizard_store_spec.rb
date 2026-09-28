@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe SchoolExperienceWizard::StateStores::SchoolExperienceWizardStore do
-  subject(:store) { described_class.new(repository:, attribute_names: %w[experience_required]) }
+  subject(:store) { described_class.new(repository:).tap { |store| store.attribute_names = %w[experience_required] } }
 
   let(:repository) { instance_double(SchoolExperienceWizard::Repositories::SchoolExperienceRepository) }
 

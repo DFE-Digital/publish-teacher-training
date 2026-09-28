@@ -56,7 +56,7 @@ RSpec.describe ALevelsWizard::StateStores::ALevel do
   end
 
   describe "#another_a_level_needed?" do
-    subject(:store) { described_class.new(repository:, attribute_names: %w[add_another_a_level]) }
+    subject(:store) { described_class.new(repository:).tap { |store| store.attribute_names = %w[add_another_a_level] } }
 
     before do
       allow(repository).to receive(:read).and_return({ add_another_a_level: })

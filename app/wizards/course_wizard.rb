@@ -23,7 +23,7 @@ class CourseWizard
            to: :state_store
 
   def steps_processor
-    DfE::Wizard::StepsProcessor::Graph.draw(self) do |graph|
+    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: self) do |graph|
       graph.root :level
 
       graph.add_node :level, Steps::Level
