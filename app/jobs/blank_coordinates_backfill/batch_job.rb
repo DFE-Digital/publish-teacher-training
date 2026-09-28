@@ -1,6 +1,7 @@
 module BlankCoordinatesBackfill
   class BatchJob < ApplicationJob
-    queue_as :geocoding
+    self.queue_adapter = :solid_queue
+    queue_as :low_priority
     without_auto_retry
 
     def perform(records_batch, process_summary_id, dry_run)

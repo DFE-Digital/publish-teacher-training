@@ -5,6 +5,10 @@ require "rails_helper"
 RSpec.describe RolloverProviderJob, type: :job do
   let(:process_summary) { create(:rollover_process_summary) }
 
+  it_behaves_like "a job routed to Solid Queue", queue: "low_priority" do
+    let(:solid_queue_job_args) { ["ABC", 1, 1] }
+  end
+
   describe "#perform" do
     it "delegates to ProviderProcessor" do
       expect(DataHub::Rollover::ProviderProcessor).to receive(:process).with("ABC", 123, process_summary.id)

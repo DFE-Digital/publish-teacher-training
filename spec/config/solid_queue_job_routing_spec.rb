@@ -3,19 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Solid Queue job routing" do
-  # Moved in later card 7 tranches; remove each entry as its job moves.
-  def not_yet_routed
-    %w[
-      RolloverJob
-      RolloverProvidersBatchJob
-      RolloverProviderJob
-      RolloverMonitoringJob
-      BlankCoordinatesBackfill::BackfillJob
-      BlankCoordinatesBackfill::BatchJob
-      BlankCoordinatesBackfill::MonitoringJob
-    ]
-  end
-
   def ptt_job_classes
     jobs_root = Rails.root.join("app/jobs")
 
@@ -26,11 +13,17 @@ RSpec.describe "Solid Queue job routing" do
   end
 
   it "routes every PTT-owned job explicitly to Solid Queue" do
-    unrouted = (ptt_job_classes - not_yet_routed).reject do |name|
+    unrouted = ptt_job_classes.reject do |name|
       job = name.constantize
       job < ApplicationJob && job.queue_adapter_name == "solid_queue"
     end
 
     expect(unrouted).to be_empty
+  end
+
+  it "keeps rollover and backfill fan-out on the low_priority worker" do
+    fan_out = [RolloverProvidersBatchJob, RolloverProviderJob, BlankCoordinatesBackfill::BatchJob]
+
+    expect(fan_out.map(&:queue_name)).to all(eq("low_priority"))
   end
 end

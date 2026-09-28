@@ -29,6 +29,10 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
       subject
     end
 
+    it "schedules the provider batches on the low_priority queue" do
+      expect { subject }.to have_enqueued_job(RolloverProvidersBatchJob).on_queue("low_priority").exactly(2).times
+    end
+
     it "schedules the monitoring job" do
       expect { subject }.to have_enqueued_job(RolloverMonitoringJob)
         .with(a_kind_of(Integer), 1)

@@ -58,6 +58,17 @@ RSpec.describe "Solid Queue configuration" do
     expect(bulk["queues"]).not_to include("mailers")
   end
 
+  it "lets LOW_PRIORITY_QUEUE_THREADS size the bulk worker in every environment" do
+    allow(ENV).to receive(:fetch).and_call_original
+    allow(ENV).to receive(:fetch).with("LOW_PRIORITY_QUEUE_THREADS", 1).and_return("3")
+
+    %w[production review].each do |env|
+      bulk = section_for(env).fetch("workers").find { |worker| Array(worker["queues"]).include?("low_priority") }
+
+      expect(bulk["threads"]).to eq(3)
+    end
+  end
+
   it "keeps Sidekiq as the application-default Active Job adapter" do
     application_config = Rails.root.join("config/application.rb").read
 

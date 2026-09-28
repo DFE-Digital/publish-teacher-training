@@ -85,13 +85,14 @@ module "solid_queue_worker" {
   docker_image = var.docker_image
   # Shared ConfigMap sets RAILS_MAX_THREADS=50 for web. Override the DB pool only
   # for this process so each Solid Queue fork does not open a 50-connection pool.
-  # Keep this >= sum of (threads × processes) across workers in config/queue.yml
-  # (DEFAULT_QUEUE_THREADS etc.) or Solid Queue will warn and contend on the pool.
+  # Each worker fork needs threads + 2 connections, so keep this >= the largest
+  # worker's threads in config/queue.yml plus 2 or Solid Queue will warn and
+  # contend on the pool. LOW_PRIORITY_QUEUE_THREADS=3 fits the default 5.
   command = [
     "/bin/sh",
     "-c",
-    # $${...} so Terraform leaves the shell default for DATABASE_CONNECTION_POOL_SIZE alone.
-    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start",
+    # $${...} so Terraform leaves the shell defaults alone.
+    "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} LOW_PRIORITY_QUEUE_THREADS=$${LOW_PRIORITY_QUEUE_THREADS:-3} bundle exec rake solid_queue:start",
   ]
   max_memory      = var.solid_queue_worker_memory_max
   replicas        = var.solid_queue_worker_replicas

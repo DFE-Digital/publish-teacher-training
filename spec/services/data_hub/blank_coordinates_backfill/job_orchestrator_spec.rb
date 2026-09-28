@@ -43,6 +43,10 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::JobOrchestrator, type: :servic
       )
     end
 
+    it "schedules the batches on the low_priority queue" do
+      expect { start_backfill }.to have_enqueued_job(BlankCoordinatesBackfill::BatchJob).on_queue("low_priority")
+    end
+
     it "schedules monitoring job after batches" do
       allow(BlankCoordinatesBackfill::MonitoringJob).to receive(:set).and_return(BlankCoordinatesBackfill::MonitoringJob)
       allow(BlankCoordinatesBackfill::MonitoringJob).to receive(:perform_later)
