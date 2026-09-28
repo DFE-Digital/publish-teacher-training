@@ -81,16 +81,30 @@ runs:
         make ci ${{ inputs.environment }} get-cluster-credentials
         make install-konduit
 
+    # The restore drops and recreates every table (pg_dump --clean). Solid Queue must
+    # not be running meanwhile or it hits UndefinedTable / UnknownPrimaryKey.
+    - name: Stop solid-queue-worker before restore
+      shell: bash
+      run: |
+        deploy="deployment/${{ env.app_name }}-solid-queue-worker"
+        replicas=$(kubectl -n "${NAMESPACE}" get "${deploy}" -o jsonpath='{.spec.replicas}')
+        if [ -z "${replicas}" ] || [ "${replicas}" = "0" ]; then
+          replicas=1
+        fi
+        echo "SQ_WORKER_REPLICAS=${replicas}" >> $GITHUB_ENV
+        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas=0
+        kubectl -n "${NAMESPACE}" wait --for=delete pod -l app="${{ env.app_name }}-solid-queue-worker" --timeout=120s || true
+
     - name: Restore backup to aks env database
       shell: bash
       run: |
         bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
-    # Sanitised restore rewrites the DB under a possibly already-running worker.
-    # Recycle so Solid Queue reloads schema (avoids poisoned PK / UndefinedTable).
-    - name: Restart solid-queue-worker after restore
+    - name: Start solid-queue-worker after restore
+      if: always()
       shell: bash
       run: |
-        kubectl -n "${NAMESPACE}" rollout restart "deployment/${{ env.app_name }}-solid-queue-worker"
-        kubectl -n "${NAMESPACE}" rollout status "deployment/${{ env.app_name }}-solid-queue-worker" --timeout=300s
+        deploy="deployment/${{ env.app_name }}-solid-queue-worker"
+        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas="${SQ_WORKER_REPLICAS:-1}"
+        kubectl -n "${NAMESPACE}" rollout status "${deploy}" --timeout=300s
