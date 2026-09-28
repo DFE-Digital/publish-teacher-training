@@ -5,10 +5,8 @@ class SchoolExperienceWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :course_code
 
-  delegate :experience_is_required?, to: :state_store
-
   def steps_processor
-    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: self) do |graph|
+    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
       graph.root(:experience_required)
 
       graph.add_conditional_edge(

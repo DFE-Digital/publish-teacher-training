@@ -5,12 +5,10 @@ class ALevelsWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :course_code
 
-  delegate :any_a_levels?, :another_a_level_needed?, :has_remaining_a_levels?, to: :state_store
-
   def steps_processor
-    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: self) do |graph|
-      graph.conditional_root(potential_root: %i[add_a_level_to_a_list what_a_level_is_required]) do |_state_store|
-        if any_a_levels?
+    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
+      graph.conditional_root(potential_root: %i[add_a_level_to_a_list what_a_level_is_required]) do |state_store|
+        if state_store.any_a_levels?
           :add_a_level_to_a_list
         else
           :what_a_level_is_required
