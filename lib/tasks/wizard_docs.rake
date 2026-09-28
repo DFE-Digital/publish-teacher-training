@@ -26,10 +26,14 @@ namespace :wizard do
 
       # you can hardcoded or make a way to discover all wizards.
       # Here we hardcoded PersonalInformationWizard
-      [
-        ALevelsWizard,
-      ].each do |wizard_class|
-        wizard = wizard_class.new(state_store: OpenStruct.new)
+      # Graph.draw evaluates the conditional root, so each wizard needs a
+      # state store that can answer its predicates.
+      {
+        ALevelsWizard => ALevelsWizard::StateStores::ALevel.new(
+          repository: ALevelsWizard::Repositories::ALevel.new(record: Course.new),
+        ),
+      }.each do |wizard_class, state_store|
+        wizard = wizard_class.new(state_store:)
 
         # Using #generate_all but you can also generate individually.
 

@@ -9,21 +9,13 @@ class CourseWizard
 
   delegate :accrediting_provider, to: :accreditation
 
-  delegate :further_education_level?,
-           :primary_level?,
-           :undergraduate_degree_with_qts?,
-           :visa_sponsorship_required?,
-           :salary_based?,
-           :fee_based?,
-           :skilled_worker_visa_sponsorship_required?,
-           :deadline_for_application_visa_sponsorship_required?,
-           :design_technology_specialisms?,
+  delegate :design_technology_specialisms?,
            :physics_specialisms?,
            :modern_languages_specialisms?,
            to: :state_store
 
   def steps_processor
-    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: self) do |graph|
+    DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
       graph.root :level
 
       graph.add_node :level, Steps::Level
@@ -40,7 +32,7 @@ class CourseWizard
       graph.add_node :funding_type, Steps::FundingType
       graph.add_node :study_pattern, Steps::StudyPattern
       graph.add_node :schools, Steps::Schools
-      graph.add_node :study_sites, Steps::StudySites, skip_when: :skip_study_sites?
+      graph.add_node :study_sites, Steps::StudySites, skip_when: -> { skip_study_sites? }
       graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
       graph.add_node :visa_sponsorship, Steps::VisaSponsorship
@@ -115,7 +107,7 @@ class CourseWizard
           { when: :further_education_level?, then: :start_date },
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
-          { when: :accredited_provider_selection_required?, then: :accredited_provider },
+          { when: -> { accredited_provider_selection_required? }, then: :accredited_provider },
           # TDA goes straight to start date when no accredited provider
           # selection is required.
           { when: :undergraduate_degree_with_qts?, then: :start_date },
