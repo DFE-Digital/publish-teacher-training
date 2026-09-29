@@ -7,7 +7,8 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l"><%= school.location_name %></h1>
     <p class="govuk-body govuk-hint govuk-!-margin-bottom-0"><%= school.full_address %></p>
-    <p class="govuk-body govuk-hint"><%= t(".urn", urn: school.urn) %></p>
+    <p class="govuk-body govuk-hint govuk-!-margin-bottom-0"><%= t(".urn", urn: school.urn) %></p>
+    <p class="govuk-body govuk-hint"><%= t(".school_code", code: school.code) %></p>
 
     <% if @school_courses.any? %>
       <div class="govuk-!-margin-top-6">
