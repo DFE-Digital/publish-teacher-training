@@ -129,8 +129,8 @@ RSpec.describe "Multiple schools" do
 
   def and_i_see_that_all_schools_are_created
     @gias_schools.each do |school|
-      expect(page).to have_css(".school-row", text: school.name)
-      expect(page).to have_css(".school-row", text: school.postcode)
+      expect(page).to have_css("tbody tr", text: school.name)
+      expect(page).to have_css("tbody tr", text: school.postcode)
     end
   end
 
