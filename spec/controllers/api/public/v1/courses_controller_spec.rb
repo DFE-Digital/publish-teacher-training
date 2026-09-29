@@ -73,15 +73,20 @@ RSpec.describe API::Public::V1::CoursesController do
         expect(APICourseSearchService).to have_received(:call)
       end
 
-      it "returns findable true without inspecting SiteStatus" do
-        course = create(:course, provider:)
+      it "returns findable from publication without inspecting SiteStatus" do
+        published_course = create(:course, :published, provider:)
+        withdrawn_course = create(:course, :withdrawn, provider:)
 
         get :index, params: {
           recruitment_cycle_year: recruitment_cycle.year,
         }
 
-        expect(course.site_statuses).to be_empty
-        expect(json_response["data"].sole["attributes"]["findable"]).to be(true)
+        findable_by_id = json_response["data"].to_h { |course| [course["id"], course["attributes"]["findable"]] }
+
+        expect(published_course.site_statuses).to be_empty
+        expect(withdrawn_course.site_statuses).to be_empty
+        expect(findable_by_id[published_course.id.to_s]).to be(true)
+        expect(findable_by_id[withdrawn_course.id.to_s]).to be(false)
       end
     end
 

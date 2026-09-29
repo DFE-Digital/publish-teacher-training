@@ -99,14 +99,11 @@ module API
           @object.created_at&.iso8601
         end
 
-        # Historical cycles no longer inspect SiteStatus. New-model courses use
-        # publication, matching Find after the schools remodel.
+        # Apply stores this as exposed_in_find and treats it as whether a
+        # candidate can apply. Publication covers that, including withdrawn
+        # courses, without inspecting SiteStatus.
         attribute :findable do
-          if @object.recruitment_cycle_after?(Settings.schools_remodel_cycle_year)
-            @object.is_published?
-          else
-            true
-          end
+          @object.is_published?
         end
 
         attribute :has_early_career_payments do
