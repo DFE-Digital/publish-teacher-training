@@ -81,7 +81,7 @@ private
   end
 
   def and_i_select_an_option
-    publish_courses_new_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
+    publish_courses_edit_engineers_teach_physics_page.campaign_fields.engineers_teach_physics.click
   end
 
   def and_i_select_subordinate_subject(subject_type)
@@ -153,7 +153,7 @@ private
   end
 
   def and_i_select_a_language
-    publish_courses_new_modern_languages_page.language_checkbox("German").click
+    publish_courses_modern_languages_edit_page.language_checkbox("German").click
   end
 
   def course_subject(subject_type)

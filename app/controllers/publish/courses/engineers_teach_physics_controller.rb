@@ -6,17 +6,6 @@ module Publish
       decorates_assigned :course
       include CourseBasicDetailConcern
 
-      def new
-        authorize(@provider, :can_create_course?)
-        return if has_physics_subject?
-
-        if go_to_confirmation_params && modern_languages_present?
-          redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
-          return
-        end
-        redirect_to next_step
-      end
-
       def edit
         @engineers_teach_physics_form = EngineersTeachPhysicsForm.new(course)
       end
@@ -59,30 +48,6 @@ module Publish
         end
       end
 
-      def back
-        authorize(@provider, :edit?)
-        if has_physics_subject?
-          redirect_to new_publish_provider_recruitment_cycle_courses_engineers_teach_physics_path(path_params)
-        else
-          redirect_to @back_link_path
-        end
-      end
-
-      def continue
-        authorize(@provider, :can_create_course?)
-        @errors = { campaign_name: ["Select if this course is part of the Engineers teach physics programme"] } if params[:course][:campaign_name].blank?
-
-        if @errors.present?
-          render :new
-        elsif params[:skip_languages_goto_confirmation].present?
-          redirect_to confirmation_publish_provider_recruitment_cycle_courses_path(path_params)
-        elsif modern_languages_present?
-          redirect_to new_publish_provider_recruitment_cycle_courses_modern_languages_path(path_params)
-        else
-          redirect_to next_step
-        end
-      end
-
     private
 
       def update_with_confirmation
@@ -122,28 +87,12 @@ module Publish
         }
       end
 
-      def modern_languages_present?
-        params[:course][:subjects_ids]&.include?(modern_languages_id)
-      end
-
       def modern_languages_id
         SecondarySubject.modern_languages.id.to_s
       end
 
       def design_technology_id
         SecondarySubject.design_technology.id.to_s
-      end
-
-      def has_physics_subject?
-        @course.master_subject_id == SecondarySubject.physics.id
-      end
-
-      def current_step
-        :engineers_teach_physics
-      end
-
-      def error_keys
-        [:campaign_name]
       end
 
       def form_params

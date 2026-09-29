@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.describe "Add course wizard check your answers navigation", type: :system do
   before do
-    FeatureFlag.activate(:wizard_add_course_flow)
     given_i_am_authenticated_as_a_provider_user(cycle_year: Find::CycleTimetable.current_year)
   end
 

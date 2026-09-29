@@ -55,8 +55,6 @@ guides/wizards/
 
 ### A level requirements
 
-The only multi-step form currently using dfe-wizard.
-
 - **Wizard:** `app/wizards/a_levels_wizard.rb`
 - **Steps:** `app/wizards/a_levels_wizard/steps/`
   - `what_a_level_is_required` - select subject and minimum grade
@@ -71,19 +69,25 @@ The only multi-step form currently using dfe-wizard.
 - **Routes:** `config/routes/publish.rb` (under `/a-levels-or-equivalency-tests/`)
 - **Auto-generated docs:** `guides/wizards/a_levels_wizard.md`
 
+### Course creation
+
+The largest multi-step flow in the app.
+
+- **Wizard:** `app/wizards/course_wizard.rb`
+- **Steps:** `app/wizards/course_wizard/steps/` (19 steps, `level` through `check_answers`)
+- **State store:** `app/wizards/course_wizard/state_stores/course_wizard_store.rb`
+- **Repositories:** `app/wizards/course_wizard/repositories/`
+- **Operations:** `app/wizards/course_wizard/operations/`
+- **Creation service:** `app/services/courses/creation_service.rb`
+- **Controllers:** `app/controllers/publish/course_wizards_controller.rb`
+- **Views:** `app/views/publish/course_wizards/`
+- **Routes:** `config/routes/publish.rb` (under `/course_wizard/`)
+
 ## Multi-step forms not yet using dfe-wizard
 
 The following forms use traditional multi-step patterns (manual controller chaining, `CourseBasicDetailConcern`, or stashing to session). They are candidates for migration to dfe-wizard.
 
-### Course creation
-
-The largest multi-step flow in the app. Uses `CourseBasicDetailConcern` and `CourseCreationStepService` to chain 15+ steps.
-
-- **Controllers:** `app/controllers/publish/courses/` (19 step controllers including `OutcomeController`, `LevelController`, `SubjectsController`, `SchoolsController`, `StudyModeController`, `StartDateController`, `AgeRangeController`, `FundingTypeController`, `RatifyingProviderController`, visa sponsorship steps, etc.)
-- **Step service:** `app/services/publish/course_creation_step_service.rb`
-- **Creation service:** `app/services/courses/creation_service.rb`
-- **Concern:** `app/models/concerns/publish/course_basic_detail_concern.rb`
-- **Routes:** `config/routes/publish.rb` (under courses resources)
+The per-field **course edit** pages under `app/controllers/publish/courses/` still use `CourseBasicDetailConcern` for their `edit`/`update` actions. They are single-step, not a chain.
 
 ### Degrees
 

@@ -14,20 +14,7 @@ module Publish
         render_not_found if @course.accrediting_provider.blank?
       end
 
-      def new; end
-
       def edit; end
-
-      def continue
-        authorize(@provider, :can_create_course?)
-
-        if course_params[:accredited_provider_code].blank?
-          set_error_messages
-          render :new
-        else
-          super
-        end
-      end
 
       def update
         if update_params[:accredited_provider_code].blank?
@@ -70,14 +57,6 @@ module Publish
       def build_course
         super
         authorize @course
-      end
-
-      def current_step
-        :accredited_provider
-      end
-
-      def error_keys
-        [:accredited_provider_code]
       end
 
       def set_error_messages

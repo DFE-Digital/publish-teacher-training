@@ -5,16 +5,6 @@ module Publish
     class FundingTypeController < ApplicationController
       include CourseBasicDetailConcern
 
-      def continue
-        authorize(@provider, :can_create_course?)
-        @errors = errors
-        if @errors.any?
-          render :new
-        else
-          handle_redirect
-        end
-      end
-
       def edit
         authorize(course, :can_update_funding_type?)
         @course_funding_form = CourseFundingForm.new(@course)
@@ -88,22 +78,6 @@ module Publish
         end
       end
 
-      def visa_sponsorship_path
-        if course.fee_based?
-          new_publish_provider_recruitment_cycle_courses_student_visa_sponsorship_path(path_params)
-        else
-          new_publish_provider_recruitment_cycle_courses_skilled_worker_visa_sponsorship_path(path_params)
-        end
-      end
-
-      def current_step
-        :funding_type
-      end
-
-      def error_keys
-        %i[funding_type program_type]
-      end
-
       def course_values
         {
           provider_code: course.provider_code,
@@ -122,28 +96,6 @@ module Publish
 
       def course_page_path
         details_publish_provider_recruitment_cycle_course_path(course_values)
-      end
-
-      def handle_redirect
-        if goto_visa_path?
-          redirect_to visa_sponsorship_path
-        elsif previous_tda_course_path?
-          redirect_to new_publish_provider_recruitment_cycle_courses_study_mode_path(previously_defaulted_attributes)
-        else
-          redirect_to next_step
-        end
-      end
-
-      def goto_visa_path?
-        params[:goto_visa] == "true" && params.dig(:course, :previous_tda_course) != "true"
-      end
-
-      def previous_tda_course_path?
-        params.dig(:course, :previous_tda_course) == "true"
-      end
-
-      def previously_defaulted_attributes
-        path_params.merge(previous_tda_course: "true")
       end
     end
   end
