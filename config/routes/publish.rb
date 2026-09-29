@@ -369,9 +369,6 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
             get "/search", to: "schools/search#new"
             post "/search", to: "schools/search#create"
             put "/search", to: "schools/search#update"
-
-            get "/added-schools", to: "schools/added_schools#index", as: :added_schools
-            get "/removed-schools", to: "schools/removed_schools#index", as: :removed_schools
           end
         end
 

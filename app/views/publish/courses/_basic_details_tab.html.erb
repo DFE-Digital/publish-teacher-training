@@ -103,16 +103,12 @@
      summary_list.with_row(html_attributes: { data: { qa: "course__schools" } }) do |row|
        row.with_key { school_label_with_plural(course, count: course.sorted_school_names.length) }
        row.with_value do
-         if course.recruitment_cycle_rollover_period_2026?
-           raw(render(::Publish::Schools::SchoolSummaryValueComponent.new(course:)))
-         else
-           raw(render(::Publish::Schools::AttachedSchoolsSummaryComponent.new(course:)))
-         end
+         raw(render(::Publish::Schools::AttachedSchoolsSummaryComponent.new(course:)))
        end
 
        if course.is_withdrawn?
          row.with_action
-       elsif !course.recruitment_cycle_rollover_period_2026? || course.schools_validated?
+       else
          row.with_action(
            href: schools_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code),
            visually_hidden_text: "schools",

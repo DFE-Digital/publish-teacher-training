@@ -6,11 +6,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <%= render ::Publish::Schools::NotificationBannerComponent.new(
-        recruitment_cycle: @recruitment_cycle,
-        provider: @provider,
-      ) %>
-
     <%= form_for course,
       url: continue_publish_provider_recruitment_cycle_courses_schools_path(@provider.provider_code, course.recruitment_cycle.year, course.course_code),
       method: :get do |form| %>
@@ -45,7 +40,7 @@
                 <% @provider.sites.sort_by(&:location_name).each_with_index do |site, index| %>
                   <%= form.govuk_check_box :sites_ids,
                         site.id,
-                        label: { text: [site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: site))].compact_blank.join(" ").html_safe },
+                        label: { text: site.location_name },
                         hint: { text: site.full_address },
                         link_errors: index.zero? %>
                 <% end %>

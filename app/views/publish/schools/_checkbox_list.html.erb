@@ -20,11 +20,9 @@
 <% end %>
 
 <% schools.each_with_index do |school, index| %>
-  <%# The name travels as an attribute of its own: the label may also carry the
-      newly added tag, which the summary must not repeat. %>
   <%= form.govuk_check_box :school_uuids,
         school.uuid,
-        label: { text: [school.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school:))].compact_blank.join(" ").html_safe },
+        label: { text: school.location_name },
         hint: { text: school.decorate.full_address, class: "govuk-!-font-size-16" },
         include_hidden:,
         link_errors: index.zero?,

@@ -15,11 +15,6 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <%= render ::Publish::Schools::NotificationBannerComponent.new(
-        recruitment_cycle: @recruitment_cycle,
-        provider: @provider,
-      ) %>
-
       <h1 class="govuk-heading-l">
         <%= render CaptionText.new(text: course.name_and_code) %>
         <%= page_title %>

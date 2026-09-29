@@ -57,7 +57,7 @@ describe ViewHelper do
     end
 
     it "puts fields it does not know about last, in the order they arrived" do
-      errors = { sites: ["Enter schools for this course"], subjects: ["Select a subject"], course_length: ["Enter course length"] }
+      errors = { sites: ["Select at least one school"], subjects: ["Select a subject"], course_length: ["Enter course length"] }
 
       expect(ordered_enrichment_errors(errors).map(&:first)).to eq(%i[course_length sites subjects])
     end

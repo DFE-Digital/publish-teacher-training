@@ -39,12 +39,7 @@ module Publish
       return if params[:school_uuids].present?
       return if ::Courses::PublishRules::SchoolPresenceExemption.applies?(course)
 
-      if course.recruitment_cycle_rollover_period_2026?
-        error = course.schools.exists? ? :check_schools : :enter_schools
-        errors.add(:school_uuids, error)
-      else
-        errors.add(:school_uuids, :no_schools)
-      end
+      errors.add(:school_uuids, :no_schools)
     end
 
     def school_uuids_belong_to_provider

@@ -33,31 +33,9 @@ RSpec.describe "Course show" do
         then_i_see_the_correct_change_links
       end
     end
-
-    context "when it is during the 2026 schools migration" do
-      scenario "i can see the correct change links with schools review", travel: 1.day.before(find_closes(2025)) do
-        given_a_next_recruitment_cycle_exists
-        and_i_am_authenticated_as_a_provider_user_for_next_cycle
-        and_there_is_a_scheduled_course
-        when_i_visit_the_course_details_page
-        then_i_see_the_change_links_without_schools
-        and_i_see_review_schools_link
-      end
-    end
-
-    context "when schools are not reviewed or validated" do
-      scenario "i can see the correct change links with schools review", travel: mid_cycle(2025) do
-        given_a_next_recruitment_cycle_exists
-        and_i_am_authenticated_as_a_provider_user_for_next_cycle
-        and_there_is_a_published_course_with_unvalidated_schools
-        when_i_visit_the_course_details_page
-        then_i_see_the_change_links_without_schools
-        and_i_see_review_schools_link
-      end
-    end
   end
 
-  context "when the school migration period 2025 is active and schools are validated" do
+  context "when the new cycle has started and the course is a draft" do
     scenario "i can see the correct change links", travel: 1.day.before(find_closes(2025)) do
       given_a_next_recruitment_cycle_exists
       and_i_am_authenticated_as_a_provider_user_for_next_cycle
@@ -65,7 +43,6 @@ RSpec.describe "Course show" do
       and_there_is_a_draft_course
       when_i_visit_the_course_details_page
       then_i_see_the_draft_course_change_links_with_start_date
-      and_i_see_review_schools_link
     end
   end
 
@@ -121,19 +98,13 @@ private
   end
 
   def and_there_is_a_published_physics_course
-    given_a_course_exists(:with_accrediting_provider, :secondary, schools_validated: true, master_subject_id: 29, funding: "apprenticeship", campaign_name: "engineers_teach_physics", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
+    given_a_course_exists(:with_accrediting_provider, :secondary, master_subject_id: 29, funding: "apprenticeship", campaign_name: "engineers_teach_physics", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)], subjects: [find_or_create(:secondary_subject, :physics)])
     given_a_site_exists(:full_time_vacancies, :findable)
     attach_course_schools_for_sites
   end
 
   def and_there_is_a_withdrawn_course
     given_a_course_exists(:with_accrediting_provider, start_date: Date.parse("2022 January"), funding: "apprenticeship", enrichments: [build(:course_enrichment, :withdrawn)])
-    given_a_site_exists(:full_time_vacancies, :findable)
-    attach_course_schools_for_sites
-  end
-
-  def and_there_is_a_published_course_with_unvalidated_schools
-    given_a_course_exists(:with_accrediting_provider, schools_validated: false, funding: "apprenticeship", start_date: Date.parse("2022 January"), enrichments: [build(:course_enrichment, :published)])
     given_a_site_exists(:full_time_vacancies, :findable)
     attach_course_schools_for_sites
   end
@@ -149,8 +120,6 @@ private
     given_a_site_exists(:full_time_vacancies, :findable)
     attach_course_schools_for_sites
   end
-
-  alias_method :and_there_is_a_scheduled_course, :and_there_is_a_published_course
 
   def when_i_visit_the_course_details_page
     publish_provider_courses_details_page.load(
@@ -233,32 +202,16 @@ private
     expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects", "age range", "outcome", "if full or part time", "schools", "can sponsor skilled_worker visa")
   end
 
-  def and_i_see_review_schools_link
-    expect(publish_provider_courses_details_page).to have_link("Review the schools for this course")
-  end
-
   def then_i_see_the_draft_course_change_links_with_start_date
     expect(publish_provider_courses_details_page.change_link_texts).to contain_exactly("subjects",
                                                                                        "age range",
                                                                                        "outcome",
                                                                                        "if full or part time",
+                                                                                       "schools",
                                                                                        "can sponsor skilled_worker visa",
                                                                                        "funding type",
                                                                                        "accredited provider",
                                                                                        "date course starts")
-  end
-
-  def then_i_see_the_change_links_without_schools
-    expect(
-      publish_provider_courses_details_page.change_link_texts,
-    ).to contain_exactly(
-      "subjects",
-      "age range",
-      "outcome",
-      "if full or part time",
-      "can sponsor skilled_worker visa",
-      "date course starts",
-    )
   end
 
   def then_i_see_the_correct_change_links_for_the_next_cycle

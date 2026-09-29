@@ -46,20 +46,6 @@ module ViewHelper
     if field.to_sym == :base
       base_errors_hash(provider_code, course)[message]
     else
-      # rubocop:disable Rails/HelperInstanceVariable
-      error_sites_url = if course.recruitment_cycle_rollover_period_2026?
-                          if @current_tab == :details
-                            "#{base}/publish#school-summary-link"
-                          elsif @current_tab == :description || !request.referer&.include?("details")
-                            "#{base}/details?display_errors=true#school-summary-link"
-                          else
-                            "#{base}/details?display_errors=true"
-                          end
-                        else
-                          "#{base}/schools?display_errors=true"
-                        end
-      # rubocop:enable Rails/HelperInstanceVariable
-
       {
         theoretical_training_activities: "#{base}/fields/what-you-will-study?display_errors=true#theoretical-training-activities-error",
         placement_school_activities: "#{field_base_url}/school-placement?display_errors=true#placement_school_activities-error",
@@ -78,7 +64,7 @@ module ViewHelper
         interview_process: "#{field_base_url}/interview-process?display_errors=true#publish-fields-interview-process-form-interview-process-field-error",
         provider_about_us: "#{provider_base}/why-train-with-us/edit?display_errors=true#publish-why-train-with-us-form-about-us-field-error",
         provider_value_proposition: "#{provider_base}/why-train-with-us/edit?display_errors=true#publish-why-train-with-us-form-value-proposition-field-error",
-        sites: error_sites_url,
+        sites: "#{base}/schools?display_errors=true",
         study_sites: (course.provider&.study_sites&.none? ? "#{provider_base}/study-sites" : "#{base}/study-sites").to_s,
         accrediting_provider:,
         applications_open_from: "#{base}/applications-open",

@@ -130,14 +130,6 @@ class RecruitmentCycle < ApplicationRecord
     "#{year.to_i - 1} to #{year}"
   end
 
-  def rollover_period_2026?
-    year.to_i == 2026 && Time.zone.now < rollover_end
-  end
-
-  def rollover_end
-    30.days.after(Find::CycleTimetable.find_opens(year))
-  end
-
   # TODO: remove once the 2022 rollover is complete
   def after_2021?
     year.to_i >= 2022
