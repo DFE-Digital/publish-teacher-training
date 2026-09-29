@@ -38,6 +38,11 @@ RSpec.describe "Secondary subjects quick link", service: :find do
       click_link_or_button "Back"
       then_i_am_on_the_find_homepage
     end
+
+    scenario "financial support mentions bursaries but not scholarships" do
+      click_link_or_button "Browse secondary courses"
+      then_i_see_bursaries_without_scholarships
+    end
   end
 
   def given_there_are_courses_with_secondary_subjects
@@ -91,5 +96,11 @@ RSpec.describe "Secondary subjects quick link", service: :find do
 
   def then_i_am_on_the_find_homepage
     expect(page).to have_current_path(find_root_path)
+  end
+
+  def then_i_see_bursaries_without_scholarships
+    expect(page).to have_css("h4", text: /\ABursaries\z/)
+    expect(page).to have_link("Find out whether you are eligible for a bursary", exact: true)
+    expect(page).to have_no_content("scholarship")
   end
 end
