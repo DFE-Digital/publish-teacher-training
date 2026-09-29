@@ -8,7 +8,7 @@ module PageObjects
 
         element :add_school, ".govuk-button", text: "Add school"
 
-        sections :schools, Sections::School, ".school-row"
+        sections :schools, Sections::School, "tbody tr"
       end
     end
   end

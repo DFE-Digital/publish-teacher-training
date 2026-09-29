@@ -42,7 +42,7 @@ RSpec.describe "Support provider schools" do
       expect(response.body).to include("112992")
       expect(response.body).to include(support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
 
-      school_row = response.parsed_body.at_css(".school-row")
+      school_row = response.parsed_body.at_css("tbody tr")
       expect(school_row.at_css(".address").text.squish).to eq("1 School Lane, Leeds, LS1 1AA")
       expect(school_row.at_css(".courses-count").text.squish).to eq("2 courses")
 

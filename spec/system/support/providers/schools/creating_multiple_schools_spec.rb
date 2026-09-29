@@ -120,7 +120,7 @@ RSpec.describe "Multiple schools" do
 
   def and_i_see_that_all_schools_are_created
     @gias_schools.each do |school|
-      school_row = page.find(".school-row", text: school.name)
+      school_row = page.find("tbody tr", text: school.name)
 
       expect(school_row).to have_text(school.urn)
     end
