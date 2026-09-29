@@ -110,9 +110,9 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response.body).to include("Catholic Primary School")
         expect(response.body).to include("1 School Lane, Building A, Quarter B, Leeds, West Yorkshire, LS1 1AA")
         expect(response.body).to include("URN: 112992")
+        expect(response.body).to include("School code: A")
         expect(response.body).to include("This school is not attached to any courses.")
         expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
-        expect(response.body).not_to include("School code")
         expect(response.body).not_to include("govuk-summary-list")
         expect(response.body).not_to include("govuk-table")
       end
@@ -149,9 +149,9 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response.body).to include("Catholic Primary School")
         expect(response.body).to include("1 School Lane, Building A, Quarter B, Leeds, West Yorkshire, LS1 1AA")
         expect(response.body).to include("URN: 112992")
+        expect(response.body).to include("School code: B")
         expect(response.body).to include("This school is not attached to any courses.")
         expect(response.body).to include("Remove #{provider_school.decorate.location_name} from your account")
-        expect(response.body).not_to include("School code")
         expect(response.body).not_to include("govuk-table")
       end
 
@@ -228,6 +228,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("St Joseph")
         expect(response.body).to include("Catholic Primary School")
+        expect(response.body).to include("School code: A")
         expect(response.body).not_to include("(Main Site)")
       end
 
@@ -236,7 +237,7 @@ RSpec.describe "Publish provider school show page", service: :publish do
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include("(Main Site)")
-        expect(response.body).not_to include("School code")
+        expect(response.body).to include("School code: -")
       end
     end
   end

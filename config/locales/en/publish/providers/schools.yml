@@ -14,6 +14,7 @@ en:
           remove: Remove school
         show:
           urn: "URN: %{urn}"
+          school_code: "School code: %{code}"
           no_courses: This school is not attached to any courses.
           remove: "Remove %{school_name} from your account"
         only_school:

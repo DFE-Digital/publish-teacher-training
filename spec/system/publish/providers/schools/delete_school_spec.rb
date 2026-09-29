@@ -194,9 +194,9 @@ RSpec.describe "Delete a provider's schools" do
     expect(page).to have_content("Future School (Main Site)")
     expect(page).to have_content("1 Future Road, Future Building, Future Quarter, Future Town, Future County, FT1 1AA")
     expect(page).to have_content("URN: 654321")
+    expect(page).to have_content("School code: -")
     expect(page).to have_content("This school is not attached to any courses.")
     expect(page).to have_link("Remove Future School (Main Site) from your account")
-    expect(page).not_to have_content("School code")
   end
 
   def when_i_remove_the_provider_school
