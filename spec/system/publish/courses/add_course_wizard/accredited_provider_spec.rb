@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.describe "Add course wizard accredited provider step", type: :system do
   before do
-    FeatureFlag.activate(:wizard_add_course_flow)
     given_i_am_authenticated_as_a_school_based_provider_user_with_multiple_accredited_partners
   end
 

@@ -20,25 +20,14 @@ class AddCourseButton < ViewComponent::Base
   end
 
   def add_course_path
-    if wizard_add_course_flow?
-      new_publish_provider_recruitment_cycle_course_wizard_path(
-        provider_code: provider.provider_code,
-        recruitment_cycle_year: provider.recruitment_cycle_year,
-        state_key: wizard_state_key,
-      )
-    else
-      new_publish_provider_recruitment_cycle_course_path(
-        provider_code: provider.provider_code,
-        recruitment_cycle_year: provider.recruitment_cycle_year,
-      )
-    end
+    new_publish_provider_recruitment_cycle_course_wizard_path(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
+    )
   end
 
 private
-
-  def wizard_add_course_flow?
-    true
-  end
 
   def wizard_state_key
     @wizard_state_key ||= SecureRandom.uuid

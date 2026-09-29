@@ -12,42 +12,6 @@ describe AddCourseButton do
     render_inline(described_class.new(provider:))
   end
 
-  context "when the wizard add course flow is active" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
-
-    it "renders a course wizard link" do
-      component = described_class.new(provider:)
-      allow(component).to receive_messages(wizard_add_course_flow?: true, wizard_state_key: "test-state-key")
-
-      render_inline(component)
-
-      expect(rendered_content).to have_link(
-        "Add course",
-        href: new_publish_provider_recruitment_cycle_course_wizard_path(
-          provider_code: provider.provider_code,
-          recruitment_cycle_year: provider.recruitment_cycle.year,
-          state_key: "test-state-key",
-        ),
-      )
-    end
-  end
-
-  context "when the wizard add course flow is not active" do
-    let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
-
-    it "renders a course link" do
-      component = described_class.new(provider:)
-      allow(component).to receive(:wizard_add_course_flow?).and_return(false)
-
-      render_inline(component)
-
-      expect(rendered_content).to have_link(
-        "Add course",
-        href: new_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle.year),
-      )
-    end
-  end
-
   context "when the provider has not filled out any required sections" do
     it "renders an accredited provider link" do
       expect(rendered_content).to have_link(
@@ -189,7 +153,23 @@ describe AddCourseButton do
   context "when the provider has added all required organisation details" do
     let(:provider) { build(:provider, :accredited_provider, study_sites: [build(:site, :study_site)], schools: [build(:provider_school)], recruitment_cycle:) }
 
-    it "renders a study sites link" do
+    it "renders a course wizard link" do
+      component = described_class.new(provider:)
+      allow(component).to receive(:wizard_state_key).and_return("test-state-key")
+
+      render_inline(component)
+
+      expect(rendered_content).to have_link(
+        "Add course",
+        href: new_publish_provider_recruitment_cycle_course_wizard_path(
+          provider_code: provider.provider_code,
+          recruitment_cycle_year: provider.recruitment_cycle.year,
+          state_key: "test-state-key",
+        ),
+      )
+    end
+
+    it "does not render a study sites link" do
       expect(rendered_content).to have_no_link(
         "add a study site",
         href: publish_provider_recruitment_cycle_study_sites_path(
@@ -199,7 +179,7 @@ describe AddCourseButton do
       )
     end
 
-    it "renders an accredited provider link" do
+    it "does not render an accredited provider link" do
       expect(rendered_content).to have_no_link(
         "add an accredited provider",
         href: publish_provider_recruitment_cycle_accredited_partnerships_path(
@@ -209,7 +189,7 @@ describe AddCourseButton do
       )
     end
 
-    it "renders a schools link" do
+    it "does not render a schools link" do
       expect(rendered_content).to have_no_link(
         "add a school",
         href: publish_provider_recruitment_cycle_schools_path(

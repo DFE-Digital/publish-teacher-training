@@ -5,11 +5,6 @@ module Publish
     class VisaSponsorshipApplicationDeadlineRequiredController < ApplicationController
       include CourseBasicDetailConcern
 
-      def new
-        authorize(@provider, :can_create_course?)
-        @deadline_required_form = VisaSponsorshipApplicationDeadlineRequiredForm.new(date_required_params)
-      end
-
       def edit
         authorize(provider)
         @deadline_required_form = VisaSponsorshipApplicationDeadlineRequiredForm.new(
@@ -81,10 +76,6 @@ module Publish
         end
       end
 
-      def current_step
-        :visa_sponsorship_application_deadline_required
-      end
-
       def date_required_params
         course_params.permit(:visa_sponsorship_application_deadline_required)
       end
@@ -93,12 +84,6 @@ module Publish
         params[:starting_step] ||
           params.dig("course", "starting_step") ||
           VisaSponsorshipApplicationDeadlineRequiredForm::CURRENT_STEP
-      end
-
-      def errors
-        @deadline_required_form = VisaSponsorshipApplicationDeadlineRequiredForm.new(date_required_params)
-        @deadline_required_form.validate
-        @deadline_required_form.errors.messages
       end
     end
   end

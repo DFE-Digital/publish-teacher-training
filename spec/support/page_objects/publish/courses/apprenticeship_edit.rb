@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../../sections/funding_type_fields"
-
 module PageObjects
   module Publish
     module Courses
@@ -9,8 +7,8 @@ module PageObjects
         set_url "/publish/organisations/{provider_code}/{recruitment_cycle_year}/courses/{course_code}/apprenticeship"
 
         section :funding_type_fields, '[data-qa="course__funding_type"]' do
-          element :checkbox_yes, "#publish_course_funding_form_funding_type_apprenticeship"
-          element :checkbox_no, "#publish_course_funding_form_funding_type_fee"
+          element :apprenticeship, "#publish_course_funding_form_funding_apprenticeship"
+          element :fee, "#publish_course_funding_form_funding_fee"
         end
 
         element :update, '[data-qa="course__save"]'

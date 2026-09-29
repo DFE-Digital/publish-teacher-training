@@ -102,37 +102,6 @@ module Publish
       end
     end
 
-    context "when languages are preserved from all_subjects_ids (no explicit language_ids)" do
-      it "extracts languages from all_subjects_ids" do
-        result = call(
-          subjects_ids: [modern_languages.id, english.id],
-          all_subjects_ids: [modern_languages.id, french.id, german.id, english.id],
-        )
-
-        expect(result).to eq([
-          modern_languages.id.to_s,
-          french.id.to_s,
-          german.id.to_s,
-          english.id.to_s,
-        ])
-      end
-    end
-
-    context "when D&T specialisms are preserved from all_subjects_ids (no explicit design_technology_ids)" do
-      it "extracts D&T specialisms from all_subjects_ids" do
-        result = call(
-          subjects_ids: [design_and_technology.id, physics.id],
-          all_subjects_ids: [design_and_technology.id, engineering.id, physics.id],
-        )
-
-        expect(result).to eq([
-          design_and_technology.id.to_s,
-          engineering.id.to_s,
-          physics.id.to_s,
-        ])
-      end
-    end
-
     context "when subjects_ids contain IDs not in edit_course_options" do
       it "filters out invalid parent IDs" do
         result = call(subjects_ids: [english.id, 999_999])

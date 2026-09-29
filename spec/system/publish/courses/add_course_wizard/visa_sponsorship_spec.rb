@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Add course wizard visa sponsorship step", type: :system do
-  before do
-    FeatureFlag.activate(:wizard_add_course_flow)
-  end
-
   scenario "choosing yes to visa sponsorship and continues to courses index" do
     given_i_am_authenticated_as_an_accredited_provider_user
     and_i_have_wizard_state_for_visa_sponsorship

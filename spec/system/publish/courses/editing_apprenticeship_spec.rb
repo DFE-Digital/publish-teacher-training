@@ -45,10 +45,48 @@ RSpec.describe "Editing apprenticeship" do
     end
   end
 
+  context "saving the teaching apprenticeship page without changing the answer" do
+    scenario "i am returned to the course with a confirmation" do
+      given_there_is_apprenticeship_course
+      when_i_visit_the_teaching_apprenticeship_page
+      then_the_courses_current_answer_is_selected
+      when_i_save
+      then_i_am_back_on_the_course_page
+      and_i_see_the_teaching_apprenticeship_updated_message
+    end
+  end
+
 private
 
   def when_i_go_back
     click_link_or_button("Back")
+  end
+
+  def when_i_visit_the_teaching_apprenticeship_page
+    publish_courses_apprenticeship_edit_page.load(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, course_code: course.course_code,
+    )
+  end
+
+  def then_the_courses_current_answer_is_selected
+    expect(publish_courses_apprenticeship_edit_page.funding_type_fields.apprenticeship).to be_checked
+  end
+
+  def when_i_save
+    publish_courses_apprenticeship_edit_page.update.click
+  end
+
+  def then_i_am_back_on_the_course_page
+    expect(page).to have_current_path(
+      details_publish_provider_recruitment_cycle_course_path(
+        provider.provider_code, provider.recruitment_cycle_year, course.course_code
+      ),
+      ignore_query: true,
+    )
+  end
+
+  def and_i_see_the_teaching_apprenticeship_updated_message
+    expect(page).to have_content("Teaching apprenticeship updated")
   end
 
   def then_i_should_be_on_the_publish_courses_apprenticeship_edit_page

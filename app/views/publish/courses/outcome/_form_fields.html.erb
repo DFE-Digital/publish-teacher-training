@@ -1,11 +1,7 @@
 <% legend = capture do %>
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
     <h1 class="govuk-fieldset__heading">
-      <% if course.course_code %>
-        <%= render CaptionText.new(text: course.name_and_code) %>
-      <% else %>
-        <%= render CaptionText.new(text: t("course.add_course")) %>
-      <% end %>
+      <%= render CaptionText.new(text: course.name_and_code) %>
       Qualification
     </h1>
   </legend>

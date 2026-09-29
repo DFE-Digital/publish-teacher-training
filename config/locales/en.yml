@@ -387,15 +387,12 @@ en:
   page_titles:
     study_mode:
       edit: Study pattern
-      new: Study pattern
     funding_type:
       edit: "Funding type"
     skilled_worker_visas:
       edit: "Skilled Worker visas"
-      new: "Skilled Worker visas"
     student_visas:
       edit: "Student visas"
-      new: "Student visas"
     error_prefix: "Error: "
     rollover:
       show: "Recruitment cycles"
@@ -653,10 +650,6 @@ en:
       row:
         "true": "Equivalency tests will be considered."
         "false": "Equivalency tests will not be considered."
-    new:
-      level:
-        special_educational_needs_and_disabilities:
-          label: Does this course have a special educational needs and disability (SEND) specialism?
     update_email:
       name: "title"
       age_range_in_years: "age range"

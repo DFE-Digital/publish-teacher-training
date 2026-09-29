@@ -5,19 +5,6 @@ module Publish
     class SchoolsController < ApplicationController
       include CourseBasicDetailConcern
 
-      def continue
-        params[:course][:sites_ids].compact_blank!
-        super
-      end
-
-      def new
-        authorize(@provider, :edit?)
-        return unless @provider.sites.count == 1
-
-        set_default_school
-        redirect_to next_step
-      end
-
       def edit
         @course_school_form = CourseSchoolForm.new(@course, params: seeded_params)
         @course_school_form.valid? if show_errors_on_publish?
@@ -40,15 +27,6 @@ module Publish
         Sentry.capture_exception(e)
         @course_school_form.errors.add(:school_uuids, :school_uuids_invalid)
         render :edit, status: :unprocessable_entity
-      end
-
-      def back
-        authorize(@provider, :edit?)
-        if @provider.sites.count > 1
-          redirect_to new_publish_provider_recruitment_cycle_courses_schools_path(path_params)
-        else
-          redirect_to @back_link_path
-        end
       end
 
     private
@@ -107,19 +85,6 @@ module Publish
         return {} if draft.nil?
 
         { school_uuids: draft.school_uuids }
-      end
-
-      def current_step
-        :school
-      end
-
-      def error_keys
-        [:sites]
-      end
-
-      def set_default_school
-        params["course"] ||= {}
-        params["course"]["sites_ids"] = [@provider.sites.first.id]
       end
 
       def school_params

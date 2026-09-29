@@ -5,19 +5,6 @@ module Publish
     class StudySitesController < ApplicationController
       include CourseBasicDetailConcern
 
-      def continue
-        params[:course][:study_sites_ids]&.compact_blank!
-        super
-      end
-
-      def new
-        authorize(@provider, :edit?)
-
-        return if @provider.study_sites.any?
-
-        redirect_to next_step
-      end
-
       def edit
         @course_study_site_form = CourseStudySiteForm.new(@course)
       end
@@ -36,16 +23,7 @@ module Publish
         end
       end
 
-      def back
-        authorize(@provider, :edit?)
-        redirect_to @provider.study_sites.many? ? new_publish_provider_recruitment_cycle_courses_study_sites_path(path_params) : @back_link_path
-      end
-
     private
-
-      def current_step
-        :study_site
-      end
 
       def study_site_params
         return { study_site_ids: nil } if params[:publish_course_study_site_form][:study_site_ids].all?(&:empty?)
