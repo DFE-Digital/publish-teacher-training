@@ -95,7 +95,6 @@ RSpec.describe "Publishing courses", travel: mid_cycle(2026) do
       :with_accrediting_provider,
       :closed,
       accrediting_provider:,
-      schools_validated: true,
       enrichments: [create(:course_enrichment, :rolled_over)],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],

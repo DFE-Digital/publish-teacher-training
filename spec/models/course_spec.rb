@@ -396,47 +396,6 @@ describe Course do
         .on(%i[create update])
     end
 
-    describe "rollover-period schools check on :publish" do
-      # Unit-level rules live in
-      # spec/validators/course_publishable_schools_rollover_validator_spec.rb.
-      # These two cases cover the Course-level wiring: the `if:` guard and
-      # the `schools_validated?` bypass on a real Course instance.
-      let(:provider) { create(:provider) }
-      let(:recruitment_cycle) { create(:recruitment_cycle, year: 2026, application_start_date: 3.days.ago) }
-
-      before do
-        provider.update!(recruitment_cycle: recruitment_cycle)
-      end
-
-      context "during 2026 rollover period with schools_validated? true" do
-        let!(:site) { create(:site, provider: provider) }
-        let(:course) { create(:course, schools_validated: true, provider: provider) }
-
-        before do
-          travel_to(recruitment_cycle.application_start_date + 1.day)
-          create(:course_school, course:, gias_school: create(:gias_school, urn: site.urn))
-        end
-
-        after { travel_back }
-
-        it "does not add errors for sites on :publish" do
-          course.valid?(:publish)
-          expect(course.errors[:sites]).to be_empty
-        end
-      end
-
-      context "outside 2026 rollover period" do
-        let(:past_cycle) { find_or_create(:recruitment_cycle, year: 2025) }
-
-        it "does not add errors for sites on :publish" do
-          course = create(:course, provider: build(:provider, recruitment_cycle: past_cycle))
-          create(:course_school, course:)
-          course.valid?(:publish)
-          expect(course.errors[:sites]).to be_empty
-        end
-      end
-    end
-
     describe "validates visa_sponsorship_application_deadline_at within recruitment cycle" do
       let(:provider) { create(:provider) }
       let(:course) { create(:course, :salary_type_based, :can_sponsor_skilled_worker_visa, provider:) }

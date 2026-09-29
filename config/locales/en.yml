@@ -778,8 +778,6 @@ en:
               blank: "^Complete your course information before publishing"
             sites:
               blank: "^Select at least one school"
-              enter_schools: "Enter schools for this course"
-              check_schools: "Review the schools for this course"
             schools:
               blank: "Select at least one school"
             age_range_in_years:
@@ -1231,8 +1229,6 @@ en:
           attributes:
             school_uuids:
               no_schools: "Select at least one school"
-              enter_schools: "Enter schools for this course"
-              check_schools: "Review the schools for this course"
               school_uuids_invalid: "The schools you submitted couldn’t be validated. Please try again. If the problem persists, please contact support."
         publish/course_study_mode_form:
           attributes:

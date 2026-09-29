@@ -144,7 +144,7 @@ class Course < ApplicationRecord
   has_many :gias_schools, through: :schools
 
   delegate :recruitment_cycle, :provider_name, :provider_code, to: :provider, allow_nil: true
-  delegate :after?, :after_2021?, :year, :rollover_period_2026?, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
+  delegate :after?, :after_2021?, :year, to: :recruitment_cycle, allow_nil: true, prefix: :recruitment_cycle
 
   def set_subject_position(course_subject)
     return if course_subject.position.present?
@@ -384,9 +384,6 @@ class Course < ApplicationRecord
   validates_with CoursePublishableSchoolsPresenceValidator, on: %i[publish new]
   validates_with CourseSchoolSelectionValidator, on: :new
   validates :subjects, presence: true, on: :publish
-  validates_with CoursePublishableSchoolsRolloverValidator,
-                 on: :publish,
-                 if: -> { recruitment_cycle_rollover_period_2026? }
 
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish

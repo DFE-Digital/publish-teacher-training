@@ -59,9 +59,5 @@ module Publish
     def provider_code_param
       params[:provider_code] || params[:code]
     end
-
-    def rollover_period_2026?
-      @recruitment_cycle.rollover_period_2026?
-    end
   end
 end

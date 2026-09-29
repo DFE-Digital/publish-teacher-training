@@ -13,7 +13,7 @@
   <% current_step.study_sites.each_with_index do |study_site, index| %>
     <%= form.govuk_check_box :study_sites_ids,
       study_site.id.to_s,
-      label: { text: [study_site.location_name, render(Publish::Schools::NewlyAddedTagComponent.new(school: study_site))].compact_blank.join(" ").html_safe },
+      label: { text: study_site.location_name },
       hint: { text: study_site.full_address },
       include_hidden: false,
       link_errors: index.zero? %>
