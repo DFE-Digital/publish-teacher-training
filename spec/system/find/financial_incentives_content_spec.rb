@@ -186,6 +186,7 @@ RSpec.describe "financial incentives call out boxes content" do
   def then_i_see_salaried_content_for_uk_citizens
     within_salaried_content_for_uk_citizens do
       expect(page).to have_content("You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You can discuss salary details with the provider at interview.")
+      expect(page).to have_content("Financial support, including bursaries and student loans, is not available for salaried courses.")
     end
   end
 
@@ -203,7 +204,7 @@ RSpec.describe "financial incentives call out boxes content" do
 
   def then_i_see_no_bursary_or_scholarship_content_for_non_uk_citizens
     within_financial_support_for_non_uk_citizens do
-      expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan")
+      expect(page).to have_content("If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary or student loan")
       expect(page).to have_content("Find out what financial support is available to non-UK citizens.")
     end
   end

@@ -5,6 +5,9 @@ require "rails_helper"
 RSpec.describe API::Public::V1::Providers::CoursesController do
   let(:provider) { create(:provider) }
   let(:recruitment_cycle) { provider.recruitment_cycle }
+  let(:course_search_service) do
+    recruitment_cycle.after?(Settings.schools_remodel_cycle_year) ? APICourseSearchServiceSchools : APICourseSearchService
+  end
 
   describe "#index" do
     context "when there are no courses" do
@@ -187,7 +190,7 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
     describe "filtering" do
       it "calls CoursesController with passed filter" do
         expected_filter = ActionController::Parameters.new(funding_type: "salary")
-        expect(CourseSearchService).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
+        expect(course_search_service).to receive(:call).with(hash_including(filter: expected_filter)).and_return(Course.all)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,

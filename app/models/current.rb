@@ -1,5 +1,5 @@
 class Current < ActiveSupport::CurrentAttributes
-  attribute :session, :user, :recruitment_cycle
+  attribute :session, :user, :recruitment_cycle, :site_settings, :feature_flags
   delegate :sessionable, to: :session, allow_nil: true
 
   def user

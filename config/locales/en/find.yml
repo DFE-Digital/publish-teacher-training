@@ -50,6 +50,7 @@ en:
       bursary_and_scholarships: Bursaries and scholarships
       bursary_amount: Bursaries of %{amount} are available to eligible trainees.
       bursary_and_scholarship_amount: Bursaries of %{bursary_amount} and scholarships of %{scholarship_amount} are available to eligible trainees.
+      not_yet_announced: Details of financial support for courses starting in the %{cycle_year_range} academic year will be released soon.
       eligible_for_bursary: Find out whether you are eligible for a bursary.
       eligible_for_bursary_or_scholarship: Find out whether you are eligible for a bursary or scholarship.
       student_loans: Student loans
@@ -65,7 +66,7 @@ en:
           paid_salary_pgce_with_qts: You will receive an unqualified teacher’s salary while training. The exact amount will vary depending on your school. You may also have to pay for your PGCE. You can discuss salary details with the provider at interview.
           pay_scale: Find out more about national pay scales for unqualified teachers.
           competitive: Places on salaried courses are highly competitive, so check your eligibility with the training provider and apply as soon as possible.
-          financial_support: Financial support, including bursaries, scholarships, and student loans, is not available for salaried courses.
+          financial_support: Financial support, including bursaries and student loans, is not available for salaried courses.
           find_out_more: Find out more about salaried courses.
       non_uk_citizens:
         title: Financial support for non-UK citizens
@@ -73,7 +74,7 @@ en:
           title: "Non-UK citizens: applying for salaried courses"
           competitive: You can apply for a salaried teacher training course. However, these courses are limited in number and very competitive.
           entry_requirements: Before you apply, contact the teacher training provider to check you meet the entry requirements.
-        unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary, scholarship or student loan
+        unlikely_to_get_help: If you are a non-UK citizen without indefinite leave to remain you are unlikely to be eligible for a bursary or student loan
         what_support: Find out what financial support is available to non-UK citizens.
     search:
       primary: Primary (ages 3 to 11)
@@ -225,7 +226,7 @@ en:
         find_courses_button: Find secondary courses
         financial_support:
           title: Financial support
-          bursaries_and_scholarship_heading: Bursaries and scholarships
-          eligible_for_bursaries_and_scholarship: Find out whether you are eligible for a bursary or scholarship
+          bursaries_and_scholarship_heading: Bursaries
+          eligible_for_bursaries_and_scholarship: Find out whether you are eligible for a bursary
           student_loans: Student loans
           loans_text: Find out more about student loans for teacher training

@@ -217,9 +217,9 @@ describe DataHub::SchoolsBackfill::Executor do
 
     context "across multiple recruitment cycles" do
       it "backfills the 2026 cycle onwards and ignores earlier cycles" do
-        previous_cycle = create(:recruitment_cycle, :previous)
-        current_cycle = find_or_create(:recruitment_cycle)
-        next_cycle = create(:recruitment_cycle, :next)
+        previous_cycle = find_or_create(:recruitment_cycle, year: 2025)
+        current_cycle = find_or_create(:recruitment_cycle, year: 2026)
+        next_cycle = find_or_create(:recruitment_cycle, year: 2027)
 
         previous_provider = create(:provider, recruitment_cycle: previous_cycle)
         current_provider = create(:provider, recruitment_cycle: current_cycle)
@@ -246,7 +246,7 @@ describe DataHub::SchoolsBackfill::Executor do
       end
 
       it "does not report sites from earlier cycles as skipped" do
-        previous_cycle = create(:recruitment_cycle, :previous)
+        previous_cycle = find_or_create(:recruitment_cycle, year: 2025)
         previous_provider = create(:provider, recruitment_cycle: previous_cycle)
         site = create(:site, provider: previous_provider, urn: nil, code: "-")
 

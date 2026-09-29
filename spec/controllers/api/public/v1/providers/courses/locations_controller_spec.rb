@@ -6,6 +6,14 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
   let(:course) { create(:course) }
   let(:provider) { course.provider }
 
+  def create_course_locations(course, count)
+    if course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      create_list(:course_school, count, course:)
+    else
+      course.sites << build_list(:site, count, provider: course.provider)
+    end
+  end
+
   describe "#index" do
     context "when a course does not have any locations" do
       before do
@@ -23,7 +31,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
 
     context "when a course has locations" do
       before do
-        course.sites << build_list(:site, 2, provider:)
+        create_course_locations(course, 2)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -61,7 +69,13 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
           expect(provider_id).to eq(provider.id)
           expect(course_id).to eq(course.id)
-          expect(location_status_id).to eq(course.site_statuses.first.id)
+          expected_location_status_id = if course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+                                          course.schools.first.id
+                                        else
+                                          course.site_statuses.first.id
+                                        end
+
+          expect(location_status_id).to eq(expected_location_status_id)
         end
       end
     end
@@ -76,7 +90,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       let(:course) { create(:course, provider:) }
 
       before do
-        course.sites << build_list(:site, 2, provider:)
+        create_course_locations(course, 2)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -296,7 +310,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
   describe "recruitment cycle" do
     context 'when "current" is specified as the recruitment cycle' do
       before do
-        course.sites << build_list(:site, 2, provider:)
+        create_course_locations(course, 2)
 
         get :index, params: {
           recruitment_cycle_year: "current",
@@ -312,7 +326,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
 
     context "when a non-existent recruitment cycle is specified" do
       before do
-        course.sites << build_list(:site, 2, provider:)
+        create_course_locations(course, 2)
 
         get :index, params: {
           recruitment_cycle_year: "1066",

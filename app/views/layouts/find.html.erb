@@ -46,6 +46,7 @@
                 if FeatureFlag.active?(:email_alerts)
                   nav.with_navigation_item(text: t(".primary_nav.email_alerts_html"), href: find_candidate_email_alerts_path)
                 end
+                nav.with_navigation_item(text: t(".primary_nav.applications_html"), href: find_applications_path)
               end
             end
           end %>
@@ -60,6 +61,7 @@
           <% if FeatureFlag.active?(:email_alerts) %>
             <% header.with_navigation_item t(".primary_nav.email_alerts_html"), find_candidate_email_alerts_path %>
           <% end %>
+          <% header.with_navigation_item t(".primary_nav.applications_html"), find_applications_path %>
         <% end %>
       <% end %>
     <% end %>
@@ -71,8 +73,6 @@
       <%= yield :before_content %>
       <main class="govuk-main-wrapper" id="main-content" role="main">
         <%= render Find::MaintenanceBannerComponent.new %>
-        <%= render Find::DeadlineBannerComponent.new(flash_empty: flash.reject { |flash| flash[0] == "start_wizard" }.empty?) unless request.url.include?("/results/filter/subject") %>
-        <%= render Find::FinancialIncentivesBannerComponent.new %>
         <%= render ActiveBannersComponent.new(interface: :find) %>
 
         <%= render(FlashBanner.new(flash:)) %>

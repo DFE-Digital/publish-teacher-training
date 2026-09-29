@@ -1,0 +1,64 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe "Salaried course callout on results page", service: :find do
+  before do
+    given_there_is_a_salaried_physics_course_with_a_bursary
+  end
+
+  scenario "filtering by salary and a subject with a bursary shows the callout above the first result" do
+    when_i_search_for_salaried_physics_courses
+    then_i_see_the_callout_above_the_first_result
+  end
+
+  scenario "the callout only shows on the first page of results" do
+    given_there_is_more_than_one_page_of_salaried_physics_courses
+    when_i_search_for_salaried_physics_courses
+    then_i_see_the_callout_above_the_first_result
+
+    when_i_go_to_the_next_page
+    then_i_do_not_see_the_callout
+  end
+
+  scenario "filtering by a subject with a bursary without salary or apprenticeship hides the callout" do
+    when_i_search_for_fee_paying_physics_courses
+    then_i_do_not_see_the_callout
+  end
+
+  def given_there_is_a_salaried_physics_course_with_a_bursary
+    physics = find_or_create(:secondary_subject, :physics)
+    physics.financial_incentive.update!(bursary_amount: "29000", scholarship: nil)
+
+    create(:course, :open, :with_full_time_sites, :secondary, funding: "salary", name: "Physics", subjects: [physics])
+    create(:course, :open, :with_full_time_sites, :secondary, funding: "fee", name: "Physics", subjects: [physics])
+  end
+
+  def given_there_is_more_than_one_page_of_salaried_physics_courses
+    physics = Subject.find_by!(subject_code: "F3")
+
+    create_list(:course, Pagy::DEFAULT[:limit], :open, :with_full_time_sites, :secondary, funding: "salary", name: "Physics", subjects: [physics])
+  end
+
+  def when_i_go_to_the_next_page
+    click_link_or_button "Next"
+  end
+
+  def when_i_search_for_salaried_physics_courses
+    visit find_results_path(funding: %w[salary], subjects: %w[F3])
+  end
+
+  def when_i_search_for_fee_paying_physics_courses
+    visit find_results_path(funding: %w[fee], subjects: %w[F3])
+  end
+
+  def then_i_see_the_callout_above_the_first_result
+    expect(page).to have_css(".app-callout + .app-search-results", count: 1)
+    expect(page).to have_css(".app-callout h2", text: "Is a salaried course right for me?")
+  end
+
+  def then_i_do_not_see_the_callout
+    expect(page).to have_css(".app-search-results")
+    expect(page).to have_no_text("Is a salaried course right for me?")
+  end
+end

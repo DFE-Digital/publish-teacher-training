@@ -6,7 +6,8 @@ module Exports
   describe FullCourseInformationList do
     subject(:export) { described_class.new(provider: provider.reload) }
 
-    let(:provider) { create(:provider) }
+    let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2026) }
+    let(:provider) { create(:provider, recruitment_cycle:) }
 
     def rows
       CSV.parse(export.data.delete_prefix(Exports::CourseColumns::BYTE_ORDER_MARK), headers: true)
@@ -201,7 +202,7 @@ module Exports
       end
 
       context "when the cycle takes fees rather than salary details" do
-        let(:provider) { create(:provider, :next_recruitment_cycle) }
+        let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: 2027) }
 
         it "heads the column with the question that replaced salary details" do
           create(:course, :salary, provider:, name: "Chemistry", enrichments: [

@@ -28,8 +28,11 @@ class Subject < ApplicationRecord
     primary.pluck(:subject_code)
   end
 
-  def self.secondary_subject_codes_with_incentives
-    secondary.joins(:financial_incentive).pluck(:subject_code)
+  def self.secondary_subject_codes_with_bursary
+    secondary
+      .joins(:financial_incentive)
+      .merge(FinancialIncentive.where.not(bursary_amount: [nil, ""]))
+      .pluck(:subject_code)
   end
 
   def self.secondary_subjects_with_subject_groups
