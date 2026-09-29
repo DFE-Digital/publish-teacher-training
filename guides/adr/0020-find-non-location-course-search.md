@@ -102,24 +102,80 @@ School presence does not affect findability. `publish_without_schools_allowed` d
 
 ### Filters
 
-The controller does not build SQL. `Courses::Query#call` stacks named scopes, each of which no-ops when its param is blank:
+The controller does not build SQL. `Courses::Query#call` stacks named scopes, each of which no-ops when its param is blank.
 
-- visa sponsorship (`can_sponsor_student_visa` or `can_sponsor_skilled_worker_visa`);
-- Engineers Teach Physics campaign;
-- subjects / subject code (also drives master-subject ordering);
-- study mode;
-- interview location (online or both, from the latest published enrichment);
-- qualification;
-- further education level;
-- minimum degree required;
-- applications open;
-- SEND;
-- funding;
-- start date ranges;
-- provider code or name (training or accredited provider);
-- excluded courses.
+**Visa sponsorship** — `visa_sponsorship_scope` (`can_sponsor_visa`)
 
-`optimisation_scope` preloads `site_statuses`, `schools`, the latest published enrichment, the provider, and subjects with financial incentives so result cards do not N+1.
+Keeps courses that can sponsor a Student visa or a Skilled Worker visa.
+
+**Engineers Teach Physics** — `engineers_teach_physics_scope` (`engineers_teach_physics`)
+
+Keeps courses whose campaign is Engineers Teach Physics.
+
+**Subjects** — `subjects_scope` (`subjects`, `subject_code`)
+
+Keeps courses that include any of those subject codes. The same codes drive master-subject ordering, so a course whose master subject matches is ordered ahead of one that only lists the subject as secondary.
+
+**Study mode** — `study_modes_scope` (`study_types`)
+
+- `full_time` keeps full-time courses and courses that offer both full time and part time.
+- `part_time` keeps part-time courses and courses that offer both.
+- Any other value, including both selected together, leaves the results unchanged.
+
+**Interview location** — `interview_location_scope` (`interview_location`)
+
+When set, keeps courses whose latest published enrichment offers online interviews, or both online and in person.
+
+**Qualification** — `qualifications_scope` (`qualifications`)
+
+- `qts` keeps QTS-only courses.
+- `qts_with_pgce_or_pgde`, and the older `qts_with_pgce` value, keep QTS with PGCE and QTS with PGDE.
+
+**Further education** — `further_education_scope` (`level` = `further_education`)
+
+Keeps further education courses. Primary and secondary searches narrow by subject code instead.
+
+**Minimum degree required** — `minimum_degree_required_scope` (`minimum_degree_required`)
+
+This is the candidate's grade.
+
+- `two_one` keeps postgraduate courses that accept a 2:1 or a lower grade.
+- `two_two` and `third_class` drop postgraduate courses that require a higher grade.
+- `pass` keeps postgraduate courses with no degree requirement.
+- `no_degree_required` keeps undergraduate courses with no degree requirement.
+- Any other value, including show all, leaves the results unchanged.
+
+**Applications open** — `applications_open_scope` (`applications_open`)
+
+Keeps courses whose application status is open.
+
+**SEND** — `special_education_needs_scope` (`send_courses`)
+
+Keeps courses marked as special educational needs.
+
+**Funding** — `funding_scope` (`funding`)
+
+Keeps courses whose funding is any of the selected values: `fee`, `salary`, or `apprenticeship`.
+
+**Start date** — `start_date_scope` (`start_date`)
+
+One or more ranges in the current cycle year. Selected ranges are combined.
+
+- `jan_to_aug`: 1 January to 31 August
+- `september`: that month
+- `oct_to_jul`: 1 October to 31 July of the following year
+
+**Provider** — `provider_scope` (`provider_code`, `provider_name`)
+
+A code is used when both are present. Keeps courses run by that provider, and courses that provider accredits.
+
+**Preload** — `optimisation_scope`
+
+Always runs, and it does not read a search parameter. Preloads `site_statuses`, `schools`, the latest published enrichment, the provider, and subjects with financial incentives so result cards do not N+1. It does not change which courses are returned.
+
+**Excluded courses** — `excluded_courses_scope` (`excluded_courses`)
+
+Each entry is a provider code and a course code, and the query drops that course. The same course code at another provider stays. An entry missing either code is ignored. `Find::SearchParams` permits it on `/results`. The results form has no control that sets it.
 
 ### Ordering and result shape
 
