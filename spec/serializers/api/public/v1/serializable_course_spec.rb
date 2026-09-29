@@ -107,22 +107,40 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:fee_schedule).with_value(course.latest_published_enrichment.fee_schedule) }
 
   context "when the course is in a historical recruitment cycle" do
-    let(:course) do
-      create(
-        :course,
-        :with_accrediting_provider,
-        enrichments: [enrichment],
-        funding: "apprenticeship",
-        provider: create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)),
-        site_statuses: [],
-      )
+    let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
+
+    context "and it is published" do
+      let(:course) do
+        create(
+          :course,
+          :published,
+          :with_accrediting_provider,
+          provider:,
+          funding: "apprenticeship",
+          site_statuses: [],
+        )
+      end
+
+      it "returns findable true without inspecting SiteStatus" do
+        allow(course).to receive(:findable?).and_return(false)
+
+        expect(course.site_statuses).to be_empty
+        expect(subject).to have_attribute(:findable).with_value(true)
+      end
     end
 
-    it "returns findable true without inspecting SiteStatus" do
-      allow(course).to receive(:findable?).and_return(false)
+    context "and it is withdrawn" do
+      let(:course) do
+        create(
+          :course,
+          :withdrawn,
+          :with_accrediting_provider,
+          provider:,
+          funding: "apprenticeship",
+        )
+      end
 
-      expect(course.site_statuses).to be_empty
-      expect(subject).to have_attribute(:findable).with_value(true)
+      it { is_expected.to have_attribute(:findable).with_value(false) }
     end
   end
 
