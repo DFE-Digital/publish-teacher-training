@@ -1,6 +1,6 @@
 en:
   find:
-    metadescription: Search for teaching courses in England. Search by location, subject, primary, secondary or further education.
+    metadescription: Find teaching training courses in England. Search by location, subject, primary, secondary or further education. Compare full-time, part-time, salaried and fee-paying routes.
     cycles:
       real:
         name: Same as production environment
