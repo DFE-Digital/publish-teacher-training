@@ -30,6 +30,7 @@ en:
           title: Accredited provider
           add: Add accredited provider
           update: Update accredited provider
+          no_partners: You need to add an accredited provider before you can select one for this course.
         show:
           back: Back to %{course_name} (%{course_code})
           heading: About %{provider_name}

@@ -49,7 +49,50 @@ RSpec.describe "Editing course ratifying provider" do
     and_i_see_the_ratifying_provider_is_updated
   end
 
+  scenario "unpublished with an accredited partnership, updating without selecting one" do
+    given_i_am_authenticated_as_a_training_provider_user
+    and_there_is_an_unpublished_course_ratified_by_a_non_partner
+    and_there_is_a_second_provider_partnership
+
+    when_i_visit_the_course_details_page
+    and_i_click_to_change_the_ratifying_provider
+    and_i_click_update
+    then_i_see_an_error_to_select_an_accredited_provider
+  end
+
+  scenario "unpublished with no accredited partnerships" do
+    given_i_am_authenticated_as_a_training_provider_user
+    and_there_is_an_unpublished_course_ratified_by_a_non_partner
+
+    when_i_visit_the_course_details_page
+    and_i_click_to_change_the_ratifying_provider
+    then_i_am_told_to_add_an_accredited_provider_first
+    and_i_cannot_update_the_ratifying_provider
+  end
+
 private
+
+  def and_there_is_an_unpublished_course_ratified_by_a_non_partner
+    given_a_course_exists(:unpublished, accrediting_provider: create(:accredited_provider))
+  end
+
+  def and_i_click_update
+    click_on "Update accredited provider"
+  end
+
+  def then_i_see_an_error_to_select_an_accredited_provider
+    expect(page).to have_css(".govuk-error-summary", text: "Select an accredited provider")
+    expect(page).to have_css(".govuk-error-message", text: "Select an accredited provider")
+  end
+
+  def then_i_am_told_to_add_an_accredited_provider_first
+    expect(page).to have_content("You need to add an accredited provider before you can select one for this course.")
+    expect(page).to have_link("Add accredited provider")
+  end
+
+  def and_i_cannot_update_the_ratifying_provider
+    expect(page).to have_no_button("Update accredited provider")
+  end
 
   def given_i_am_authenticated_as_a_training_provider_user
     given_i_am_authenticated(user: create(:user, :with_provider))
