@@ -387,7 +387,6 @@ class Course < ApplicationRecord
 
   validates :accrediting_provider, presence: true, on: :publish, unless: -> { self_accredited? || further_education_course? }
   validate :validate_enrichment_publishable, on: :publish
-  validate :validate_site_statuses_publishable, on: :publish
   validate :validate_provider_visa_sponsorship_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_provider_urn_ukprn_publishable, on: :publish, if: -> { recruitment_cycle_after_2021? }
   validate :validate_accredited_provider_is_accredited, on: :publish
@@ -1096,12 +1095,6 @@ private
         latest_draft_enrichment.valid?(:publish)
         add_enrichment_errors(latest_draft_enrichment)
       end
-    end
-  end
-
-  def validate_site_statuses_publishable
-    site_statuses.each do |site_status|
-      raise "Site status invalid on course #{provider_code}/#{course_code}: #{site_status.errors.full_messages.first}" unless site_status.valid?
     end
   end
 
