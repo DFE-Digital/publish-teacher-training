@@ -11,6 +11,7 @@ module Find
 
     default_form_builder GOVUKDesignSystemFormBuilder::FormBuilder
 
+    prepend_before_action :persist_session_cookie
     before_action :candidate
     before_action :redirect_to_cycle_has_ended_if_find_is_down
     before_action :redirect_to_maintenance_page_if_flag_is_active
@@ -28,6 +29,10 @@ module Find
     end
 
   private
+
+    def persist_session_cookie
+      request.session_options[:expire_after] = 2.weeks
+    end
 
     def candidate
       @candidate ||= Current.user
