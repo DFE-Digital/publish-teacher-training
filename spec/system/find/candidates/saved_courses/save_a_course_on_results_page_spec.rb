@@ -40,6 +40,19 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     then_i_am_told_to_try_again
   end
 
+  scenario "A signed-in candidate whose page goes stale again later in the same tab gets another reload" do
+    given_saving_always_fails
+    when_i_sign_in_as_a_candidate
+    when_i_visit_the_results_page
+
+    when_i_save_the_course
+    then_the_page_reloads
+
+    when_i_visit_the_results_page
+    when_i_save_the_course
+    then_the_page_reloads
+  end
+
   scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
     when_i_visit_a_course_without_signing_in
     when_i_visit_the_results_page

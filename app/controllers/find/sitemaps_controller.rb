@@ -2,6 +2,8 @@
 
 module Find
   class SitemapsController < ApplicationController
+    skip_before_action :persist_session_cookie
+
     def show
       # Only the three columns the XML needs. Loading the courses as records
       # (with enrichments, schools and providers) took ~25s and ~1.5GB per
