@@ -56,6 +56,19 @@ GIT
       jwt (~> 2.10)
       omniauth (~> 2.1)
 
+GIT
+  remote: https://github.com/alphagov/rubocop-govuk.git
+  revision: ae60b14642cb16371ec43e3fdc2cf89be65d0744
+  ref: ae60b14642cb16371ec43e3fdc2cf89be65d0744
+  specs:
+    rubocop-govuk (5.2.1)
+      rubocop (= 1.91.0)
+      rubocop-ast (= 1.50.0)
+      rubocop-capybara (= 3.0.0)
+      rubocop-rails (= 2.37.0)
+      rubocop-rake (= 0.7.1)
+      rubocop-rspec (= 3.10.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -680,45 +693,39 @@ GEM
     rswag-ui (2.17.0)
       actionpack (>= 5.2, < 8.2)
       railties (>= 5.2, < 8.2)
-    rubocop (1.86.0)
-      json (~> 2.3)
+    rubocop (1.91.0)
+      json (>= 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
-      parallel (~> 1.10)
+      parallel (>= 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 2.9.3, < 3.0)
       rubocop-ast (>= 1.49.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.49.1)
+    rubocop-ast (1.50.0)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
-    rubocop-capybara (2.22.1)
+    rubocop-capybara (3.0.0)
       lint_roller (~> 1.1)
-      rubocop (~> 1.72, >= 1.72.1)
+      rubocop (~> 1.81)
     rubocop-factory_bot (2.28.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
-    rubocop-govuk (5.2.1)
-      rubocop (= 1.86.0)
-      rubocop-ast (= 1.49.1)
-      rubocop-capybara (= 2.22.1)
-      rubocop-rails (= 2.34.3)
-      rubocop-rake (= 0.7.1)
-      rubocop-rspec (= 3.9.0)
-    rubocop-rails (2.34.3)
+    rubocop-rails (2.37.0)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
-      rubocop (>= 1.75.0, < 2.0)
+      rubocop (>= 1.89.0, < 2.0)
       rubocop-ast (>= 1.44.0, < 2.0)
     rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
-    rubocop-rspec (3.9.0)
+    rubocop-rspec (3.10.2)
       lint_roller (~> 1.1)
-      rubocop (~> 1.81)
+      regexp_parser (>= 2.0)
+      rubocop (~> 1.86, >= 1.86.2)
     rubocop-rspec_rails (2.32.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -929,7 +936,7 @@ DEPENDENCIES
   rswag-specs
   rswag-ui
   rubocop-factory_bot
-  rubocop-govuk
+  rubocop-govuk!
   rubocop-rspec_rails
   rubypants
   schema_to_scaffold

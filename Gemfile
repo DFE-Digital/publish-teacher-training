@@ -181,7 +181,9 @@ group :development, :test do
   # Linters and formatting
   gem "erb_lint", require: false
   gem "rubocop-factory_bot", require: false
-  gem "rubocop-govuk", require: false
+  # Pinned to unreleased main for rubocop >= 1.90 (allows json 3). Switch back
+  # to the released gem once a version after 5.2.1 ships.
+  gem "rubocop-govuk", github: "alphagov/rubocop-govuk", ref: "ae60b14642cb16371ec43e3fdc2cf89be65d0744", require: false
   gem "rubocop-rspec_rails", require: false
 
   # This is only required in the test suite

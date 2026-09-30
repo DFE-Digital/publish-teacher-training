@@ -24,3 +24,8 @@ AllCops:
 
 Rails/SaveBang:
   AllowImplicitReturn: true
+
+# rubocop-capybara 3.0 enables this and only allows have_text; we use
+# have_content (its alias) across the specs.
+Capybara/RSpec/HaveContent:
+  Enabled: false
