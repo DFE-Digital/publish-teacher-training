@@ -198,7 +198,7 @@ Non-location search reads:
 - `course_enrichment` (publication and some filters / fee ordering)
 - `subject` / `course_subject`
 
-The filter does not join `course_school`, `gias_school` or `site`. `optimisation_scope` still loads `course_school` rows, and legacy `site_statuses`, so the result card can see whether a school is attached. GIAS coordinates are read only once a search has coordinates, as described in [ADR 21](0021-find-location-course-search.md).
+The filter does not join `course_school`, `gias_school` or `site`. `optimisation_scope` still preloads the school models on every search, including when there is no location: `:schools` (`course_school` rows) and `:site_statuses`, plus the latest published enrichment, the provider, and subjects with financial incentives. The result card uses those school rows to see whether a school is attached. GIAS coordinates are read only once a search has coordinates, as described in [ADR 21](0021-find-location-course-search.md).
 
 ### Reuse
 
