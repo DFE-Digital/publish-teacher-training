@@ -129,6 +129,7 @@ gem "omniauth-rails_csrf_protection", "~> 2.0"
 gem "google-cloud-bigquery"
 
 # Faster JSON serialization
+gem "json", "~> 3.0"
 gem "oj"
 
 # Rails 7 CSS and JS Bundling
