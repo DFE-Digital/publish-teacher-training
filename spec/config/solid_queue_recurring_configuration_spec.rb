@@ -76,7 +76,7 @@ RSpec.describe "Solid Queue recurring configuration" do
     )
     expect(production_tasks["send_weekly_email_alerts"]).to include(
       "class" => "SendWeeklyEmailAlertsJob",
-      "queue" => "default",
+      "queue" => "low_priority",
       "schedule" => "0 3 * * 5 Europe/London",
     )
   end

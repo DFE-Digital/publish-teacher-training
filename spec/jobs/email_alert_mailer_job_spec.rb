@@ -66,26 +66,47 @@ RSpec.describe EmailAlertMailerJob do
       end
     end
 
-    it "does not send again if this job already sent the digest" do
+    it "does not send an alert again during the same calendar week" do
+      allow(EmailAlertMailer).to receive(:weekly_digest)
+      delivery_week = Time.zone.today.beginning_of_week
+      alert.update!(last_sent_at: delivery_week + 2.days)
+
+      described_class.new.perform(alert.id, course_ids, delivery_week)
+
+      expect(EmailAlertMailer).not_to have_received(:weekly_digest)
+    end
+
+    it "sends again in the next calendar week" do
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_return(double(deliver_now: true))
+      previous_week = Time.zone.today.beginning_of_week
+      alert.update!(last_sent_at: previous_week + 2.days)
+
+      described_class.new.perform(alert.id, course_ids, previous_week + 1.week)
+
+      expect(EmailAlertMailer).to have_received(:weekly_digest)
+    end
+
+    it "uses the enqueue week for a two-argument job queued before this change" do
       allow(EmailAlertMailer).to receive(:weekly_digest)
       job = described_class.new(alert.id, course_ids)
-      job.enqueued_at = 1.hour.ago
-      alert.update!(last_sent_at: 10.minutes.ago)
+      job.enqueued_at = 2.days.ago
+      alert.update!(last_sent_at: 1.day.ago)
 
       job.perform(alert.id, course_ids)
 
       expect(EmailAlertMailer).not_to have_received(:weekly_digest)
     end
 
-    it "sends when the last digest went out before this job was queued" do
-      allow(EmailAlertMailer).to receive(:weekly_digest).and_return(double(deliver_now: true))
-      job = described_class.new(alert.id, course_ids)
-      job.enqueued_at = 1.hour.ago
-      alert.update!(last_sent_at: 1.week.ago)
+    it "serializes duplicate copies and sends only once" do
+      mail = double(deliver_now: true)
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_return(mail)
+      allow(Candidate::EmailAlert).to receive(:find).with(alert.id).and_return(alert)
+      expect(alert).to receive(:with_lock).twice.and_call_original
+      delivery_week = Time.zone.today.beginning_of_week
 
-      job.perform(alert.id, course_ids)
+      2.times { described_class.new.perform(alert.id, course_ids, delivery_week) }
 
-      expect(EmailAlertMailer).to have_received(:weekly_digest)
+      expect(mail).to have_received(:deliver_now).once
     end
   end
 
@@ -99,8 +120,26 @@ RSpec.describe EmailAlertMailerJob do
       klass.new(instance_double(Net::HTTPResponse, code:, body: "Notify said no"))
     end
 
-    it "tries again when Notify has a server error" do
+    it "does not retry an ambiguous Notify server error" do
       allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(notify_error(Notifications::Client::ServerError, "500"))
+
+      expect {
+        described_class.perform_now(alert.id, [course.id])
+      }.to raise_error(Notifications::Client::ServerError)
+      expect(described_class).not_to have_been_enqueued
+    end
+
+    it "does not retry an ambiguous read timeout" do
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(Net::ReadTimeout, "timed out")
+
+      expect {
+        described_class.perform_now(alert.id, [course.id])
+      }.to raise_error(Net::ReadTimeout)
+      expect(described_class).not_to have_been_enqueued
+    end
+
+    it "tries again when the connection cannot be opened" do
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(Net::OpenTimeout, "timed out")
 
       expect { described_class.perform_now(alert.id, [course.id]) }.to have_enqueued_job(described_class)
     end
@@ -117,6 +156,19 @@ RSpec.describe EmailAlertMailerJob do
 
       expect { described_class.perform_now(alert.id, [course.id]) }.to raise_error(Notifications::Client::BadRequestError)
       expect(described_class).not_to have_been_enqueued
+    end
+
+    it "does not retry a deadlock after Notify accepted the email" do
+      mail = double(deliver_now: true)
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_return(mail)
+      allow(Candidate::EmailAlert).to receive(:find).with(alert.id).and_return(alert)
+      allow(alert).to receive(:touch).and_raise(ActiveRecord::Deadlocked, "deadlock")
+
+      expect {
+        described_class.perform_now(alert.id, [course.id])
+      }.to raise_error(ActiveRecord::Deadlocked, "deadlock")
+      expect(described_class).not_to have_been_enqueued
+      expect(mail).to have_received(:deliver_now).once
     end
   end
 

@@ -58,6 +58,29 @@ RSpec.describe ApplicationJob, type: :job do
     end
   end
 
+  describe ".fail_without_retry_on" do
+    let(:job_class) do
+      Class.new(ApplicationJob) do
+        retry_on ActiveRecord::Deadlocked
+        fail_without_retry_on ActiveRecord::Deadlocked
+
+        def perform
+          raise ActiveRecord::Deadlocked, "ambiguous side effect"
+        end
+      end
+    end
+
+    before { stub_const("FailWithoutRetryExampleJob", job_class) }
+
+    it "overrides an earlier retry handler and raises the failure" do
+      expect {
+        FailWithoutRetryExampleJob.perform_now
+      }.to raise_error(ActiveRecord::Deadlocked, "ambiguous side effect")
+
+      expect(FailWithoutRetryExampleJob).not_to have_been_enqueued
+    end
+  end
+
   describe ".retry_on_failure" do
     around do |example|
       original_adapter = ActiveJob::Base.queue_adapter
