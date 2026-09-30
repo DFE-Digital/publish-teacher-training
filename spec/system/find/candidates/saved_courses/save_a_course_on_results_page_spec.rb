@@ -16,6 +16,30 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     then_the_course_is_saved
   end
 
+  scenario "A signed-in candidate on a stale page saves after it reloads" do
+    given_saving_fails_once
+    when_i_sign_in_as_a_candidate
+    when_i_visit_the_results_page
+
+    when_i_save_the_course
+    then_the_page_reloads
+
+    when_i_save_the_course
+    then_the_course_is_saved
+  end
+
+  scenario "A signed-in candidate is told to try again when saving still fails after the reload" do
+    given_saving_always_fails
+    when_i_sign_in_as_a_candidate
+    when_i_visit_the_results_page
+
+    when_i_save_the_course
+    then_the_page_reloads
+
+    when_i_save_the_course
+    then_i_am_told_to_try_again
+  end
+
   scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
     when_i_visit_a_course_without_signing_in
     when_i_visit_the_results_page
@@ -105,9 +129,34 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     visit find_results_path
   end
 
+  def given_saving_fails_once
+    calls = 0
+    allow(Find::SaveCourseService).to receive(:call).and_wrap_original do |original, **args|
+      calls += 1
+      raise ActionController::InvalidAuthenticityToken if calls == 1
+
+      original.call(**args)
+    end
+  end
+
+  def given_saving_always_fails
+    allow(Find::SaveCourseService).to receive(:call).and_raise(ActionController::InvalidAuthenticityToken)
+  end
+
   def when_i_save_the_course
     expect(page).to have_content("Save")
+    page.execute_script("document.body.dataset.beforeReload = true")
     click_link_or_button("Save")
+  end
+
+  def then_the_page_reloads
+    expect(page).to have_no_css("body[data-before-reload]")
+  end
+
+  def then_i_am_told_to_try_again
+    within(".results-save-course-button__unstyled-button") do
+      expect(page).to have_css(".save-course-button__text", text: "Something went wrong, try again")
+    end
   end
 
   def when_i_save_the_course_as_an_unauthenticated_visitor
