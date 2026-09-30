@@ -171,7 +171,9 @@ A code is used when both are present. Keeps courses run by that provider, and co
 
 **Preload** — `optimisation_scope`
 
-Always runs, and it does not read a search parameter. Preloads `site_statuses`, `schools`, the latest published enrichment, the provider, and subjects with financial incentives so result cards do not N+1. It does not change which courses are returned.
+Always runs, including on this path, and it does not read a search parameter. It preloads `schools` (`course_school` rows), `site_statuses`, the latest published enrichment, the provider, and subjects with financial incentives.
+
+The result card calls `Course#without_employing_school?`, which asks `schools.none?`, to choose the placement copy for a course that has no employing school. Loading those rows here avoids one query per card. The preload does not join schools into the filter and does not calculate a distance.
 
 **Excluded courses** — `excluded_courses_scope` (`excluded_courses`)
 
@@ -196,7 +198,7 @@ Non-location search reads:
 - `course_enrichment` (publication and some filters / fee ordering)
 - `subject` / `course_subject`
 
-It does not join `course_school`, `gias_school` or `site`. Those tables are only used once coordinates are present, as described in [ADR 21](0021-find-location-course-search.md).
+The filter does not join `course_school`, `gias_school` or `site`. `optimisation_scope` still loads `course_school` rows, and legacy `site_statuses`, so the result card can see whether a school is attached. GIAS coordinates are read only once a search has coordinates, as described in [ADR 21](0021-find-location-course-search.md).
 
 ### Reuse
 
