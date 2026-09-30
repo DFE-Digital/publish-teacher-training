@@ -25,6 +25,36 @@ RSpec.describe "Testing Errors render", service: :find, type: :request do
     end
   end
 
+  describe "not_found - GET /course/:provider_code/:missing_course_code" do
+    it "logs the rescued exception with its first backtrace line" do
+      provider = create(:provider)
+      allow(Rails.logger).to receive(:info).and_call_original
+
+      get "/course/#{provider.provider_code}/NOPE"
+
+      expect(response).to have_http_status(:not_found)
+      expect(Rails.logger).to have_received(:info).with(
+        message: "rescue_from handled ActiveRecord::RecordNotFound",
+        payload: {
+          exception: "ActiveRecord::RecordNotFound",
+          exception_message: a_string_starting_with("Couldn't find Course"),
+          backtrace: a_string_matching(/\S/),
+        },
+      )
+    end
+
+    it "reports a logging failure and still renders not found" do
+      provider = create(:provider)
+      allow(Rails.logger).to receive(:info).and_raise(IOError)
+      allow(Rails.error).to receive(:report)
+
+      get "/course/#{provider.provider_code}/NOPE"
+
+      expect(response).to have_http_status(:not_found)
+      expect(Rails.error).to have_received(:report).with(an_instance_of(IOError), handled: true)
+    end
+  end
+
   describe "internal_server_error" do
     it "returns html response when json format is not found" do
       allow(Sentry).to receive(:capture_exception)
