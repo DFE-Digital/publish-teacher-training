@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DataHub::ProcessSummary, type: :model do
-  subject(:summary) { build(:register_school_import_summary) }
+  subject(:summary) { build(:schools_backfill_process_summary) }
 
   describe "validations" do
     it { is_expected.to validate_presence_of(:type) }
@@ -24,7 +24,7 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
     end
 
     context "when the status is failed" do
-      subject { build(:register_school_import_summary, status: :failed) }
+      subject { build(:schools_backfill_process_summary, status: :failed) }
 
       it { is_expected.to be_failed }
       it { is_expected.not_to be_finished }
@@ -35,7 +35,7 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
   describe "#duration_in_seconds" do
     context "when finished_at is set" do
       subject do
-        build(:register_school_import_summary, started_at:, finished_at:)
+        build(:schools_backfill_process_summary, started_at:, finished_at:)
       end
 
       let(:started_at)  { Time.current }
@@ -48,7 +48,7 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
 
     context "when finished_at is nil" do
       subject do
-        build(:register_school_import_summary, started_at: Time.current, finished_at: nil)
+        build(:schools_backfill_process_summary, started_at: Time.current, finished_at: nil)
       end
 
       it "returns nil" do
@@ -58,32 +58,32 @@ RSpec.describe DataHub::ProcessSummary, type: :model do
   end
 
   describe "STI subclass" do
-    subject(:persisted_summary) { create(:register_school_import_summary) }
+    subject(:persisted_summary) { create(:schools_backfill_process_summary) }
 
     it "does not raise" do
       expect(persisted_summary).to be_persisted
     end
 
-    it "is a RegisterSchoolImportSummary" do
-      expect(persisted_summary).to be_a(DataHub::RegisterSchoolImportSummary)
+    it "is a SchoolsBackfillProcessSummary" do
+      expect(persisted_summary).to be_a(DataHub::SchoolsBackfillProcessSummary)
     end
 
     it "can be found via ProcessSummary" do
       found = described_class.find(persisted_summary.id)
-      expect(found).to be_a(DataHub::RegisterSchoolImportSummary)
+      expect(found).to be_a(DataHub::SchoolsBackfillProcessSummary)
     end
   end
 
   describe ".start!" do
     it "creates a new summary with status 'started' and timestamps" do
-      summary = DataHub::RegisterSchoolImportSummary.start!
+      summary = DataHub::SchoolsBackfillProcessSummary.start!
 
       expect(summary).to be_started
       expect(summary.started_at).to be_within(1.second).of(Time.current)
       expect(summary.status).to eq("started")
       expect(summary.short_summary).to eq({})
       expect(summary.full_summary).to eq({})
-      expect(summary.type).to eq("DataHub::RegisterSchoolImportSummary")
+      expect(summary.type).to eq("DataHub::SchoolsBackfillProcessSummary")
     end
   end
 
