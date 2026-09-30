@@ -133,6 +133,24 @@ describe "#publishable?" do
     end
   end
 
+  context "with an invalid legacy placement site status" do
+    let(:course) { create(:course, :publishable, study_mode: :full_time) }
+
+    before do
+      create(:course_school, course:)
+      course.site_statuses.first.update_column(
+        :vac_status,
+        SiteStatus.vac_statuses[:part_time_vacancies],
+      )
+    end
+
+    it "does not validate the placement site status when publishing" do
+      expect(course.site_statuses.first).not_to be_valid
+      expect { course.publishable? }.not_to raise_error
+      expect(course).to be_publishable
+    end
+  end
+
   context "when publishing a NON teacher degree apprenticeship course without A levels" do
     it "does not require A level to be answered" do
       course = create(
