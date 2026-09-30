@@ -18,4 +18,15 @@ class ApplicationJob < ActiveJob::Base
     discard_on StandardError, report: true
     retry_on ActiveRecord::Deadlocked
   end
+
+  # Opt-in for Solid Queue jobs that are safe to run again: Solid Queue has no
+  # Sidekiq-style auto-retries, so retry any error a few times with backoff
+  # before it lands in solid_queue_failed_executions.
+  #
+  # Re-declare the DeserializationError discard after the StandardError retry so
+  # LIFO `rescue_from` still drops jobs whose records have been deleted.
+  def self.retry_on_failure(attempts: 3)
+    retry_on StandardError, attempts:, wait: :polynomially_longer
+    discard_on ActiveJob::DeserializationError
+  end
 end

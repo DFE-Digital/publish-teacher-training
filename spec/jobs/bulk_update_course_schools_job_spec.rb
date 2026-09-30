@@ -3,12 +3,19 @@
 require "rails_helper"
 
 describe BulkUpdateCourseSchoolsJob do
+  include ActiveJob::TestHelper
+
   let(:provider) { create(:provider) }
   let(:course) { create(:course, provider:, sites: []) }
   let(:other_course) { create(:course, provider:, sites: []) }
 
   def result(updated: [], failed: [])
     Publish::Schools::BulkUpdate::Apply::Result.new(updated_ids: updated, failed_ids: failed)
+  end
+
+  it "runs on Solid Queue's low priority queue" do
+    expect(described_class.queue_adapter_name).to eq("solid_queue")
+    expect(described_class.new.queue_name).to eq("low_priority")
   end
 
   def stub_apply(returning)
@@ -39,32 +46,31 @@ describe BulkUpdateCourseSchoolsJob do
 
   it "asks for nothing more when every course was updated" do
     stub_apply(result(updated: [course.id]))
-    allow(described_class).to receive(:perform_in)
 
     described_class.new.perform([course.id], [], [])
 
-    expect(described_class).not_to have_received(:perform_in)
+    expect(described_class).not_to have_been_enqueued
   end
 
   describe "when some courses could not be updated" do
     before { stub_apply(result(updated: [course.id], failed: [other_course.id])) }
 
     it "comes back for the ones that failed, and only those" do
-      allow(described_class).to receive(:perform_in)
+      freeze_time do
+        described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1)
 
-      described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1)
-
-      expect(described_class).to have_received(:perform_in)
-        .with(kind_of(ActiveSupport::Duration), [other_course.id], %w[a], %w[b], 2)
+        expect(described_class).to have_been_enqueued
+          .with([other_course.id], %w[a], %w[b], 2)
+          .at(described_class::RETRY_AFTER.from_now)
+      end
     end
 
     it "gives up once it has tried enough times" do
-      allow(described_class).to receive(:perform_in)
       allow(Sentry).to receive(:capture_message)
 
       described_class.new.perform([other_course.id], [], [], described_class::MAX_ATTEMPTS)
 
-      expect(described_class).not_to have_received(:perform_in)
+      expect(described_class).not_to have_been_enqueued
       expect(Sentry).to have_received(:capture_message)
     end
 

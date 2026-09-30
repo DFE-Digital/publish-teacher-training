@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "sidekiq/testing"
 
 RSpec.describe "Publish - Reviewing the courses a placement school change will update", type: :system do
+  include ActiveJob::TestHelper
+
   before do
     given_i_am_authenticated_as_a_provider_user
   end
@@ -123,7 +124,7 @@ RSpec.describe "Publish - Reviewing the courses a placement school change will u
     review_page = page.current_path
     and_the_queue_is_down
 
-    expect { and_i_confirm }.to raise_error(Redis::CannotConnectError)
+    expect { and_i_press_confirm }.to raise_error(SolidQueue::Job::EnqueueError)
 
     and_i_return_to(review_page)
     then_i_still_see_the_courses_that_will_be_updated
@@ -297,7 +298,11 @@ private
   end
 
   def and_i_confirm
-    Sidekiq::Testing.inline! { click_button(page.find("button[type='submit']").text) }
+    perform_enqueued_jobs { and_i_press_confirm }
+  end
+
+  def and_i_press_confirm
+    click_button(page.find("button[type='submit']").text)
   end
 
   def and_i_cancel
@@ -313,7 +318,7 @@ private
   end
 
   def and_the_queue_is_down
-    allow(BulkUpdateCourseSchoolsJob).to receive(:perform_async).and_raise(Redis::CannotConnectError)
+    allow(BulkUpdateCourseSchoolsJob).to receive(:perform_later).and_raise(SolidQueue::Job::EnqueueError)
   end
 
   def then_i_still_see_the_courses_that_will_be_updated

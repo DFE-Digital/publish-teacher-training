@@ -26,7 +26,7 @@ module Publish
 
           matched = matched_courses
 
-          BulkUpdateCourseSchoolsJob.perform_async(matched.ids, @draft.added_uuids, @draft.removed_uuids)
+          BulkUpdateCourseSchoolsJob.perform_later(matched.ids, @draft.added_uuids, @draft.removed_uuids)
 
           # Only once the change is safely queued. Applying the same diff twice
           # lands on the same schools, so a second press of the button costs
