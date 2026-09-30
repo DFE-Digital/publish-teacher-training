@@ -87,7 +87,7 @@ sequenceDiagram
     A->>T: stamp the provider once
     A-->>J: Result(updated_ids, failed_ids)
     alt failures, attempts left
-        J->>J: perform_in(5 min, failed_ids only, attempt + 1)
+        J->>J: set(wait: 5 min).perform_later(failed_ids only, attempt + 1)
     else failures, none left
         J->>J: Sentry once, naming every course outstanding
     end
