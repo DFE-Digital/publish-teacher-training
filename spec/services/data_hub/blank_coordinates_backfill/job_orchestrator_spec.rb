@@ -56,6 +56,27 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::JobOrchestrator, type: :servic
       )
     end
 
+    it "round-trips hash batches and delayed monitoring through Solid Queue", :solid_queue do
+      processor = instance_double(DataHub::BlankCoordinatesBackfill::RecordProcessor, call: true)
+      geocoder = instance_double(DataHub::Geocoder::Real)
+      allow(DataHub::Geocoder::Real).to receive(:new).and_return(geocoder)
+      allow(DataHub::BlankCoordinatesBackfill::RecordProcessor).to receive(:new).and_return(processor)
+
+      summary = start_backfill
+      batch_job = SolidQueue::Job.find_by!(class_name: "BlankCoordinatesBackfill::BatchJob")
+      monitoring_job = SolidQueue::Job.find_by!(class_name: "BlankCoordinatesBackfill::MonitoringJob")
+
+      expect(batch_job.queue_name).to eq("low_priority")
+      expect(monitoring_job.queue_name).to eq("default")
+      expect(monitoring_job.arguments["arguments"]).to eq([summary.id, 1])
+      expect(SolidQueue::ScheduledExecution.where(job_id: monitoring_job.id)).to exist
+
+      ActiveJob::Base.execute(batch_job.arguments)
+
+      expect(DataHub::BlankCoordinatesBackfill::RecordProcessor).to have_received(:new).exactly(8).times
+      expect(processor).to have_received(:call).exactly(8).times
+    end
+
     it "records batch scheduling information in summary" do
       summary = start_backfill
 
@@ -146,7 +167,7 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::JobOrchestrator, type: :servic
     end
 
     it "creates batches with increasing scheduled times" do
-      batches_info = orchestrator.send(:calculate_batch_schedule)
+      batches_info = orchestrator.send(:calculate_batch_schedule).to_a
 
       expect(batches_info.size).to eq(3)
       expect(batches_info[0][:at] < batches_info[1][:at]).to be(true)
@@ -154,7 +175,7 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::JobOrchestrator, type: :servic
     end
 
     it "spaces batches by at least minimum interval" do
-      batches_info = orchestrator.send(:calculate_batch_schedule)
+      batches_info = orchestrator.send(:calculate_batch_schedule).to_a
 
       interval = batches_info[1][:at] - batches_info[0][:at]
       expect(interval).to be >= 10

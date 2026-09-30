@@ -96,8 +96,9 @@ module DataHub
           "warning" => "Monitoring stopped due to timeout. Some jobs may still be running.",
         }
 
-        process_summary.finish!(
-          short_summary: process_summary.short_summary,
+        process_summary.update!(
+          status: :failed,
+          finished_at: Time.current,
           full_summary: enhanced_full_summary,
         )
       end

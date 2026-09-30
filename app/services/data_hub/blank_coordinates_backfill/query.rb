@@ -10,13 +10,31 @@ module DataHub
       end
 
       def call
+        each_batch(batch_size: 1_000).to_a.flatten(1)
+      end
+
+      def each_batch(batch_size:)
+        return enum_for(__method__, batch_size:) unless block_given?
+
         Log.info("Fetching records with blank coordinates for cycle year=#{recruitment_cycle.year}")
-        sites_needing_backfill + gias_schools_needing_backfill
+        batch = []
+
+        each_record(batch_size:) do |record|
+          batch << record
+          next unless batch.size == batch_size
+
+          yield batch
+          batch = []
+        end
+
+        yield batch if batch.any?
       end
 
       def total_count
-        count = sites_relation.count + gias_schools_relation.count
-        Log.info("Total records needing backfill: #{count} (Sites: #{sites_relation.count}, GIAS Schools: #{gias_schools_relation.count})")
+        sites_count = sites_relation.count
+        schools_count = gias_schools_relation.count
+        count = sites_count + schools_count
+        Log.info("Total records needing backfill: #{count} (Sites: #{sites_count}, GIAS Schools: #{schools_count})")
         count
       end
 
@@ -30,12 +48,14 @@ module DataHub
         GiasSchool.where(latitude: nil).or(GiasSchool.where(longitude: nil))
       end
 
-      def sites_needing_backfill
-        sites_relation.pluck(:id).map { |id| { type: "Site", id: } }
-      end
+      def each_record(batch_size:)
+        sites_relation.select(:id).find_each(batch_size:) do |site|
+          yield({ type: "Site", id: site.id })
+        end
 
-      def gias_schools_needing_backfill
-        gias_schools_relation.pluck(:id).map { |id| { type: "GiasSchool", id: } }
+        gias_schools_relation.select(:id).find_each(batch_size:) do |school|
+          yield({ type: "GiasSchool", id: school.id })
+        end
       end
     end
   end
