@@ -20,7 +20,10 @@ module Courses
           sites_subquery
         end
 
+      # Course ignores columns, so without this select Rails lists only the
+      # Course columns and drops the subquery's extra columns.
       Course
+        .select("course.*")
         .from(subquery, :course)
         .order("distance_to_search_location ASC")
     end

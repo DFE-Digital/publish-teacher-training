@@ -54,7 +54,10 @@ module Courses
                  .select(school_columns_sql(EACH_SCHOOL_PER_COURSE))
                  .order("course.id, gias_school.id, provider_school.site_code ASC")
 
+      # Course ignores columns, so without this select Rails lists only the
+      # Course columns and drops the subquery's extra columns.
       Course
+        .select("course.*")
         .from(subquery, :course)
         .order("course_id ASC, distance_to_search_location ASC")
     end
