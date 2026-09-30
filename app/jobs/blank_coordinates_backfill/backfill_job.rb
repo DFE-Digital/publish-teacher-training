@@ -1,5 +1,6 @@
 module BlankCoordinatesBackfill
   class BackfillJob < ApplicationJob
+    self.queue_adapter = :solid_queue
     queue_as :default
     without_auto_retry
 

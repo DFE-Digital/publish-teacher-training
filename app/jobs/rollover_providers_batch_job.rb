@@ -1,5 +1,6 @@
 class RolloverProvidersBatchJob < ApplicationJob
-  queue_as :default
+  self.queue_adapter = :solid_queue
+  queue_as :low_priority
   without_auto_retry
 
   def perform(provider_codes, recruitment_cycle_id, summary_id)
