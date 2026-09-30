@@ -110,10 +110,13 @@ runs:
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        # Abort on the first SQL error and roll the entire restore back, so the
-        # always-run worker cleanup never starts against a partially restored DB.
-        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- \
-          psql --set=ON_ERROR_STOP=1 --single-transaction
+        # Konduit does not forward psql flags for compressed input, so wrap the
+        # dump itself in an error-stopping transaction. A failure rolls back the
+        # restore before the always-run worker cleanup starts the deployment.
+        ATOMIC_RESTORE_FILE="${SANITISED_FILE_NAME}_atomic.sql.gz"
+        python3 .github/actions/restore/wrap_restore.py \
+          "${SANITISED_FILE_NAME}.sql.gz" "${ATOMIC_RESTORE_FILE}"
+        bin/konduit.sh -n ${NAMESPACE} -i "${ATOMIC_RESTORE_FILE}" -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
     - name: Start solid-queue-worker after restore
