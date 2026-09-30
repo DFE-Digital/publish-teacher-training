@@ -110,7 +110,10 @@ runs:
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- psql
+        # Abort on the first SQL error and roll the entire restore back, so the
+        # always-run worker cleanup never starts against a partially restored DB.
+        bin/konduit.sh -n ${NAMESPACE} -i ${SANITISED_FILE_NAME}.sql.gz -c -t 7200 -x ${{ env.app_name }} -- \
+          psql --set=ON_ERROR_STOP=1 --single-transaction
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
     - name: Start solid-queue-worker after restore
