@@ -183,6 +183,15 @@ module ViewHelper
     support_recruitment_cycle_provider_accredited_partnerships_path(provider.recruitment_cycle_year, provider)
   end
 
+  def accredited_provider_section_paths(provider)
+    year = provider.recruitment_cycle_year
+
+    [
+      support_recruitment_cycle_provider_accredited_partnerships_path(year, provider),
+      search_support_recruitment_cycle_provider_accredited_providers_path(year, provider),
+    ]
+  end
+
   # The publish errors in the order the rows appear on the description tab.
   # Their natural order is the order the validations happen to be declared in
   # Course, which puts degrees, GCSEs and A levels below fields that sit well

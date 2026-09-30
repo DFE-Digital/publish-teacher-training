@@ -40,13 +40,14 @@ private
   end
 
   class NavigationItemComponent < ApplicationComponent
-    attr_reader :text, :href
+    attr_reader :text, :href, :active_when
 
-    def initialize(text, href, classes: [], html_attributes: {})
+    def initialize(text, href, active_when: nil, classes: [], html_attributes: {})
       super(classes:, html_attributes:)
 
       @text = text
       @href = href
+      @active_when = active_when
     end
   end
 end

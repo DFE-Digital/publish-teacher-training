@@ -34,13 +34,9 @@
     <%= govuk_skip_link %>
 
     <%= render HeaderComponent.new(service_name: I18n.t("service_name.support"), service_url: support_root_path, current_user:) do |header| %>
-      <% header.with_navigation_item t(".onboarding"), support_providers_onboarding_form_requests_path %>
-      <% header.with_navigation_item t(".providers"), support_recruitment_cycle_providers_path(params[:recruitment_cycle_year] || Find::CycleTimetable.current_year) %>
-      <% header.with_navigation_item t(".candidates"), support_candidates_path if FeatureFlag.active?(:candidate_accounts) %>
-      <% header.with_navigation_item t(".users"), support_recruitment_cycle_users_path(params[:recruitment_cycle_year] || Find::CycleTimetable.current_year) %>
-      <% header.with_navigation_item t(".feedbacks"), support_feedback_index_path %>
-      <% header.with_navigation_item t(".subjects"), support_subjects_path %>
-      <% header.with_navigation_item t(".settings"), support_settings_path %>
+      <% support_primary_navigation_items.each do |item| %>
+        <% header.with_navigation_item item[:text], item[:href], active_when: item[:active_when] %>
+      <% end %>
       <% header.with_phase_banner_text t(".phase_banner_text", feedback_link: govuk_link_to("feedback", "#", new_tab: true)) %>
     <% end %>
 
