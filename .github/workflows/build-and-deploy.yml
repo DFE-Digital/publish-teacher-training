@@ -272,6 +272,9 @@ jobs:
 
   deploy-aks-before-production:
     name: Parallel deployment before production
+    concurrency:
+      group: deploy-or-database-restore-${{ matrix.environment }}
+      cancel-in-progress: false
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy_app_before_production.outputs.deploy-url }}

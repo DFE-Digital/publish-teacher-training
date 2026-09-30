@@ -190,6 +190,9 @@ jobs:
   restore:
     needs: [backup]
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-or-database-restore-${{ matrix.environment }}
+      cancel-in-progress: false
     environment:
       name: ${{ matrix.environment }}
     env:

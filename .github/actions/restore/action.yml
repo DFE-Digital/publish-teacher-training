@@ -93,7 +93,19 @@ runs:
         fi
         echo "SQ_WORKER_REPLICAS=${replicas}" >> $GITHUB_ENV
         kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas=0
-        kubectl -n "${NAMESPACE}" wait --for=delete pod -l app="${{ env.app_name }}-solid-queue-worker" --timeout=120s || true
+
+        selector='app=${{ env.app_name }}-solid-queue-worker'
+        worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${selector}" -o name)
+        if [ -n "${worker_pods}" ]; then
+          kubectl -n "${NAMESPACE}" wait --for=delete pod -l "${selector}" --timeout=120s
+        fi
+
+        remaining_worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${selector}" -o name)
+        if [ -n "${remaining_worker_pods}" ]; then
+          echo "::error::Solid Queue worker pods remain after scale-down:"
+          echo "${remaining_worker_pods}"
+          exit 1
+        fi
 
     - name: Restore backup to aks env database
       shell: bash

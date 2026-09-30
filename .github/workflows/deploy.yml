@@ -28,6 +28,9 @@ permissions:
 jobs:
   deploy:
     name: Deployment to ${{ github.event.inputs.environment }}
+    concurrency:
+      group: deploy-or-database-restore-${{ github.event.inputs.environment }}
+      cancel-in-progress: false
     environment:
       name: ${{ github.event.inputs.environment }}
       url: ${{ steps.deploy_app.outputs.deploy-url }}
