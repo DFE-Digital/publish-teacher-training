@@ -236,12 +236,12 @@ private
 
   def and_i_see_the_organisation_question
     expect(page).to have_content("Can your organisation sponsor Student visas for this course?")
-    expect(page).not_to have_content("Is Student visa sponsorship available for this course?")
+    expect(page).to have_no_content("Is Student visa sponsorship available for this course?")
   end
 
   def and_i_see_the_availability_question
     expect(page).to have_content("Is Student visa sponsorship available for this course?")
-    expect(page).not_to have_content("Can your organisation sponsor Student visas for this course?")
+    expect(page).to have_no_content("Can your organisation sponsor Student visas for this course?")
   end
 
   def and_i_see_recruiting_from_overseas_guidance
@@ -253,8 +253,8 @@ private
   end
 
   def and_i_do_not_see_recruiting_from_overseas_guidance
-    expect(page).not_to have_content("Learn more about")
-    expect(page).not_to have_link("recruiting trainee teachers from overseas")
+    expect(page).to have_no_content("Learn more about")
+    expect(page).to have_no_link("recruiting trainee teachers from overseas")
   end
 
   def and_i_see_accrediting_partner_can_sponsor_inset_text
@@ -273,7 +273,7 @@ private
   end
 
   def and_i_do_not_see_accrediting_provider_inset_text
-    expect(page).not_to have_css(".govuk-inset-text")
+    expect(page).to have_no_css(".govuk-inset-text")
   end
 
   def and_i_see_no_selected_by_default

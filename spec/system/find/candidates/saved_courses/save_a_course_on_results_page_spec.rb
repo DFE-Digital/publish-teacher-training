@@ -151,7 +151,7 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
 
   def then_i_do_not_see_course_saved
     within(".results-save-course-button__unstyled-button") do
-      expect(page).not_to have_css(".save-course-button__text", text: "Saved")
+      expect(page).to have_no_css(".save-course-button__text", text: "Saved")
     end
   end
 

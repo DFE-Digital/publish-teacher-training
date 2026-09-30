@@ -26,7 +26,7 @@ describe Shared::Courses::WhatIsAnAccreditedProviderComponent, type: :component 
 
     it "does not render the callout box" do
       result = render_inline(described_class.new(course: course))
-      expect(result).not_to have_css(".app-callout__title")
+      expect(result).to have_no_css(".app-callout__title")
     end
   end
 
@@ -35,7 +35,7 @@ describe Shared::Courses::WhatIsAnAccreditedProviderComponent, type: :component 
 
     it "does not render the callout box" do
       result = render_inline(described_class.new(course: course))
-      expect(result).not_to have_css(".app-callout__title")
+      expect(result).to have_no_css(".app-callout__title")
     end
   end
 end

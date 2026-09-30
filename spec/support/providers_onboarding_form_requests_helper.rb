@@ -40,12 +40,12 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_see_first_page_of_requests_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 10)
+    expect(page).to have_css("table tbody tr", count: 10)
     expect(page).to have_link("Next")
   end
 
   def then_i_see_second_page_of_requests_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 8)
+    expect(page).to have_css("table tbody tr", count: 8)
     expect(page).to have_link("Previous")
   end
 
@@ -128,7 +128,7 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_do_not_see_non_admin_user_in_support_agent_dropdown(non_admin_user)
-    expect(page).not_to have_select(
+    expect(page).to have_no_select(
       "Support agent (optional)",
       with_options: [non_admin_user.email],
     )

@@ -61,7 +61,7 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
     it "renders the course title without a link" do
       expect(rendered).to have_text("Best Practice Network")
       expect(rendered).to have_text("Physics (S252)")
-      expect(rendered).not_to have_link(
+      expect(rendered).to have_no_link(
         "Best Practice Network",
         href: find_course_path(provider_code: "RO1", course_code: "S252"),
       )
@@ -98,7 +98,7 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
 
     context "when the same course does not exist in the current cycle" do
       it "does not render a current-cycle course link" do
-        expect(rendered).not_to have_link("View this year's course")
+        expect(rendered).to have_no_link("View this year's course")
       end
     end
   end
@@ -121,8 +121,8 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
   end
 
   it "does not render note actions when there is no note" do
-    expect(rendered).not_to have_link("Edit")
-    expect(rendered).not_to have_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
+    expect(rendered).to have_no_link("Edit")
+    expect(rendered).to have_no_css("form[action='#{find_candidate_saved_course_note_path(saved_course)}']")
   end
 
   context "when a note has been added" do

@@ -37,7 +37,7 @@ RSpec.describe "About Your Organisation section" do
 
     expect(page).to have_content "Why train with us"
 
-    page.find("#publish-why-train-with-us-form-about-us-field").set ""
+    page.find_by_id("publish-why-train-with-us-form-about-us-field").set ""
     click_on "Update why train with us"
     within publish_provider_details_edit_page.error_summary do
       expect(page).to have_content "Enter what kind of organisation #{@provider.provider_name} is"
@@ -60,7 +60,7 @@ RSpec.describe "About Your Organisation section" do
     )
     expect(page).to have_content "Training with disabilities and other needs"
 
-    page.find("#publish-disability-support-form-train-with-disability-field").set("Updated: training with disabilities")
+    page.find_by_id("publish-disability-support-form-train-with-disability-field").set("Updated: training with disabilities")
     click_on "Update training with disabilities"
 
     expect(page).to have_content "Your changes have been published"

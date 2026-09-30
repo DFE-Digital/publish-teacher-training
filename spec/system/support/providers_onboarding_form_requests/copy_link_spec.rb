@@ -36,7 +36,7 @@ RSpec.describe "Support console: providers onboarding form requests - copy link"
   end
 
   def then_i_see_the_copy_button
-    expect(page).to have_selector(".copy-btn", text: "Copy link", visible: :visible)
+    expect(page).to have_css(".copy-btn", text: "Copy link", visible: :visible)
   end
 
   def when_i_click_the_copy_button
@@ -64,6 +64,6 @@ RSpec.describe "Support console: providers onboarding form requests - copy link"
   end
 
   def then_i_do_not_see_the_copy_button
-    expect(page).not_to have_selector(".copy-btn", text: "Copy link")
+    expect(page).to have_no_css(".copy-btn", text: "Copy link")
   end
 end

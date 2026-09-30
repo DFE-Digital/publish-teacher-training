@@ -63,9 +63,9 @@ RSpec.describe "Support console Candidates notes" do
   def then_i_see_only_noted_courses_for_that_candidate
     expect(page).to have_content(@saved_with_note.course.name)
     expect(page).to have_content(@saved_with_note.note)
-    expect(page).not_to have_content(@course_without_note.name)
-    expect(page).not_to have_content(@course_with_blank_note.name)
-    expect(page).not_to have_content(@other_candidate_course.name)
+    expect(page).to have_no_content(@course_without_note.name)
+    expect(page).to have_no_content(@course_with_blank_note.name)
+    expect(page).to have_no_content(@other_candidate_course.name)
   end
 
   def then_i_see_notes_ordered_by_most_recently_updated_first

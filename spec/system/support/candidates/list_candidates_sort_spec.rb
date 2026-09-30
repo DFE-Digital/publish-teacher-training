@@ -14,14 +14,14 @@ RSpec.describe "Support console Candidates sorting" do
 
     click_link "Created at"
     within("table") do
-      expect(page).to have_selector("tbody tr:first-child td", text: newer.email_address)
-      expect(page).to have_selector("tbody tr:last-child td", text: older.email_address)
+      expect(page).to have_css("tbody tr:first-child td", text: newer.email_address)
+      expect(page).to have_css("tbody tr:last-child td", text: older.email_address)
     end
 
     click_link "Created at"
     within("table") do
-      expect(page).to have_selector("tbody tr:first-child td", text: older.email_address)
-      expect(page).to have_selector("tbody tr:last-child td", text: newer.email_address)
+      expect(page).to have_css("tbody tr:first-child td", text: older.email_address)
+      expect(page).to have_css("tbody tr:last-child td", text: newer.email_address)
     end
   end
 end

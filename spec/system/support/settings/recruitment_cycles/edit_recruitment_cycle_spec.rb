@@ -54,7 +54,7 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
   end
 
   def then_i_can_not_edit_the_cycle
-    expect(page).not_to have_content("Change")
+    expect(page).to have_no_content("Change")
   end
 
   def when_i_click_back

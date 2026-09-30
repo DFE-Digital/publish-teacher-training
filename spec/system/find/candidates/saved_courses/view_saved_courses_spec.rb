@@ -239,14 +239,14 @@ RSpec.describe "Viewing my saved courses", service: :find do
     within_first_saved_course_row do
       expect(page).to have_content("Course from a previous year")
       expect(page).to have_content(@course.name_and_code)
-      expect(page).not_to have_link(
+      expect(page).to have_no_link(
         @course.provider_name,
         href: find_course_path(
           provider_code: @course.provider_code,
           course_code: @course.course_code,
         ),
       )
-      expect(page).not_to have_link("View this year's course")
+      expect(page).to have_no_link("View this year's course")
     end
   end
 
@@ -264,7 +264,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def and_the_current_cycle_card_does_not_link_to_itself
     within(current_cycle_card) do
-      expect(page).not_to have_link("View this year's course")
+      expect(page).to have_no_link("View this year's course")
     end
   end
 
@@ -476,34 +476,34 @@ RSpec.describe "Viewing my saved courses", service: :find do
   def and_most_recently_saved_is_the_active_sort
     within(sort_bar) do
       expect(page).to have_css("strong", text: "Most recently saved")
-      expect(page).not_to have_link("Most recently saved")
+      expect(page).to have_no_link("Most recently saved")
     end
   end
 
   def and_distance_is_the_active_sort
     within(sort_bar) do
       expect(page).to have_css("strong", text: "Distance")
-      expect(page).not_to have_link("Distance")
+      expect(page).to have_no_link("Distance")
     end
   end
 
   def and_lowest_fee_uk_is_the_active_sort
     within(sort_bar) do
       expect(page).to have_css("strong", text: "Lowest fee for UK citizens")
-      expect(page).not_to have_link("Lowest fee for UK citizens")
+      expect(page).to have_no_link("Lowest fee for UK citizens")
     end
   end
 
   def and_lowest_fee_intl_is_the_active_sort
     within(sort_bar) do
       expect(page).to have_css("strong", text: "Lowest fee for non-UK citizens")
-      expect(page).not_to have_link("Lowest fee for non-UK citizens")
+      expect(page).to have_no_link("Lowest fee for non-UK citizens")
     end
   end
 
   def and_distance_sort_is_not_visible
     within(sort_bar) do
-      expect(page).not_to have_content("Distance")
+      expect(page).to have_no_content("Distance")
     end
   end
 

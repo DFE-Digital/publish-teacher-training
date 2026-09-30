@@ -82,7 +82,7 @@ RSpec.describe "Email alert link on results page", service: :find do
   end
 
   def then_i_do_not_see_the_email_alert_link
-    expect(page).not_to have_link("Email me courses like this")
+    expect(page).to have_no_link("Email me courses like this")
   end
 
   def candidate

@@ -49,6 +49,6 @@ RSpec.describe "Applications", service: :find do
   end
 
   def then_i_do_not_see_applications_in_nav
-    expect(page).not_to have_link("Applications")
+    expect(page).to have_no_link("Applications")
   end
 end

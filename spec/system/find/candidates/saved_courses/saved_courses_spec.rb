@@ -62,8 +62,8 @@ RSpec.describe "View pages" do
 
   def then_i_cant_see_the_primary_navigation_links
     within ".govuk-service-navigation__container" do
-      expect(page).not_to have_link("Find courses", href: find_root_path)
-      expect(page).not_to have_link("Saved courses", href: find_candidate_saved_courses_path)
+      expect(page).to have_no_link("Find courses", href: find_root_path)
+      expect(page).to have_no_link("Saved courses", href: find_candidate_saved_courses_path)
     end
   end
 

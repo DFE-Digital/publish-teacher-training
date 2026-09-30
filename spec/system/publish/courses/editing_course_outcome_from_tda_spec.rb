@@ -82,14 +82,14 @@ private
     when_i_visit_the_course_description_tab
 
     expect(page).to have_link("Enter A levels and equivalency test requirements")
-    expect(page).not_to have_content("Subject knowledge requirement for system test")
+    expect(page).to have_no_content("Subject knowledge requirement for system test")
   end
 
   def and_i_see_the_degree_requirements_row_on_the_course_description_tab
     when_i_visit_the_course_description_tab
 
     expect(page).to have_content("Subject knowledge requirement for system test")
-    expect(page).not_to have_link("Enter A levels and equivalency test requirements")
+    expect(page).to have_no_link("Enter A levels and equivalency test requirements")
   end
 
   def when_i_visit_the_course_description_tab

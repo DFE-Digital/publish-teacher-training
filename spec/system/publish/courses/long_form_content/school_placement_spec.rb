@@ -180,8 +180,8 @@ RSpec.describe "Publishing a course with long form content on the school placeme
   end
 
   def then_i_should_not_see_the_fields_from_the_last_cycle
-    expect(page).not_to have_content("How placements work")
-    expect(page).not_to have_content(@course_enrichment.how_school_placements_work)
+    expect(page).to have_no_content("How placements work")
+    expect(page).to have_no_content(@course_enrichment.how_school_placements_work)
   end
 
   def then_i_should_see_a_collapsible_section_for_the_last_cycle_content

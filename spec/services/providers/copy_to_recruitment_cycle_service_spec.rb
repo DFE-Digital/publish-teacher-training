@@ -358,7 +358,7 @@ describe Providers::CopyToRecruitmentCycleService do
         expect(result[:study_sites]).to eq(0)
 
         expect(result[:sites_skipped]).to contain_exactly(
-          { site_code: site.code,       reason: "Site creation failed" },
+          { site_code: site.code, reason: "Site creation failed" },
         )
 
         expect(result[:study_sites_skipped]).to contain_exactly(

@@ -209,7 +209,7 @@ RSpec.describe "Providers index" do
   end
 
   def then_the_change_cycle_link_is_not_visible
-    expect(page).not_to have_content("Change recruitment cycle")
+    expect(page).to have_no_content("Change recruitment cycle")
   end
 
   def when_i_visit_support_page

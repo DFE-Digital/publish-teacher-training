@@ -257,8 +257,8 @@ RSpec.describe "Search results tracking", :js, service: :find do
     within(".app-search-results") do
       expect(page).to have_content("Mathematics")
       expect(page).to have_content("PGTA History")
-      expect(page).not_to have_content("Biology")
-      expect(page).not_to have_content("Further Education")
+      expect(page).to have_no_content("Biology")
+      expect(page).to have_no_content("Further Education")
     end
   end
 

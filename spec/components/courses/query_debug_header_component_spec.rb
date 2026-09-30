@@ -141,7 +141,7 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
       render_inline(component)
 
       expect(page).to have_content("Debug School")
-      expect(page).not_to have_link("Debug School", visible: :all)
+      expect(page).to have_no_link("Debug School", visible: :all)
     end
 
     it "labels the column as a school rather than a site" do

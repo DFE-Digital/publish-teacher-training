@@ -237,7 +237,7 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def then_i_do_not_see_email_alerts_in_nav
-    expect(page).not_to have_link("Email alerts")
+    expect(page).to have_no_link("Email alerts")
   end
 
   def then_i_see_empty_state
@@ -339,7 +339,7 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).to have_content("Are you sure you want to unsubscribe?")
     expect(page).to have_button("Unsubscribe")
     expect(page).to have_content("Biology")
-    expect(page).not_to have_content(/\bC1\b/)
+    expect(page).to have_no_content(/\bC1\b/)
   end
 
   def then_i_see_homepage
@@ -352,7 +352,7 @@ RSpec.describe "Email alerts", service: :find do
 
   def then_i_see_only_active_alerts
     expect(page).to have_content("Chemistry")
-    expect(page).not_to have_content("Biology")
+    expect(page).to have_no_content("Biology")
     expect(page).to have_link("Unsubscribe", count: 1)
   end
 
@@ -468,11 +468,11 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def then_i_do_not_see_email_alert_link
-    expect(page).not_to have_link("Email me courses like this")
+    expect(page).to have_no_link("Email me courses like this")
   end
 
   def then_i_am_redirected_away_from_new_page
-    expect(page).not_to have_current_path(new_find_candidate_email_alert_path)
+    expect(page).to have_no_current_path(new_find_candidate_email_alert_path)
   end
 
   def then_i_see_already_subscribed_notice

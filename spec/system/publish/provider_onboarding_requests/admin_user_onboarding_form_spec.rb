@@ -43,10 +43,10 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
   end
 
   def then_i_do_not_see_already_submitted_message
-    expect(page).not_to have_content(
+    expect(page).to have_no_content(
       "This form has already been submitted and can no longer be edited. Please contact the Publish support team if you need assistance.",
     )
-    expect(page).not_to have_css(".govuk-inset-text.govuk-inset-text--warning")
+    expect(page).to have_no_css(".govuk-inset-text.govuk-inset-text--warning")
   end
 
   def then_i_see_the_completed_form_fields

@@ -31,7 +31,7 @@ describe FlashBanner do
           if type == "success"
             expect(component).to have_css(".govuk-notification-banner--success")
           else
-            expect(component).not_to have_css(".govuk-notification-banner--success")
+            expect(component).to have_no_css(".govuk-notification-banner--success")
           end
         end
       end
@@ -135,7 +135,7 @@ describe FlashBanner do
 
     it "only renders known flash types" do
       expect(component).to have_text("This should render")
-      expect(component).not_to have_text("This should not render")
+      expect(component).to have_no_text("This should not render")
     end
 
     it "renders only one notification banner" do

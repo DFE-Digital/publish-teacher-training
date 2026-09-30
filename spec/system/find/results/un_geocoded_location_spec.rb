@@ -55,8 +55,8 @@ RSpec.describe "Results page with an un-geocoded location", service: :find do
 
     expect(page).to have_http_status(:ok)
     expect(page).to have_css("h1", text: /courses/i)
-    expect(page).not_to have_content("Sort by: distance")
-    expect(page).not_to have_content("Sort by: Course (a to z)")
+    expect(page).to have_no_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: Course (a to z)")
   end
 
   scenario "location + subject filter (mirrors the Sentry payload) — subject chip present, no order chip, no crash" do
@@ -64,37 +64,37 @@ RSpec.describe "Results page with an un-geocoded location", service: :find do
 
     expect(page).to have_http_status(:ok)
     expect(page).to have_content("Biology")
-    expect(page).not_to have_content("Sort by: distance")
-    expect(page).not_to have_content("Sort by: Course (a to z)")
+    expect(page).to have_no_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: Course (a to z)")
   end
 
   scenario "location + funding filter — funding chip present, no order chip" do
     visit find_results_path(location: "Atlantis", funding: %w[salary])
 
     expect(page).to have_http_status(:ok)
-    expect(page).not_to have_content("Sort by: distance")
-    expect(page).not_to have_content("Sort by: Course (a to z)")
+    expect(page).to have_no_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: Course (a to z)")
   end
 
   scenario "location + explicit order=course_name_ascending — no order chip (it IS the default)" do
     visit find_results_path(location: "Atlantis", order: "course_name_ascending")
 
     expect(page).to have_http_status(:ok)
-    expect(page).not_to have_content("Sort by: Course (a to z)")
+    expect(page).to have_no_content("Sort by: Course (a to z)")
   end
 
   scenario "location + explicit order=distance — page renders (no PG::UndefinedColumn), no 'Sort by: distance' chip" do
     visit find_results_path(location: "Atlantis", order: "distance")
 
     expect(page).to have_http_status(:ok)
-    expect(page).not_to have_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: distance")
   end
 
   scenario "location + start_date filter — page renders" do
     visit find_results_path(location: "Atlantis", start_date: %w[september])
 
     expect(page).to have_http_status(:ok)
-    expect(page).not_to have_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: distance")
   end
 
   # Locks in the SearchParamDefaults behaviour change: when only the
@@ -107,6 +107,6 @@ RSpec.describe "Results page with an un-geocoded location", service: :find do
     visit find_results_path(short_address: "Manchester", order: "distance")
 
     expect(page).to have_http_status(:ok)
-    expect(page).not_to have_content("Sort by: distance")
+    expect(page).to have_no_content("Sort by: distance")
   end
 end

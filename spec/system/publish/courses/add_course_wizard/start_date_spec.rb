@@ -67,7 +67,7 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
     expect(page).to have_content("Course start date")
     expect(page).to have_field(current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year))
     expect(page).to have_field("July #{Find::CycleTimetable.next_year}")
-    expect(page).not_to have_field(previous_month_label(cycle_year: Find::CycleTimetable.current_year))
+    expect(page).to have_no_field(previous_month_label(cycle_year: Find::CycleTimetable.current_year))
   end
 
   scenario "shows options starting from January when provider recruitment cycle is in the future" do
@@ -77,7 +77,7 @@ RSpec.describe "Add course wizard start date step when qualification is undergra
 
     expect(page).to have_content("Course start date")
     expect(page).to have_field("January #{Find::CycleTimetable.next_year}")
-    expect(page).not_to have_field("December #{Find::CycleTimetable.current_year}")
+    expect(page).to have_no_field("December #{Find::CycleTimetable.current_year}")
     expect(page).to have_field("July #{Find::CycleTimetable.next_year + 1}")
   end
 

@@ -112,7 +112,7 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
 
     within(all(".govuk-summary-card").first) do
       expect(page).to have_link("Add a note")
-      expect(page).not_to have_content("Note to undo-delete")
+      expect(page).to have_no_content("Note to undo-delete")
     end
   end
 end
