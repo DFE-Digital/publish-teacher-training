@@ -151,7 +151,7 @@ RSpec.describe "Search Results on small viewport", :js, service: :find do
   end
 
   def when_i_click_the_filter_and_sort_button
-    page.find("button", text: "Filter and Sort").click
+    click_button "Filter and Sort"
   end
 
   def given_there_are_courses_that_sponsor_visa

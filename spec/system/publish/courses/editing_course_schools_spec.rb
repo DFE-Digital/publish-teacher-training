@@ -260,8 +260,8 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
       provider.recruitment_cycle_year,
       course.course_code,
     )
-    expect(page).to have_no_content("Site 1")
     expect(page).to have_content("Site 2")
+    expect(page).to have_no_content("Site 1")
   end
 
   def given_the_provider_has_three_sites

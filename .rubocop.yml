@@ -29,3 +29,17 @@ Rails/SaveBang:
 # have_content (its alias) across the specs.
 Capybara/RSpec/HaveContent:
   Enabled: false
+
+# Historical migrations that have already run; not worth rewriting.
+Rails/ReversibleMigration:
+  Exclude:
+    - 'db/migrate/20211221133521_drop_nctl_organisation_table.rb'
+    - 'db/migrate/20211231135738_update_uniq_index_on_site.rb'
+    - 'db/migrate/20220421115022_remove_discard_indexes_from_site.rb'
+
+# dfe-analytics' matcher takes the event type(s) as the expectation subject,
+# e.g. `expect(:create_entity).to have_been_enqueued_as_analytics_events`.
+RSpec/ExpectActual:
+  Exclude:
+    - 'spec/services/provider_schools/removal_spec.rb'
+    - 'spec/system/publish/dfe_analytics_events_spec.rb'

@@ -52,7 +52,7 @@ RSpec.describe "Viewing the grouped course list" do
 
   def and_the_self_accredited_section_has_no_heading
     # The self-accredited group is rendered first and has no <h2> heading.
-    first_section = page.all(".app-table--courses__section").first
+    first_section = page.first(".app-table--courses__section")
     expect(first_section).to have_no_css("h2")
   end
 

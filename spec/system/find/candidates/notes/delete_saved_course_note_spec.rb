@@ -68,7 +68,7 @@ RSpec.describe "Deleting a saved course note", service: :find do
   end
 
   def then_i_can_delete_the_note
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       within ".govuk-summary-list__actions" do
         click_button "Delete"
       end
@@ -78,7 +78,7 @@ RSpec.describe "Deleting a saved course note", service: :find do
     expect(page).to have_content("Note deleted")
     expect(page).to have_content("Your note for Best Practice Network - Physics (S252) has been deleted.")
 
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       expect(page).to have_link("Add a note")
       expect(page).to have_no_content("Note to delete")
     end
@@ -89,7 +89,7 @@ RSpec.describe "Deleting a saved course note", service: :find do
   end
 
   def then_i_see_a_failed_to_delete_note_message
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       within ".govuk-summary-list__actions" do
         click_button "Delete"
       end

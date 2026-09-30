@@ -71,7 +71,7 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
   end
 
   def when_i_delete_the_note
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       within ".govuk-summary-list__actions" do
         click_button "Delete"
       end
@@ -89,7 +89,7 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
 
     expect(page).to have_current_path(find_candidate_saved_courses_path)
 
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       expect(page).to have_content("Note to undo-delete")
       within ".govuk-summary-list__actions" do
         expect(page).to have_link("Edit")
@@ -110,7 +110,7 @@ RSpec.describe "Undo deleting a saved course note", service: :find do
     expect(page).to have_current_path(find_candidate_saved_courses_path)
     expect(page).to have_content("Failed to undo note")
 
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       expect(page).to have_link("Add a note")
       expect(page).to have_no_content("Note to undo-delete")
     end

@@ -569,7 +569,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def within_first_saved_course_row(&block)
-    within(all(".govuk-summary-card").first, &block)
+    within(first(".govuk-summary-card"), &block)
   end
 
   def previous_cycle_card
@@ -591,6 +591,6 @@ RSpec.describe "Viewing my saved courses", service: :find do
   end
 
   def sort_bar
-    page.all("p.govuk-body", text: "Sort by:").first
+    page.first("p.govuk-body", text: "Sort by:")
   end
 end
