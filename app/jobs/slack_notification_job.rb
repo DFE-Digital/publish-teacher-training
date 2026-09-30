@@ -3,8 +3,13 @@
 require "http"
 
 class SlackNotificationJob < ApplicationJob
+  class SlackMessageError < StandardError; end
+  class SlackServerError < SlackMessageError; end
+
   self.queue_adapter = :solid_queue
-  retry_on_failure
+
+  # A 4xx means the webhook or payload is wrong, and will be wrong next time too.
+  retry_on SlackServerError, HTTP::ConnectionError, HTTP::TimeoutError, attempts: 3, wait: :polynomially_longer
 
   SLACK_CHANNEL = "#twd_findpub_tech"
 
@@ -33,8 +38,9 @@ private
 
     response = HTTP.post(@webhook_url, body: payload.to_json)
 
-    raise SlackMessageError, "Slack error: #{response.body}" unless response.status.success?
-  end
+    return if response.status.success?
 
-  class SlackMessageError < StandardError; end
+    error = response.status.server_error? ? SlackServerError : SlackMessageError
+    raise error, "Slack error: #{response.body}"
+  end
 end
