@@ -89,7 +89,6 @@ shared:
     - degree_type
     - funding
     - visa_sponsorship_application_deadline_at
-    - schools_validated
     - school_experience_required
     - school_experience_required_content
     - publish_without_schools_allowed
