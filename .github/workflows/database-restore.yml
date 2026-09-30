@@ -105,6 +105,12 @@ jobs:
           echo "::add-mask::$STORAGE_CONN_STR"
           echo "AZURE_STORAGE_CONNECTION_STRING=$STORAGE_CONN_STR" >> $GITHUB_ENV
 
+      - name: Install postgres client
+        if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
+        uses: DFE-Digital/github-actions/install-postgres-client@master
+        with:
+          version: 17
+
       - name: Download existing backup from Azure Storage
         if: github.event_name == 'workflow_dispatch' && env.SKIP_BACKUP == 'true'
         shell: bash
