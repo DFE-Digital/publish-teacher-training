@@ -26,6 +26,11 @@ describe GiasImportJob do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
+  it "runs on Solid Queue's low priority queue" do
+    expect(described_class.queue_adapter_name).to eq("solid_queue")
+    expect(described_class.new.queue_name).to eq("low_priority")
+  end
+
   it "runs the job" do
     expect {
       job
@@ -38,6 +43,19 @@ describe GiasImportJob do
 
     expect { described_class.perform_now }
       .to have_enqueued_job(described_class).at(a_value_between(30.minutes.from_now, 35.minutes.from_now))
+  end
+
+  [
+    ActiveRecord::ConnectionFailed,
+    ActiveRecord::ConnectionNotEstablished,
+    PG::ConnectionBad,
+  ].each do |error_class|
+    it "tries a transient #{error_class} database failure again later" do
+      allow(Gias::Importer).to receive(:call).and_raise(error_class, "database unavailable")
+
+      expect { described_class.perform_now }
+        .to have_enqueued_job(described_class).at(a_value_between(5.minutes.from_now, 6.minutes.from_now))
+    end
   end
 
   it "does not retry other failures" do

@@ -11,6 +11,11 @@ RSpec.describe CleanupSchoolBulkUpdateDraftsJob do
     Course::SchoolBulkUpdateDraft.start(course:, user:, school_uuids: [], baseline_uuids: [])
   end
 
+  it "runs on Solid Queue's low priority queue" do
+    expect(described_class.queue_adapter_name).to eq("solid_queue")
+    expect(described_class.new.queue_name).to eq("low_priority")
+  end
+
   it "deletes drafts past their time" do
     stale = draft
     stale.update_column(:expires_at, 1.hour.ago)

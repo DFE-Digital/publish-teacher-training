@@ -16,6 +16,11 @@ class BulkUpdateCourseSchoolsJob < ApplicationJob
   queue_as :low_priority
   retry_on_failure
 
+  # Sidekiq 6 sets jid before executing native payloads. Keep this shim until
+  # payloads queued before this class moved to Active Job have drained from
+  # Redis queues, scheduled jobs and retries.
+  attr_accessor :jid
+
   MAX_ATTEMPTS = 3
   RETRY_AFTER = 5.minutes
 

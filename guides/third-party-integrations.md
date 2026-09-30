@@ -26,9 +26,10 @@ team. SLAs and renewal dates are managed centrally by DfE.
 | [Google Geocoding API](geolocation.md) | Location search on Find          | REST API                                  |
 | GIAS (Get Information About Schools)   | School data import               | Daily CSV download via `Gias::Downloader` |
 
-The GIAS import runs daily as a Sidekiq job (`GiasImportJob`). It downloads the full school dataset from the Edubase
-API, transforms it, and upserts records into the `gias_school` table. Provider schools and course location searches
-depend on this data. See `lib/gias/` for the download, transform, and import pipeline.
+The GIAS import runs daily as `GiasImportJob` on Solid Queue. Until the recurring scheduler cutover, Sidekiq Cron
+hands each occurrence to Solid Queue through a retryable bridge worker. The job downloads the full school dataset
+from the Edubase API, transforms it, and upserts records into the `gias_school` table. Provider schools and course
+location searches depend on this data. See `lib/gias/` for the download, transform, and import pipeline.
 
 ## Monitoring and Observability
 

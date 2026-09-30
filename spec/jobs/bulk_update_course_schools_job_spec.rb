@@ -18,6 +18,22 @@ describe BulkUpdateCourseSchoolsJob do
     expect(described_class.new.queue_name).to eq("low_priority")
   end
 
+  it "can finish a native Sidekiq payload queued before the adapter migration" do
+    stub_apply(result(updated: [course.id]))
+    payload = {
+      "class" => described_class.name,
+      "jid" => "legacy-sidekiq-jid",
+      "args" => [[course.id], %w[added], %w[removed]],
+    }
+
+    worker = payload.fetch("class").constantize.new
+    worker.jid = payload.fetch("jid")
+    worker.perform(*payload.fetch("args"))
+
+    expect(worker.jid).to eq("legacy-sidekiq-jid")
+    expect(Publish::Schools::BulkUpdate::Apply).to have_received(:call)
+  end
+
   def stub_apply(returning)
     allow(Publish::Schools::BulkUpdate::Apply).to receive(:call).and_return(returning)
   end
