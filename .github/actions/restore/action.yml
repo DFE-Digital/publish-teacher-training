@@ -88,7 +88,7 @@ runs:
       run: |
         deploy="deployment/${{ env.app_name }}-solid-queue-worker"
         replicas=$(kubectl -n "${NAMESPACE}" get "${deploy}" -o jsonpath='{.spec.replicas}')
-        if [ -z "${replicas}" ] || [ "${replicas}" = "0" ]; then
+        if [ -z "${replicas}" ]; then
           replicas=1
         fi
         echo "SQ_WORKER_REPLICAS=${replicas}" >> $GITHUB_ENV
@@ -119,10 +119,12 @@ runs:
         bin/konduit.sh -n ${NAMESPACE} -i "${ATOMIC_RESTORE_FILE}" -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
-    - name: Start solid-queue-worker after restore
-      if: always()
+    - name: Restore solid-queue-worker replica count
+      if: ${{ always() && env.SQ_WORKER_REPLICAS != '' }}
       shell: bash
       run: |
         deploy="deployment/${{ env.app_name }}-solid-queue-worker"
-        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas="${SQ_WORKER_REPLICAS:-1}"
-        kubectl -n "${NAMESPACE}" rollout status "${deploy}" --timeout=300s
+        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas="${SQ_WORKER_REPLICAS}"
+        if [ "${SQ_WORKER_REPLICAS}" != "0" ]; then
+          kubectl -n "${NAMESPACE}" rollout status "${deploy}" --timeout=300s
+        fi
