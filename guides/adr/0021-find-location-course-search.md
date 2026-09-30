@@ -127,7 +127,7 @@ When a location search returns nothing, `Courses::RadiusQuickLinkSuggestions` ca
 
 ### Saved courses are not the same query
 
-`SavedCourses::Query` subclasses `Courses::Query` and reuses the same school-model branch to *annotate* distance. It does not filter by radius, and it keeps previous-cycle saved courses even when their old placement sites are no longer publishable. Do not assume a change to `location_scope` automatically has the same meaning on the saved-courses page.
+`SavedCourses::Query` subclasses `Courses::Query` but does not use `schools_location_scope`. It annotates distance with its own `ST_DistanceSphere` SQL. It does not filter by radius, and it keeps previous-cycle saved courses even when their old placement sites are no longer publishable. A change to `location_scope` or `CanonicalSchoolDistance` does not change the saved-courses page.
 
 ### Data sources
 
@@ -151,7 +151,7 @@ Location results are a subset of findable courses: published courses without a g
 
 Geocoding is a runtime dependency. Cache hits keep most requests off the Google client. A cache miss or client failure must not 500 the results page.
 
-Distance is not calculated in one place. Results use `Courses::Query`, the course page and debug panel use `CanonicalSchoolDistance`, and saved courses use another copy in `SavedCourses::Query`. Sphere maths and `Geolocation::METRES_PER_MILE` are the shared contract. The nearest-school tie-break exists only in `CanonicalSchoolDistance`.
+Distance is not calculated in one place. The results card reads `minimum_distance_to_search_location` from its own `ST_Distance(..., false)` in `Courses::Query#schools_location_scope`. The legacy path uses `ST_DistanceSphere` in `sites_location_scope`. The course page and the debug panel use `CanonicalSchoolDistance`. `SavedCourses::Query` has another `ST_DistanceSphere` copy. Changing only `CanonicalSchoolDistance` leaves the results card on the old maths, so the card and the course page can show different distances for the same course. Sphere maths and `Geolocation::METRES_PER_MILE` are the shared contract. The nearest-school tie-break exists only in `CanonicalSchoolDistance`.
 
 Public API location search is still `CourseSearchServiceSchools`, not `Courses::Query`. Equivalent product behaviour there is a separate change.
 
