@@ -4,11 +4,9 @@
 PG_DETAIL_REGEX = /^DETAIL:.*$/
 PG_DETAIL_FILTERED = "[PG DETAIL FILTERED]"
 
-def filter_record_not_unique_exception_messages!(event, hint)
-  return unless hint[:exception].is_a?(ActiveRecord::RecordNotUnique)
-
-  event.exception.each_value do |single_exception|
-    single_exception.value.gsub!(PG_DETAIL_REGEX, PG_DETAIL_FILTERED)
+def filter_pg_detail!(event)
+  Array(event.exception&.values).each do |single_exception|
+    single_exception.value = single_exception.value.gsub(PG_DETAIL_REGEX, PG_DETAIL_FILTERED)
   end
 end
 
@@ -19,8 +17,8 @@ Sentry.init do |config|
   # calls) reach Sentry. Default in sentry-rails is false.
   config.rails.register_error_subscriber = true
 
-  config.before_send = lambda do |event, hint|
-    filter_record_not_unique_exception_messages!(event, hint)
+  config.before_send = lambda do |event, _hint|
+    filter_pg_detail!(event)
 
     # Sanitize extra data
     if event.extra
@@ -48,6 +46,5 @@ Sentry.init do |config|
 
   config.excluded_exceptions += %w[
     ActiveRecord::RecordNotFound
-    Pundit::NotAuthorizedError
   ]
 end
