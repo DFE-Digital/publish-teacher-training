@@ -69,7 +69,8 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::MonitoringManager, type: :serv
         described_class.check_completion(process_summary.id, 5)
 
         process_summary.reload
-        expect(process_summary.status).to eq("finished")
+        expect(process_summary.status).to eq("failed")
+        expect(process_summary.records_backfilled).to eq(2)
         expect(process_summary.full_summary["monitoring_timeout"]).to be_present
         expect(process_summary.full_summary["monitoring_timeout"]["warning"]).to include("timeout")
       end
