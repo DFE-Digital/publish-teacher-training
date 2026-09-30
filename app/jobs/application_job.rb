@@ -19,6 +19,12 @@ class ApplicationJob < ActiveJob::Base
     retry_on ActiveRecord::Deadlocked
   end
 
+  # Override a retry/discard handler inherited from ApplicationJob or declared
+  # earlier in a subclass. The error is left visible to the queue backend.
+  def self.fail_without_retry_on(*exceptions)
+    rescue_from(*exceptions) { |error| raise error }
+  end
+
   # Opt-in for Solid Queue jobs that are safe to run again: Solid Queue has no
   # Sidekiq-style auto-retries, so retry any error a few times with backoff
   # before it lands in solid_queue_failed_executions.
