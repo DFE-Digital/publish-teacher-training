@@ -3,6 +3,9 @@
 require "http"
 
 class SlackNotificationJob < ApplicationJob
+  self.queue_adapter = :solid_queue
+  retry_on_failure
+
   SLACK_CHANNEL = "#twd_findpub_tech"
 
   def perform(text, url = nil)

@@ -32,4 +32,19 @@ describe GiasImportJob do
       perform_enqueued_jobs
     }.to change(GiasSchool, :count).by(1)
   end
+
+  it "tries a failed download again later" do
+    allow(Gias::Downloader).to receive(:call).and_raise(Gias::DownloadError)
+
+    expect { described_class.perform_now }
+      .to have_enqueued_job(described_class).at(a_value_between(30.minutes.from_now, 35.minutes.from_now))
+  end
+
+  it "does not retry other failures" do
+    allow(Gias::Downloader).to receive(:call).and_return(StringIO.new)
+    allow(Gias::Transformer).to receive(:call).and_raise(ArgumentError)
+
+    expect { described_class.perform_now }.to raise_error(ArgumentError)
+    expect(described_class).not_to have_been_enqueued
+  end
 end

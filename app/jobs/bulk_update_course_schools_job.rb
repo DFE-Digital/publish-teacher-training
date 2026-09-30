@@ -10,9 +10,11 @@
 # A course that cannot be written does not hold up the rest, and is not dropped
 # either: the job comes back for those alone, a few times, and says so once when
 # it stops. Anything that escapes Apply entirely - a dropped connection, say -
-# still bubbles, and Sidekiq retries the job as it would any other.
-class BulkUpdateCourseSchoolsJob
-  include Sidekiq::Job
+# still bubbles, and the whole job is retried a few times with backoff.
+class BulkUpdateCourseSchoolsJob < ApplicationJob
+  self.queue_adapter = :solid_queue
+  queue_as :low_priority
+  retry_on_failure
 
   MAX_ATTEMPTS = 3
   RETRY_AFTER = 5.minutes
@@ -27,7 +29,7 @@ class BulkUpdateCourseSchoolsJob
     return if result.failed_ids.empty?
 
     if attempt < MAX_ATTEMPTS
-      self.class.perform_in(RETRY_AFTER, result.failed_ids, added_uuids, removed_uuids, attempt + 1)
+      self.class.set(wait: RETRY_AFTER).perform_later(result.failed_ids, added_uuids, removed_uuids, attempt + 1)
     else
       report(result.failed_ids, added_uuids, removed_uuids, attempt)
     end

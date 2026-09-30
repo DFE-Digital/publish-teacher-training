@@ -59,4 +59,54 @@ RSpec.describe ApplicationJob, type: :job do
       expect(WithoutAutoRetryExampleJob.calls).to eq(1)
     end
   end
+
+  describe ".retry_on_failure" do
+    around do |example|
+      original_adapter = ActiveJob::Base.queue_adapter
+      ActiveJob::Base.queue_adapter = :test
+      clear_enqueued_jobs
+      example.run
+    ensure
+      clear_enqueued_jobs
+      ActiveJob::Base.queue_adapter = original_adapter
+    end
+
+    let(:job_class) do
+      Class.new(ApplicationJob) do
+        retry_on_failure attempts: 2
+
+        def perform(action = :standard)
+          case action
+          when :standard then raise StandardError, "boom"
+          when :deserialization
+            begin
+              raise ActiveRecord::RecordNotFound
+            rescue ActiveRecord::RecordNotFound
+              raise ActiveJob::DeserializationError
+            end
+          end
+        end
+      end
+    end
+
+    before { stub_const("RetryOnFailureExampleJob", job_class) }
+
+    it "re-enqueues a StandardError until attempts run out, then raises" do
+      expect {
+        RetryOnFailureExampleJob.perform_now(:standard)
+      }.to have_enqueued_job(RetryOnFailureExampleJob)
+
+      expect {
+        perform_enqueued_jobs { RetryOnFailureExampleJob.perform_later(:standard) }
+      }.to raise_error(/boom/)
+    end
+
+    it "still discards jobs whose records have gone" do
+      expect {
+        RetryOnFailureExampleJob.perform_now(:deserialization)
+      }.not_to raise_error
+
+      expect(RetryOnFailureExampleJob).not_to have_been_enqueued
+    end
+  end
 end
