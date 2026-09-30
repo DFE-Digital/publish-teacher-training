@@ -619,11 +619,6 @@
           },
           {
             "fieldPath": [
-              "schools_validated"
-            ]
-          },
-          {
-            "fieldPath": [
               "school_experience_required"
             ]
           },
