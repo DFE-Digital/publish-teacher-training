@@ -105,6 +105,13 @@ RSpec.describe EmailAlertMailerJob do
       expect { described_class.perform_now(alert.id, [course.id]) }.to have_enqueued_job(described_class)
     end
 
+    it "waits a minute before trying again when Notify rate limits" do
+      allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(notify_error(Notifications::Client::RateLimitError, "429"))
+
+      expect { described_class.perform_now(alert.id, [course.id]) }
+        .to have_enqueued_job(described_class).at(a_value_between(1.minute.from_now, 75.seconds.from_now))
+    end
+
     it "does not retry when Notify rejects the request" do
       allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(notify_error(Notifications::Client::BadRequestError, "400"))
 

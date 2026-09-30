@@ -8,12 +8,13 @@ class EmailAlertMailerJob < ApplicationJob
   # risk sending the digest twice, so it fails once and shows in Mission Control.
   retry_on(
     Notifications::Client::ServerError,
-    Notifications::Client::RateLimitError,
     Net::OpenTimeout,
     Net::ReadTimeout,
     attempts: 3,
     wait: :polynomially_longer,
   )
+  # Notify's limit is per minute, so back off long enough for the window to reset.
+  retry_on Notifications::Client::RateLimitError, attempts: 5, wait: 1.minute
 
   def perform(email_alert_id, course_ids)
     alert = Candidate::EmailAlert.find(email_alert_id)
