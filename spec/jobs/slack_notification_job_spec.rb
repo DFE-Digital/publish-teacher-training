@@ -48,6 +48,23 @@ describe SlackNotificationJob do
     end
   end
 
+  describe "retries" do
+    include ActiveJob::TestHelper
+
+    it "tries again when Slack has a server error" do
+      stub_request(:post, "https://example.com/webhook").to_return(status: 503)
+
+      expect { described_class.perform_now("example text") }.to have_enqueued_job(described_class)
+    end
+
+    it "does not retry when Slack rejects the message" do
+      stub_request(:post, "https://example.com/webhook").to_return(status: 400)
+
+      expect { described_class.perform_now("example text") }.to raise_error(SlackNotificationJob::SlackMessageError)
+      expect(described_class).not_to have_been_enqueued
+    end
+  end
+
   def invoke_worker
     described_class.new.perform("example text", "https://example.com/support")
   end
