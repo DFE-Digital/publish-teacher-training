@@ -8,17 +8,7 @@ require "yaml"
 # global adapter stays on Sidekiq. Shrink still_on_sidekiq as each tranche lands;
 # a new job must opt in to Solid Queue or be listed here deliberately.
 RSpec.describe "Solid Queue job routing" do
-  let(:still_on_sidekiq) do
-    %w[
-      RolloverJob
-      RolloverMonitoringJob
-      RolloverProviderJob
-      RolloverProvidersBatchJob
-      BlankCoordinatesBackfill::BackfillJob
-      BlankCoordinatesBackfill::BatchJob
-      BlankCoordinatesBackfill::MonitoringJob
-    ]
-  end
+  let(:still_on_sidekiq) { [] }
 
   # Framework jobs such as Sentry::SendEventJob also subclass ApplicationJob;
   # they stay on the global adapter until card 8.
