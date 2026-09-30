@@ -177,6 +177,8 @@ Always runs, and it does not read a search parameter. Preloads `site_statuses`, 
 
 Each entry is a provider code and a course code, and the query drops that course. The same course code at another provider stays. An entry missing either code is ignored. `Find::SearchParams` permits it on `/results`. The results form has no control that sets it.
 
+Apply uses this so a recommended-courses link can omit courses the candidate has already applied to. Added in [pull request 5365](https://github.com/DFE-Digital/publish-teacher-training/pull/5365).
+
 ### Ordering and result shape
 
 When there is no location, the default order is `course_name_ascending` (`Courses::OrderingStrategy`). Distance order is rejected if there are no coordinates, so a stale `order=distance` query string cannot break the page.
