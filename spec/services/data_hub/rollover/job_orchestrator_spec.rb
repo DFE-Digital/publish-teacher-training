@@ -35,6 +35,19 @@ RSpec.describe DataHub::Rollover::JobOrchestrator, type: :service do
         .at(be_within(1.second).of(DataHub::Rollover::JobOrchestrator::MONITORING_START_TIME.from_now))
     end
 
+    it "staggers provider batches on low_priority and monitoring on default in Solid Queue", :solid_queue do
+      subject
+
+      batches = SolidQueue::Job.where(class_name: "RolloverProvidersBatchJob")
+      monitoring = SolidQueue::Job.find_by!(class_name: "RolloverMonitoringJob")
+
+      expect(batches.pluck(:queue_name)).to eq(%w[low_priority low_priority])
+      expect(batches.pluck(:scheduled_at)).to all(be <= described_class::STAGGER_OVER.from_now)
+      expect(monitoring.queue_name).to eq("default")
+      expect(SolidQueue::ScheduledExecution.find_by!(job_id: monitoring.id).scheduled_at)
+        .to be_within(1.second).of(described_class::MONITORING_START_TIME.from_now)
+    end
+
     it "logs completion and returns the summary" do
       summary = subject
       expect(summary).to be_a(DataHub::RolloverProcessSummary)
