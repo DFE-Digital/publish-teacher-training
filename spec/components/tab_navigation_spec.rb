@@ -38,4 +38,28 @@ describe TabNavigation do
       expect(rendered_link["aria-current"]).to eq("page")
     end
   end
+
+  context "when the page is a child of a section" do
+    let(:year) { Find::CycleTimetable.current_year }
+    let(:items) do
+      [
+        { name: "Details", url: "/support/#{year}/providers/1" },
+        { name: "Schools", url: "/support/#{year}/providers/1/schools" },
+      ]
+    end
+
+    before do
+      with_request_url "/support/#{year}/providers/1/schools/abc/delete", host: "publish.localhost" do
+        render_inline(described_class.new(items:))
+      end
+    end
+
+    it "keeps the parent section active" do
+      schools = component.find(".app-tab-navigation__link", text: "Schools")
+      details = component.find(".app-tab-navigation__link", text: "Details")
+
+      expect(schools["aria-current"]).to eq("page")
+      expect(details["aria-current"]).to be_nil
+    end
+  end
 end
