@@ -107,13 +107,12 @@ module Publish
           end
         end
 
-        it "marks the schools as validated and touches the provider for Apply" do
+        it "touches the provider for Apply" do
           provider.update_columns(changed_at: 2.days.ago)
           previous_provider_changed_at = provider.changed_at
 
           service_call
 
-          expect(course.reload.schools_validated).to be(true)
           expect(provider.reload.changed_at).to be > previous_provider_changed_at
         end
 

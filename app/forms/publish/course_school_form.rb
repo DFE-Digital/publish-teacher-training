@@ -2,7 +2,7 @@
 
 module Publish
   class CourseSchoolForm < BaseCourseForm
-    FIELDS = %i[school_uuids schools_validated].freeze
+    FIELDS = %i[school_uuids].freeze
 
     attr_accessor(*FIELDS)
 

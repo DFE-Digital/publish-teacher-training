@@ -52,15 +52,12 @@ module Publish
           # course (e.g. master_subject_id), and Rails refuses lock! then.
           Course.where(id: course.id).lock.load
 
-          # TODO: Schools validated is from a depricated feature, we'll have to remove this
-          course.schools_validated = true
-
           update_site_statuses(provider_schools)
           sync_course_schools(provider_schools)
 
           # TouchCourse uses update_columns, which bypasses TouchProvider. Saving
-          # here persists schools_validated and updates provider.changed_at so
-          # Apply knows that it needs to sync the provider's courses.
+          # here updates provider.changed_at so Apply knows that it needs to
+          # sync the provider's courses.
           course.save!
         end
 
