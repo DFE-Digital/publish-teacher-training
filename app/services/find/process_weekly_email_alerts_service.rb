@@ -2,12 +2,13 @@
 
 module Find
   class ProcessWeeklyEmailAlertsService
-    def self.call(since: 1.week.ago)
-      new(since).call
+    def self.call(since: 1.week.ago, delivery_week: Time.zone.today.beginning_of_week)
+      new(since, delivery_week).call
     end
 
-    def initialize(since)
+    def initialize(since, delivery_week)
       @since = since
+      @delivery_week = delivery_week
     end
 
     def call
@@ -24,7 +25,9 @@ module Find
           matching = find_matching_courses(alert, recently_published_ids)
           next if matching.empty?
 
-          EmailAlertMailerJob.set(wait_until: deliver_at).perform_later(alert.id, matching.reorder(nil).pluck(:id))
+          EmailAlertMailerJob
+            .set(wait_until: deliver_at)
+            .perform_later(alert.id, matching.reorder(nil).pluck(:id), @delivery_week)
         end
       end
     end

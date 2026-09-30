@@ -61,7 +61,7 @@ bg_jobs:
   send_weekly_email_alerts:
     cron: "0 3 * * 5" # weekly on Friday at 03:00
     class: "SendWeeklyEmailAlertsJob"
-    queue: default
+    queue: low_priority
 
 skylight:
   enable: true

@@ -12,10 +12,11 @@ module Find
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
 
         alert = create(:email_alert, candidate:, subjects: [])
+        delivery_week = Date.new(2026, 9, 28)
 
-        expect { described_class.call(since: 1.week.ago) }
+        expect { described_class.call(since: 1.week.ago, delivery_week:) }
           .to have_enqueued_job(EmailAlertMailerJob)
-          .with(alert.id, [course.id])
+          .with(alert.id, [course.id], delivery_week)
       end
 
       it "does not enqueue a job when no courses were published since the given date" do
@@ -69,7 +70,7 @@ module Find
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob)
-          .with(alert.id, [course.id])
+          .with(alert.id, [course.id], Time.zone.today.beginning_of_week)
       end
 
       it "scopes recently published courses to the current recruitment cycle" do
@@ -135,7 +136,7 @@ module Find
 
         expect { described_class.call(since: 1.week.ago) }
           .to have_enqueued_job(EmailAlertMailerJob)
-          .with(alert.id, [open_course.id])
+          .with(alert.id, [open_course.id], Time.zone.today.beginning_of_week)
       end
     end
   end
