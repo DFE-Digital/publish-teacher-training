@@ -107,8 +107,8 @@ of them would be hundreds of emails saying the same thing.
 
 A course that fails does not hold up the rest and is not dropped: the job comes
 back for those alone. Anything escaping `Apply` entirely still bubbles, and
-Sidekiq retries as it would any job. Per-course failure is ours; whole-job
-failure is Sidekiq's.
+Active Job reschedules the Solid Queue job. Per-course failure is ours;
+whole-job failure uses the shared job retry policy.
 
 ## The pieces
 

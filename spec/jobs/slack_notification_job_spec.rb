@@ -57,6 +57,13 @@ describe SlackNotificationJob do
       expect { described_class.perform_now("example text") }.to have_enqueued_job(described_class)
     end
 
+    it "tries a rate-limited request again after one minute" do
+      stub_request(:post, "https://example.com/webhook").to_return(status: 429)
+
+      expect { described_class.perform_now("example text") }
+        .to have_enqueued_job(described_class).at(a_value_between(1.minute.from_now, 70.seconds.from_now))
+    end
+
     it "does not retry when Slack rejects the message" do
       stub_request(:post, "https://example.com/webhook").to_return(status: 400)
 

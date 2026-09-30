@@ -3,6 +3,11 @@
 require "rails_helper"
 
 RSpec.describe CleanupRecentSearchesJob do
+  it "runs on Solid Queue's low priority queue" do
+    expect(described_class.queue_adapter_name).to eq("solid_queue")
+    expect(described_class.new.queue_name).to eq("low_priority")
+  end
+
   describe "#perform" do
     it "permanently deletes discarded searches older than 1 day" do
       old_discarded = create(:recent_search)

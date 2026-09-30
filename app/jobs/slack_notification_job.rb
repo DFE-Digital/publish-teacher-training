@@ -5,11 +5,14 @@ require "http"
 class SlackNotificationJob < ApplicationJob
   class SlackMessageError < StandardError; end
   class SlackServerError < SlackMessageError; end
+  class SlackRateLimitError < SlackMessageError; end
 
   self.queue_adapter = :solid_queue
 
-  # A 4xx means the webhook or payload is wrong, and will be wrong next time too.
+  # Most 4xx responses mean the webhook or payload will still be wrong next time.
+  # Slack's 429 response is transient and gets a slower, separate retry policy.
   retry_on SlackServerError, HTTP::ConnectionError, HTTP::TimeoutError, attempts: 3, wait: :polynomially_longer
+  retry_on SlackRateLimitError, attempts: 5, wait: 1.minute
 
   SLACK_CHANNEL = "#twd_findpub_tech"
 
@@ -40,7 +43,13 @@ private
 
     return if response.status.success?
 
-    error = response.status.server_error? ? SlackServerError : SlackMessageError
+    error = if response.status == 429
+              SlackRateLimitError
+            elsif response.status.server_error?
+              SlackServerError
+            else
+              SlackMessageError
+            end
     raise error, "Slack error: #{response.body}"
   end
 end
