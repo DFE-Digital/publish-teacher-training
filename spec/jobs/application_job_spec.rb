@@ -73,10 +73,30 @@ RSpec.describe ApplicationJob, type: :job do
     before { stub_const("FailWithoutRetryExampleJob", job_class) }
 
     it "overrides an earlier retry handler and raises the failure" do
+      allow(Sidekiq).to receive(:server?).and_return(false)
+
       expect {
         FailWithoutRetryExampleJob.perform_now
       }.to raise_error(ActiveRecord::Deadlocked, "ambiguous side effect")
 
+      expect(FailWithoutRetryExampleJob).not_to have_been_enqueued
+    end
+
+    it "reports and consumes a legacy Sidekiq payload so its wrapper cannot retry" do
+      allow(Sidekiq).to receive(:server?).and_return(true)
+      allow(Rails.error).to receive(:report)
+      wrapper = ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper.new
+      wrapper.jid = "legacy-sidekiq-jid"
+
+      expect {
+        wrapper.perform(FailWithoutRetryExampleJob.new.serialize)
+      }.not_to raise_error
+
+      expect(Rails.error).to have_received(:report).with(
+        an_instance_of(ActiveRecord::Deadlocked),
+        handled: true,
+        source: "application.active_job",
+      )
       expect(FailWithoutRetryExampleJob).not_to have_been_enqueued
     end
   end
