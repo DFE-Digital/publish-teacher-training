@@ -2,6 +2,8 @@ import { Controller } from '@hotwired/stimulus'
 
 const RELOADED_KEY = 'save-course-reloaded'
 
+let reloadedAfterFailure = false
+
 export default class extends Controller {
   static targets = ['icon', 'text']
   static values = {
@@ -16,6 +18,13 @@ export default class extends Controller {
     saveText: String,
     signInToSaveText: String,
     failedText: String
+  }
+
+  connect () {
+    if (window.sessionStorage.getItem(RELOADED_KEY)) {
+      window.sessionStorage.removeItem(RELOADED_KEY)
+      reloadedAfterFailure = true
+    }
   }
 
   toggle (event) {
@@ -81,7 +90,7 @@ export default class extends Controller {
   }
 
   recover () {
-    if (window.sessionStorage.getItem(RELOADED_KEY)) {
+    if (reloadedAfterFailure) {
       this.iconTarget.alt = this.failedTextValue
       this.textTarget.textContent = this.failedTextValue
       return
@@ -92,7 +101,6 @@ export default class extends Controller {
   }
 
   updateUI (saved) {
-    window.sessionStorage.removeItem(RELOADED_KEY)
     this.savedValue = saved
 
     let text
