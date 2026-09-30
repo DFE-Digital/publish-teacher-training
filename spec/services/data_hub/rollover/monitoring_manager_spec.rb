@@ -49,8 +49,9 @@ RSpec.describe DataHub::Rollover::MonitoringManager, type: :service do
         }.not_to have_enqueued_job(RolloverMonitoringJob)
 
         process_summary.reload
-        expect(process_summary.status).to eq("finished")
+        expect(process_summary.status).to eq("failed")
         expect(process_summary.full_summary["monitoring_timeout"]).to be_present
+        expect(process_summary.short_summary["providers_rolled_over"]).to eq(1)
       end
     end
 

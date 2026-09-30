@@ -23,4 +23,16 @@ RSpec.describe RolloverJob, type: :job do
     expect(Rails.error).to have_received(:report).with(an_instance_of(StandardError), hash_including(source: "application.active_job"))
     expect(described_class).not_to have_been_enqueued
   end
+
+  it "does not retry a deadlock after orchestration may have partially scheduled providers" do
+    allow(DataHub::Rollover::JobOrchestrator).to receive(:start_rollover)
+      .and_raise(ActiveRecord::Deadlocked, "deadlock")
+
+    expect {
+      described_class.perform_now(recruitment_cycle.id)
+    }.to raise_error(ActiveRecord::Deadlocked, "deadlock")
+
+    expect(DataHub::Rollover::JobOrchestrator).to have_received(:start_rollover).once
+    expect(described_class).not_to have_been_enqueued
+  end
 end

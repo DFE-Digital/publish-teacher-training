@@ -5,6 +5,7 @@ class RolloverJob < ApplicationJob
   queue_as :default
   # A retry would open a second process summary and schedule every provider again.
   without_auto_retry
+  fail_without_retry_on ActiveRecord::Deadlocked
 
   def perform(recruitment_cycle_id)
     DataHub::Rollover::JobOrchestrator.start_rollover(recruitment_cycle_id)

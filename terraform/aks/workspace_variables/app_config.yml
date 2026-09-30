@@ -27,3 +27,4 @@ production:
   <<: *default
   RAILS_ENV: production
   RACK_ENV: production
+  LOW_PRIORITY_QUEUE_THREADS: 3

@@ -30,12 +30,11 @@ module DataHub
         return handle_no_records if total_records.zero?
 
         initialize_process_summary
-        batches_info = calculate_batch_schedule
-        schedule_batches(batches_info)
-        schedule_monitoring(batches_info)
-        update_scheduling_complete(batches_info)
+        schedule = schedule_batches
+        schedule_monitoring(schedule)
+        update_scheduling_complete(schedule)
 
-        Log.info("Orchestration complete: scheduled #{batches_info.size} batches across #{total_records} records")
+        Log.info("Orchestration complete: scheduled #{schedule[:batch_count]} batches across #{total_records} records")
         @process_summary
       rescue StandardError => e
         Log.error("Orchestration error: #{e.message}")
@@ -62,8 +61,7 @@ module DataHub
       end
 
       def calculate_batch_schedule
-        batches = query.call.each_slice(DEFAULT_BATCH_SIZE).to_a
-        batch_count = batches.size
+        batch_count = (total_records.to_f / DEFAULT_BATCH_SIZE).ceil
 
         # Breathing space: add 1 second per 250 batches for extra margin
         interval = MIN_SECONDS_BETWEEN_BATCHES + [batch_count / 250, 10].min
@@ -71,16 +69,20 @@ module DataHub
 
         Log.info("Calculated batch schedule: #{batch_count} batches, #{interval}s interval")
 
-        batches.each_with_index.map do |batch, i|
+        query.each_batch(batch_size: DEFAULT_BATCH_SIZE).with_index.lazy.map do |batch, i|
           { batch: batch, at: now + (i * interval).seconds }
         end
       end
 
-      def schedule_batches(batches_info)
-        Log.info("Scheduling #{batches_info.size} batches...")
+      def schedule_batches
+        Log.info("Scheduling batches...")
 
-        batches_info.each_with_index do |info, idx|
-          Log.info("Batch #{idx + 1}/#{batches_info.size}: #{info[:batch].size} records at #{info[:at].strftime('%H:%M:%S')}")
+        first_batch_at = nil
+        last_batch_at = nil
+        batch_count = 0
+
+        calculate_batch_schedule.each_with_index do |info, idx|
+          Log.info("Batch #{idx + 1}: #{info[:batch].size} records at #{info[:at].strftime('%H:%M:%S')}")
 
           ::BlankCoordinatesBackfill::BatchJob.set(wait_until: info[:at]).perform_later(
             info[:batch],
@@ -93,11 +95,23 @@ module DataHub
             scheduled_at: info[:at],
             records_count: info[:batch].size,
           )
+
+          first_batch_at ||= info[:at]
+          last_batch_at = info[:at]
+          batch_count += 1
         end
+
+        raise "No backfill batches were available to schedule" if batch_count.zero?
+
+        {
+          batch_count:,
+          batch_interval_seconds: batch_count > 1 ? ((last_batch_at - first_batch_at) / (batch_count - 1)).to_i : 0,
+          last_batch_at:,
+        }
       end
 
-      def schedule_monitoring(batches_info)
-        monitoring_delay_seconds = (batches_info.last[:at] - Time.current).to_i + MONITORING_DELAY.to_i
+      def schedule_monitoring(schedule)
+        monitoring_delay_seconds = (schedule[:last_batch_at] - Time.current).to_i + MONITORING_DELAY.to_i
         attempt_number = 1
 
         ::BlankCoordinatesBackfill::MonitoringJob.set(wait: monitoring_delay_seconds.seconds).perform_later(
@@ -105,28 +119,21 @@ module DataHub
           attempt_number,
         )
 
-        monitoring_start_time = batches_info.last[:at] + MONITORING_DELAY
+        monitoring_start_time = schedule[:last_batch_at] + MONITORING_DELAY
         Log.info("Scheduled monitoring to start in #{monitoring_delay_seconds / 60} minutes " \
                  "(at #{monitoring_start_time.strftime('%H:%M:%S')})")
       end
 
-      def update_scheduling_complete(batches_info)
-        estimated_completion = batches_info.last[:at] +
+      def update_scheduling_complete(schedule)
+        estimated_completion = schedule[:last_batch_at] +
           MONITORING_DELAY +
           (MonitoringManager::MAX_ATTEMPTS * MonitoringManager::CHECK_INTERVAL)
 
-        # Calculate interval between first and second batch
-        batch_interval_seconds = if batches_info.size > 1
-                                   (batches_info[1][:at] - batches_info[0][:at]).to_i
-                                 else
-                                   0
-                                 end
-
         @process_summary.update!(
           short_summary: @process_summary.short_summary.merge(
-            batches_scheduled: batches_info.size,
+            batches_scheduled: schedule[:batch_count],
             batch_size: DEFAULT_BATCH_SIZE,
-            batch_interval_seconds:,
+            batch_interval_seconds: schedule[:batch_interval_seconds],
             estimated_completion_time: estimated_completion.iso8601,
             scheduling_completed_at: Time.current.iso8601,
           ),

@@ -61,6 +61,21 @@ RSpec.describe DataHub::BlankCoordinatesBackfill::Query, type: :service do
     end
   end
 
+  describe "#each_batch" do
+    let!(:provider) { create(:provider, recruitment_cycle:) }
+    let!(:sites) { create_list(:site, 3, latitude: nil, longitude: nil, provider:) }
+    let!(:schools) { create_list(:gias_school, 2, latitude: nil, longitude: nil) }
+
+    it "streams bounded batches across both record types" do
+      batches = query.each_batch(batch_size: 2).to_a
+      expected_records = sites.map { |site| { type: "Site", id: site.id } } +
+        schools.map { |school| { type: "GiasSchool", id: school.id } }
+
+      expect(batches.map(&:size)).to eq([2, 2, 1])
+      expect(batches.flatten).to match_array(expected_records)
+    end
+  end
+
   describe "#total_count" do
     let!(:provider) { create(:provider, recruitment_cycle:) }
     let!(:sites) { create_list(:site, 3, latitude: nil, longitude: nil, provider:) }
