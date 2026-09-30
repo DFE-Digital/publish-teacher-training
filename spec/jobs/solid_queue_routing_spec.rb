@@ -10,8 +10,6 @@ require "yaml"
 RSpec.describe "Solid Queue job routing" do
   let(:still_on_sidekiq) do
     %w[
-      EmailAlertMailerJob
-      SendWeeklyEmailAlertsJob
       RolloverJob
       RolloverMonitoringJob
       RolloverProviderJob
