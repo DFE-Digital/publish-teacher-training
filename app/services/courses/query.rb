@@ -567,29 +567,7 @@ module Courses
     # withdrawn — regardless of whether the course has schools/sites attached.
     # Findability is therefore exactly Course#is_published?.
     def findable_courses_sql
-      published_course_sql
-    end
-
-    # SQL mirror of Course#is_published?. A course counts as published when it
-    # has a published enrichment AND its latest enrichment has not since been
-    # rolled over or withdrawn. The published row + "latest not rolled_over /
-    # withdrawn" pair keeps courses findable when a legacy subsequent draft is
-    # still present, while excluding draft-only, rolled-over and withdrawn
-    # courses. The created_at/id ordering matches CourseEnrichment.most_recent.
-    def published_course_sql
-      <<~SQL
-        EXISTS (
-          SELECT 1 FROM course_enrichment ce
-          WHERE ce.course_id = course.id
-            AND ce.status = #{CourseEnrichment.statuses[:published]}
-        )
-        AND (
-          SELECT ce_latest.status FROM course_enrichment ce_latest
-          WHERE ce_latest.course_id = course.id
-          ORDER BY ce_latest.created_at DESC, ce_latest.id DESC
-          LIMIT 1
-        ) NOT IN (#{CourseEnrichment.statuses[:rolled_over]}, #{CourseEnrichment.statuses[:withdrawn]})
-      SQL
+      Course.visible_in_find_sql
     end
 
     def master_subject_ordering_scope

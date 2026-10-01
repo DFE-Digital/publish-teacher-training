@@ -294,6 +294,26 @@ class Course < ApplicationRecord
     where(id: CourseEnrichment.published.select(:course_id))
   }
 
+  # A published enrichment whose latest enrichment is not
+  # rolled over or withdrawn. School and site status are not part of this.
+  scope :visible_in_find, -> { where(visible_in_find_sql) }
+
+  def self.visible_in_find_sql
+    <<~SQL.squish
+      EXISTS (
+        SELECT 1 FROM course_enrichment ce
+        WHERE ce.course_id = course.id
+          AND ce.status = #{CourseEnrichment.statuses[:published]}
+      )
+      AND (
+        SELECT ce_latest.status FROM course_enrichment ce_latest
+        WHERE ce_latest.course_id = course.id
+        ORDER BY ce_latest.created_at DESC, ce_latest.id DESC
+        LIMIT 1
+      ) NOT IN (#{CourseEnrichment.statuses[:rolled_over]}, #{CourseEnrichment.statuses[:withdrawn]})
+    SQL
+  end
+
   scope :with_recruitment_cycle, ->(year) { joins(provider: :recruitment_cycle).where(recruitment_cycle: { year: }) }
   scope :findable, -> { joins(:site_statuses).merge(SiteStatus.findable) }
   scope :with_vacancies, -> { joins(:site_statuses).merge(SiteStatus.with_vacancies) }

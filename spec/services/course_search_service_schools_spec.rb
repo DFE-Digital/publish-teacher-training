@@ -350,9 +350,10 @@ RSpec.describe CourseSearchServiceSchools do
       context "when true" do
         let(:filter) { { findable: true } }
 
-        it "does not apply the legacy site status scope" do
+        it "returns courses that are visible on Find" do
+          expect(scope).to receive(:visible_in_find).and_return(course_ids_scope)
           expect(scope).not_to receive(:findable)
-          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
         end
@@ -361,7 +362,8 @@ RSpec.describe CourseSearchServiceSchools do
       context "when false" do
         let(:filter) { { findable: false } }
 
-        it "doesn't add the findable scope" do
+        it "doesn't add the visible on Find scope" do
+          expect(scope).not_to receive(:visible_in_find)
           expect(scope).not_to receive(:findable)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
@@ -372,7 +374,8 @@ RSpec.describe CourseSearchServiceSchools do
       context "when absent" do
         let(:filter) { {} }
 
-        it "doesn't add the findable scope" do
+        it "doesn't add the visible on Find scope" do
+          expect(scope).not_to receive(:visible_in_find)
           expect(scope).not_to receive(:findable)
           expect(scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
