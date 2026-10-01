@@ -51,11 +51,14 @@ class CourseSearchServiceSchools
       # ratifying provider of every course. preload runs before includes, and
       # the accrediting_provider scope depends on the course's recruitment
       # cycle, so the provider and cycle are named again here ahead of it.
+      # running, has_vacancies and open_for_applications still read the site
+      # statuses, which Course only filters in memory once they are loaded.
       :latest_enrichment,
       :latest_published_enrichment,
       :subjects,
       { provider: :recruitment_cycle },
       :accrediting_provider,
+      :site_statuses,
     ).where(id: scope.select(:id))
 
     if provider_name.present?

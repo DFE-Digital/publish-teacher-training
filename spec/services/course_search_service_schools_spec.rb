@@ -37,6 +37,7 @@ RSpec.describe CourseSearchServiceSchools do
           :subjects,
           { provider: :recruitment_cycle },
           :accrediting_provider,
+          :site_statuses,
         ).and_return(course_with_includes)
 
       allow(course_with_includes).to receive(:where).and_return(outer_query_scope)
