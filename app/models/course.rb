@@ -723,10 +723,6 @@ class Course < ApplicationRecord
     provider.accredited?
   end
 
-  def is_school_direct?
-    !(is_uni_or_scitt? || is_further_education?)
-  end
-
   def self_accredited?
     provider.accredited?
   end

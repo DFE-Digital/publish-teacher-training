@@ -4,12 +4,11 @@ module Courses
   class CreationService
     include ServicePattern
 
-    attr_reader :course_params, :provider, :next_available_course_code
+    attr_reader :course_params, :provider
 
-    def initialize(course_params:, provider:, next_available_course_code: false)
+    def initialize(course_params:, provider:)
       @course_params = course_params
       @provider = provider
-      @next_available_course_code = next_available_course_code
     end
 
     def call
@@ -40,7 +39,7 @@ module Courses
         course.accrediting_provider = course.provider.accredited_partners.first
       end
 
-      course.course_code = provider.next_available_course_code if next_available_course_code
+      course.course_code = provider.next_available_course_code
 
       Publish::Courses::AssignTdaAttributesService.new(course).call if course.undergraduate_degree_with_qts?
       Courses::AssignProgramTypeService.new.execute(course.funding, course)

@@ -460,12 +460,6 @@ class CourseDecorator < ApplicationDecorator
     is_withdrawn? || teacher_degree_apprenticeship?
   end
 
-  def show_skilled_worker_visa_row?
-    school_direct_salaried_training_programme? ||
-      pg_teaching_apprenticeship? ||
-      teacher_degree_apprenticeship?
-  end
-
   def show_sponsorship_deadline_required_row?
     visa_sponsorship.in?(%i[can_sponsor_student_visa can_sponsor_skilled_worker_visa])
   end

@@ -102,6 +102,13 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
       resource :course_wizard, only: %i[new], controller: "course_wizards"
       get "course_wizard/:state_key/:step", to: "course_wizards#show", as: :course_wizard
       patch "course_wizard/:state_key/:step", to: "course_wizards#update"
+      get "courses/new", to: redirect(status: 302) { |params, _request|
+        Rails.application.routes.url_helpers.new_publish_provider_recruitment_cycle_course_wizard_path(
+          params[:provider_code],
+          params[:recruitment_cycle_year],
+          state_key: SecureRandom.uuid,
+        )
+      }
 
       resources :courses, param: :code, only: %i[index show] do
         get "/download-course-information", on: :collection, to: "courses/exports#course_information", as: :download_course_information

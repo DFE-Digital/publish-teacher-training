@@ -16,7 +16,6 @@ class CourseWizard
         course = ::Courses::CreationService.call(
           course_params: params,
           provider: @wizard.provider,
-          next_available_course_code: true,
         )
 
         if course.valid?(:new) && course.save

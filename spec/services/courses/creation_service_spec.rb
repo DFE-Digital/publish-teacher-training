@@ -6,7 +6,6 @@ describe Courses::CreationService do
   subject do
     described_class.call(
       course_params: valid_course_params, provider:,
-      next_available_course_code:
     )
   end
 
@@ -19,8 +18,6 @@ describe Courses::CreationService do
   let(:gias_school) { provider_school.gias_school }
 
   let(:recruitment_cycle) { provider.recruitment_cycle }
-
-  let(:next_available_course_code) { false }
 
   context "visa sponsorship is duplicated in params" do
     context "when funding is fee" do
@@ -254,33 +251,11 @@ describe Courses::CreationService do
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([primary_subject.id])
-      expect(subject.course_code).to be_nil
+      expect(subject.course_code).not_to be_nil
+      expect(subject.course_code).not_to eq("D0CK")
       expect(subject.name).to eq("Primary (SEND)")
       expect(subject.study_mode).to eq "full_time"
       expect(subject.errors).to be_empty
-    end
-
-    context "next_available_course_code is true" do
-      let(:next_available_course_code) do
-        true
-      end
-
-      it "create the primary course" do
-        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
-          expect(subject.public_send(key)).to eq(value)
-        end
-
-        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
-        expect(subject.is_send).to be(true)
-        expect(subject.sites.map(&:id)).to eq([site.id])
-        expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.course_subjects.map { it.subject.id }).to eq([primary_subject.id])
-        expect(subject.course_code).not_to be_nil
-        expect(subject.course_code).not_to eq("D0CK")
-        expect(subject.name).to eq("Primary (SEND)")
-        expect(subject.study_mode).to eq "full_time"
-        expect(subject.errors).to be_empty
-      end
     end
   end
 
@@ -306,7 +281,7 @@ describe Courses::CreationService do
 
     it "create the secondary course" do
       valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
-        expect(subject.send(key)).to eq(value)
+        expect(subject.public_send(key)).to eq(value)
       end
 
       expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
@@ -314,33 +289,11 @@ describe Courses::CreationService do
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
-      expect(subject.course_code).to be_nil
+      expect(subject.course_code).not_to be_nil
+      expect(subject.course_code).not_to eq("D0CK")
       expect(subject.name).to eq("Biology")
       expect(subject.study_mode).to eq "part_time"
       expect(subject.errors).to be_empty
-    end
-
-    context "next_available_course_code is true" do
-      let(:next_available_course_code) do
-        true
-      end
-
-      it "create the secondary course" do
-        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "subjects_ids", "course_code", "study_mode").each do |key, value|
-          expect(subject.public_send(key)).to eq(value)
-        end
-
-        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
-        expect(subject.is_send).to be(false)
-        expect(subject.sites.map(&:id)).to eq([site.id])
-        expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
-        expect(subject.course_code).not_to be_nil
-        expect(subject.course_code).not_to eq("D0CK")
-        expect(subject.name).to eq("Biology")
-        expect(subject.study_mode).to eq "part_time"
-        expect(subject.errors).to be_empty
-      end
     end
 
     context "study_mode param is a string" do
@@ -368,7 +321,8 @@ describe Courses::CreationService do
         expect(subject.sites.map(&:id)).to eq([site.id])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
         expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
-        expect(subject.course_code).to be_nil
+        expect(subject.course_code).not_to be_nil
+        expect(subject.course_code).not_to eq("D0CK")
         expect(subject.name).to eq("Biology")
         expect(subject.study_mode).to eq "part_time"
         expect(subject.errors).to be_empty
@@ -393,12 +347,17 @@ describe Courses::CreationService do
     end
 
     it "create the further_education course" do
+      valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
+        expect(subject.send(key)).to eq(value)
+      end
+
       expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(true)
       expect(subject.sites.map(&:id)).to eq([site.id])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([further_education_subject.id])
-      expect(subject.course_code).to be_nil
+      expect(subject.course_code).not_to be_nil
+      expect(subject.course_code).not_to eq("D0CK")
       expect(subject.name).to eq("Further education (SEND)")
       expect(subject.errors).to be_empty
       expect(subject.funding).to eq("fee")
@@ -406,33 +365,6 @@ describe Courses::CreationService do
       expect(subject.maths).to eq("not_required")
       expect(subject.science).to eq("not_required")
       expect(subject.study_mode).to eq "full_time_or_part_time"
-    end
-
-    context "next_available_course_code is true" do
-      let(:next_available_course_code) do
-        true
-      end
-
-      it "create the further_education course" do
-        valid_course_params.except("start_date", "is_send", "school_uuids", "study_sites_ids", "course_code", "study_mode").each do |key, value|
-          expect(subject.send(key)).to eq(value)
-        end
-
-        expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
-        expect(subject.is_send).to be(true)
-        expect(subject.sites.map(&:id)).to eq([site.id])
-        expect(subject.study_sites.map(&:id)).to eq([study_site.id])
-        expect(subject.course_subjects.map { it.subject.id }).to eq([further_education_subject.id])
-        expect(subject.course_code).not_to be_nil
-        expect(subject.course_code).not_to eq("D0CK")
-        expect(subject.name).to eq("Further education (SEND)")
-        expect(subject.errors).to be_empty
-        expect(subject.funding).to eq("fee")
-        expect(subject.english).to eq("not_required")
-        expect(subject.maths).to eq("not_required")
-        expect(subject.science).to eq("not_required")
-        expect(subject.study_mode).to eq "full_time_or_part_time"
-      end
     end
 
     context "when course sponsors visa" do
@@ -471,7 +403,7 @@ describe Courses::CreationService do
 
   describe "writing selected schools during course creation" do
     subject(:created_course) do
-      described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
+      described_class.call(course_params: valid_course_params, provider:)
     end
 
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
@@ -691,7 +623,7 @@ describe Courses::CreationService do
   # must not be the one place that insists on it.
   describe "writing selected study sites during course creation" do
     subject(:created_course) do
-      described_class.call(course_params: valid_course_params, provider:, next_available_course_code: true)
+      described_class.call(course_params: valid_course_params, provider:)
     end
 
     let(:primary_subject) { find_or_create(:primary_subject, :primary) }
