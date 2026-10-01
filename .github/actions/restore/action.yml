@@ -58,6 +58,12 @@ runs:
           echo "app_name=publish-${{ env.app_environment }}" >> $GITHUB_ENV
         fi
 
+    - name: Set solid-queue-worker variables
+      shell: bash
+      run: |
+        echo "SQ_WORKER_DEPLOYMENT=deployment/${{ env.app_name }}-solid-queue-worker" >> $GITHUB_ENV
+        echo "SQ_WORKER_SELECTOR=app=${{ env.app_name }}-solid-queue-worker" >> $GITHUB_ENV
+
     - uses: azure/login@v3
       with:
         tenant-id: ${{ inputs.azure-tenant-id }}
@@ -86,21 +92,19 @@ runs:
     - name: Stop solid-queue-worker before restore
       shell: bash
       run: |
-        deploy="deployment/${{ env.app_name }}-solid-queue-worker"
-        replicas=$(kubectl -n "${NAMESPACE}" get "${deploy}" -o jsonpath='{.spec.replicas}')
+        replicas=$(kubectl -n "${NAMESPACE}" get "${SQ_WORKER_DEPLOYMENT}" -o jsonpath='{.spec.replicas}')
         if [ -z "${replicas}" ]; then
           replicas=1
         fi
         echo "SQ_WORKER_REPLICAS=${replicas}" >> $GITHUB_ENV
-        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas=0
+        kubectl -n "${NAMESPACE}" scale "${SQ_WORKER_DEPLOYMENT}" --replicas=0
 
-        selector='app=${{ env.app_name }}-solid-queue-worker'
-        worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${selector}" -o name)
+        worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${SQ_WORKER_SELECTOR}" -o name)
         if [ -n "${worker_pods}" ]; then
-          kubectl -n "${NAMESPACE}" wait --for=delete pod -l "${selector}" --timeout=120s
+          kubectl -n "${NAMESPACE}" wait --for=delete pod -l "${SQ_WORKER_SELECTOR}" --timeout=120s
         fi
 
-        remaining_worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${selector}" -o name)
+        remaining_worker_pods=$(kubectl -n "${NAMESPACE}" get pods -l "${SQ_WORKER_SELECTOR}" -o name)
         if [ -n "${remaining_worker_pods}" ]; then
           echo "::error::Solid Queue worker pods remain after scale-down:"
           echo "${remaining_worker_pods}"
@@ -110,12 +114,15 @@ runs:
     - name: Restore backup to aks env database
       shell: bash
       run: |
-        # Konduit does not forward psql flags for compressed input, so wrap the
-        # dump itself in an error-stopping transaction. A failure rolls back the
-        # restore before the always-run worker cleanup starts the deployment.
+        # Konduit does not forward psql flags, so wrap the dump in an error-stopping
+        # transaction. gzip -d reads concatenated members, so the dump is not recompressed.
         ATOMIC_RESTORE_FILE="${SANITISED_FILE_NAME}_atomic.sql.gz"
-        python3 .github/actions/restore/wrap_restore.py \
-          "${SANITISED_FILE_NAME}.sql.gz" "${ATOMIC_RESTORE_FILE}"
+        gzip --test "${SANITISED_FILE_NAME}.sql.gz"
+        {
+          printf '\\set ON_ERROR_STOP on\nBEGIN;\n' | gzip
+          cat "${SANITISED_FILE_NAME}.sql.gz"
+          printf '\nCOMMIT;\n' | gzip
+        } > "${ATOMIC_RESTORE_FILE}"
         bin/konduit.sh -n ${NAMESPACE} -i "${ATOMIC_RESTORE_FILE}" -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
@@ -123,8 +130,7 @@ runs:
       if: ${{ always() && env.SQ_WORKER_REPLICAS != '' }}
       shell: bash
       run: |
-        deploy="deployment/${{ env.app_name }}-solid-queue-worker"
-        kubectl -n "${NAMESPACE}" scale "${deploy}" --replicas="${SQ_WORKER_REPLICAS}"
+        kubectl -n "${NAMESPACE}" scale "${SQ_WORKER_DEPLOYMENT}" --replicas="${SQ_WORKER_REPLICAS}"
         if [ "${SQ_WORKER_REPLICAS}" != "0" ]; then
-          kubectl -n "${NAMESPACE}" rollout status "${deploy}" --timeout=300s
+          kubectl -n "${NAMESPACE}" rollout status "${SQ_WORKER_DEPLOYMENT}" --timeout=300s
         fi
