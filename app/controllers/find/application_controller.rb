@@ -2,6 +2,8 @@
 
 module Find
   class ApplicationController < ActionController::Base
+    SESSION_COOKIE_EXPIRY = 2.weeks
+
     include Pagy::Backend
     include DfE::Analytics::Requests
     include Authentication
@@ -31,7 +33,7 @@ module Find
   private
 
     def persist_session_cookie
-      request.session_options[:expire_after] = 2.weeks
+      request.session_options[:expire_after] = SESSION_COOKIE_EXPIRY
     end
 
     def candidate
