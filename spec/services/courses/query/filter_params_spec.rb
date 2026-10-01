@@ -492,127 +492,91 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   context "when searching by start date" do
     let(:current_recruitment_cycle_year) { RecruitmentCycle.current.year.to_i }
     let(:next_recruitment_cycle_year) { current_recruitment_cycle_year + 1 }
-    let!(:january_course) do
-      create(:course, :with_full_time_sites, :published, name: "Art and design", start_date: Time.zone.local(current_recruitment_cycle_year, 1, 1))
-    end
-    let!(:august_course) do
-      create(:course, :with_full_time_sites, :published, name: "Biology", start_date: Time.zone.local(current_recruitment_cycle_year, 8, 1))
-    end
-    let!(:beginning_of_september_course) do
-      create(:course, :with_full_time_sites, :published, name: "Computing", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 1))
-    end
-    let!(:middle_of_september_course) do
-      create(:course, :with_full_time_sites, :published, name: "English", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 15))
-    end
-    let!(:end_of_september_course) do
-      create(:course, :with_full_time_sites, :published, name: "Primary with english", start_date: Time.zone.local(current_recruitment_cycle_year, 9, 30))
-    end
-    let!(:october_course) do
-      create(:course, :with_full_time_sites, :published, name: "Spanish", start_date: Time.zone.local(current_recruitment_cycle_year, 10, 1))
-    end
-    let!(:next_year_january_course) do
-      create(:course, :with_full_time_sites, :published, name: "Mathematics", start_date: Time.zone.local(next_recruitment_cycle_year, 1, 15))
-    end
-    let!(:next_year_july_course) do
-      create(:course, :with_full_time_sites, :published, name: "Physics", start_date: Time.zone.local(next_recruitment_cycle_year, 7, 31))
+
+    let!(:december_before_course) { course_starting(current_recruitment_cycle_year - 1, 12, 31) }
+    let!(:january_course) { course_starting(current_recruitment_cycle_year, 1, 1) }
+    let!(:march_course) { course_starting(current_recruitment_cycle_year, 3, 31) }
+    let!(:april_course) { course_starting(current_recruitment_cycle_year, 4, 1) }
+    let!(:june_course) { course_starting(current_recruitment_cycle_year, 6, 30) }
+    let!(:july_course) { course_starting(current_recruitment_cycle_year, 7, 1) }
+    let!(:august_course) { course_starting(current_recruitment_cycle_year, 8, 31) }
+    let!(:beginning_of_september_course) { course_starting(current_recruitment_cycle_year, 9, 1) }
+    let!(:middle_of_september_course) { course_starting(current_recruitment_cycle_year, 9, 15) }
+    let!(:end_of_september_course) { course_starting(current_recruitment_cycle_year, 9, 30) }
+    let!(:october_course) { course_starting(current_recruitment_cycle_year, 10, 1) }
+    let!(:december_course) { course_starting(current_recruitment_cycle_year, 12, 31) }
+    let!(:next_year_january_course) { course_starting(next_recruitment_cycle_year, 1, 1) }
+    let!(:next_year_march_course) { course_starting(next_recruitment_cycle_year, 3, 31) }
+    let!(:next_year_april_course) { course_starting(next_recruitment_cycle_year, 4, 1) }
+    let!(:next_year_june_course) { course_starting(next_recruitment_cycle_year, 6, 30) }
+    let!(:next_year_july_course) { course_starting(next_recruitment_cycle_year, 7, 31) }
+    let!(:next_year_august_course) { course_starting(next_recruitment_cycle_year, 8, 1) }
+
+    def course_starting(year, month, day)
+      create(:course, :with_full_time_sites, :published, start_date: Time.zone.local(year, month, day))
     end
 
-    context "when searching for january to august courses" do
+    {
+      "jan_to_mar" => %i[january_course march_course],
+      "apr_to_jun" => %i[april_course june_course],
+      "jul_to_aug" => %i[july_course august_course],
+      "september" => %i[beginning_of_september_course middle_of_september_course end_of_september_course],
+      "oct_to_dec" => %i[october_course december_course],
+      "next_jan_to_mar" => %i[next_year_january_course next_year_march_course],
+      "next_apr_to_jun" => %i[next_year_april_course next_year_june_course],
+      "next_jul" => %i[next_year_july_course],
+    }.each do |start_date, expected_courses|
+      context "when searching for #{start_date}" do
+        let(:params) { { start_date: [start_date] } }
+
+        it "returns only the courses starting in that bucket" do
+          expect(results).to match_array(expected_courses.map { |name| public_send(name) })
+        end
+      end
+    end
+
+    context "when searching for several buckets" do
+      let(:params) { { start_date: %w[september next_jul] } }
+
+      it "returns courses starting in any of them" do
+        expect(results).to contain_exactly(
+          beginning_of_september_course,
+          middle_of_september_course,
+          end_of_september_course,
+          next_year_july_course,
+        )
+      end
+    end
+
+    context "when searching for every bucket" do
+      let(:params) { { start_date: Courses::StartDateOptions::ALL } }
+
+      it "returns courses from January of the cycle year to July of the next" do
+        expect(results).to match_array(Course.all - [december_before_course, next_year_august_course])
+      end
+    end
+
+    context "when searching for january to august, which the filter used to offer" do
       let(:params) { { start_date: %w[jan_to_aug] } }
 
       it "returns courses that start between January and August" do
-        expect(results).to match_collection(
-          [
-            january_course,
-            august_course,
-          ],
-          attribute_names: %w[id name start_date],
+        expect(results).to contain_exactly(
+          january_course, march_course, april_course, june_course, july_course, august_course
         )
       end
     end
 
-    context "when searching for only september courses" do
-      let(:params) { { start_date: %w[september] } }
-
-      it "returns courses that starts in september" do
-        expect(results).to match_collection(
-          [
-            beginning_of_september_course,
-            middle_of_september_course,
-            end_of_september_course,
-          ],
-          attribute_names: %w[id name start_date],
-        )
-      end
-    end
-
-    context "when searching for october to july courses" do
+    context "when searching for october to july, which the filter used to offer" do
       let(:params) { { start_date: %w[oct_to_jul] } }
 
       it "returns courses that start between October and July of the following year" do
         expect(results).to contain_exactly(
           october_course,
+          december_course,
           next_year_january_course,
-          next_year_july_course,
-        )
-      end
-    end
-
-    context "when searching for january to august and september courses" do
-      let(:params) { { start_date: %w[jan_to_aug september] } }
-
-      it "returns courses that start between January and September" do
-        expect(results).to contain_exactly(
-          january_course,
-          august_course,
-          beginning_of_september_course,
-          middle_of_september_course,
-          end_of_september_course,
-        )
-      end
-    end
-
-    context "when searching for september and october to july courses" do
-      let(:params) { { start_date: %w[september oct_to_jul] } }
-
-      it "returns courses that start from September onwards" do
-        expect(results).to contain_exactly(
-          beginning_of_september_course,
-          middle_of_september_course,
-          end_of_september_course,
-          october_course,
-          next_year_january_course,
-          next_year_july_course,
-        )
-      end
-    end
-
-    context "when searching for january to august and october to july courses" do
-      let(:params) { { start_date: %w[jan_to_aug oct_to_jul] } }
-
-      it "returns courses excluding september" do
-        expect(results).to contain_exactly(
-          january_course,
-          august_course,
-          october_course,
-          next_year_january_course,
-          next_year_july_course,
-        )
-      end
-    end
-
-    context "when searching for all options" do
-      let(:params) { { start_date: %w[jan_to_aug september oct_to_jul] } }
-
-      it "returns all courses" do
-        expect(results).to contain_exactly(
-          january_course,
-          august_course,
-          beginning_of_september_course,
-          middle_of_september_course,
-          end_of_september_course,
-          october_course,
-          next_year_january_course,
+          next_year_march_course,
+          next_year_april_course,
+          next_year_june_course,
           next_year_july_course,
         )
       end
@@ -622,16 +586,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       let(:params) { { start_date: %w[something] } }
 
       it "returns all courses" do
-        expect(results).to contain_exactly(
-          january_course,
-          august_course,
-          beginning_of_september_course,
-          middle_of_september_course,
-          end_of_september_course,
-          october_course,
-          next_year_january_course,
-          next_year_july_course,
-        )
+        expect(results).to match_array(Course.all)
       end
     end
   end
