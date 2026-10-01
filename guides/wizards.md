@@ -83,11 +83,13 @@ The largest multi-step flow in the app.
 - **Views:** `app/views/publish/course_wizards/`
 - **Routes:** `config/routes/publish.rb` (under `/course_wizard/`)
 
+## Course edit pages
+
+The per-field edit pages for a saved course, under `app/controllers/publish/courses/`, are single-step forms, not a chain. They use `CourseBasicDetailConcern` for their `edit`/`update` actions.
+
 ## Multi-step forms not yet using dfe-wizard
 
-The following forms use traditional multi-step patterns (manual controller chaining, `CourseBasicDetailConcern`, or stashing to session). They are candidates for migration to dfe-wizard.
-
-The per-field **course edit** pages under `app/controllers/publish/courses/` still use `CourseBasicDetailConcern` for their `edit`/`update` actions. They are single-step, not a chain.
+The following forms use traditional multi-step patterns (manual controller chaining or stashing to session). They are candidates for migration to dfe-wizard.
 
 ### Degrees
 

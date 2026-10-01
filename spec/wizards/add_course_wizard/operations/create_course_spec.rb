@@ -18,7 +18,6 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
     allow(Courses::CreationService).to receive(:call).with(
       course_params: serialized_params,
       provider: wizard.provider,
-      next_available_course_code: true,
     ).and_return(course)
   end
 
