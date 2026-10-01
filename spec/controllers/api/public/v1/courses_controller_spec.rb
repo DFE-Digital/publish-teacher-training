@@ -58,6 +58,21 @@ RSpec.describe API::Public::V1::CoursesController do
         expect(findable_by_id[published_course.id.to_s]).to be(true)
         expect(findable_by_id[draft_course.id.to_s]).to be(false)
       end
+
+      it "returns only courses visible on Find when filter[findable] is true" do
+        published_course = create(:course, :published, provider:)
+        draft_course = create(:course, :draft_enrichment, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+          filter: { findable: true },
+        }
+
+        ids = json_response["data"].map { |course| course["id"] }
+
+        expect(ids).to include(published_course.id.to_s)
+        expect(ids).not_to include(draft_course.id.to_s)
+      end
     end
 
     context "when the recruitment cycle is not after the remodel cutover year" do
@@ -87,6 +102,23 @@ RSpec.describe API::Public::V1::CoursesController do
         expect(withdrawn_course.site_statuses).to be_empty
         expect(findable_by_id[published_course.id.to_s]).to be(true)
         expect(findable_by_id[withdrawn_course.id.to_s]).to be(false)
+      end
+
+      it "returns published courses without a findable SiteStatus when filter[findable] is true" do
+        published_course = create(:course, :published, provider:)
+        withdrawn_course = create(:course, :withdrawn, provider:)
+
+        get :index, params: {
+          recruitment_cycle_year: recruitment_cycle.year,
+          filter: { findable: true },
+        }
+
+        ids = json_response["data"].map { |returned_course| returned_course["id"] }
+
+        expect(published_course.site_statuses).to be_empty
+        expect(withdrawn_course.site_statuses).to be_empty
+        expect(ids).to include(published_course.id.to_s)
+        expect(ids).not_to include(withdrawn_course.id.to_s)
       end
     end
 

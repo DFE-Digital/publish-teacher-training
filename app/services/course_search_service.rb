@@ -25,7 +25,7 @@ class CourseSearchService
     scope = scope.with_salary if funding_filter_salary?
     scope = scope.with_qualifications(qualifications) if qualifications.any?
     scope = scope.application_status_open if applications_open?
-    scope = scope.findable if findable?
+    scope = scope.visible_in_find if findable?
     scope = scope.with_study_modes(study_types) if study_types.any?
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?

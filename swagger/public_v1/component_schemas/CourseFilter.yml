@@ -7,7 +7,7 @@ properties:
     type: boolean
     example: true
   findable:
-    description: "Return courses that are currently available on the Find Postgraduate Teacher Training service"
+    description: "Return courses that are currently visible on Find. A course is included when it is published. Draft, rolled over and withdrawn courses are excluded. School or site status are not used."
     type: boolean
     example: true
   funding_type:

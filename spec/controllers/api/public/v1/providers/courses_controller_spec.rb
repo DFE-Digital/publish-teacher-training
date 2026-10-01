@@ -259,6 +259,8 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
 
         context "when the findable filter is requested for after the remodel cutover year" do
           let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+          let(:near_course) { create(:course, :published, provider:) }
+          let(:far_course) { create(:course, :published, provider:) }
 
           before do
             get :index, params: {
@@ -280,6 +282,67 @@ RSpec.describe API::Public::V1::Providers::CoursesController do
             expect(ids).not_to include(far_course.id.to_s)
           end
         end
+      end
+    end
+
+    describe "filter[findable]" do
+      let(:published_course) { create(:course, :published, provider:) }
+      let(:draft_course) { create(:course, :draft_enrichment, provider:) }
+      let(:withdrawn_course) { create(:course, :withdrawn, provider:) }
+      let(:rolled_over_course) { create(:course, :published, provider:) }
+
+      before do
+        published_course
+        draft_course
+        withdrawn_course
+        create(:course_enrichment, :rolled_over, course: rolled_over_course, created_at: 1.minute.from_now)
+      end
+
+      def returned_course_ids
+        json_response["data"].map { |course| course["id"] }
+      end
+
+      shared_examples "courses visible on Find" do
+        it "returns a published course and excludes draft, withdrawn and rolled over courses" do
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            filter: { findable: true },
+          }
+
+          expect(returned_course_ids).to include(published_course.id.to_s)
+          expect(returned_course_ids).not_to include(
+            draft_course.id.to_s,
+            withdrawn_course.id.to_s,
+            rolled_over_course.id.to_s,
+          )
+        end
+
+        it "returns draft, withdrawn and rolled over courses when the filter is not set" do
+          get :index, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+          }
+
+          expect(returned_course_ids).to include(
+            published_course.id.to_s,
+            draft_course.id.to_s,
+            withdrawn_course.id.to_s,
+            rolled_over_course.id.to_s,
+          )
+        end
+      end
+
+      context "when the recruitment cycle is after the remodel cutover year" do
+        let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)) }
+
+        include_examples "courses visible on Find"
+      end
+
+      context "when the recruitment cycle is not after the remodel cutover year" do
+        let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
+
+        include_examples "courses visible on Find"
       end
     end
 
