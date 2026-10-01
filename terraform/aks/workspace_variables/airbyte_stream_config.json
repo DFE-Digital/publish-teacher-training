@@ -2114,11 +2114,6 @@
             "fieldPath": [
               "discarded_via_script"
             ]
-          },
-          {
-            "fieldPath": [
-              "added_via"
-            ]
           }
         ]
       },
