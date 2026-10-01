@@ -23,12 +23,12 @@ RSpec.describe "Search results ordering by start date", :js, service: :find do
     then_courses_are_sorted_by_name_within_same_start_date
   end
 
-  scenario "start date is shown on course result when sorting by soonest start date" do
+  scenario "start date is not shown on course results when sorting by soonest start date" do
     given_there_are_courses_with_different_start_dates
     when_i_visit_the_find_results_page
-    then_the_start_date_is_not_shown
     and_i_sort_by_soonest_start_date
-    then_the_start_date_is_shown_on_each_course
+    then_the_courses_are_ordered_by_start_date_ascending
+    and_the_start_date_is_not_shown
   end
 
   def given_there_are_courses_with_different_start_dates
@@ -95,15 +95,9 @@ RSpec.describe "Search results ordering by start date", :js, service: :find do
     ])
   end
 
-  def then_the_start_date_is_not_shown
+  def and_the_start_date_is_not_shown
     within(".app-search-results") do
       expect(page).to have_no_content("Start date")
-    end
-  end
-
-  def then_the_start_date_is_shown_on_each_course
-    within(".app-search-results") do
-      expect(page).to have_content("Start date", count: 3)
     end
   end
 end
