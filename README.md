@@ -43,7 +43,7 @@ This repo is home to three services:
 - [API](guides/api.md)
 - [Monitoring](guides/monitoring.md)
 - [Healthchecks](guides/healthchecks.md)
-- [Find opens checklist](guides/find-opens-checklist.md)
+- [Find Opens](guides/find-opens/README.md)
 - [Rollover](guides/rollover.md)
 - [Cycle period testing](guides/cycle-period-testing.md)
 - [Wizards](guides/wizards)
