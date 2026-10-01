@@ -4,13 +4,12 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, show_start_date: nil)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
-      @show_start_date = show_start_date
 
       super()
     end
@@ -163,10 +162,6 @@ module Courses
 
     def search_by_location?
       @location.present? && course.respond_to?(:minimum_distance_to_search_location)
-    end
-
-    def show_start_date?
-      @show_start_date.presence
     end
 
   private
