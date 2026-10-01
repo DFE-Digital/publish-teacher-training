@@ -34,7 +34,7 @@ Use this checklist on the morning Find opens. This checklist is for the 2026/202
   - [ ] Pod CPU and memory
   - [ ] Pod restarts and health checks
   - [ ] Replica count
-- [ ] [Azure Database](https://portal.azure.com/#@platform.education.gov.uk/resource/subscriptions/20da9d12-7ee1-42bb-b969-3fe9112964a7/resourceGroups/s189t01-ptt-stg-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/s189t01-ptt-stg-pg/overview):
+- [ ] [Azure Database](https://portal.azure.com/#@platform.education.gov.uk/resource/subscriptions/3c033a0c-7a1c-4653-93cb-0f2a9f57a391/resourceGroups/s189p01-ptt-pd-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/s189p01-ptt-pd-pg/overview):
   - [ ] Connections
   - [ ] CPU and memory
   - [ ] Slow or problematic queries
