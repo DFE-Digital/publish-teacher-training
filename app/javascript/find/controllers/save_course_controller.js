@@ -1,9 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
 
-const RELOADED_KEY = 'save-course-reloaded'
-
-let reloadedAfterFailure = false
-
 export default class extends Controller {
   static targets = ['icon', 'text', 'status']
   static values = {
@@ -18,13 +14,6 @@ export default class extends Controller {
     saveText: String,
     signInToSaveText: String,
     failedText: String
-  }
-
-  connect () {
-    if (window.sessionStorage.getItem(RELOADED_KEY)) {
-      window.sessionStorage.removeItem(RELOADED_KEY)
-      reloadedAfterFailure = true
-    }
   }
 
   toggle (event) {
@@ -59,7 +48,7 @@ export default class extends Controller {
         this.unsaveUrlValue = `/candidate/saved-courses/${json.saved_course}`
         this.updateUI(true)
       } else {
-        this.recover()
+        this.showFailure()
       }
     } catch (e) {
       console.error('Save failed:', e)
@@ -80,7 +69,7 @@ export default class extends Controller {
         this.unsaveUrlValue = ''
         this.updateUI(false)
       } else {
-        this.recover()
+        this.showFailure()
       }
     } catch (e) {
       console.error('Unsave failed:', e)
@@ -89,16 +78,10 @@ export default class extends Controller {
     }
   }
 
-  recover () {
-    if (reloadedAfterFailure) {
-      this.iconTarget.alt = this.failedTextValue
-      this.textTarget.textContent = this.failedTextValue
-      this.statusTarget.textContent = this.failedTextValue
-      return
-    }
-
-    window.sessionStorage.setItem(RELOADED_KEY, 'true')
-    window.location.reload()
+  showFailure () {
+    this.iconTarget.alt = this.failedTextValue
+    this.textTarget.textContent = this.failedTextValue
+    this.statusTarget.textContent = this.failedTextValue
   }
 
   updateUI (saved) {

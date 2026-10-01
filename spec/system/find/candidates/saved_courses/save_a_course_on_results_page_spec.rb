@@ -17,42 +17,15 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     and_screen_readers_are_told("Saved")
   end
 
-  scenario "A signed-in candidate on a stale page saves after it reloads" do
-    given_saving_fails_once
+  scenario "A signed-in candidate is told to try again when saving fails" do
+    given_saving_fails
     when_i_sign_in_as_a_candidate
     when_i_visit_the_results_page
 
     when_i_save_the_course
-    then_the_page_reloads
 
-    when_i_save_the_course
-    then_the_course_is_saved
-  end
-
-  scenario "A signed-in candidate is told to try again when saving still fails after the reload" do
-    given_saving_always_fails
-    when_i_sign_in_as_a_candidate
-    when_i_visit_the_results_page
-
-    when_i_save_the_course
-    then_the_page_reloads
-
-    when_i_save_the_course
     then_i_am_told_to_try_again
     and_screen_readers_are_told("Something went wrong, try again")
-  end
-
-  scenario "A signed-in candidate whose page goes stale again later in the same tab gets another reload" do
-    given_saving_always_fails
-    when_i_sign_in_as_a_candidate
-    when_i_visit_the_results_page
-
-    when_i_save_the_course
-    then_the_page_reloads
-
-    when_i_visit_the_results_page
-    when_i_save_the_course
-    then_the_page_reloads
   end
 
   scenario "An unauthenticated visitor is prompted to sign in when trying to save a course" do
@@ -144,28 +117,13 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     visit find_results_path
   end
 
-  def given_saving_fails_once
-    calls = 0
-    allow(Find::SaveCourseService).to receive(:call).and_wrap_original do |original, **args|
-      calls += 1
-      raise ActionController::InvalidAuthenticityToken if calls == 1
-
-      original.call(**args)
-    end
-  end
-
-  def given_saving_always_fails
+  def given_saving_fails
     allow(Find::SaveCourseService).to receive(:call).and_raise(ActionController::InvalidAuthenticityToken)
   end
 
   def when_i_save_the_course
     expect(page).to have_content("Save")
-    page.execute_script("document.body.dataset.beforeReload = true")
     click_link_or_button("Save")
-  end
-
-  def then_the_page_reloads
-    expect(page).to have_no_css("body[data-before-reload]")
   end
 
   def then_i_am_told_to_try_again
@@ -186,7 +144,9 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
   end
 
   def and_screen_readers_are_told(message)
-    expect(page).to have_css("[role='status']", text: message, visible: :all)
+    within("[data-controller='save-course']") do
+      expect(page).to have_css("[role='status'][aria-live='polite']", text: message, visible: :all)
+    end
   end
 
   def then_i_do_not_see_course_saved
