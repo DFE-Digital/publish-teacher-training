@@ -5,7 +5,7 @@ const RELOADED_KEY = 'save-course-reloaded'
 let reloadedAfterFailure = false
 
 export default class extends Controller {
-  static targets = ['icon', 'text']
+  static targets = ['icon', 'text', 'status']
   static values = {
     courseId: String,
     saved: Boolean,
@@ -93,6 +93,7 @@ export default class extends Controller {
     if (reloadedAfterFailure) {
       this.iconTarget.alt = this.failedTextValue
       this.textTarget.textContent = this.failedTextValue
+      this.statusTarget.textContent = this.failedTextValue
       return
     }
 
@@ -116,6 +117,7 @@ export default class extends Controller {
     this.iconTarget.src = saved ? this.savedIconUrlValue : this.unsavedIconUrlValue
     this.iconTarget.alt = text
     this.textTarget.textContent = text
+    this.statusTarget.textContent = text
   }
 
   setLoadingState (disabled) {
