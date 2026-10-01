@@ -74,12 +74,14 @@ module Find
             get :new, params: {
               subjects: %w[C1],
               qualifications: %w[qts qts_with_pgce_or_pgde],
-              start_date: %w[jan_to_aug september],
+              start_date: %w[jan_to_mar september],
             }
 
             expect(response.body).to include("Biology")
             expect(response.body).to include("QTS only")
             expect(response.body).to include("QTS with PGCE or PGDE")
+            expect(response.body).to include("January to March #{Find::CycleTimetable.current_year}")
+            expect(response.body).to include("September #{Find::CycleTimetable.current_year} only")
             expect(response.body).not_to include("Qualification:")
             expect(response.body).not_to include("Start date:")
           end
