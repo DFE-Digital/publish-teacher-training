@@ -368,7 +368,6 @@ en:
             or equivalent qualification
             </span>
       visa_sponsorship_key: Visa sponsorship
-      start_date: Start date
       visa_sponsorship_value:
         no_sponsorship: Visas cannot be sponsored
         can_sponsor_student_visa: Student visas can be sponsored
