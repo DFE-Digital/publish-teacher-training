@@ -39,8 +39,11 @@ RSpec.describe SavedCourses::Query do
     end
 
     it "returns saved courses newest first" do
+      # Reloaded so created_at is compared as stored on both sides. The
+      # in-memory value from the factory does not always equal the value
+      # read back from the database.
       expect(results).to match_collection(
-        [new_saved, old_saved],
+        [new_saved, old_saved].map(&:reload),
         attribute_names: %w[created_at],
       )
     end
