@@ -140,7 +140,9 @@ RSpec.describe "Searching for a study site from the GIAS list" do
   end
 
   def and_there_are_schools_in_the_database
-    @school = create(:gias_school, name: "Northgate Academy")
+    # A fixed town, because the search also matches town by prefix and a random
+    # Faker town can start with "Sch".
+    @school = create(:gias_school, name: "Northgate Academy", town: "Leeds")
     @school_two = create(:gias_school, name: "School Two")
     @school_three = create(:gias_school, name: "School Three")
   end
