@@ -475,12 +475,51 @@ RSpec.describe Courses::SearchForm do
   end
 
   describe "#start_date_options" do
-    it "returns the new start date options" do
+    it "returns the start date options" do
       search_form = described_class.new
 
       options = search_form.start_date_options
 
-      expect(options).to eq(%w[jan_to_aug september oct_to_jul])
+      expect(options).to eq(
+        %w[jan_to_mar apr_to_jun jul_to_aug september oct_to_dec next_jan_to_mar next_apr_to_jun next_jul],
+      )
+    end
+  end
+
+  describe "#start_date_options_by_year" do
+    it "groups the options under the cycle year and the year after" do
+      search_form = described_class.new
+
+      expect(search_form.start_date_options_by_year).to eq(
+        Find::CycleTimetable.current_year => %w[jan_to_mar apr_to_jun jul_to_aug september oct_to_dec],
+        Find::CycleTimetable.next_year => %w[next_jan_to_mar next_apr_to_jun next_jul],
+      )
+    end
+  end
+
+  describe "#start_date" do
+    it "keeps the current options" do
+      expect(described_class.new(start_date: %w[september next_jul]).start_date).to eq(%w[september next_jul])
+    end
+
+    it "accepts a single checkbox value" do
+      expect(described_class.new(start_date: "september").start_date).to eq(%w[september])
+    end
+
+    it "expands the options the filter used to offer" do
+      expect(described_class.new(start_date: %w[jan_to_aug september]).start_date).to eq(
+        %w[jan_to_mar apr_to_jun jul_to_aug september],
+      )
+    end
+
+    it "drops unknown values" do
+      expect(described_class.new(start_date: %w[september_2025]).start_date).to be_nil
+    end
+
+    it "passes the expanded options on in the search params" do
+      expect(described_class.new(start_date: %w[oct_to_jul]).search_params[:start_date]).to eq(
+        %w[oct_to_dec next_jan_to_mar next_apr_to_jun next_jul],
+      )
     end
   end
 
@@ -692,10 +731,18 @@ RSpec.describe Courses::SearchForm do
     end
 
     context "with start_date selected" do
-      let(:form) { described_class.new(start_date: %w[september_2025 january_2026]) }
+      let(:form) { described_class.new(start_date: %w[september next_jul]) }
 
       it "returns the count of start dates" do
         expect(form.filter_counts[:start_date]).to eq(2)
+      end
+    end
+
+    context "with a start_date the filter used to offer" do
+      let(:form) { described_class.new(start_date: %w[oct_to_jul]) }
+
+      it "counts the options it expands into" do
+        expect(form.filter_counts[:start_date]).to eq(4)
       end
     end
 
