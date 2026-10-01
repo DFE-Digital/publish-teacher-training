@@ -396,9 +396,11 @@
         <% end %>
       </summary>
       <div class="app-c-filter-section__content">
-        <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t(".start_date_html"), hidden: true }, class: "govuk-checkboxes--small", multiple: false do %>
-          <% form.object.start_date_options.each do |start_date_option| %>
-            <%= form.govuk_check_box :start_date, start_date_option, label: { text: t(".start_date_options.#{start_date_option}", next_recruitment_cycle_year: Find::CycleTimetable.next_year, recruitment_cycle_year: Find::CycleTimetable.current_year) }, include_hidden: false, form: form_id %>
+        <% form.object.start_date_options_by_year.each do |year, start_date_options| %>
+          <%= form.govuk_check_boxes_fieldset :start_date, legend: { text: t(".start_date_year_html", year:), size: "s", tag: "h4" }, class: "govuk-checkboxes--small", multiple: false do %>
+            <% start_date_options.each do |start_date_option| %>
+              <%= form.govuk_check_box :start_date, start_date_option, label: { text: t(".start_date_options.#{start_date_option}") }, include_hidden: false, form: form_id %>
+            <% end %>
           <% end %>
         <% end %>
       </div>
