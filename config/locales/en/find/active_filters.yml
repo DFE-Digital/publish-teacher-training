@@ -48,13 +48,23 @@ en:
       send_courses:
         true: Courses with a SEND specialism
       start_date_options:
+        jan_to_mar: "January to March %{current_recruitment_cycle_year}"
+        apr_to_jun: "April to June %{current_recruitment_cycle_year}"
+        jul_to_aug: "July and August %{current_recruitment_cycle_year}"
         september: "September %{current_recruitment_cycle_year} only"
-        jan_to_aug: "January to August %{current_recruitment_cycle_year}"
-        oct_to_jul: "October %{current_recruitment_cycle_year} to July %{next_recruitment_cycle_year}"
+        oct_to_dec: "October to December %{current_recruitment_cycle_year}"
+        next_jan_to_mar: "January to March %{next_recruitment_cycle_year}"
+        next_apr_to_jun: "April to June %{next_recruitment_cycle_year}"
+        next_jul: "July %{next_recruitment_cycle_year} only"
       start_date:
+        jan_to_mar: "Start date: January to March %{current_recruitment_cycle_year}"
+        apr_to_jun: "Start date: April to June %{current_recruitment_cycle_year}"
+        jul_to_aug: "Start date: July and August %{current_recruitment_cycle_year}"
         september: "Start date: September %{current_recruitment_cycle_year} only"
-        jan_to_aug: "Start date: January to August %{current_recruitment_cycle_year}"
-        oct_to_jul: "Start date: October %{current_recruitment_cycle_year} to July %{next_recruitment_cycle_year}"
+        oct_to_dec: "Start date: October to December %{current_recruitment_cycle_year}"
+        next_jan_to_mar: "Start date: January to March %{next_recruitment_cycle_year}"
+        next_apr_to_jun: "Start date: April to June %{next_recruitment_cycle_year}"
+        next_jul: "Start date: July %{next_recruitment_cycle_year} only"
       study_types:
         full_time: Full time
         part_time: Part time
