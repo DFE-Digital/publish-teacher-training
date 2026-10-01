@@ -50,7 +50,7 @@ module Courses
     MINIMUM_DEGREE_REQUIRED_OPTIONS = %w[two_one two_two third_class pass no_degree_required].freeze
     FUNDING_OPTIONS = %w[fee salary apprenticeship].freeze
     QUALIFICATION_OPTIONS = %w[qts qts_with_pgce_or_pgde].freeze
-    START_DATE_OPTIONS = %w[jan_to_aug september oct_to_jul].freeze
+    START_DATE_OPTIONS = StartDateOptions::ALL
     STUDY_TYPE_OPTIONS = %w[full_time part_time].freeze
 
     def initialize(attributes = {})
@@ -100,6 +100,12 @@ module Courses
     # return nil if empty
     def funding
       Array(super).presence
+    end
+
+    # Expand the broader options the filter used to offer, so old links,
+    # recent searches and email alerts tick the boxes that replaced them.
+    def start_date=(value)
+      super(StartDateOptions.normalise(value).presence)
     end
 
     def order
@@ -239,6 +245,13 @@ module Courses
 
     def start_date_options
       START_DATE_OPTIONS
+    end
+
+    def start_date_options_by_year
+      {
+        Find::CycleTimetable.current_year => StartDateOptions::CURRENT_YEAR,
+        Find::CycleTimetable.next_year => StartDateOptions::NEXT_YEAR,
+      }
     end
 
     def study_type_options
