@@ -14,6 +14,7 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     when_i_save_the_course
 
     then_the_course_is_saved
+    and_screen_readers_are_told("Saved")
   end
 
   scenario "A signed-in candidate on a stale page saves after it reloads" do
@@ -38,6 +39,7 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
 
     when_i_save_the_course
     then_i_am_told_to_try_again
+    and_screen_readers_are_told("Something went wrong, try again")
   end
 
   scenario "A signed-in candidate whose page goes stale again later in the same tab gets another reload" do
@@ -181,6 +183,10 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     within(".results-save-course-button__unstyled-button") do
       expect(page).to have_css(".save-course-button__text", text: "Saved")
     end
+  end
+
+  def and_screen_readers_are_told(message)
+    expect(page).to have_css("[role='status']", text: message, visible: :all)
   end
 
   def then_i_do_not_see_course_saved
