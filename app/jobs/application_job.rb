@@ -19,6 +19,20 @@ class ApplicationJob < ActiveJob::Base
     retry_on ActiveRecord::Deadlocked
   end
 
+  # Override a retry/discard handler inherited from ApplicationJob or declared
+  # earlier in a subclass. Solid Queue records the raised error for an operator.
+  # A legacy payload already in Sidekiq must instead be reported and consumed,
+  # because Sidekiq's Active Job wrapper would otherwise retry it automatically.
+  def self.fail_without_retry_on(*exceptions)
+    rescue_from(*exceptions) do |error|
+      if Sidekiq.server?
+        Rails.error.report(error, handled: true, source: "application.active_job")
+      else
+        raise error
+      end
+    end
+  end
+
   # Opt-in for Solid Queue jobs that are safe to run again: Solid Queue has no
   # Sidekiq-style auto-retries, so retry any error a few times with backoff
   # before it lands in solid_queue_failed_executions.
