@@ -1,9 +1,10 @@
 # Production / development: 1s polling.
 # Non-production PTT envs (qa, staging, …): 3s polling for burstable DBs.
 #
-# Keep worker `threads` × `processes` within DATABASE_CONNECTION_POOL_SIZE on the
-# solid-queue-worker (default 5 in terraform/aks/application.tf). Bumping threads
-# here without raising that pool causes Solid Queue to warn and queue on the pool.
+# Each worker process needs `threads` + 2 connections (polling and heartbeat), so
+# keep the largest worker's threads + 2 within DATABASE_CONNECTION_POOL_SIZE on the
+# solid-queue-worker (default 5 in terraform/aks/application.tf). Raising threads
+# past 3 without raising that pool makes Solid Queue warn and queue on the pool.
 default: &default
   dispatchers:
     - polling_interval: 1
@@ -21,7 +22,8 @@ default: &default
       processes: <%= ENV.fetch("MAILER_QUEUE_PROCESSES", 1) %>
       polling_interval: 1
 
-    # Bulk / low-priority — kept separate so backlogs cannot starve mailers.
+    # Bulk / low-priority (rollover fan-out, coordinate backfill, scheduled
+    # maintenance) — kept separate so backlogs cannot starve default, geocoding or mailers.
     # solid_queue_recurring is the default queue for recurring.yml `command` tasks.
     - queues: [save_statistic, low_priority, solid_queue_recurring]
       threads: <%= ENV.fetch("LOW_PRIORITY_QUEUE_THREADS", 1) %>
@@ -34,13 +36,14 @@ non_production: &non_production
       batch_size: 500
       concurrency_maintenance_interval: 300
   workers:
-    - queues: [default, geocoding, mailers]
+    - &non_production_interactive_worker
+      queues: [default, geocoding, mailers]
       threads: 1
       processes: 1
       polling_interval: 3
 
     - queues: [save_statistic, low_priority, solid_queue_recurring]
-      threads: 1
+      threads: <%= ENV.fetch("LOW_PRIORITY_QUEUE_THREADS", 1) %>
       processes: 1
       polling_interval: 3
 
@@ -68,5 +71,14 @@ review:
 loadtest:
   <<: *non_production
 
+# Rollover rehearsals run production's three low-priority threads, so a
+# monitoring timeout there means the same as it would in production.
 rollover:
   <<: *non_production
+  workers:
+    - *non_production_interactive_worker
+
+    - queues: [save_statistic, low_priority, solid_queue_recurring]
+      threads: <%= ENV.fetch("LOW_PRIORITY_QUEUE_THREADS", 3) %>
+      processes: 1
+      polling_interval: 3

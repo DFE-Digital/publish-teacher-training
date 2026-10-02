@@ -49,8 +49,31 @@ RSpec.describe DataHub::Rollover::MonitoringManager, type: :service do
         }.not_to have_enqueued_job(RolloverMonitoringJob)
 
         process_summary.reload
-        expect(process_summary.status).to eq("finished")
+        expect(process_summary.status).to eq("failed")
         expect(process_summary.full_summary["monitoring_timeout"]).to be_present
+        expect(process_summary.short_summary["providers_rolled_over"]).to eq(1)
+      end
+    end
+
+    context "when providers are still processing on Solid Queue", :solid_queue do
+      before do
+        process_summary.add_provider_result(provider_code: "ABC", status: :rolled_over, details: {})
+      end
+
+      it "schedules the next check with set(wait:) and releases it once due" do
+        described_class.check_completion(process_summary.id, 1)
+
+        job = SolidQueue::Job.find_by!(class_name: "RolloverMonitoringJob")
+        scheduled = SolidQueue::ScheduledExecution.find_by!(job_id: job.id)
+
+        expect(job.queue_name).to eq("default")
+        expect(job.arguments["arguments"]).to eq([process_summary.id, 2])
+        expect(scheduled.scheduled_at).to be_within(1.second).of(5.minutes.from_now)
+
+        travel_to(scheduled.scheduled_at + 1.second) { SolidQueue::ScheduledExecution.dispatch_next_batch(10) }
+
+        expect(SolidQueue::ScheduledExecution.where(job_id: job.id)).to be_empty
+        expect(SolidQueue::ReadyExecution.where(job_id: job.id)).to exist
       end
     end
 

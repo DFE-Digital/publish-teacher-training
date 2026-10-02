@@ -27,6 +27,13 @@ RSpec.describe "Solid Queue configuration" do
     queue_config.fetch(env)
   end
 
+  def app_config
+    YAML.safe_load(
+      Rails.root.join("terraform/aks/workspace_variables/app_config.yml").read,
+      aliases: true,
+    )
+  end
+
   def consumed_queues(env)
     Array(section_for(env).fetch("workers")).flat_map { |worker| Array(worker.fetch("queues")) }.uniq
   end
@@ -57,6 +64,26 @@ RSpec.describe "Solid Queue configuration" do
     bulk = production_workers.find { |worker| Array(worker["queues"]).include?("low_priority") }
 
     expect(bulk["queues"]).not_to include("mailers")
+  end
+
+  it "gives only production three low-priority threads within the five-connection worker pool" do
+    expect(app_config.dig("production", "LOW_PRIORITY_QUEUE_THREADS")).to eq(3)
+    %w[qa staging sandbox review].each do |environment|
+      expect(app_config.fetch(environment)).not_to have_key("LOW_PRIORITY_QUEUE_THREADS")
+    end
+
+    application_tf = Rails.root.join("terraform/aks/application.tf").read
+    expect(application_tf).to include("DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5}")
+  end
+
+  it "rehearses rollover with production's three low-priority threads" do
+    low_priority_threads = lambda do |env|
+      section_for(env).fetch("workers").find { |worker| Array(worker["queues"]).include?("low_priority") }["threads"]
+    end
+
+    expect(low_priority_threads.call("rollover")).to eq(3)
+    expect(low_priority_threads.call("qa")).to eq(1)
+    expect(section_for("rollover").fetch("workers").first["queues"]).to eq(%w[default geocoding mailers])
   end
 
   it "keeps Sidekiq as the application-default Active Job adapter" do
