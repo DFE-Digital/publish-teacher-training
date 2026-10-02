@@ -51,7 +51,7 @@ RSpec.describe "Solid Queue recurring configuration" do
 
     expect(production_tasks["save_statistic"]).to include(
       "class" => "SaveStatisticJob",
-      "queue" => "save_statistic",
+      "queue" => "low_priority",
       "schedule" => "0 0 * * * Europe/London",
     )
     expect(production_tasks["send_entity_table_checks_to_bigquery"]).to include(
@@ -89,6 +89,7 @@ RSpec.describe "Solid Queue recurring configuration" do
       "cleanup_recent_searches",
       "cleanup_school_bulk_update_drafts",
     )
+    expect(qa_tasks["save_statistic"]["queue"]).to eq("low_priority")
     expect(qa_tasks["cleanup_recent_searches"]["queue"]).to eq("low_priority")
     expect(qa_tasks["cleanup_school_bulk_update_drafts"]["queue"]).to eq("low_priority")
     expect(application_job_tasks("staging").keys).to contain_exactly("save_statistic")

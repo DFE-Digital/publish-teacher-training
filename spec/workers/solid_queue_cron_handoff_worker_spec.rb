@@ -58,6 +58,43 @@ RSpec.describe SolidQueueCronHandoffWorker do
       )
       expect(wrapped.fetch(:queue)).to eq("low_priority")
     end
+
+    it "falls back to the target job's own queue when the entry has none" do
+      jobs = { example: { cron: "0 0 * * *", class: "GiasImportJob" } }
+
+      wrapped = described_class.wrap(jobs).fetch(:example)
+
+      expect(wrapped).to include(queue: "low_priority", args: ["GiasImportJob", [], "low_priority"])
+    end
+
+    it "leaves an entry naming an unknown class unchanged instead of raising" do
+      jobs = { example: { cron: "0 0 * * *", class: "NoSuchJob", queue: "default" } }
+
+      expect(described_class.wrap(jobs)).to eq(jobs)
+    end
+
+    %w[production qa staging].each do |env|
+      it "wraps every Solid Queue entry in the #{env} Sidekiq Cron settings" do
+        bg_jobs = YAML.safe_load(
+          ERB.new(Rails.root.join("config/settings/#{env}.yml").read).result,
+          aliases: true,
+        ).fetch("bg_jobs").deep_symbolize_keys
+
+        described_class.wrap(bg_jobs).each do |key, wrapped|
+          target = bg_jobs.dig(key, :class).constantize
+
+          if target.respond_to?(:queue_adapter_name) && target.queue_adapter_name == "solid_queue"
+            expect(wrapped).to include(class: described_class.name, queue: target.new.queue_name)
+          else
+            expect(wrapped).to eq(bg_jobs.fetch(key))
+          end
+        end
+      end
+    end
+  end
+
+  it "gives up on a failed handoff after a few retries" do
+    expect(described_class.get_sidekiq_options["retry"]).to eq(5)
   end
 
   describe "#perform" do

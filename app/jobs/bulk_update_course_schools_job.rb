@@ -13,12 +13,16 @@
 # still bubbles, and the whole job is retried a few times with backoff.
 class BulkUpdateCourseSchoolsJob < ApplicationJob
   self.queue_adapter = :solid_queue
-  queue_as :low_priority
+  queue_as :default
   retry_on_failure
 
   # Sidekiq 6 sets jid before executing native payloads. Keep this shim until
   # payloads queued before this class moved to Active Job have drained from
   # Redis queues, scheduled jobs and retries.
+  #
+  # Only the success path is covered: when a legacy payload fails, Sidekiq asks
+  # the instance for sidekiq_retry_in_block and sidekiq_retries_exhausted_block,
+  # reports the NoMethodError, then retries or kills the payload as normal.
   attr_accessor :jid
 
   MAX_ATTEMPTS = 3

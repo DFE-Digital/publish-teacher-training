@@ -25,7 +25,7 @@ production:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
   send_entity_table_checks_to_bigquery:
     class: DfE::Analytics::EntityTableCheckJob
@@ -52,7 +52,7 @@ qa:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
   cleanup_recent_searches:
     class: CleanupRecentSearchesJob
@@ -67,7 +67,7 @@ staging:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
 
 # No Sidekiq Cron schedules today — keep empty so a future SKIP_RECURRING=false
