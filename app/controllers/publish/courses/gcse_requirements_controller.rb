@@ -75,6 +75,8 @@ module Publish
                                                    .permit(
                                                      :accept_pending_gcse,
                                                      :accept_english_gcse_equivalency,
+                                                     :accept_maths_gcse_equivalency,
+                                                     :accept_science_gcse_equivalency,
                                                      :accept_gcse_equivalency,
                                                      { accept_english_gcse_equivalency: [] },
                                                      { accept_maths_gcse_equivalency: [] },
