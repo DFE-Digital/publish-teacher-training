@@ -284,41 +284,19 @@ FactoryBot.define do
     trait :with_full_time_sites do
       enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
-      after(:build) do |course|
-        gias_school = build(:gias_school, latitude: 51.5079, longitude: 0.0877)
-        provider_school = build(:provider_school, provider: course.provider, gias_school:)
-        course.schools << build(:course_school, course:, gias_school:, provider_school:)
-      end
     end
 
     trait :with_part_time_sites do
       enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
-      after(:build) do |course|
-        gias_school = build(:gias_school, latitude: 51.5079, longitude: 0.0877)
-        provider_school = build(:provider_school, provider: course.provider, gias_school:)
-        course.schools << build(:course_school, course:, gias_school:, provider_school:)
-      end
     end
 
     trait :with_full_time_or_part_time_sites do
       enrichments { [build(:course_enrichment, :published)] }
       site_statuses { [build(:site_status, :findable, vac_status: :both_full_time_and_part_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA"))] }
-      after(:build) do |course|
-        gias_school = build(:gias_school, latitude: 51.5079, longitude: 0.0877)
-        provider_school = build(:provider_school, provider: course.provider, gias_school:)
-        course.schools << build(:course_school, course:, gias_school:, provider_school:)
-      end
     end
 
     trait :with_2_full_time_sites do
-      after(:build) do |course|
-        [0.0877, 0.0897].each do |longitude|
-          gias_school = build(:gias_school, latitude: 51.5079, longitude:)
-          provider_school = build(:provider_school, provider: course.provider, gias_school:)
-          course.schools << build(:course_school, course:, gias_school:, provider_school:)
-        end
-      end
       site_statuses do
         [
           build(:site_status, :findable, vac_status: :full_time_vacancies, site: build(:site, latitude: 51.5079, longitude: 0.0877, address1: "1 Foo Street", postcode: "BN1 1AA")),
