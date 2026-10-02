@@ -27,6 +27,7 @@ RSpec.describe "Multiple schools" do
     then_i_am_redirected_to_the_school_index
     and_i_see_that_all_schools_are_created
     and_provider_school_rows_are_created_for_each
+    and_no_legacy_sites_are_created
     and_i_see_the_success_message
   end
 
@@ -127,13 +128,11 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_provider_school_rows_are_created_for_each
-    @gias_schools.each do |gias_school|
-      site = @provider.sites.find_by(urn: gias_school.urn)
-      provider_school = @provider.schools.find_by(gias_school_id: gias_school.id, site_code: site.code)
-      expect(provider_school).to be_present
-      expect(provider_school.site_code).to eq(site.code)
-      expect(provider_school.uuid).to eq(site.uuid)
-    end
+    expect(@provider.schools.pluck(:gias_school_id)).to include(*@gias_schools.map(&:id))
+  end
+
+  def and_no_legacy_sites_are_created
+    expect(@provider.sites.where(urn: @gias_schools.map(&:urn))).to be_empty
   end
 
   def and_i_enter_51_urns
@@ -230,7 +229,7 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_i_have_one_existing_school
-    provider.sites.school.create(@gias_schools.first.school_attributes)
+    create(:provider_school, provider:, gias_school: @gias_schools.first)
   end
 
   def and_i_enter_only_an_existing_urn

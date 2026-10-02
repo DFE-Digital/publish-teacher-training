@@ -133,6 +133,13 @@ class GiasSchool < ApplicationRecord
     [name, address1, address2, address3, town, postcode].compact_blank.join(", ")
   end
 
+  # Whether the address is complete enough to add the school to a provider:
+  # at least one address line and a valid postcode.
+  def complete_address?
+    [address1, address2, address3, town].any?(&:present?) &&
+      postcode.present? && UKPostcode.parse(postcode).full_valid?
+  end
+
 private
 
   def searchable_vector_value
