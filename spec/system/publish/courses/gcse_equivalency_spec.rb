@@ -23,6 +23,18 @@ RSpec.describe "GCSE equivalency requirements" do
 
     then_i_am_on_the_course_page
     and_i_see_the_success_summary
+    and_the_gcse_equivalency_subjects_are_saved(course, english: true, maths: true, science: nil)
+  end
+
+  scenario "a provider saves science as an accepted equivalency subject for a primary course" do
+    given_i_am_authenticated(user: user_with_courses)
+    when_i_visit_the_course_publish_courses_gcse_requirements_page(course: course2)
+    and_i_set_the_gcse_requirements
+    gcse_requirements_page.maths_equivalency.check
+    gcse_requirements_page.science_equivalency.check
+    and_i_click_save
+
+    and_the_gcse_equivalency_subjects_are_saved(course2, english: nil, maths: true, science: true)
   end
 
   scenario "a provider views course pages with course 2 GCSE requirements" do
@@ -216,5 +228,13 @@ private
 
   def and_i_see_the_success_summary
     expect(publish_provider_courses_index_page.success_summary).to have_content("GCSE requirements updated")
+  end
+
+  def and_the_gcse_equivalency_subjects_are_saved(course, english:, maths:, science:)
+    expect(course.reload).to have_attributes(
+      accept_english_gcse_equivalency: english,
+      accept_maths_gcse_equivalency: maths,
+      accept_science_gcse_equivalency: science,
+    )
   end
 end
