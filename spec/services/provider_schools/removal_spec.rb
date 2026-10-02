@@ -149,6 +149,17 @@ RSpec.describe ProviderSchools::Removal do
       end
     end
 
+    context "without the legacy site" do
+      subject(:removal) { described_class.new(provider:, uuid: provider_school.uuid, legacy_site: false) }
+
+      it "removes the provider school and leaves the legacy site alone" do
+        expect(removal.call).to be(true)
+
+        expect(Provider::School.where(id: provider_school.id)).to be_empty
+        expect(Site.where(id: site.id)).to contain_exactly(site)
+      end
+    end
+
     # Removal deliberately does not branch on the recruitment cycle: the same
     # records are deleted in every cycle.
     context "when the provider is in a later recruitment cycle" do
