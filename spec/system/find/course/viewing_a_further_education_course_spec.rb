@@ -50,6 +50,7 @@ RSpec.describe "Viewing a findable course" do
   scenario "user sees selectable school placements", travel: find_opens do
     given_there_is_a_findable_course
     and_the_provider_has_selectable_schools
+    and_the_course_has_a_placement_school
     when_i_visit_the_course_page
     when_i_click("View list of school placements")
     then_i_should_be_on_the_school_placements_page
@@ -322,9 +323,8 @@ private
     expect(page).to have_content(
       "You will be able to select a preferred placement location, but there is no guarantee you will be placed in the school you have chosen. The training provider will contact you to discuss your choice to help them select a location that suits you.",
     )
-    @course.site_statuses.new_or_running.map(&:site).uniq.each do |site|
-      expect(find_course_show_page).to have_content(site.decorate.full_address)
-    end
+    expect(page).to have_content(@placement_school.gias_school.name)
+    expect(page).to have_content(@placement_school.decorate.full_address)
   end
 
   def then_i_should_be_on_the_provider_page
@@ -400,5 +400,13 @@ private
 
   def and_the_provider_has_selectable_schools
     @provider.update(selectable_school: true)
+  end
+
+  def and_the_course_has_a_placement_school
+    @placement_school = create(
+      :course_school,
+      course: @course,
+      gias_school: create(:gias_school, name: "Ashfield School", address1: "12 Mill Lane", town: "Barnsley", postcode: "S70 2AB"),
+    ).provider_school
   end
 end
