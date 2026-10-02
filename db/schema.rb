@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_02_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -224,7 +224,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
     t.integer "qualification", null: false
     t.boolean "school_experience_required"
     t.text "school_experience_required_content"
-    t.boolean "schools_validated"
     t.integer "science"
     t.datetime "start_date", precision: nil
     t.text "study_mode"
@@ -580,7 +579,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
   end
 
   create_table "site", id: :serial, force: :cascade do |t|
-    t.string "added_via", default: "publish_interface", null: false
     t.text "address1"
     t.text "address2"
     t.text "address3"
@@ -600,7 +598,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_120000) do
     t.datetime "updated_at", precision: nil, default: -> { "timezone('utc'::text, now())" }, null: false
     t.string "urn"
     t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
-    t.index ["added_via"], name: "index_site_on_added_via"
     t.index ["discarded_at"], name: "index_site_on_discarded_at"
     t.index ["discarded_via_script"], name: "index_site_on_discarded_via_script"
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
