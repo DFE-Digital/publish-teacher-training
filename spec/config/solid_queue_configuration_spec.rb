@@ -76,6 +76,16 @@ RSpec.describe "Solid Queue configuration" do
     expect(application_tf).to include("DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5}")
   end
 
+  it "rehearses rollover with production's three low-priority threads" do
+    low_priority_threads = lambda do |env|
+      section_for(env).fetch("workers").find { |worker| Array(worker["queues"]).include?("low_priority") }["threads"]
+    end
+
+    expect(low_priority_threads.call("rollover")).to eq(3)
+    expect(low_priority_threads.call("qa")).to eq(1)
+    expect(section_for("rollover").fetch("workers").first["queues"]).to eq(%w[default geocoding mailers])
+  end
+
   it "keeps Sidekiq as the application-default Active Job adapter" do
     application_config = Rails.root.join("config/application.rb").read
 
