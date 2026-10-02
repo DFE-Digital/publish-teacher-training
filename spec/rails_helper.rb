@@ -71,6 +71,7 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActiveJob::TestHelper, type: :request
+  config.include ActiveJob::TestHelper, type: :job
   config.include ActiveSupport::Testing::TimeHelpers
   config.include SystemRetryHelper, type: :system
   config.include DfE::Wizard::Test::RSpecMatchers, type: :wizard

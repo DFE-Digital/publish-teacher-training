@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ApplicationJob, type: :job do
-  include ActiveJob::TestHelper
-
   describe ".without_auto_retry" do
     around do |example|
       original_adapter = ActiveJob::Base.queue_adapter
@@ -91,14 +89,13 @@ RSpec.describe ApplicationJob, type: :job do
 
     before { stub_const("RetryOnFailureExampleJob", job_class) }
 
-    it "re-enqueues a StandardError until attempts run out, then raises" do
+    it "re-enqueues a StandardError until attempts run out, then raises without enqueuing again" do
       expect {
         RetryOnFailureExampleJob.perform_now(:standard)
-      }.to have_enqueued_job(RetryOnFailureExampleJob)
+      }.to have_enqueued_job(RetryOnFailureExampleJob).exactly(:once)
 
-      expect {
-        perform_enqueued_jobs { RetryOnFailureExampleJob.perform_later(:standard) }
-      }.to raise_error(/boom/)
+      expect { perform_enqueued_jobs }.to raise_error(/boom/)
+      expect(RetryOnFailureExampleJob).not_to have_been_enqueued
     end
 
     it "still discards jobs whose records have gone" do

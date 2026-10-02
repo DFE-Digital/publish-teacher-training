@@ -3,6 +3,3 @@ en:
     active:
       true: active
       false: inactive
-    slack_notification:
-      activated: ":flags: Feature ‘%{feature_name}‘ was activated"
-      deactivated: ":flags: Feature ‘%{feature_name}‘ was deactivated"

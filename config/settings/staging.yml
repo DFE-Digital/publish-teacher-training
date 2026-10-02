@@ -31,7 +31,7 @@ bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
-    queue: save_statistic
+    queue: low_priority
 
 features:
   send_request_data_to_bigquery: true

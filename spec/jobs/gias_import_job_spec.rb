@@ -3,8 +3,6 @@
 require "rails_helper"
 
 describe GiasImportJob do
-  include ActiveJob::TestHelper
-
   subject(:job) { described_class.perform_later }
 
   before do
@@ -26,10 +24,7 @@ describe GiasImportJob do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
-  it "runs on Solid Queue's low priority queue" do
-    expect(described_class.queue_adapter_name).to eq("solid_queue")
-    expect(described_class.new.queue_name).to eq("low_priority")
-  end
+  it_behaves_like "a Solid Queue job", queue: "low_priority"
 
   it "runs the job" do
     expect {

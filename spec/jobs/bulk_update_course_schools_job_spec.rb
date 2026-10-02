@@ -3,8 +3,6 @@
 require "rails_helper"
 
 describe BulkUpdateCourseSchoolsJob do
-  include ActiveJob::TestHelper
-
   let(:provider) { create(:provider) }
   let(:course) { create(:course, provider:, sites: []) }
   let(:other_course) { create(:course, provider:, sites: []) }
@@ -13,10 +11,7 @@ describe BulkUpdateCourseSchoolsJob do
     Publish::Schools::BulkUpdate::Apply::Result.new(updated_ids: updated, failed_ids: failed)
   end
 
-  it "runs on Solid Queue's low priority queue" do
-    expect(described_class.queue_adapter_name).to eq("solid_queue")
-    expect(described_class.new.queue_name).to eq("low_priority")
-  end
+  it_behaves_like "a Solid Queue job", queue: "default"
 
   it "can finish a native Sidekiq payload queued before the adapter migration" do
     stub_apply(result(updated: [course.id]))

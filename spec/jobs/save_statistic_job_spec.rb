@@ -2,8 +2,6 @@
 
 require "rails_helper"
 describe SaveStatisticJob do
-  include ActiveJob::TestHelper
-
   subject(:job) { described_class.perform_later }
 
   after do
@@ -16,9 +14,7 @@ describe SaveStatisticJob do
       .to change(ActiveJob::Base.queue_adapter.enqueued_jobs, :size).by(1)
   end
 
-  it "is put into the save_statistic queue" do
-    expect(described_class.new.queue_name).to eq("save_statistic")
-  end
+  it_behaves_like "a Solid Queue job", queue: "low_priority"
 
   context "executing the job" do
     it "calls the StatisticService to save" do

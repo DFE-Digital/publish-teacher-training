@@ -20,8 +20,6 @@ api_hosts:
 
 base_url: https://www.publish-teacher-training-courses.service.gov.uk
 
-STATE_CHANGE_SLACK_URL:
-
 dfe_signin:
   issuer: https://oidc.signin.education.gov.uk
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
@@ -43,7 +41,7 @@ bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
-    queue: save_statistic
+    queue: low_priority
   send_entity_table_checks_to_bigquery:
     cron: "30 0 * * *" # daily at 00:30
     class: "DfE::Analytics::EntityTableCheckJob"

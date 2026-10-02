@@ -16,14 +16,12 @@ class FeatureFlag
       raise UnknownFeatureError unless feature_name.in?(features)
 
       sync_with_redis(feature_name, true)
-      notify_slack(feature_name, true)
     end
 
     def deactivate(feature_name)
       raise UnknownFeatureError unless feature_name.in?(features)
 
       sync_with_redis(feature_name, false)
-      notify_slack(feature_name, false)
     end
 
     def features
@@ -64,19 +62,6 @@ class FeatureFlag
 
         Current.feature_flags[cache_key] = feature && JSON.parse(feature)
       end
-    end
-
-    def notify_slack(feature_name, feature_activated)
-      return unless Rails.env.production?
-
-      SlackNotificationJob.perform_later(
-        I18n.t(slack_notification_i18n_key(feature_activated), feature_name: feature_name.humanize),
-        Rails.application.routes.url_helpers.support_feature_flags_path,
-      )
-    end
-
-    def slack_notification_i18n_key(feature_activated)
-      "feature_flags.slack_notification.#{feature_activated ? 'activated' : 'deactivated'}"
     end
   end
 
