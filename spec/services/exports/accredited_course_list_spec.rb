@@ -25,7 +25,7 @@ module Exports
 
     describe "#data" do
       it "sets the correct row values" do
-        create_partner_course(
+        course = create_partner_course(
           :secondary,
           :fee,
           :resulting_in_pgce_with_qts,
@@ -34,9 +34,9 @@ module Exports
           age_range_in_years: "11_to_16",
           study_mode: :full_time,
           start_date: Time.zone.local(training_partner.recruitment_cycle_year.to_i, 9, 1),
-          site_statuses: [create(:site_status, :full_time_vacancies, :findable, site: create(:site, code: "K"))],
           enrichments: [build(:course_enrichment, :published, course_length: "OneYear", fee_uk_eu: 9_535, fee_international: 21_500)],
         )
+        create(:course_school, course:, site_code: "K")
 
         expect(rows.first.to_h).to eq(
           "Provider" => "Partner University",
@@ -87,23 +87,38 @@ module Exports
         )
       end
 
-      it "lists campus codes in a stable order, whatever order the sites load in" do
-        create_partner_course(site_statuses: [
-          create(:site_status, :findable, site: create(:site, code: "M")),
-          create(:site_status, :findable, site: create(:site, code: "A")),
-          create(:site_status, :findable, site: create(:site, code: "8")),
-        ])
+      it "lists campus codes in a stable order, whatever order the schools load in" do
+        course = create_partner_course
+        create(:course_school, course:, site_code: "M")
+        create(:course_school, course:, site_code: "A")
+        create(:course_school, course:, site_code: "8")
 
-        expect(rows.first["Campus codes"]).to eq("8 A M")
+        expect(rows.first["Campus codes"]).to eq("A M 8")
       end
 
       it "lists the main site code last so Excel does not read the cell as a formula" do
-        create_partner_course(site_statuses: [
-          create(:site_status, :findable, site: create(:site, code: Provider::School::MAIN_SITE_CODE)),
-          create(:site_status, :findable, site: create(:site, code: "F")),
-        ])
+        course = create_partner_course
+        create(:course_school, :main_site, course:)
+        create(:course_school, course:, site_code: "F")
 
         expect(rows.first["Campus codes"]).to eq("F -")
+      end
+
+      it "lists letter codes before numeric codes so Excel does not read them as a time" do
+        course = create_partner_course
+        create(:course_school, course:, site_code: "1")
+        create(:course_school, course:, site_code: "A")
+
+        expect(rows.first["Campus codes"]).to eq("A 1")
+      end
+
+      it "uses course schools rather than legacy sites" do
+        course = create_partner_course(site_statuses: [
+          create(:site_status, :findable, site: create(:site, code: "Z")),
+        ])
+        create(:course_school, course:, site_code: "A")
+
+        expect(rows.first["Campus codes"]).to eq("A")
       end
 
       it "leaves the enrichment columns empty when there is no enrichment" do
