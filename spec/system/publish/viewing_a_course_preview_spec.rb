@@ -141,14 +141,11 @@ RSpec.describe "Course show", travel: mid_cycle(2025) do
   # so this is the Publish half of the pair covered for Find in
   # spec/controllers/find/placements_controller_spec.rb.
   scenario "user sees canonical school placements", travel: find_opens(2026) do
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
     given_i_am_authenticated(user: user_with_fee_based_course)
     and_the_course_is_taught_at_a_canonical_school
     when_i_visit_the_publish_course_preview_page
     and_i_click_link_or_button("View list of school placements")
     then_i_see_the_canonical_school_placement
-  ensure
-    FeatureFlag.deactivate(:course_publishing_uses_new_school_model)
   end
 
   scenario "user views provider and accredited_provider", travel: mid_cycle do

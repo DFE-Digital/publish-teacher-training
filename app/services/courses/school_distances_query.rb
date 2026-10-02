@@ -29,17 +29,12 @@ module Courses
     end
 
     def call
-      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-        schools_query
-      else
-        sites_query
-      end
+      schools_query
     end
 
   private
 
-    # Every school of every course over the canonical course_school -> gias_school
-    # model, used while the :course_publishing_uses_new_school_model flag is on.
+    # Every school of every course over course_school -> gias_school.
     #
     # DISTINCT ON (course.id, gias_school.id) is the counterpart of the legacy
     # GROUP BY (course.id, site.id): it lists a school once per course however many
@@ -60,31 +55,6 @@ module Courses
         .select("course.*")
         .from(subquery, :course)
         .order("course_id ASC, distance_to_search_location ASC")
-    end
-
-    def sites_query
-      Course
-        .joins(site_statuses: :site)
-        .where(id: @courses.map(&:id))
-        .where("site.longitude IS NOT NULL AND site.latitude IS NOT NULL")
-        .select(select_sql)
-        .order("course.id, distance_to_search_location ASC")
-        .group("course.id, site.id")
-    end
-
-    def select_sql
-      <<~SQL.squish
-        course.id AS course_id,
-        course.*,
-        site.id AS site_id,
-        site.location_name,
-        site.latitude,
-        site.longitude,
-        ST_DistanceSphere(
-          ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-          ST_SetSRID(ST_MakePoint(#{Float(@longitude)}, #{Float(@latitude)}), 4326)
-        ) / #{Geolocation::METRES_PER_MILE} AS distance_to_search_location
-      SQL
     end
   end
 end

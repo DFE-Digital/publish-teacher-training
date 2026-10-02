@@ -10,9 +10,9 @@ Accepted
 
 Find also lets candidates search by place: a city, postcode, or other location, optionally with a radius. A course should appear if any of its attached schools is within that radius. The result is still one row per course, annotated with the distance to the nearest matching school.
 
-Location search used to query duplicated `Site` rows. [ADR 16](0016-model-school-relationships-with-gias-backed-join-tables.md) moved school data to GIAS-backed relationships. Coordinates now live on `GiasSchool.geo_location`. Course-to-school links live on `course_school`. [ADR 18](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md) and [ADR 19](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md) rolled that model out behind `:course_publishing_uses_new_school_model` without intending to change which courses appear.
+Location search used to query duplicated `Site` rows. [ADR 16](0016-model-school-relationships-with-gias-backed-join-tables.md) moved school data to GIAS-backed relationships. Coordinates now live on `GiasSchool.geo_location`. Course-to-school links live on `course_school`. [ADR 18](0018-roll-out-school-relationship-model-with-dual-writes-and-feature-flags.md) and [ADR 19](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md) rolled that model out behind `:course_publishing_uses_new_school_model`. That flag and the `Site` location query have since been removed. Location search reads `course_school` and `gias_school` only.
 
-The shared Find pipeline — params, form, filters, findability, pagination — is documented in [ADR 20](0020-find-non-location-course-search.md). This ADR records the location-specific decisions: geocoding, radius, PostGIS filtering, nearest-school display, and the temporary Site fallback.
+The shared Find pipeline — params, form, filters, findability, pagination — is documented in [ADR 20](0020-find-non-location-course-search.md). This ADR records the location-specific decisions: geocoding, radius, PostGIS filtering, and nearest-school display.
 
 This ADR records the current implementation. It does not propose a behaviour change.
 
@@ -51,20 +51,18 @@ Join through `course_school` when present, otherwise fall back to the provider�
 
 ### 3. Filter and sort by nearest `GiasSchool` on the course-school relationship
 
-Geocode the candidate’s location, then include a course when any `course_school` → `gias_school` point is within the radius. Annotate the row with the minimum distance. Keep the old `Site` SQL behind the remodel feature flag until that path is removed.
+Geocode the candidate’s location, then include a course when any `course_school` → `gias_school` point is within the radius. Annotate the row with the minimum distance.
 
 #### Pros
 
 - Search reads the same GIAS-backed relationships as publishing and the API.
 - The GiST index on `gias_school.geo_location` can prune far-away schools before the course join.
 - Product behaviour stays “nearest attached school within radius, one row per course”.
-- The old path remains available for rollback.
 
 #### Cons
 
-- Two location SQL paths exist while the feature flag is on.
 - A published course with no geocoded course school disappears from location results even though it is findable without a location.
-- Distance maths must stay aligned with the legacy `ST_DistanceSphere` path or cards and tests will disagree.
+- Distance maths must stay aligned across the results card, course page and saved courses, or those surfaces will disagree.
 
 ## Decision
 
@@ -92,32 +90,24 @@ When the search is located, the default order is `distance`. The no-location def
 
 ### How the location scope is built
 
-`Courses::Query#location_scope` runs only when both coordinates are present. It then branches on `:course_publishing_uses_new_school_model`.
-
-**Current path (flag on): `schools_location_scope`**
+`Courses::Query#location_scope` runs only when both coordinates are present. It filters and annotates distance through `course_school` and `gias_school`.
 
 1. Build a geography point from the search longitude and latitude (SRID 4326).
 2. In a derived table, join `gias_school` to `course_school` where `gias_school.geo_location` is present and `ST_DWithin(..., radius_in_metres, false)`.
 3. `GROUP BY course_school.course_id` and take `MIN(ST_Distance(..., false))`.
 4. Inner-join that derived table to `course`, select `minimum_distance_to_search_location` in miles, and group so subject joins and later orderings cannot duplicate or un-group the distance column.
 
-The derived table exists so Postgres does not flatten the nearby-school work into a per-(school × course) join that then re-applies published-course filters. `ST_DWithin` can use the partial GiST index `index_gias_school_on_geo_location`. The trailing `false` on `ST_DWithin` / `ST_Distance` forces sphere maths so results match the legacy `ST_DistanceSphere` path.
-
-**Legacy path (flag off): `sites_location_scope`**
-
-Joins running, published `course_site` rows to non-discarded `site` rows and filters with `ST_DistanceSphere` on `site.latitude` / `site.longitude`. This is a temporary dual-read for rollback, not the long-term model.
-
-Miles conversion is centralised as `Geolocation::METRES_PER_MILE` (`1609.344`). Call sites previously used two slightly different factors, which made the results card and the course page disagree about the same distance.
+The derived table exists so Postgres does not flatten the nearby-school work into a per-(school × course) join that then re-applies published-course filters. `ST_DWithin` can use the partial GiST index `index_gias_school_on_geo_location`. The trailing `false` on `ST_DWithin` / `ST_Distance` forces sphere maths. Miles conversion uses `Geolocation::METRES_PER_MILE` (`1609.344`).
 
 ### How results are built and displayed
 
-The query still returns one course. `minimum_distance_to_search_location` is the nearest attached school inside the radius, calculated in `schools_location_scope` or `sites_location_scope`.
+The query still returns one course. `minimum_distance_to_search_location` is the nearest attached school inside the radius, calculated in `schools_location_scope`.
 
 - Result cards (`Courses::SummaryCardComponent`) show that column, ceiled to a whole mile. The card does not run a second distance query.
 - The course page (`Find::CoursesController`) uses `Courses::NearestSchoolQuery` for its own nearest-school distance. A course with no geocoded school is not an error; the page falls back to the funding hint.
 - `?debug` uses `Courses::SchoolDistancesQuery` to list every school and its distance.
 
-`NearestSchoolQuery` and `SchoolDistancesQuery` share `Courses::CanonicalSchoolDistance`. The results query does not. Its distance SQL is written again in `schools_location_scope` (and in `sites_location_scope` on the legacy path). The three stay aligned only by using sphere maths and `Geolocation::METRES_PER_MILE`. A change in `CanonicalSchoolDistance` does not change the distance on the results card, and the other way around.
+`NearestSchoolQuery` and `SchoolDistancesQuery` share `Courses::CanonicalSchoolDistance`. The results query does not. Its distance SQL is written in `schools_location_scope`. The three stay aligned only by using sphere maths and `Geolocation::METRES_PER_MILE`. A change in `CanonicalSchoolDistance` does not change the distance on the results card, and the other way around.
 
 On the new model, `CanonicalSchoolDistance` reads `gias_school.geo_location` and labels main sites in SQL (`site_code = "-"`). `DISTINCT ON` plus `site_code` breaks ties when two provider schools share a GIAS school. `schools_location_scope` does not apply that tie-break: it keeps `MIN(ST_Distance(...))` per course and does not choose a school row.
 
@@ -137,7 +127,7 @@ Current location search reads:
 - `course_school` — which schools are attached to the course;
 - `provider_school` — display name, main-site label, and UUID on nearest-school / debug queries.
 
-Coordinates do not come from `Site` when the remodel flag is on. `Site` remains the study-placement model.
+Coordinates come from `gias_school`. `Site` remains the study-placement model.
 
 ## Consequences
 
@@ -145,13 +135,13 @@ Location search now queries a smaller, GIAS-backed relationship instead of cycle
 
 Product behaviour stays “one course, nearest attached school, within radius”. Engineers can trace that contract from geocoding through `location_scope` to the card, course page and debug panel.
 
-The feature-flagged `Site` path remains until it is removed. Tests must cover both branches. Once the flag is permanently on, `sites_location_scope` and the matching branches in `NearestSchoolQuery`, `SchoolDistancesQuery` and `SavedCourses::Query` can be deleted together.
+Location search reads `course_school` and `gias_school` only. The feature-flagged `Site` path has been removed.
 
 Location results are a subset of findable courses: published courses without a geocoded course school will not appear. That is expected. Widen or remove the location filter to see them.
 
 Geocoding is a runtime dependency. Cache hits keep most requests off the Google client. A cache miss or client failure must not 500 the results page.
 
-Distance is not calculated in one place. The results card reads `minimum_distance_to_search_location` from its own `ST_Distance(..., false)` in `Courses::Query#schools_location_scope`. The legacy path uses `ST_DistanceSphere` in `sites_location_scope`. The course page and the debug panel use `CanonicalSchoolDistance`. `SavedCourses::Query` has another `ST_DistanceSphere` copy. Changing only `CanonicalSchoolDistance` leaves the results card on the old maths, so the card and the course page can show different distances for the same course. Sphere maths and `Geolocation::METRES_PER_MILE` are the shared contract. The nearest-school tie-break exists only in `CanonicalSchoolDistance`.
+Distance is not calculated in one place. The results card reads `minimum_distance_to_search_location` from its own `ST_Distance(..., false)` in `Courses::Query#schools_location_scope`. The course page and the debug panel use `CanonicalSchoolDistance`. `SavedCourses::Query` has its own `ST_DistanceSphere` copy over `gias_school` coordinates. Changing only `CanonicalSchoolDistance` leaves the results card on the old maths, so the card and the course page can show different distances for the same course. Sphere maths and `Geolocation::METRES_PER_MILE` are the shared contract. The nearest-school tie-break exists only in `CanonicalSchoolDistance`.
 
 Public API location search is still `CourseSearchServiceSchools`, not `Courses::Query`. Equivalent product behaviour there is a separate change.
 

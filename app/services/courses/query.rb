@@ -281,60 +281,10 @@ module Courses
         radius: radius_in_miles,
       }
 
-      @scope =
-        if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-          schools_location_scope(latitude:, longitude:, radius_in_meters:)
-        else
-          sites_location_scope(latitude:, longitude:, radius_in_meters:)
-        end
+      @scope = schools_location_scope(latitude:, longitude:, radius_in_meters:)
     end
 
-    # Location filter over the legacy course_site -> site model, used while the
-    # :course_publishing_uses_new_school_model flag is off.
-    def sites_location_scope(latitude:, longitude:, radius_in_meters:)
-      @scope
-        .joins(<<~SQL)
-          INNER JOIN course_site site_statuses ON (
-            site_statuses.course_id = course.id
-            AND site_statuses.status = 'R'
-            AND site_statuses.publish = 'Y'
-          )
-          INNER JOIN site ON (
-            site.id = site_statuses.site_id
-            AND site.discarded_at IS NULL
-          )
-        SQL
-        .where("(site.longitude IS NOT NULL OR site.latitude IS NOT NULL)")
-        .where(
-          <<~SQL.squish, longitude, latitude, radius_in_meters
-            ST_DistanceSphere(
-              ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-              ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-            ) <= ?
-          SQL
-        )
-        .select(
-          Course.sanitize_sql_array(
-            [
-              <<~SQL.squish,
-                course.*,
-                provider.provider_name,
-                MIN(ST_DistanceSphere(
-                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / ?) AS minimum_distance_to_search_location
-              SQL
-              longitude,
-              latitude,
-              Geolocation::METRES_PER_MILE,
-            ],
-          ),
-        )
-        .group(:id, "provider.provider_name")
-    end
-
-    # Location filter over the canonical course_school -> gias_school model, used
-    # while the :course_publishing_uses_new_school_model flag is on.
+    # Location filter over course_school -> gias_school.
     #
     # A derived table finds the nearby schools via the partial GiST index
     # (ST_DWithin prunes far-away schools) and reduces them to one row per course
@@ -346,7 +296,7 @@ module Courses
     # results match the legacy ST_DistanceSphere path. Distance is returned in
     # miles, preserving the minimum_distance_to_search_location contract.
     #
-    # The GROUP BY carries the same contract sites_location_scope has always had,
+    # The GROUP BY carries the same contract the location filter has always had,
     # and both of its jobs matter. It collapses the subjects_scope join, which
     # otherwise repeats a course once per matching subject, and it keeps the
     # distance column groupable for the orderings that add a GROUP BY of their own

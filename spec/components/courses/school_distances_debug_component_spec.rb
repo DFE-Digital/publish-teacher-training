@@ -106,35 +106,7 @@ RSpec.describe Courses::SchoolDistancesDebugComponent do
     end
   end
 
-  context "when render the school distances" do
-    let(:environment_name) { "qa" }
-    let(:debug) { true }
-    let(:manchester) { build(:location, :manchester) }
-    let(:bristol) { build(:location, :bristol) }
-
-    it "renders the details summary with the course provider and name" do
-      schools = [
-        create(:site_status, site: build(:site, latitude: manchester.latitude, longitude: manchester.longitude), course:),
-        create(:site_status, site: build(:site, latitude: bristol.latitude, longitude: bristol.longitude), course:),
-      ]
-
-      expect(school_distances_debug_component_content).to include("School distances for Test Provider (TP123) - Maths (M123)")
-
-      schools.each do |school|
-        expect(school_distances_debug_component_content).to have_text(school.site.location_name)
-        expect(school_distances_debug_component_content).to have_text(school.site.latitude.to_s)
-        expect(school_distances_debug_component_content).to have_text(school.site.longitude.to_s)
-        expect(rendered_component.css("a").map { |a| a[:href] }).to include(
-          "https://www.google.com/maps/dir/#{latitude},#{longitude}/#{school.site.latitude},#{school.site.longitude}",
-        )
-      end
-    end
-  end
-
   context "when the course only has canonical schools" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
     let(:environment_name) { "qa" }
     let(:debug) { true }
     let(:manchester) { build(:location, :manchester) }

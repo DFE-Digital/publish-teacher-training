@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# Which school association a course page should eager-load, while the
-# :course_publishing_uses_new_school_model flag decides whether schools are read
-# from course_school -> gias_school or from the legacy course_site -> site.
+# Which school association a course page should eager-load.
 #
 # Two shapes, because the pages ask different questions: the course page only
 # asks whether a course has any school, while the placements pages render every
@@ -19,11 +17,7 @@ private
   # so nothing below the join rows is worth loading - a course can have
   # thousands of them.
   def school_preloads
-    if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-      { schools: [] }
-    else
-      { site_statuses: [:site] }
-    end
+    { schools: [] }
   end
 
   # CourseDecorator#preview_placement_schools walks course_school ->
@@ -32,10 +26,6 @@ private
   # own gias_school is a denormalised copy that these pages never read - the
   # public API's location serializer is what reads that one.
   def placement_school_preloads
-    if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-      { schools: { provider_school: :gias_school } }
-    else
-      { site_statuses: [:site] }
-    end
+    { schools: { provider_school: :gias_school } }
   end
 end

@@ -2,16 +2,12 @@
 
 require "rails_helper"
 
-# The per-school distance listing behind Find's ?debug panel, over the canonical
-# course_school -> gias_school model and gated by the
-# :course_publishing_uses_new_school_model flag. Unlike the nearest-school lookup
-# this keeps every school a course is taught at, so the panel can show them all -
-# but only once each, however many Provider::Schools point at the same GiasSchool.
+# The per-school distance listing behind Find's ?debug panel, over
+# course_school -> gias_school. Unlike the nearest-school lookup this keeps every
+# school a course is taught at, so the panel can show them all - but only once
+# each, however many Provider::Schools point at the same GiasSchool.
 RSpec.describe Courses::SchoolDistancesQuery do
   subject(:results) { described_class.new(courses:, latitude: london.latitude, longitude: london.longitude).call }
-
-  before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-  after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
   let(:london) { build(:location, :london) }
   let(:canary_wharf) { build(:location, :canary_wharf) }

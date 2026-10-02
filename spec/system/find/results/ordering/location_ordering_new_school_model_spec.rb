@@ -3,21 +3,16 @@
 require "rails_helper"
 require_relative "ordering_helper"
 
-# The sibling ordering specs cover these sorts over the legacy course_site -> site
-# path. With :course_publishing_uses_new_school_model on, the distance a location
-# search annotates each course with comes from a derived table instead, while each
-# of these sorts adds a GROUP BY of its own. The two have to agree: when they did
-# not, every one of these searches returned a 500 instead of results, and a course
-# matching two of the chosen subjects was listed twice.
+# Location search annotates each course with a distance from a derived table, while
+# each of these sorts adds a GROUP BY of its own. The two have to agree: when they
+# did not, every one of these searches returned a 500 instead of results, and a
+# course matching two of the chosen subjects was listed twice.
 RSpec.describe "Search results ordering with a location on the new school model", :js, service: :find do
   include OrderingHelper
 
   before do
-    FeatureFlag.activate(:course_publishing_uses_new_school_model)
     Timecop.travel(Find::CycleTimetable.mid_cycle)
   end
-
-  after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
   scenario "ordering courses by lowest UK fee when a location is present" do
     given_there_are_courses_at_different_locations_with_different_uk_fees

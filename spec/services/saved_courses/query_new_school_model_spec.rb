@@ -2,10 +2,8 @@
 
 require "rails_helper"
 
-# Saved-courses location annotation over the canonical course_school -> gias_school
-# model, gated by :course_publishing_uses_new_school_model. As with the legacy
-# path, saved courses are annotated with distance and sorted, but NOT filtered by
-# radius.
+# Saved-courses location annotation over course_school -> gias_school. Saved
+# courses are annotated with distance and sorted, and are not filtered by radius.
 RSpec.describe SavedCourses::Query do
   subject(:results) { described_class.call(candidate:, params:) }
 
@@ -22,10 +20,7 @@ RSpec.describe SavedCourses::Query do
     end
   end
 
-  context "when :course_publishing_uses_new_school_model is active" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
+  context "when searching by location" do
     let(:london) { build(:location, :london) }
     let!(:london_saved_result) { saved_course_at(london, provider_name: "London University", distance: 0.0) }
     let!(:lewisham_saved_result) { saved_course_at(lewisham, provider_name: "Lewisham University", distance: 6.07) }

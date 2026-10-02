@@ -8,96 +8,16 @@ module ResultsHelper
     primary_subject = find_or_create(:primary_subject, :primary)
     mathematics_subject = find_or_create(:secondary_subject, :mathematics)
 
-    @postcode_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - TR17 0HF",
-      provider: create(:provider, provider_name: "First university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: postcode.latitude, longitude: postcode.longitude))],
-      subjects: [primary_subject],
-    )
+    provider = create(:provider, provider_name: "First university")
 
-    @london_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - London",
-      provider: create(:provider, provider_name: "First university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [primary_subject],
-    )
-
-    @penzance_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - Penzance",
-      provider: create(:provider, provider_name: "First university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: penzance.latitude, longitude: penzance.longitude))],
-      subjects: [primary_subject],
-    )
-
-    @cornwall_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - Cornwall",
-      provider: create(:provider, provider_name: "First university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: cornwall.latitude, longitude: cornwall.longitude))],
-      subjects: [primary_subject],
-    )
-
-    @postcode_mathematics_course = create(
-      :course,
-      :secondary,
-      :open,
-      :published,
-      name: "Mathematics - TR17 0HF",
-      provider: create(:provider, provider_name: "First university"),
-      can_sponsor_student_visa: true,
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: postcode.latitude, longitude: postcode.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @penzance_mathematics_course = create(
-      :course,
-      :secondary,
-      :open,
-      :published,
-      name: "Mathematics - Penzance",
-      provider: create(:provider, provider_name: "First university"),
-      can_sponsor_student_visa: true,
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: penzance.latitude, longitude: penzance.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @cornwall_mathematics_course = create(
-      :course,
-      :secondary,
-      :open,
-      :published,
-      name: "Mathematics - Cornwall",
-      provider: create(:provider, provider_name: "First university"),
-      can_sponsor_student_visa: true,
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: cornwall.latitude, longitude: cornwall.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @london_mathematics_course = create(
-      :course,
-      :secondary,
-      :open,
-      :published,
-      name: "Mathematics - London",
-      can_sponsor_student_visa: true,
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [mathematics_subject],
-    )
+    @postcode_primary_course = course_at(postcode, :primary, name: "Primary - TR17 0HF", provider:, subjects: [primary_subject])
+    @london_primary_course = course_at(london, :primary, name: "Primary - London", provider:, subjects: [primary_subject])
+    @penzance_primary_course = course_at(penzance, :primary, name: "Primary - Penzance", provider:, subjects: [primary_subject])
+    @cornwall_primary_course = course_at(cornwall, :primary, name: "Primary - Cornwall", provider:, subjects: [primary_subject])
+    @postcode_mathematics_course = course_at(postcode, :secondary, name: "Mathematics - TR17 0HF", provider:, can_sponsor_student_visa: true, subjects: [mathematics_subject])
+    @penzance_mathematics_course = course_at(penzance, :secondary, name: "Mathematics - Penzance", provider:, can_sponsor_student_visa: true, subjects: [mathematics_subject])
+    @cornwall_mathematics_course = course_at(cornwall, :secondary, name: "Mathematics - Cornwall", provider:, can_sponsor_student_visa: true, subjects: [mathematics_subject])
+    @london_mathematics_course = course_at(london, :secondary, name: "Mathematics - London", can_sponsor_student_visa: true, subjects: [mathematics_subject])
   end
 
   # Course/School Distances from London, UK
@@ -119,92 +39,24 @@ module ResultsHelper
     primary_subject = find_or_create(:primary_subject, :primary)
     mathematics_subject = find_or_create(:secondary_subject, :mathematics)
 
-    @london_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - London",
-      provider: create(:provider, provider_name: "First university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [primary_subject],
-    )
+    @london_primary_course = course_at(london, :primary, name: "Primary - London", provider: create(:provider, provider_name: "First university"), subjects: [primary_subject])
+    @romford_primary_course = course_at(romford, :primary, name: "Primary - Romford", provider: create(:provider, provider_name: "Second university"), subjects: [primary_subject])
+    @watford_primary_course = course_at(watford, :primary, name: "Primary - Watford", subjects: [primary_subject])
+    course_at(edinburgh, :primary, :can_not_sponsor_visa, name: "Primary - Edinburgh", subjects: [primary_subject])
+    @london_mathematics_course = course_at(london, :secondary, name: "Mathematics - London", can_sponsor_student_visa: true, subjects: [mathematics_subject])
+    @romford_mathematics_course = course_at(romford, :secondary, :can_not_sponsor_visa, name: "Mathematics - Romford", subjects: [mathematics_subject])
+    @watford_mathematics_course = course_at(watford, :secondary, :can_not_sponsor_visa, name: "Mathematics - Watford", subjects: [mathematics_subject])
+    @edinburgh_mathematics_course = course_at(edinburgh, :secondary, :can_not_sponsor_visa, name: "Mathematics - Edinburgh", subjects: [mathematics_subject])
+  end
 
-    @romford_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - Romford",
-      provider: create(:provider, provider_name: "Second university"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [primary_subject],
+  def course_at(location, *traits, **attrs)
+    course = create(:course, :open, :published, *traits, **attrs)
+    create(
+      :course_school,
+      course:,
+      gias_school: create(:gias_school, latitude: location.latitude, longitude: location.longitude),
     )
-
-    @watford_primary_course = create(
-      :course,
-      :primary,
-      :open,
-      :published,
-      name: "Primary - Watford",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
-      subjects: [primary_subject],
-    )
-
-    @edinburgh_mathematics_course = create(
-      :course,
-      :primary,
-      :can_not_sponsor_visa,
-      :open,
-      :published,
-      name: "Primary - Edinburgh",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
-      subjects: [primary_subject],
-    )
-
-    @london_mathematics_course = create(
-      :course,
-      :secondary,
-      :open,
-      :published,
-      name: "Mathematics - London",
-      can_sponsor_student_visa: true,
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @romford_mathematics_course = create(
-      :course,
-      :secondary,
-      :can_not_sponsor_visa,
-      :open,
-      :published,
-      name: "Mathematics - Romford",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @watford_mathematics_course = create(
-      :course,
-      :secondary,
-      :can_not_sponsor_visa,
-      :open,
-      :published,
-      name: "Mathematics - Watford",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: watford.latitude, longitude: watford.longitude))],
-      subjects: [mathematics_subject],
-    )
-
-    @edinburgh_mathematics_course = create(
-      :course,
-      :secondary,
-      :can_not_sponsor_visa,
-      :open,
-      :published,
-      name: "Mathematics - Edinburgh",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: edinburgh.latitude, longitude: edinburgh.longitude))],
-      subjects: [mathematics_subject],
-    )
+    course
   end
 
   def when_i_filter_by_courses_that_sponsor_visa

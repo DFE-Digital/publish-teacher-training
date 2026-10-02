@@ -40,9 +40,9 @@ RSpec.describe "Searching in Wales", :js, service: :find do
       :secondary,
       :published,
       name: "Mathematics - Bristol",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: bristol.latitude, longitude: bristol.longitude))],
       subjects: [find_or_create(:secondary_subject, :mathematics)],
     )
+    create(:course_school, course: @bristol_course, gias_school: create(:gias_school, latitude: bristol.latitude, longitude: bristol.longitude))
   end
 
   def when_i_enter_cardiff_as_the_location
