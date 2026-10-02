@@ -5,11 +5,8 @@ require "rails_helper"
 RSpec.describe CourseSchools::CopyToCourse do
   subject(:copy_schools) { described_class.new.call(course:, new_provider:, new_course:) }
 
-  # A provider school and the legacy site it was dual-written with, joined by
-  # the uuid the two share.
   def link_school(provider, gias_school, site_code: "B")
-    site = create(:site, provider:, urn: gias_school.urn, code: site_code)
-    create(:provider_school, provider:, gias_school:, site_code:, uuid: site.uuid)
+    create(:provider_school, provider:, gias_school:, site_code:)
   end
 
   let(:provider) { create(:provider) }
@@ -32,11 +29,10 @@ RSpec.describe CourseSchools::CopyToCourse do
         .to contain_exactly([new_provider_school.id, gias_school.id])
     end
 
-    it "attaches the target provider's paired legacy site to the copied course" do
-      copy_schools
+    it "does not write legacy site statuses for the copied course" do
+      create(:site, provider: new_provider, urn: gias_school.urn, code: "K", uuid: new_provider_school.uuid)
 
-      expect(new_course.site_statuses.reload.map(&:site))
-        .to contain_exactly(new_provider.sites.find_by!(uuid: new_provider_school.uuid))
+      expect { copy_schools }.not_to(change { new_course.site_statuses.count })
     end
 
     it "does not add any schools to the target provider" do
