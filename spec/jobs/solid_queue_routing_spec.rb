@@ -4,12 +4,9 @@ require "rails_helper"
 require "erb"
 require "yaml"
 
-# Card 7 moves PTT-owned jobs onto Solid Queue with per-class adapters while the
-# global adapter stays on Sidekiq. Shrink still_on_sidekiq as each tranche lands;
-# a new job must opt in to Solid Queue or be listed here deliberately.
+# PTT-owned jobs run on Solid Queue with per-class adapters while the global
+# adapter stays on Sidekiq, so a new job must opt in explicitly.
 RSpec.describe "Solid Queue job routing" do
-  let(:still_on_sidekiq) { [] }
-
   # Framework jobs such as Sentry::SendEventJob also subclass ApplicationJob;
   # they stay on the global adapter until card 8.
   def ptt_jobs
@@ -26,17 +23,10 @@ RSpec.describe "Solid Queue job routing" do
     config.fetch(env).fetch("workers").flat_map { |worker| Array(worker.fetch("queues")) }
   end
 
-  it "routes every PTT job to Solid Queue unless it is still listed as on Sidekiq" do
-    routing = ptt_jobs.to_h { |job| [job.name, job.queue_adapter_name] }
+  it "routes every PTT job to Solid Queue" do
+    not_on_solid_queue = ptt_jobs.reject { |job| job.queue_adapter_name == "solid_queue" }
 
-    on_sidekiq, on_solid_queue = routing.partition { |name, _adapter| still_on_sidekiq.include?(name) }
-
-    expect(on_solid_queue.to_h.values).to all(eq("solid_queue"))
-    expect(on_sidekiq.to_h.values).not_to include("solid_queue")
-  end
-
-  it "only lists jobs that still exist" do
-    expect(still_on_sidekiq - ptt_jobs.map(&:name)).to be_empty
+    expect(not_on_solid_queue.map(&:name)).to be_empty
   end
 
   it "puts every Solid Queue job on a queue the workers consume" do

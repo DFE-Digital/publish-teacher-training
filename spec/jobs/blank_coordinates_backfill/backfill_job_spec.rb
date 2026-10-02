@@ -3,10 +3,7 @@
 require "rails_helper"
 
 RSpec.describe BlankCoordinatesBackfill::BackfillJob do
-  it "runs the orchestrator on Solid Queue's low priority queue" do
-    expect(described_class.queue_adapter_name).to eq("solid_queue")
-    expect(described_class.new.queue_name).to eq("low_priority")
-  end
+  it_behaves_like "a Solid Queue job", queue: "low_priority"
 
   it "delegates to the backfill orchestrator" do
     allow(DataHub::BlankCoordinatesBackfill::JobOrchestrator).to receive(:start_backfill)
