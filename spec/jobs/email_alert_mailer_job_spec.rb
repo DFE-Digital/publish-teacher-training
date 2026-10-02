@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe EmailAlertMailerJob do
+  it_behaves_like "a Solid Queue job", queue: "mailers"
+
   describe "#perform" do
     let(:candidate) { create(:candidate) }
     let(:alert) { create(:email_alert, candidate:) }
@@ -111,8 +113,6 @@ RSpec.describe EmailAlertMailerJob do
   end
 
   describe "retries" do
-    include ActiveJob::TestHelper
-
     let(:alert) { create(:email_alert) }
     let(:course) { create(:course, :published) }
 
