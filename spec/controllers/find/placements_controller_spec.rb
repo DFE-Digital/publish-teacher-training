@@ -68,9 +68,6 @@ module Find
         let(:provider) { create(:provider, selectable_school: true) }
         let(:course) { create(:course, :published, provider:) }
 
-        before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-        after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
         def get_placements
           get :index, params: {
             provider_code: provider.provider_code,

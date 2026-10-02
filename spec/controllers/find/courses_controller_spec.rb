@@ -110,13 +110,10 @@ module Find
         end
 
         before do
-          FeatureFlag.activate(:course_publishing_uses_new_school_model)
           allow(Geolocation::Address).to receive(:query).and_return(
             Geolocation::Address.new(latitude: london.latitude, longitude: london.longitude, formatted_address: "London"),
           )
         end
-
-        after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
         def get_show_from_london
           get :show, params: {

@@ -35,58 +35,12 @@ module SavedCourses
 
       @applied_scopes[:location] = { latitude:, longitude:, radius: radius_in_miles }
 
-      if FeatureFlag.active?(:course_publishing_uses_new_school_model)
-        schools_location_scope(latitude:, longitude:)
-      else
-        sites_location_scope(latitude:, longitude:)
-      end
+      schools_location_scope(latitude:, longitude:)
     end
 
-    # Distance annotation over the legacy course_site -> site model, used while
-    # the :course_publishing_uses_new_school_model flag is off. Saved courses are
+    # Distance annotation over course_school -> gias_school. Saved courses are
     # annotated with distance but not filtered by radius. Previous-cycle courses
-    # are retained when their old placement sites are no longer publishable.
-    # Both latitude and longitude are required to compute distance.
-    def sites_location_scope(latitude:, longitude:)
-      @scope
-        .joins(<<~SQL)
-          LEFT JOIN course_site ON (
-            course_site.course_id = course.id
-            AND course_site.status = 'R'
-            AND course_site.publish = 'Y'
-          )
-          LEFT JOIN site ON (
-            site.id = course_site.site_id
-            AND site.discarded_at IS NULL
-            AND site.longitude IS NOT NULL
-            AND site.latitude IS NOT NULL
-          )
-        SQL
-        .where("site.id IS NOT NULL OR provider.recruitment_cycle_id <> ?", current_recruitment_cycle_id)
-        .select(
-          Course.sanitize_sql_array(
-            [
-              <<~SQL.squish,
-                saved_course.*,
-                MIN(ST_DistanceSphere(
-                  ST_SetSRID(ST_MakePoint(site.longitude::float, site.latitude::float), 4326),
-                  ST_SetSRID(ST_MakePoint(?::float, ?::float), 4326)
-                ) / ?) AS minimum_distance_to_search_location
-              SQL
-              longitude,
-              latitude,
-              Geolocation::METRES_PER_MILE,
-            ],
-          ),
-        )
-        .group("saved_course.id, provider.provider_name")
-    end
-
-    # Distance annotation over the canonical course_school -> gias_school model,
-    # used while the :course_publishing_uses_new_school_model flag is on. As with
-    # the legacy path, saved courses are annotated with distance but not filtered
-    # by radius. Previous-cycle courses are retained when they have no canonical
-    # school with coordinates.
+    # are retained when they have no school with coordinates.
     def schools_location_scope(latitude:, longitude:)
       @scope
         .joins(<<~SQL)

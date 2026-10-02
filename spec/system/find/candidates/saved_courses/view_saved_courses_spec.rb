@@ -312,8 +312,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "Old Course",
       course_code: "OLD1",
       provider: create(:provider, provider_name: "Alpha Provider"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
     )
+    create(:course_school, course: @old_course, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
 
     @new_course = create(
       :course,
@@ -322,8 +322,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "New Course",
       course_code: "NEW1",
       provider: create(:provider, provider_name: "Beta Provider"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
     )
+    create(:course_school, course: @new_course, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
 
     create(:saved_course, course: @old_course, candidate: candidate, created_at: 2.days.ago)
     create(:saved_course, course: @new_course, candidate: candidate, created_at: 1.hour.ago)
@@ -341,8 +341,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "London Course",
       course_code: "LON1",
       provider: create(:provider, provider_name: "London University"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
     )
+    create(:course_school, course: @london_course, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
 
     @lewisham_course = create(
       :course,
@@ -351,8 +351,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "Lewisham Course",
       course_code: "LEW1",
       provider: create(:provider, provider_name: "Lewisham University"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude))],
     )
+    create(:course_school, course: @lewisham_course, gias_school: create(:gias_school, latitude: lewisham.latitude, longitude: lewisham.longitude))
 
     create(:saved_course, course: @lewisham_course, candidate: candidate, created_at: 1.hour.ago)
     create(:saved_course, course: @london_course, candidate: candidate, created_at: 2.days.ago)
@@ -370,8 +370,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "London Course",
       course_code: "LON1",
       provider: create(:provider, provider_name: "London University"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
     )
+    create(:course_school, course: @london_course, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
 
     @cambridge_course = create(
       :course,
@@ -380,8 +380,8 @@ RSpec.describe "Viewing my saved courses", service: :find do
       name: "Cambridge Course",
       course_code: "CAM1",
       provider: create(:provider, provider_name: "Cambridge University"),
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude))],
     )
+    create(:course_school, course: @cambridge_course, gias_school: create(:gias_school, latitude: cambridge.latitude, longitude: cambridge.longitude))
 
     create(:saved_course, course: @cambridge_course, candidate: candidate, created_at: 1.hour.ago)
     create(:saved_course, course: @london_course, candidate: candidate, created_at: 2.days.ago)

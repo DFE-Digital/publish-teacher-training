@@ -102,19 +102,13 @@ RSpec.describe "Search results ordering by course name", :js, service: :find do
 
     provider = create(:provider, provider_name: "Test Provider")
 
-    # Closer to London but later alphabetically
-    create(:course, :published,
-           provider:,
-           name: "Zoology",
-           course_code: "ZOO1",
-           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))])
+    create(:course, :published, provider:, name: "Zoology", course_code: "ZOO1").tap do |course|
+      create(:course_school, course:, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
+    end
 
-    # Further from London but earlier alphabetically
-    create(:course, :published,
-           provider:,
-           name: "Art",
-           course_code: "ART1",
-           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))])
+    create(:course, :published, provider:, name: "Art", course_code: "ART1").tap do |course|
+      create(:course_school, course:, gias_school: create(:gias_school, latitude: romford.latitude, longitude: romford.longitude))
+    end
   end
 
   def then_the_courses_are_ordered_by_name_not_distance

@@ -2,17 +2,12 @@
 
 require "rails_helper"
 
-# The nearest-school lookup over the canonical course_school -> gias_school model,
-# gated by the :course_publishing_uses_new_school_model flag. Distances come from
-# gias_school coordinates instead of course_site -> site, so a course that only has
-# Course::School / Provider::School records - with no legacy Site or SiteStatus -
-# still resolves a distance. The expected miles below are the same values the
-# location search pins in spec/services/courses/query/location_new_school_model_spec.rb.
+# The nearest-school lookup over course_school -> gias_school. Distances come from
+# gias_school coordinates, so a course that only has Course::School records still
+# resolves a distance. The expected miles below are the same values the location
+# search pins in spec/services/courses/query/location_new_school_model_spec.rb.
 RSpec.describe Courses::NearestSchoolQuery do
   subject(:results) { described_class.new(courses:, latitude: london.latitude, longitude: london.longitude).call }
-
-  before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-  after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
   let(:london) { build(:location, :london) }
   let(:canary_wharf) { build(:location, :canary_wharf) }

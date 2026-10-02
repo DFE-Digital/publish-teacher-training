@@ -39,21 +39,19 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   end
 
   context "when combined with location filter" do
-    let!(:nearby_recent) do
-      create(:course, :with_full_time_sites, name: "Nearby Recent",
-                                             provider: alpha_provider,
-                                             enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 1.day.ago)])
-    end
+    let!(:nearby_recent) { course_near(51.5074, -0.1278, name: "Nearby Recent", provider: alpha_provider, published_at: 1.day.ago) }
     let(:params) { { order: "newest_course", latitude: 51.5074, longitude: -0.1278, radius: 10 } }
-    let!(:nearby_old) do
-      create(:course, :with_full_time_sites, name: "Nearby Old",
-                                             provider: beta_provider,
-                                             enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: 5.days.ago)])
-    end
+    let!(:nearby_old) { course_near(51.5080, -0.1280, name: "Nearby Old", provider: beta_provider, published_at: 5.days.ago) }
 
-    before do
-      nearby_recent.site_statuses.first.site.update!(latitude: 51.5074, longitude: -0.1278)
-      nearby_old.site_statuses.first.site.update!(latitude: 51.5080, longitude: -0.1280)
+    def course_near(latitude, longitude, name:, provider:, published_at:)
+      course = create(
+        :course,
+        name:,
+        provider:,
+        enrichments: [build(:course_enrichment, :published, last_published_timestamp_utc: published_at)],
+      )
+      create(:course_school, course:, gias_school: create(:gias_school, latitude:, longitude:))
+      course
     end
 
     it "returns location-filtered courses ordered by newest first" do
