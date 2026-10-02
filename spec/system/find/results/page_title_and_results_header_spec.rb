@@ -18,6 +18,7 @@ RSpec.describe "Search results page title", :js, service: :find do
 
     given_courses_exist_in_various_locations
     and_there_are_courses_with_primary_subjects
+    and_the_primary_courses_are_in_london
     when_i_visit_the_results_page
   end
 
@@ -94,6 +95,18 @@ RSpec.describe "Search results page title", :js, service: :find do
     and_i_click_search
 
     then_i_see_page_title("No courses found")
+  end
+
+  def and_the_primary_courses_are_in_london
+    [
+      "Primary",
+      "Primary with english",
+      "Primary with mathematics",
+      "Primary with science",
+    ].each do |name|
+      course = Course.find_by!(name:)
+      create(:course_school, course:, gias_school: create(:gias_school, latitude: 51.5079, longitude: 0.0877))
+    end
   end
 
   def when_i_visit_the_results_page
