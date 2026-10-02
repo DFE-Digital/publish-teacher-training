@@ -1108,6 +1108,11 @@ en:
           attributes:
             school_id:
               blank: "Select the school to continue. If this school is not correct you can change your search."
+        support/providers/schools/check_form:
+          attributes:
+            gias_school:
+              already_added: "This school has already been added"
+              incomplete_address: "The address we hold for this school is incomplete. Ask the school to update its details on Get Information About Schools (GIAS)."
         support/providers/schools/search_form:
           attributes:
             school:
