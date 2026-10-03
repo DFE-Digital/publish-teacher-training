@@ -407,7 +407,7 @@ RSpec.describe "Email alerts", service: :find do
       "minimum_degree_required" => "two_one",
       "can_sponsor_visa" => "true",
       "interview_location" => "online",
-      "start_date" => %w[jan_to_aug september oct_to_jul],
+      "start_date" => %w[jan_to_mar september next_jul],
     }
   end
 
