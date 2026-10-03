@@ -2,10 +2,8 @@
 
 require "rails_helper"
 
-# Combined filter + ordering coverage for the canonical course_school -> gias_school
-# location path, gated by :course_publishing_uses_new_school_model. The sibling
-# combined_filter_ordering_spec.rb covers the same combinations over the legacy
-# course_site -> site path.
+# Combined filter and ordering coverage for location search over course_school ->
+# gias_school.
 #
 # schools_location_scope annotates each course with a distance taken from a derived
 # table while the fee and newest_course orderings add a GROUP BY of their own, and
@@ -13,9 +11,6 @@ require "rails_helper"
 # Postgres rejects the query and duplicate courses reach the results page.
 RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   subject(:results) { described_class.call(params:) }
-
-  before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-  after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
 
   let(:alpha_provider) { create(:provider, provider_name: "Alpha University") }
   let(:beta_provider) { create(:provider, provider_name: "Beta University") }

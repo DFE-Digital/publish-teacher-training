@@ -18,10 +18,6 @@ module Find
     let(:edinburgh) { build(:location, :edinburgh) }
 
     def create_findable_course(name:, subjects:, latitude: nil, longitude: nil, published_at: 2.days.ago, **traits)
-      site_attrs = {}
-      site_attrs[:latitude] = latitude if latitude
-      site_attrs[:longitude] = longitude if longitude
-
       course = create(
         :course,
         :secondary,
@@ -30,12 +26,12 @@ module Find
         name:,
         subjects:,
         infer_subjects?: false,
-        site_statuses: [
-          build(:site_status, :findable, vac_status: :full_time_vacancies,
-                                         site: build(:site, **site_attrs)),
-        ],
         **traits,
       )
+
+      if latitude && longitude
+        create(:course_school, course:, gias_school: create(:gias_school, latitude:, longitude:))
+      end
 
       course.enrichments.first.update!(last_published_timestamp_utc: published_at)
       course

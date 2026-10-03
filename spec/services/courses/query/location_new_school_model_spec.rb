@@ -3,18 +3,12 @@
 require "rails_helper"
 require_relative "query_helper"
 
-# Location search over the canonical course_school -> gias_school model, gated by
-# the :course_publishing_uses_new_school_model flag. Distances are computed from
-# gias_school coordinates instead of course_site -> site, so the same coordinates
-# must produce the same minimum_distance_to_search_location as the legacy path
-# (the values below are shared with location_params_spec.rb on purpose).
+# Location search over course_school -> gias_school. Distances are computed from
+# gias_school coordinates.
 RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   include QueryHelper
 
-  context "when :course_publishing_uses_new_school_model is active" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
+  context "when searching by location" do
     let(:london) { build(:location, :london) }
     let!(:course_london_result) { course_at(london, name: "Mathematics (London)", distance: 0.0) }
     let!(:course_canary_wharf_result) { course_at(canary_wharf, name: "Science (Canary Wharf)", distance: 4.46) }
@@ -283,6 +277,37 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
         # Lewisham (6.07mi) fall within 10 miles.
         expect(query.count).to eq(3)
       end
+    end
+  end
+
+  describe "SQL injection tests for location search" do
+    let(:valid_latitude) { 51.5074 }
+    let(:valid_longitude) { -0.1278 }
+    let(:valid_radius) { 10 }
+
+    it "does not allow SQL injection via latitude" do
+      malicious_latitude = "1; DROP TABLE #{Course.table_name}; --"
+      params = { latitude: malicious_latitude, longitude: valid_longitude, radius: valid_radius }
+
+      expect { described_class.call(params:) }.to raise_error(
+        ArgumentError, "invalid value for Float(): \"#{malicious_latitude}\""
+      )
+    end
+
+    it "does not allow SQL injection via longitude" do
+      malicious_longitude = "1; DROP TABLE #{Course.table_name}; --"
+      params = { latitude: valid_latitude, longitude: malicious_longitude, radius: valid_radius }
+
+      expect { described_class.call(params:) }.to raise_error(
+        ArgumentError, "invalid value for Float(): \"#{malicious_longitude}\""
+      )
+    end
+
+    it "does not allow SQL injection via radius" do
+      malicious_radius = "10; DELETE FROM #{Course.table_name} WHERE 1=1; --"
+      params = { latitude: valid_latitude, longitude: valid_longitude, radius: malicious_radius }
+
+      expect(described_class.new(params:).radius_in_miles).to be(10)
     end
   end
 end

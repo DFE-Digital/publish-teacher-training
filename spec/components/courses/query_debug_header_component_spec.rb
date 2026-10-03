@@ -110,38 +110,26 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
     let(:longitude) { -0.1 }
     let(:results) { [course] }
     let(:course) { create(:course, provider:) }
-    let(:site) do
-      create(
-        :site,
-        provider:,
-        urn: gias_school.urn,
-        code: site_code,
-        location_name: gias_school.name,
-        latitude:,
-        longitude:,
-      )
-    end
     let(:site_code) { "A" }
-    let(:gias_school) { create(:gias_school, name: "Debug School") }
+    let(:gias_school) { create(:gias_school, name: "Debug School", latitude:, longitude:) }
 
     before do
-      create(:site_status, :findable, course:, site:)
+      create(
+        :course_school,
+        course:,
+        gias_school:,
+        provider_school: create(:provider_school, provider:, gias_school:, site_code:),
+      )
     end
 
     # The link resolves against Provider::School#uuid in Publish, so that is the
     # only uuid worth rendering - a legacy site uuid would 404 there.
     it "links to the school using the provider school uuid" do
-      provider_school = create(:provider_school, provider:, gias_school:, site_code:)
       render_inline(component)
 
-      expect(page.find_link("Debug School", visible: :all)[:href]).to include("/schools/#{provider_school.uuid}")
-    end
-
-    it "renders the school name without a school link when the provider school uuid is missing" do
-      render_inline(component)
-
-      expect(page).to have_content("Debug School")
-      expect(page).not_to have_link("Debug School", visible: :all)
+      expect(page.find_link("Debug School", visible: :all)[:href]).to include(
+        "/schools/#{course.schools.first.provider_school.uuid}",
+      )
     end
 
     it "labels the column as a school rather than a site" do
@@ -151,9 +139,6 @@ RSpec.describe Courses::QueryDebugHeaderComponent, type: :component do
   end
 
   context "when the results only have canonical schools" do
-    before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-    after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
     let(:debug) { true }
     let(:environment_name) { "qa" }
     let(:latitude) { 51.5 }

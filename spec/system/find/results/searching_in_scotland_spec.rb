@@ -40,9 +40,9 @@ RSpec.describe "Searching in Scotland", :js, service: :find do
       :secondary,
       :published,
       name: "Mathematics - Newcastle",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: newcastle.latitude, longitude: newcastle.longitude))],
       subjects: [find_or_create(:secondary_subject, :mathematics)],
     )
+    create(:course_school, course: @newcastle_course, gias_school: create(:gias_school, latitude: newcastle.latitude, longitude: newcastle.longitude))
   end
 
   def when_i_enter_edinburgh_as_the_location

@@ -39,21 +39,27 @@ RSpec.describe "No search results", :js, service: :find do
     reading = build(:location, :reading)
 
     create(
-      :course,
-      :primary,
-      :published,
-      name: "Primary - London",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-      subjects: [find_or_create(:primary_subject, :primary)],
+      :course_school,
+      course: create(
+        :course,
+        :primary,
+        :published,
+        name: "Primary - London",
+        subjects: [find_or_create(:primary_subject, :primary)],
+      ),
+      gias_school: create(:gias_school, latitude: romford.latitude, longitude: romford.longitude),
     )
 
     create(
-      :course,
-      :secondary,
-      :published,
-      name: "Mathematics - Reading",
-      site_statuses: [create(:site_status, :findable, site: create(:site, latitude: reading.latitude, longitude: reading.longitude))],
-      subjects: [find_or_create(:secondary_subject, :mathematics)],
+      :course_school,
+      course: create(
+        :course,
+        :secondary,
+        :published,
+        name: "Mathematics - Reading",
+        subjects: [find_or_create(:secondary_subject, :mathematics)],
+      ),
+      gias_school: create(:gias_school, latitude: reading.latitude, longitude: reading.longitude),
     )
   end
 

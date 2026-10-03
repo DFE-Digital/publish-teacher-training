@@ -242,21 +242,21 @@ RSpec.describe "Search results ordering by UK fee", :js, service: :find do
 
     provider = create(:provider, provider_name: "Test Provider")
 
-    # Closer to London but more expensive
     create(:course, :published,
            provider:,
            name: "Expensive Course",
            course_code: "EXP1",
-           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-           enrichments: [build(:course_enrichment, :published, fee_uk_eu: 9000)])
+           enrichments: [build(:course_enrichment, :published, fee_uk_eu: 9000)]).tap do |course|
+             create(:course_school, course:, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
+           end
 
-    # Further from London but cheaper
     create(:course, :published,
            provider:,
            name: "Cheap Course",
            course_code: "CHP1",
-           site_statuses: [create(:site_status, :findable, site: create(:site, latitude: romford.latitude, longitude: romford.longitude))],
-           enrichments: [build(:course_enrichment, :published, fee_uk_eu: 1000)])
+           enrichments: [build(:course_enrichment, :published, fee_uk_eu: 1000)]).tap do |course|
+             create(:course_school, course:, gias_school: create(:gias_school, latitude: romford.latitude, longitude: romford.longitude))
+           end
   end
 
   def then_the_courses_are_ordered_by_uk_fee_not_distance

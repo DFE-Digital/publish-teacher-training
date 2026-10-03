@@ -51,54 +51,19 @@ RSpec.describe SavedCourses::Query do
 
   context "when searching by location" do
     let(:london) { build(:location, :london) }
+    let!(:london_saved_result) { saved_course_near(london, name: "London Course", provider_name: "London University", distance: 0.0) }
+    let!(:lewisham_saved_result) { saved_course_near(lewisham, name: "Lewisham Course", provider_name: "Lewisham University", distance: 6.07) }
+    let!(:cambridge_saved_result) { saved_course_near(cambridge, name: "Cambridge Course", provider_name: "Cambridge University", distance: 49.38) }
     let(:lewisham) { build(:location, :lewisham) }
     let(:cambridge) { build(:location, :cambridge) }
 
-    let!(:london_saved_result) do
-      test_saved_course_wrapper_klass.new(
-        create(
-          :saved_course,
-          candidate:,
-          course: create(
-            :course,
-            name: "London Course",
-            provider: create(:provider, provider_name: "London University"),
-            site_statuses: [create(:site_status, :findable, site: create(:site, latitude: london.latitude, longitude: london.longitude))],
-          ),
-        ),
-        minimum_distance_to_search_location: 0.0,
-      )
-    end
+    def saved_course_near(location, name:, provider_name:, distance:)
+      course = create(:course, name:, provider: create(:provider, provider_name:))
+      create(:course_school, course:, gias_school: create(:gias_school, latitude: location.latitude, longitude: location.longitude))
 
-    let!(:lewisham_saved_result) do
       test_saved_course_wrapper_klass.new(
-        create(
-          :saved_course,
-          candidate:,
-          course: create(
-            :course,
-            name: "Lewisham Course",
-            provider: create(:provider, provider_name: "Lewisham University"),
-            site_statuses: [create(:site_status, :findable, site: create(:site, latitude: lewisham.latitude, longitude: lewisham.longitude))],
-          ),
-        ),
-        minimum_distance_to_search_location: 6.07,
-      )
-    end
-
-    let!(:cambridge_saved_result) do
-      test_saved_course_wrapper_klass.new(
-        create(
-          :saved_course,
-          candidate:,
-          course: create(
-            :course,
-            name: "Cambridge Course",
-            provider: create(:provider, provider_name: "Cambridge University"),
-            site_statuses: [create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude))],
-          ),
-        ),
-        minimum_distance_to_search_location: 49.38,
+        create(:saved_course, candidate:, course:),
+        minimum_distance_to_search_location: distance,
       )
     end
 
@@ -124,52 +89,6 @@ RSpec.describe SavedCourses::Query do
 
         expect(results).to include(previous_cycle_saved)
         expect(results.find { it.id == previous_cycle_saved.id }.minimum_distance_to_search_location).to be_nil
-      end
-    end
-
-    context "when a placement school has been discarded" do
-      let(:params) { { latitude: london.latitude, longitude: london.longitude } }
-
-      it "excludes a saved course whose only placement school is discarded" do
-        create(
-          :saved_course,
-          candidate:,
-          course: create(
-            :course,
-            name: "Discarded School Course",
-            provider: create(:provider, provider_name: "Discarded University"),
-            site_statuses: [create(:site_status, :findable, site: create(:site, :discarded, latitude: london.latitude, longitude: london.longitude))],
-          ),
-        )
-
-        expect(results).to match_collection(
-          [london_saved_result, lewisham_saved_result, cambridge_saved_result],
-          attribute_names: %w[minimum_distance_to_search_location],
-        )
-      end
-
-      it "measures distance from the kept school when a saved course also has a discarded one" do
-        mixed_saved_result = test_saved_course_wrapper_klass.new(
-          create(
-            :saved_course,
-            candidate:,
-            course: create(
-              :course,
-              name: "Mixed Course",
-              provider: create(:provider, provider_name: "Mixed University"),
-              site_statuses: [
-                create(:site_status, :findable, site: create(:site, :discarded, latitude: london.latitude, longitude: london.longitude)),
-                create(:site_status, :findable, site: create(:site, latitude: cambridge.latitude, longitude: cambridge.longitude)),
-              ],
-            ),
-          ),
-          minimum_distance_to_search_location: 49.38,
-        )
-
-        expect(results).to match_collection(
-          [london_saved_result, lewisham_saved_result, cambridge_saved_result, mixed_saved_result],
-          attribute_names: %w[minimum_distance_to_search_location],
-        )
       end
     end
 

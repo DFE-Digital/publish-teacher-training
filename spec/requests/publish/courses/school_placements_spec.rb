@@ -5,9 +5,6 @@ require "rails_helper"
 describe "Publish::Courses::SchoolPlacementsController#index", service: :publish do
   include DfESignInUserHelper
 
-  before { FeatureFlag.activate(:course_publishing_uses_new_school_model) }
-  after { FeatureFlag.deactivate(:course_publishing_uses_new_school_model) }
-
   def render_placements_for(school_count)
     user = create(:user, :with_provider)
     provider = user.providers.first

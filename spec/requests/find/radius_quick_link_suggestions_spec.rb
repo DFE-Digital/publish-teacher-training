@@ -17,21 +17,15 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
     context "with 3 courses in separate radius buckets" do
       before do
         subject_record = find_or_create(:secondary_subject, :mathematics)
-        reading_site = build(:site, latitude: 51.4550, longitude: -0.9711)
-        peterborough_site = build(:site, latitude: 52.5769, longitude: -0.2424)
-        birmingham_site = build(:site, latitude: 52.4862, longitude: -1.8904)
 
-        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
-          build(:site_status, :findable, site: reading_site),
-        ])
-
-        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
-          build(:site_status, :findable, site: peterborough_site),
-        ])
-
-        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
-          build(:site_status, :findable, site: birmingham_site),
-        ])
+        [
+          [51.4550, -0.9711],
+          [52.5769, -0.2424],
+          [52.4862, -1.8904],
+        ].each do |latitude, longitude|
+          course = create(:course, :secondary, :published, subjects: [subject_record])
+          create(:course_school, course:, gias_school: create(:gias_school, latitude:, longitude:))
+        end
       end
 
       it "returns quick link suggestions for 50 and 100 mile buckets" do
@@ -51,9 +45,8 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
       before do
         subject_record = find_or_create(:secondary_subject, :mathematics)
 
-        create(:course, :secondary, :published, subjects: [subject_record], site_statuses: [
-          build(:site_status, :findable, site: build(:site, latitude: 51.4550, longitude: -0.9711)),
-        ])
+        course = create(:course, :secondary, :published, subjects: [subject_record])
+        create(:course_school, course:, gias_school: create(:gias_school, latitude: 51.4550, longitude: -0.9711))
       end
 
       it "routes each suggestion through track_click, naming the radius" do
@@ -91,9 +84,8 @@ RSpec.describe "API::RadiusQuickLinkSuggestions", type: :request do
     context "when a bucket has over 100 results" do
       before do
         101.times do
-          create(:course, :secondary, :published, subjects: [find_or_create(:secondary_subject, :mathematics)], site_statuses: [
-            build(:site_status, :findable, site: build(:site, latitude: 51.5074, longitude: -0.1278)),
-          ])
+          course = create(:course, :secondary, :published, subjects: [find_or_create(:secondary_subject, :mathematics)])
+          create(:course_school, course:, gias_school: create(:gias_school, latitude: 51.5074, longitude: -0.1278))
         end
       end
 
