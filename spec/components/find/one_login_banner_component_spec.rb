@@ -28,7 +28,7 @@ describe Find::OneLoginBannerComponent do
       expect(form[:action]).to eq("/auth/one-login") if Settings.one_login.enabled
       expect(form[:action]).to eq("/auth/find-developer") unless Settings.one_login.enabled
       expect(form[:method]).to eq("post")
-      expect(component).to have_selector("form input[name='authenticity_token']", visible: :hidden)
+      expect(component).to have_css("form input[name='authenticity_token']", visible: :hidden)
     end
 
     it "has a sign in button" do

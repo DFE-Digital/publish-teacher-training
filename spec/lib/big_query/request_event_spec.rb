@@ -10,8 +10,8 @@ module BigQuery
       subject { event.as_json }
 
       context "initialized" do
-        it {  is_expected.to include("environment" => "test") }
-        it {  is_expected.to include("event_type" => "web_request") }
+        it { is_expected.to include("environment" => "test") }
+        it { is_expected.to include("event_type" => "web_request") }
 
         it "contains Time.now in iso8601" do
           freeze_time do

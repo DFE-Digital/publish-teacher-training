@@ -45,8 +45,9 @@ RSpec.describe "Filter chip consistency for order across location states", servi
         longitude: london.longitude,
       )
 
-      expect(page).not_to have_content("Sort by: distance")
-      expect(page).not_to have_content("Sort by: Course (a to z)")
+      expect(page).to have_css("h1", text: /course/i)
+      expect(page).to have_no_content("Sort by: distance")
+      expect(page).to have_no_content("Sort by: Course (a to z)")
     end
 
     scenario "explicit order=course_name_ascending — chip appears (it is NOT the default for geocoded searches)" do
@@ -65,14 +66,16 @@ RSpec.describe "Filter chip consistency for order across location states", servi
     scenario "no explicit order — no order chip (form fell back to course_name_ascending, which IS the default)" do
       visit find_results_path(location: "Atlantis")
 
-      expect(page).not_to have_content("Sort by: distance")
-      expect(page).not_to have_content("Sort by: Course (a to z)")
+      expect(page).to have_css("h1", text: /course/i)
+      expect(page).to have_no_content("Sort by: distance")
+      expect(page).to have_no_content("Sort by: Course (a to z)")
     end
 
     scenario "explicit order=distance — form normalises away from distance, no 'Sort by: distance' chip surfaces" do
       visit find_results_path(location: "Atlantis", order: "distance")
 
-      expect(page).not_to have_content("Sort by: distance")
+      expect(page).to have_css("h1", text: /course/i)
+      expect(page).to have_no_content("Sort by: distance")
     end
   end
 
@@ -80,8 +83,9 @@ RSpec.describe "Filter chip consistency for order across location states", servi
     scenario "order=course_name_ascending — no chip (this is the default)" do
       visit find_results_path(order: "course_name_ascending")
 
-      expect(page).not_to have_content("Sort by: Course (a to z)")
-      expect(page).not_to have_content("Sort by: distance")
+      expect(page).to have_css("h1", text: /course/i)
+      expect(page).to have_no_content("Sort by: Course (a to z)")
+      expect(page).to have_no_content("Sort by: distance")
     end
 
     scenario "order=provider_name_ascending — chip appears (not the default)" do

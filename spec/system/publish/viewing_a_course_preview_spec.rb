@@ -391,7 +391,7 @@ private
   end
 
   def and_i_submit_a_valid_about_training_with_disabilities
-    page.find("#publish-disability-support-form-train-with-disability-field").set("test training with disabilities")
+    page.find_by_id("publish-disability-support-form-train-with-disability-field").set("test training with disabilities")
 
     click_link_or_button "Update training with disabilities"
   end

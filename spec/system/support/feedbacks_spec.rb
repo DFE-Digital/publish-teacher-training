@@ -161,12 +161,12 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_first_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 50)
+    expect(page).to have_css("table tbody tr", count: 50)
     expect(page).to have_link("Next")
   end
 
   def then_i_see_second_page_of_feedback_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 5)
+    expect(page).to have_css("table tbody tr", count: 5)
     expect(page).to have_link("Previous")
   end
 

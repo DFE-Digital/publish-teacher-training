@@ -62,7 +62,7 @@ RSpec.describe "Saving a course", service: :find do
   end
 
   def when_i_click_apply_for_this_course
-    page.find("a", text: "Apply for this course", match: :first).click
+    page.first("a", text: "Apply for this course").click
   end
 
   def when_i_visit_confirm_apply_page

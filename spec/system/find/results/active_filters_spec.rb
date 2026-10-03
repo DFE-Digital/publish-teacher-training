@@ -418,7 +418,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def then_all_active_filters_are_cleared
-    expect(page).not_to have_css(".app-active-filters__remove-filter")
+    expect(page).to have_no_css(".app-active-filters__remove-filter")
   end
 
   def and_user_sees_only_default_state

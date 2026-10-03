@@ -216,7 +216,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_i_do_not_see_recent_searches_in_nav
-    expect(page).not_to have_link("Recent searches")
+    expect(page).to have_no_link("Recent searches")
   end
 
   def then_i_am_prompted_to_sign_in
@@ -229,7 +229,7 @@ RSpec.describe "Recent searches", service: :find do
   end
 
   def then_i_do_not_see_clear_all_button
-    expect(page).not_to have_button("Clear all recent searches")
+    expect(page).to have_no_button("Clear all recent searches")
   end
 
   def then_i_see_clear_all_button

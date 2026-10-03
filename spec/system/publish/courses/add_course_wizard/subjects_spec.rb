@@ -258,11 +258,11 @@ private
   end
 
   def and_i_select_a_modern_language
-    page.find(".govuk-checkboxes__input", visible: :all, match: :first).set(true)
+    page.first(".govuk-checkboxes__input", visible: :all).set(true)
   end
 
   def and_i_select_a_design_technology_specialism
-    page.find(".govuk-checkboxes__input", visible: :all, match: :first).set(true)
+    page.first(".govuk-checkboxes__input", visible: :all).set(true)
   end
 
   def and_i_have_wizard_state_for_specialism_flow(master:, subordinate: nil)

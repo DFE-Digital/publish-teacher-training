@@ -25,8 +25,8 @@ module Govuk
                   one-login-header__button-form
                 ],
                 method: :delete) do
-                  tag.span("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
-                end
+        tag.span("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
+      end
     end
 
     def sign_in_link
@@ -38,8 +38,8 @@ module Govuk
                 form_class: %w[
                   one-login-header__button-form
                 ], method: :post) do
-                  tag.span("Sign in", class: %w[rebranded-one-login-header__nav__link-content])
-                end
+        tag.span("Sign in", class: %w[rebranded-one-login-header__nav__link-content])
+      end
     end
 
     def path

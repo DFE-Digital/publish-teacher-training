@@ -86,8 +86,8 @@ class Site < ApplicationRecord
 
   def needs_geolocation?
     full_address.present? && (
-    latitude.nil? || longitude.nil? || address_changed?
-  )
+      latitude.nil? || longitude.nil? || address_changed?
+    )
   end
 
   def full_address

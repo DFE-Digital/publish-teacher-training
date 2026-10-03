@@ -56,7 +56,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       let(:course) { create(:course, :open, name: "Mathematics", course_code: "37CP") }
 
       it "does not render the not yet open status tag" do
-        expect(summary_card).not_to have_css(".app-saved-course__status-tag", text: "Not yet open")
+        expect(summary_card).to have_no_css(".app-saved-course__status-tag", text: "Not yet open")
       end
     end
   end

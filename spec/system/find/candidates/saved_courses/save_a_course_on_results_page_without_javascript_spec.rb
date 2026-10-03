@@ -123,7 +123,7 @@ RSpec.describe "Saving a course on the results page without JavaScript", service
   end
 
   def then_i_do_not_see_course_saved_banner
-    expect(page).not_to have_content("Course saved")
+    expect(page).to have_no_content("Course saved")
   end
 
   def then_i_am_redirected_to_sign_in_page_from_results

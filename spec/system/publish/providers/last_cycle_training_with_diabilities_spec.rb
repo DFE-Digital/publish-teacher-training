@@ -25,7 +25,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     given_there_is_a_provider
     when_i_visit_the_organisation_page
     then_i_visit_the_disability_support_page
-    expect(page).not_to have_content("See what you wrote last cycle")
+    expect(page).to have_no_content("See what you wrote last cycle")
   end
 
   scenario "A user editing a next cycle provider sees content from that provider's previous cycle" do

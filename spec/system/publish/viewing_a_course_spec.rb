@@ -449,7 +449,7 @@ private
     expect(page).to have_content(course_enrichment.interview_process)
     expect(page).to have_content("£9,250")
     expect(page).to have_content("£14,000")
-    expect(page).not_to have_content(course_enrichment.salary_details)
+    expect(page).to have_no_content(course_enrichment.salary_details)
     expect(page).to have_content("Degree")
     expect(page).to have_content("GCSE")
   end

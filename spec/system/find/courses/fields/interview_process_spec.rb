@@ -30,9 +30,9 @@ RSpec.describe "Viewing long form course content for the interview process", ser
 
     when_i_visit_a_course
 
-    expect(page).not_to have_selector("h2", text: "Interview process")
+    expect(page).to have_no_css("h2", text: "Interview process")
     within(".course-contents") do
-      expect(page).not_to have_link("Interview process")
+      expect(page).to have_no_link("Interview process")
     end
   end
 
@@ -60,8 +60,8 @@ RSpec.describe "Viewing long form course content for the interview process", ser
   def then_i_see_the_long_form_content_for_interview_location_in_person
     enrichment = @course.enrichments.first
 
-    expect(page).not_to have_content("Online interviews are available for this course")
-    expect(page).not_to have_content("Depending on individual circumstances")
+    expect(page).to have_no_content("Online interviews are available for this course")
+    expect(page).to have_no_content("Depending on individual circumstances")
     expect(page).to have_content(enrichment.interview_process)
   end
 
@@ -69,7 +69,7 @@ RSpec.describe "Viewing long form course content for the interview process", ser
     enrichment = @course.enrichments.first
 
     expect(page).to have_content("Online interviews are available for this course")
-    expect(page).not_to have_content("Depending on individual circumstances")
+    expect(page).to have_no_content("Depending on individual circumstances")
     expect(page).to have_content(enrichment.interview_process)
   end
 

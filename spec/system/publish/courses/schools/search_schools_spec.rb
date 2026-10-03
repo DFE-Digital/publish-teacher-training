@@ -353,7 +353,7 @@ RSpec.describe "Publish - Searching the placement schools list", :js, type: :sys
   end
 
   def and_i_choose_the_first_suggestion
-    page.find(".autocomplete__option", match: :first).click
+    page.first(".autocomplete__option").click
   end
 
   def then_i_see_the_search_panel

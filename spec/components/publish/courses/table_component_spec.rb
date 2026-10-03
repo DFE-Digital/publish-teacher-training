@@ -173,7 +173,7 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
 
         expect(page.all(".govuk-table__header").map(&:text)).to eq(%w[Course Status])
         expect(page).to have_no_css(".app-table--courses__course-information")
-        expect(page).to have_css("table.app-table--courses--no-information")
+        expect(page).to have_table(class: "app-table--courses--no-information")
         expect(page).to have_css(".app-table--courses__row--sparse")
       end
     end
@@ -197,7 +197,7 @@ RSpec.describe Publish::Courses::TableComponent, type: :component do
         render_with
 
         expect(page.all(".govuk-table__header").map(&:text)).to eq(["Course", "Course information", "Status", "View course"])
-        expect(page).to have_css("table.app-table--courses--view-course")
+        expect(page).to have_table(class: "app-table--courses--view-course")
         expect(page.find(".app-table--courses__view-course a")[:href])
           .to include("find.localhost/course/#{provider.provider_code}/B123")
       end

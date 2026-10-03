@@ -131,7 +131,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Study sites (optional)")
     expect(rendered_component).to have_text("None")
     expect(rendered_component).to have_no_link("Select a study site")
-    expect(rendered_component).to have_selector("a[href*='return_to_review=study_sites']", text: "Change")
+    expect(rendered_component).to have_css("a[href*='return_to_review=study_sites']", text: "Change")
   end
 
   it "renders add study site CTA when provider has no study sites" do

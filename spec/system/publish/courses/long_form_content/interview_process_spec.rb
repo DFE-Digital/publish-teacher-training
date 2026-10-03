@@ -45,8 +45,8 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     given_there_is_a_draft_course
     when_i_visit_the_course_page
     and_i_click_to_change_the_interview_process_page
-    expect(page).not_to have_content("See what you wrote last cycle")
-    expect(page).not_to have_content("Last years interview process")
+    expect(page).to have_no_content("See what you wrote last cycle")
+    expect(page).to have_no_content("Last years interview process")
   end
 
   def when_i_visit_the_course_page

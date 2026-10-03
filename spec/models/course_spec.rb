@@ -1531,8 +1531,8 @@ describe Course do
 
   describe "content_status" do
     let(:course) { create(:course, enrichments: [enrichment1, enrichment2]) }
-    let(:enrichment1) {  build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
-    let(:enrichment2) {  build(:course_enrichment, :published, created_at: 1.minute.ago) }
+    let(:enrichment1) { build(:course_enrichment, :subsequent_draft, created_at: Time.zone.now) }
+    let(:enrichment2) { build(:course_enrichment, :published, created_at: 1.minute.ago) }
     let(:service_spy) { spy(execute: :published) }
     let(:content_status) { course.content_status }
 

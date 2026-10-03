@@ -123,7 +123,7 @@ module DataHub
                                  end
 
         @process_summary.update!(
-          short_summary: @process_summary.short_summary.merge(
+          short_summary: @process_summary.short_summary.deep_symbolize_keys.merge(
             batches_scheduled: batches_info.size,
             batch_size: DEFAULT_BATCH_SIZE,
             batch_interval_seconds:,

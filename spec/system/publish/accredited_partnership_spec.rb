@@ -309,7 +309,7 @@ private
   end
 
   def and_i_dont_see_change_links
-    expect(page).not_to have_link("Change")
+    expect(page).to have_no_link("Change")
   end
 
   def and_i_see_the_back_link_to_accredited_providers_page

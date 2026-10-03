@@ -226,7 +226,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   end
 
   def and_i_do_not_see_the_continue_button
-    expect(page).not_to have_button("Continue")
+    expect(page).to have_no_button("Continue")
   end
 
   def and_the_onboarding_request_becomes_invalid_before_submit
