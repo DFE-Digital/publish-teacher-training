@@ -6,11 +6,7 @@ RSpec.describe UpdateCourseSchoolsJob, type: :job do
   let!(:course) { create(:course) }
   let(:school_uuids) { [SecureRandom.uuid] }
 
-  it "uses Solid Queue explicitly for this pilot job" do
-    expect(described_class.queue_adapter).to be_a(ActiveJob::QueueAdapters::SolidQueueAdapter)
-  end
-
-  it "can be enqueued onto Solid Queue" do
+  it "can be enqueued onto Solid Queue", :solid_queue do
     expect {
       described_class.perform_later(course.id, school_uuids)
     }.to change { SolidQueue::Job.where(class_name: "UpdateCourseSchoolsJob").count }.by(1)

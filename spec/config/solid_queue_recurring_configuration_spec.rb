@@ -51,7 +51,7 @@ RSpec.describe "Solid Queue recurring configuration" do
 
     expect(production_tasks["save_statistic"]).to include(
       "class" => "SaveStatisticJob",
-      "queue" => "save_statistic",
+      "queue" => "low_priority",
       "schedule" => "0 0 * * * Europe/London",
     )
     expect(production_tasks["send_entity_table_checks_to_bigquery"]).to include(
@@ -61,17 +61,17 @@ RSpec.describe "Solid Queue recurring configuration" do
     )
     expect(production_tasks["import_gias_schools"]).to include(
       "class" => "GiasImportJob",
-      "queue" => "default",
+      "queue" => "low_priority",
       "schedule" => "30 2 * * * Europe/London",
     )
     expect(production_tasks["cleanup_recent_searches"]).to include(
       "class" => "CleanupRecentSearchesJob",
-      "queue" => "default",
+      "queue" => "low_priority",
       "schedule" => "0 3 * * * Europe/London",
     )
     expect(production_tasks["cleanup_school_bulk_update_drafts"]).to include(
       "class" => "CleanupSchoolBulkUpdateDraftsJob",
-      "queue" => "default",
+      "queue" => "low_priority",
       "schedule" => "0 3 * * * Europe/London",
     )
     expect(production_tasks["send_weekly_email_alerts"]).to include(
@@ -82,11 +82,16 @@ RSpec.describe "Solid Queue recurring configuration" do
   end
 
   it "mirrors QA and staging Sidekiq Cron job sets" do
-    expect(application_job_tasks("qa").keys).to contain_exactly(
+    qa_tasks = application_job_tasks("qa")
+
+    expect(qa_tasks.keys).to contain_exactly(
       "save_statistic",
       "cleanup_recent_searches",
       "cleanup_school_bulk_update_drafts",
     )
+    expect(qa_tasks["save_statistic"]["queue"]).to eq("low_priority")
+    expect(qa_tasks["cleanup_recent_searches"]["queue"]).to eq("low_priority")
+    expect(qa_tasks["cleanup_school_bulk_update_drafts"]["queue"]).to eq("low_priority")
     expect(application_job_tasks("staging").keys).to contain_exactly("save_statistic")
   end
 
