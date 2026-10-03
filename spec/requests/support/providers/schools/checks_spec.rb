@@ -59,17 +59,29 @@ RSpec.describe "Support provider school checks" do
     end
   end
 
-  it "rolls back the legacy Site when Provider::School creation fails" do
-    allow(ProviderSchools::Creator).to receive(:call).and_raise(StandardError, "provider school failed")
+  it "adds only the provider school, without a legacy site" do
+    expect { add_school }
+      .to change { provider.schools.where(gias_school:).count }.by(1)
+      .and(not_change { provider.sites.count })
 
-    expect {
-      expect {
-        put support_recruitment_cycle_provider_schools_check_path(
-          recruitment_cycle.year,
-          provider,
-          school_id: gias_school.id,
-        )
-      }.to raise_error(StandardError, "provider school failed")
-    }.not_to(change { provider.reload.sites.count })
+    expect(response).to redirect_to(support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider))
+  end
+
+  it "does not add a school the provider already has" do
+    create(:provider_school, provider:, gias_school:)
+
+    expect { add_school }.not_to(change { provider.schools.count })
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.body).to include("This school has already been added")
+  end
+
+  it "does not add a school with an incomplete address" do
+    gias_school.update!(address1: "", address2: "", address3: "", town: "")
+
+    expect { add_school }.not_to(change { provider.schools.count })
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.body).to include("The address we hold for this school is incomplete")
   end
 end

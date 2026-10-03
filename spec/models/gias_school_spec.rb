@@ -127,4 +127,30 @@ describe GiasSchool do
       end
     end
   end
+
+  describe "#complete_address?" do
+    it "is true with an address line and a valid postcode" do
+      expect(build(:gias_school, address1: "1 School Lane", postcode: "LS1 1AA")).to be_complete_address
+    end
+
+    it "accepts any address line in place of address1" do
+      gias_school = build(:gias_school, address1: "", address2: "", address3: "", town: "Leeds", postcode: "LS1 1AA")
+
+      expect(gias_school).to be_complete_address
+    end
+
+    it "is false without any address line" do
+      gias_school = build(:gias_school, address1: "", address2: "", address3: "", town: "", postcode: "LS1 1AA")
+
+      expect(gias_school).not_to be_complete_address
+    end
+
+    it "is false without a postcode" do
+      expect(build(:gias_school, address1: "1 School Lane", postcode: "")).not_to be_complete_address
+    end
+
+    it "is false with an invalid postcode" do
+      expect(build(:gias_school, address1: "1 School Lane", postcode: "NOT A POSTCODE")).not_to be_complete_address
+    end
+  end
 end

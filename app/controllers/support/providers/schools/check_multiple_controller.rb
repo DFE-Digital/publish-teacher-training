@@ -39,7 +39,7 @@ module Support
         end
 
         def save
-          result = ::ProviderSchools::BulkCreator.call(provider:, gias_schools:)
+          result = ::ProviderSchools::BulkCreator.call(provider:, gias_schools:, legacy_site: false)
 
           schools_added_message(result.saved, result.unsaved)
         end
