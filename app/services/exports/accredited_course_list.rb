@@ -65,10 +65,17 @@ module Exports
     attr_reader :courses
 
     def campus_codes(course)
-      course.sites
-        .map(&:code)
-        .sort_by { |code| [code == Provider::School::MAIN_SITE_CODE ? 1 : 0, code] }
+      course.schools
+        .map(&:site_code)
+        .sort_by { |site_code| [campus_code_sort_order(site_code), site_code] }
         .join(" ")
+    end
+
+    def campus_code_sort_order(site_code)
+      return 2 if site_code == Provider::School::MAIN_SITE_CODE
+      return 1 if site_code.match?(/\A\d/)
+
+      0
     end
   end
 end

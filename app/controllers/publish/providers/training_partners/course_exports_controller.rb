@@ -17,7 +17,7 @@ module Publish
       private
 
         def courses
-          @courses ||= provider.current_accredited_courses.preload(:enrichments, :latest_enrichment, :sites)
+          @courses ||= provider.current_accredited_courses.preload(:enrichments, :latest_enrichment, schools: :provider_school)
         end
 
         def data_export
