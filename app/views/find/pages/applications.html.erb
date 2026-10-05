@@ -7,6 +7,12 @@
     <p class="govuk-body"><%= t(".continue_to_apply") %></p>
     <p class="govuk-body"><%= t(".need_to_sign_in") %></p>
 
-    <%= govuk_button_link_to(t(".continue"), "#{Settings.apply_base_url}/candidate/account") %>
+    <%= govuk_button_link_to(
+          t(".continue"),
+          find_track_click_path(
+            utm_content: "applications_continue_to_apply",
+            url: "#{Settings.apply_base_url}/candidate/account",
+          ),
+        ) %>
   </div>
 </div>

@@ -43,7 +43,14 @@ private
   end
 
   def host_allowed?(host)
-    ALLOWED_REDIRECT_HOSTS.include?(host.delete_prefix("www."))
+    normalized = host.delete_prefix("www.")
+    ALLOWED_REDIRECT_HOSTS.include?(normalized) || normalized == apply_host
+  end
+
+  def apply_host
+    URI.parse(Settings.apply_base_url.to_s).host&.delete_prefix("www.")
+  rescue URI::InvalidURIError
+    nil
   end
 
   def safe_redirect_url(url)
