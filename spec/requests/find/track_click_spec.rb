@@ -72,6 +72,14 @@ RSpec.describe "TrackController", service: :find, type: :request do
 
       expect(response).to redirect_to(find_root_path)
     end
+
+    it "redirects to the Apply account page" do
+      apply_url = "#{Settings.apply_base_url}/candidate/account"
+
+      get "/track_click", params: { url: apply_url, utm_content: "applications_continue_to_apply" }
+
+      expect(response).to redirect_to(apply_url)
+    end
   end
 
   describe "GET /track_apply_to_course_click" do

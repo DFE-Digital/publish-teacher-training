@@ -44,7 +44,10 @@ RSpec.describe "Applications", service: :find do
   def and_the_continue_button_links_to_apply
     expect(page).to have_link(
       "Continue to the Apply for teacher training website",
-      href: "#{Settings.apply_base_url}/candidate/account",
+      href: find_track_click_path(
+        utm_content: "applications_continue_to_apply",
+        url: "#{Settings.apply_base_url}/candidate/account",
+      ),
     )
   end
 
