@@ -158,6 +158,7 @@ npm run find:all           # baseline, then peak, then stress
 - **Duration**: 15 minutes
 - **Purpose**: "Find opens" event (45k requests in 5 minutes)
 - **Target RPS**: 150 sustained
+- **Observed**: see [Find opens baseline](../guides/find-opens-baseline.md)
 
 ### Stress Test
 - **Users**: 400 concurrent
