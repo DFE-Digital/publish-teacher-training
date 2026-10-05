@@ -116,10 +116,13 @@ runs:
       run: |
         # Konduit does not forward psql flags, so wrap the dump in an error-stopping
         # transaction. gzip -d reads concatenated members, so the dump is not recompressed.
+        # Review apps run the postgis/postgis image, which also installs postgis_topology and
+        # postgis_tiger_geocoder. They depend on postgis, so the dump's DROP EXTENSION postgis
+        # fails unless they are dropped first.
         ATOMIC_RESTORE_FILE="${SANITISED_FILE_NAME}_atomic.sql.gz"
         gzip --test "${SANITISED_FILE_NAME}.sql.gz"
         {
-          printf '\\set ON_ERROR_STOP on\nBEGIN;\n' | gzip
+          printf '\\set ON_ERROR_STOP on\nBEGIN;\nDROP EXTENSION IF EXISTS postgis_tiger_geocoder;\nDROP EXTENSION IF EXISTS postgis_topology;\n' | gzip
           cat "${SANITISED_FILE_NAME}.sql.gz"
           printf '\nCOMMIT;\n' | gzip
         } > "${ATOMIC_RESTORE_FILE}"
