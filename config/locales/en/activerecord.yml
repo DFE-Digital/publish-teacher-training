@@ -16,6 +16,7 @@ en:
         created_at: Created at
       financial_incentive:
         bursary_amount: Bursary amount
+        degree_dependent: Degree dependent
         early_career_payments: Early career payments
         non_uk_bursary_eligible: Non-UK bursary
         non_uk_scholarship_eligible: Non-UK scholarship

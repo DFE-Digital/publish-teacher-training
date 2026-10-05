@@ -32,6 +32,10 @@
         <% f.govuk_check_box :subject_knowledge_enhancement_course_available, true, false, label: { text: t(".fields.subject_knowledge_enhancement_course_available.label") }, multiple: false %>
       <% end %>
 
+      <%= f.govuk_check_boxes_fieldset :degree_dependent, legend: { text: t(".fields.degree_dependent.legend"), size: "s" }, multiple: false do %>
+        <% f.govuk_check_box :degree_dependent, "true", "false", label: { text: t(".fields.degree_dependent.label") }, multiple: false %>
+      <% end %>
+
       <%= f.govuk_submit t("support.update_record") %>
     <% end %>
 

@@ -30,6 +30,7 @@ en:
         table:
           action: Action
           bursary: Bursary
+          degree_dependent: Degree dependent
           early_career_payments: Early career payments
           non_uk_bursary: Non-UK bursary
           non_uk_scholarship: Non-UK scholarship
@@ -42,6 +43,9 @@ en:
         heading: Edit %{year} financial incentive
         warning: Changes to this incentive will be visible to candidates when the feature flag is active.
         fields:
+          degree_dependent:
+            legend: Degree dependent
+            label: Incentive amount depends on the candidate's degree
           non_uk_bursary_eligible:
             legend: Non-UK bursary eligibility
             label: Eligible for non-UK bursary

@@ -47,6 +47,24 @@ RSpec.describe "Financial incentives support" do
     then_the_physics_financial_incentive_is_updated
   end
 
+  scenario "marking a subject's incentive as degree dependent" do
+    given_the_current_year_has_visible_financial_incentives
+    when_i_visit_the_financial_incentives_page
+    when_i_edit_the_physics_financial_incentive
+    and_i_mark_the_incentive_as_degree_dependent
+    then_i_see_degree_dependent_on_the_confirmation_page("Yes")
+
+    when_i_confirm_the_financial_incentive_changes
+    then_physics_shows_degree_dependent_on_the_financial_incentives_page("Yes")
+
+    when_i_edit_the_physics_financial_incentive
+    and_i_unmark_the_incentive_as_degree_dependent
+    then_i_see_degree_dependent_on_the_confirmation_page("No")
+
+    when_i_confirm_the_financial_incentive_changes
+    then_physics_shows_degree_dependent_on_the_financial_incentives_page("No")
+  end
+
   scenario "visiting the page with an invalid or unsupported year" do
     when_i_visit_the_financial_incentives_page_with_year("not-a-year")
     then_i_see_the_current_financial_incentive_year
@@ -194,6 +212,35 @@ private
   def then_the_physics_financial_incentive_is_updated
     expect(page).to have_content("Financial incentive for Physics updated")
     expect(physics_incentive.reload.bursary_amount).to eq("12345")
+  end
+
+  def given_the_current_year_has_visible_financial_incentives
+    given_the_current_year_has_hidden_financial_incentives
+    FinancialIncentives::PublishYearService.call(year: current_year)
+  end
+
+  def and_i_mark_the_incentive_as_degree_dependent
+    check "Incentive amount depends on the candidate's degree"
+    click_link_or_button "Update"
+  end
+
+  def and_i_unmark_the_incentive_as_degree_dependent
+    uncheck "Incentive amount depends on the candidate's degree"
+    click_link_or_button "Update"
+  end
+
+  def then_i_see_degree_dependent_on_the_confirmation_page(value)
+    within_summary_row("Degree dependent") do
+      expect(page).to have_content(value)
+    end
+  end
+
+  def then_physics_shows_degree_dependent_on_the_financial_incentives_page(value)
+    expect(page).to have_content("Financial incentive for Physics updated")
+
+    headings = page.all("thead th").map(&:text)
+    physics_cells = page.find("tbody tr", text: physics.subject_name).all("td, th").map(&:text)
+    expect(headings.zip(physics_cells).to_h).to include("Degree dependent" => value)
   end
 
   def current_year

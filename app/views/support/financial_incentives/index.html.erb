@@ -48,6 +48,7 @@
         <% row.with_cell(text: t(".table.non_uk_bursary")) %>
         <% row.with_cell(text: t(".table.non_uk_scholarship")) %>
         <% row.with_cell(text: t(".table.ske")) %>
+        <% row.with_cell(text: t(".table.degree_dependent")) %>
         <% row.with_cell(text: t(".table.status")) %>
         <% row.with_cell(text: t(".table.action")) %>
       <% end %>
@@ -64,6 +65,7 @@
           <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.non_uk_bursary_eligible?)) %>
           <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.non_uk_scholarship_eligible?)) %>
           <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.subject_knowledge_enhancement_course_available?)) %>
+          <% row.with_cell(text: financial_incentive_yes_no(financial_incentive&.degree_dependent?)) %>
           <% row.with_cell { financial_incentive_status_tag(financial_incentive) } %>
           <% row.with_cell do %>
             <% if financial_incentive.present? %>

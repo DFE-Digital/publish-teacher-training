@@ -8,6 +8,7 @@ class FinancialIncentive < ApplicationRecord
     non_uk_bursary_eligible
     non_uk_scholarship_eligible
     subject_knowledge_enhancement_course_available
+    degree_dependent
   ].freeze
 
   DEFAULT_ATTRIBUTES = {
@@ -17,6 +18,7 @@ class FinancialIncentive < ApplicationRecord
     non_uk_bursary_eligible: false,
     non_uk_scholarship_eligible: false,
     subject_knowledge_enhancement_course_available: false,
+    degree_dependent: false,
   }.freeze
 
   attribute :displayed, default: false

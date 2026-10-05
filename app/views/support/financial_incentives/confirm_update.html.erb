@@ -41,6 +41,11 @@
         <% row.with_key { FinancialIncentive.human_attribute_name(:subject_knowledge_enhancement_course_available) } %>
         <% row.with_value(text: financial_incentive_yes_no(@financial_incentive.subject_knowledge_enhancement_course_available?)) %>
       <% end %>
+
+      <% summary_list.with_row do |row| %>
+        <% row.with_key { FinancialIncentive.human_attribute_name(:degree_dependent) } %>
+        <% row.with_value(text: financial_incentive_yes_no(@financial_incentive.degree_dependent?)) %>
+      <% end %>
     <% end %>
 
     <%= form_with model: @financial_incentive, url: support_financial_incentive_path(@financial_incentive, year: @year), scope: :financial_incentive, method: :patch, local: true do |form| %>
