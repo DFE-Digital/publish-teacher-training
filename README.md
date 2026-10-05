@@ -44,6 +44,7 @@ This repo is home to three services:
 - [Monitoring](guides/monitoring.md)
 - [Healthchecks](guides/healthchecks.md)
 - [Find opens checklist](guides/find-opens-checklist.md)
+- [Find opens baseline](guides/find-opens-baseline.md)
 - [Rollover](guides/rollover.md)
 - [Cycle period testing](guides/cycle-period-testing.md)
 - [Wizards](guides/wizards)

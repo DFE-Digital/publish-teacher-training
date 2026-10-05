@@ -13,7 +13,7 @@ Use this checklist on the morning Find opens. This checklist is for the 2026/202
 - [ ] Open the Teams monitoring and escalation [channel](https://teams.cloud.microsoft/l/channel/19%3Ad4ee3fa641fb4146961d2d727d92e77b%40thread.tacv2/REC%20Publish%20and%20Find%20System%20Notifications?groupId=5e035efe-5b2b-491b-9e3e-d832445e4ad1&tenantId=fad277c9-c60a-4da1-b5f3-b3b8b34a82f9)
 - [ ] Confirm the expected production replica count by logging into the cluster and check deployment
 - [ ] Check the production [`/healthcheck`](https://find-teacher-training-courses.service.gov.uk/healthcheck) is healthy
-- [ ] Check the baseline traffic, response time and error rate
+- [ ] Check the [baseline](find-opens-baseline.md) traffic, response time and error rate
 - [ ] Check for signs of imminent DDoS
 
 ## At opening
@@ -34,7 +34,7 @@ Use this checklist on the morning Find opens. This checklist is for the 2026/202
   - [ ] Pod CPU and memory
   - [ ] Pod restarts and health checks
   - [ ] Replica count
-- [ ] [Azure Database](https://portal.azure.com/#@platform.education.gov.uk/resource/subscriptions/20da9d12-7ee1-42bb-b969-3fe9112964a7/resourceGroups/s189t01-ptt-stg-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/s189t01-ptt-stg-pg/overview):
+- [ ] [Azure Database](https://portal.azure.com/#@platform.education.gov.uk/resource/subscriptions/3c033a0c-7a1c-4653-93cb-0f2a9f57a391/resourceGroups/s189p01-ptt-pd-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/s189p01-ptt-pd-pg/overview):
   - [ ] Connections
   - [ ] CPU and memory
   - [ ] Slow or problematic queries
