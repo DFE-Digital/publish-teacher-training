@@ -96,6 +96,7 @@ private
       non_uk_bursary_eligible: true,
       non_uk_scholarship_eligible: true,
       subject_knowledge_enhancement_course_available: true,
+      degree_dependent: true,
       displayed: false,
     }
   end

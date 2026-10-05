@@ -1153,6 +1153,11 @@
             "fieldPath": [
               "year"
             ]
+          },
+          {
+            "fieldPath": [
+              "degree_dependent"
+            ]
           }
         ]
       },

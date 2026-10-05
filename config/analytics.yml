@@ -158,6 +158,7 @@ shared:
     - updated_at
     - subject_knowledge_enhancement_course_available
     - year
+    - degree_dependent
   gias_school:
     - id
     - urn
