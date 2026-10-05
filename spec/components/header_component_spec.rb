@@ -33,4 +33,12 @@ RSpec.describe HeaderComponent, type: :component do
 
     expect(providers[:class]).not_to include("govuk-service-navigation__item--active")
   end
+
+  it "renders the environment tag without feedback text when no phase banner text is given" do
+    render_inline(described_class.new(service_name: "Support"))
+
+    expect(page).to have_css(".govuk-phase-banner__content__tag", text: "Test")
+    expect(page).to have_no_css(".govuk-phase-banner__text")
+    expect(page).to have_no_link("feedback")
+  end
 end

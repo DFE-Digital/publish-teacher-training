@@ -37,7 +37,6 @@
       <% support_primary_navigation_items.each do |item| %>
         <% header.with_navigation_item item[:text], item[:href], active_when: item[:active_when] %>
       <% end %>
-      <% header.with_phase_banner_text t(".phase_banner_text", feedback_link: govuk_link_to("feedback", "#", new_tab: true)) %>
     <% end %>
 
     <div class="govuk-width-container">
