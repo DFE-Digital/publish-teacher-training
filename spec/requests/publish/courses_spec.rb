@@ -163,7 +163,7 @@ describe "Publish::CoursesController#index" do
     end
 
     it "tells the provider when nothing matches" do
-      get_courses(level: %w[further_education])
+      get_courses(level: %w[primary], funding: %w[salary])
 
       expect(response.parsed_body.text).to include("No courses found")
     end
