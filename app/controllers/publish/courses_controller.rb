@@ -7,8 +7,9 @@ module Publish
     decorates_assigned :course
 
     def index
-      @filter_form = ::Publish::Courses::FilterForm.new(provider:, **course_filter_params)
-      @course_list = ::Publish::CourseList.new(provider:, params: @filter_form.filter_params)
+      unfiltered_courses = ::Publish::Courses::Query.call(provider:).to_a
+      @filter_form = ::Publish::Courses::FilterForm.new(provider:, courses: unfiltered_courses, **course_filter_params)
+      @course_list = ::Publish::CourseList.new(provider:, params: @filter_form.filter_params, unfiltered_courses:)
     end
 
     def show

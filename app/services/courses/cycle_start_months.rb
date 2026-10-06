@@ -7,7 +7,7 @@ module Courses
   # Shared by the course wizard and the edit options, which both offer these
   # months when setting a start date, so the two cannot drift apart. The publish
   # course list filter offers the months its courses actually start in instead —
-  # see Publish::Courses::AvailableStartMonths.
+  # see Publish::Courses::AvailableFilterOptions.
   module CycleStartMonths
     MONTHS_INTO_FOLLOWING_YEAR = 7
 
