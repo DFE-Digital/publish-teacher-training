@@ -8,6 +8,11 @@ class TrackController < ApplicationController
     teachinscotland.scot
     educators.wales
     enic.org.uk
+    apply-for-teacher-training.service.gov.uk
+    qa.apply-for-teacher-training.service.gov.uk
+    staging.apply-for-teacher-training.service.gov.uk
+    sandbox.apply-for-teacher-training.service.gov.uk
+    apply-loadtest.london.cloudapps.digital
   ].freeze
 
   def track_click
@@ -43,14 +48,7 @@ private
   end
 
   def host_allowed?(host)
-    normalized = host.delete_prefix("www.")
-    ALLOWED_REDIRECT_HOSTS.include?(normalized) || normalized == apply_host
-  end
-
-  def apply_host
-    URI.parse(Settings.apply_base_url.to_s).host&.delete_prefix("www.")
-  rescue URI::InvalidURIError
-    nil
+    ALLOWED_REDIRECT_HOSTS.include?(host.delete_prefix("www."))
   end
 
   def safe_redirect_url(url)
