@@ -23,4 +23,14 @@ RSpec.describe "Find::SecondarySubjectsController#index", service: :find do
     expect(response).to have_http_status(:ok)
     expect(many).to eq(few)
   end
+
+  it "shows the maximum bursary for a subject whose bursary depends on the degree" do
+    physics = find_or_create(:secondary_subject, :physics)
+    physics.update!(subject_group: create(:subject_group))
+    physics.financial_incentive.update!(bursary_amount: "20000", scholarship: nil, degree_dependent: true)
+
+    get "/secondary"
+
+    expect(response.body).to include("Bursaries of up to £20,000 are available to UK citizens")
+  end
 end

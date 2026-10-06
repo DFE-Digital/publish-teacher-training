@@ -367,7 +367,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
 
         it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("for UK citizens")
+          expect(summary_card_content).to include("to UK citizens")
         end
       end
 
@@ -412,7 +412,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         let(:search_params) { { can_sponsor_visa: true } }
 
         it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("for UK citizens")
+          expect(summary_card_content).to include("to UK citizens")
         end
       end
 
@@ -432,7 +432,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         let(:search_params) { { can_sponsor_visa: true } }
 
         it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("for UK citizens")
+          expect(summary_card_content).to include("to UK citizens")
         end
       end
     end

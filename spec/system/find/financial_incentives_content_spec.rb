@@ -217,22 +217,22 @@ RSpec.describe "financial incentives call out boxes content" do
   end
 
   def then_i_see_the_displayed_search_result_financial_incentive_is_for_uk_citizens
-    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
   end
 
   def then_i_see_the_displayed_search_result_financial_incentive_is_available_to_non_uk_citizens
     expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
-    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
   end
 
   def then_i_see_the_displayed_course_page_financial_incentive_is_for_uk_citizens
-    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
     expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
   end
 
   def then_i_see_the_displayed_course_page_financial_incentive_is_available_to_non_uk_citizens
     expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
-    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available for UK citizens")
+    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
     expect(page).to have_content("Bursaries of £4,000 and scholarships of £2,000 are available to eligible trainees.")
   end
 

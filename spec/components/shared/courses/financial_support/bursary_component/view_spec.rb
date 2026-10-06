@@ -13,8 +13,18 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
     end
 
     it "renders bursary details" do
-      expect(page.has_text?("Find out whether you are eligible for a bursary")).to be true
+      expect(page.has_text?("Find out whether you’re eligible for a bursary")).to be true
       expect(page.has_text?("Bursaries of £3,000 are available to eligible trainees.")).to be true
+      expect(page.has_text?("will depend on your degree")).to be false
+    end
+
+    context "when the bursary depends on the degree" do
+      let(:course) { create(:course, :secondary, subjects: [create(:secondary_subject, bursary_amount: "20000", degree_dependent: true)]) }
+
+      it "renders the maximum amount and that it depends on the degree" do
+        expect(page.has_text?("Bursaries of up to £20,000 are available to eligible trainees.")).to be true
+        expect(page.has_text?("The amount you are eligible for will depend on your degree.")).to be true
+      end
     end
   end
 

@@ -35,6 +35,10 @@ class CourseIncentive
     has_bursary? && !has_scholarship?
   end
 
+  def degree_dependent?
+    funding_relevant_subjects.any? { |s| s.financial_incentive&.degree_dependent? }
+  end
+
   def bursary_eligible_subjects?
     funding_relevant_subjects.any? { |s| s.financial_incentive&.non_uk_bursary_eligible? }
   end
