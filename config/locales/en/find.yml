@@ -49,9 +49,11 @@ en:
       bursaries: Bursaries
       bursary_and_scholarships: Bursaries and scholarships
       bursary_amount: Bursaries of %{amount} are available to eligible trainees.
+      bursary_up_to_amount: Bursaries of up to %{amount} are available to eligible trainees.
+      amount_depends_on_degree: The amount you are eligible for will depend on your degree.
       bursary_and_scholarship_amount: Bursaries of %{bursary_amount} and scholarships of %{scholarship_amount} are available to eligible trainees.
       not_yet_announced: Details of financial support for courses starting in the %{cycle_year_range} academic year will be released soon.
-      eligible_for_bursary: Find out whether you are eligible for a bursary.
+      eligible_for_bursary: Find out whether you’re eligible for a bursary.
       eligible_for_bursary_or_scholarship: Find out whether you are eligible for a bursary or scholarship.
       student_loans: Student loans
       find_out_more_student_loans: Find out about student loans for teacher training.
@@ -179,6 +181,7 @@ en:
       url_maintenance_loans: "https://getintoteaching.education.gov.uk/funding-and-support/tuition-fee-and-maintenance-loans"
       url_non_uk_trainees: https://getintoteaching.education.gov.uk/non-uk-teachers/fees-and-funding-for-non-uk-trainees
       url_bursaries_and_scholarships_support: https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries
+      url_bursary_eligibility: https://getintoteaching.education.gov.uk/funding-and-support/scholarships-and-bursaries
       url_teacher_salaries: https://getintoteaching.education.gov.uk/funding-and-support/salaried-teacher-training
       url_improve_your_subject_knowledge: https://getintoteaching.education.gov.uk/improve-your-subject-knowledge
       url_teacher_training_events: https://getintoteaching.education.gov.uk/events/about-get-into-teaching-events?utm_source=find-postgraduate-teacher-training.service.gov.uk&utm_medium=referral&utm_campaign=find_banner&utm_content=Autumn23events

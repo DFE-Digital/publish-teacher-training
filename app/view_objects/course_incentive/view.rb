@@ -8,7 +8,7 @@ class CourseIncentive::View
            :bursary_amount, :scholarship_amount,
            :bursary_eligible_subjects?,
            :scholarship_eligible_subjects?, :non_uk_funding_available?,
-           :subject_with_scholarship,
+           :subject_with_scholarship, :degree_dependent?,
            to: :course_incentive
 
   def initialize(course_incentive)
@@ -30,7 +30,7 @@ class CourseIncentive::View
   # We can pass arbitrary values in for burasry and scholarship
   # This is specifically used for rendering content about financial incentives
   # directly with secondary subjects rather than course
-  def self.hint_text(bursary_amount:, scholarship_amount:, non_uk_funding_available: true)
+  def self.hint_text(bursary_amount:, scholarship_amount:, non_uk_funding_available: true, degree_dependent: false)
     bursary = bursary_amount.presence
     scholarship = scholarship_amount.presence
 
@@ -44,7 +44,7 @@ class CourseIncentive::View
              )
            elsif bursary.present?
              I18n.t(
-               "financial_incentive.hint.bursaries_only",
+               degree_dependent ? "financial_incentive.hint.bursaries_up_to" : "financial_incentive.hint.bursaries_only",
                bursary_amount: ActiveSupport::NumberHelper.number_to_currency(bursary),
              )
            else
@@ -54,7 +54,7 @@ class CourseIncentive::View
              )
            end
 
-    text += " for UK citizens" unless non_uk_funding_available
+    text += I18n.t("financial_incentive.hint.uk_citizens_only") unless non_uk_funding_available
     text
   end
 
@@ -63,6 +63,7 @@ class CourseIncentive::View
       bursary_amount: bursary_amount,
       scholarship_amount: scholarship_amount,
       non_uk_funding_available: non_uk_funding_available?,
+      degree_dependent: degree_dependent?,
     )
   end
 

@@ -45,6 +45,7 @@ FactoryBot.define do
       scholarship { nil }
       non_uk_bursary_eligible { false }
       non_uk_scholarship_eligible { false }
+      degree_dependent { false }
       financial_incentive_year { FinancialIncentive.current_year }
       financial_incentive_displayed { true }
     end
@@ -61,6 +62,7 @@ FactoryBot.define do
         scholarship: evaluator.scholarship,
         non_uk_bursary_eligible: evaluator.non_uk_bursary_eligible,
         non_uk_scholarship_eligible: evaluator.non_uk_scholarship_eligible,
+        degree_dependent: evaluator.degree_dependent,
         displayed: evaluator.financial_incentive_displayed,
       )
       subject.association(:financial_incentive).target = financial_incentive if financial_incentive.displayed?

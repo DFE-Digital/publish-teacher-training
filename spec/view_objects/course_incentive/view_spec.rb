@@ -79,6 +79,12 @@ describe CourseIncentive::View do
       ).to eq("Scholarships of £22,000 are available")
     end
 
+    it "returns an up-to bursary hint when the amount depends on the degree" do
+      expect(
+        described_class.hint_text(bursary_amount: 20_000, scholarship_amount: nil, degree_dependent: true),
+      ).to eq("Bursaries of up to £20,000 are available")
+    end
+
     it "returns nil when both are blank" do
       expect(described_class.hint_text(bursary_amount: nil, scholarship_amount: nil)).to be_nil
     end
@@ -88,16 +94,24 @@ describe CourseIncentive::View do
     context "when course has both bursary and scholarship but no non-UK funding" do
       let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000")]) }
 
-      it "appends 'for UK citizens'" do
-        expect(view.hint_text).to eq("Scholarships of £2,000 or bursaries of £3,000 are available for UK citizens")
+      it "appends 'to UK citizens'" do
+        expect(view.hint_text).to eq("Scholarships of £2,000 or bursaries of £3,000 are available to UK citizens")
       end
     end
 
     context "when course has non-UK funding available" do
       let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "3000", scholarship: "2000", non_uk_bursary_eligible: true)]) }
 
-      it "does not append 'for UK citizens'" do
+      it "does not append 'to UK citizens'" do
         expect(view.hint_text).to eq("Scholarships of £2,000 or bursaries of £3,000 are available")
+      end
+    end
+
+    context "when course has a degree-dependent bursary" do
+      let(:course) { build(:course, provider:, subjects: [build(:secondary_subject, bursary_amount: "20000", degree_dependent: true)]) }
+
+      it "returns the up-to hint for UK citizens" do
+        expect(view.hint_text).to eq("Bursaries of up to £20,000 are available to UK citizens")
       end
     end
 

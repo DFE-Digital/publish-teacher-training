@@ -135,13 +135,13 @@ module Find
           end
 
           context "when the subject is not non-UK eligible" do
-            it "appends 'for UK citizens'" do
+            it "appends 'to UK citizens'" do
               subject = build(:secondary_subject, :chemistry, bursary_amount: 20_000)
               enrichment = create(:course_enrichment, :published)
               course = create(:course, :secondary, :fee_type_based, subjects: [subject], enrichments: [enrichment]).decorate
 
               result = render_inline(described_class.new(course, enrichment))
-              expect(result.text).to include("for UK citizens")
+              expect(result.text).to include("to UK citizens")
             end
           end
         end
