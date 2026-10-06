@@ -10,9 +10,10 @@ module Publish
     # the values that group offers. That single choke point means an unrecognised
     # value in the query string reaches neither the SQL nor an active filter chip.
     #
-    # Every group but start date offers a fixed list of options. Start date offers
-    # the months the provider's courses start in, so narrowing that list narrows
-    # the checkboxes, the allowed values and the chip labels together.
+    # Every group but start date, status, education phase and funding offers a
+    # fixed list of options. Those four offer only the values the provider's
+    # courses actually have, so narrowing that list narrows the checkboxes, the
+    # allowed values and the chip labels together.
     class FilterForm < ApplicationForm
       Option = Data.define(:value, :label)
 
@@ -62,8 +63,16 @@ module Publish
         filter_params.any?
       end
 
+      PRESENT_OPTION_GROUPS = %i[status level funding].freeze
+
       def options_for(group)
-        group == :start_date ? start_date_options : static_options_for(group)
+        if group == :start_date
+          start_date_options
+        elsif PRESENT_OPTION_GROUPS.include?(group)
+          present_options_for(group)
+        else
+          static_options_for(group)
+        end
       end
 
       # Chips, in group order, each removing only its own value.
@@ -97,6 +106,15 @@ module Publish
         @start_date_options ||= ::Publish::Courses::AvailableStartMonths.for(provider).map do |month|
           Option.new(value: month.to_fs(:year_and_month), label: I18n.l(month, format: :short))
         end
+      end
+
+      def present_options_for(group)
+        present = available_filter_options.fetch(group)
+        static_options_for(group).select { |option| present.include?(option.value) }
+      end
+
+      def available_filter_options
+        @available_filter_options ||= ::Publish::Courses::AvailableFilterOptions.for(provider)
       end
 
       def static_options_for(group)

@@ -13,6 +13,11 @@ RSpec.describe Publish::Courses::FilterForm do
     context "when every value is recognised" do
       let(:attributes) { { status: %w[open draft], level: %w[primary] } }
 
+      before do
+        create(:course, :published, provider:, application_status: :open, level: :primary)
+        create(:course, :draft_enrichment, provider:, level: :primary)
+      end
+
       it "keeps them" do
         expect(form.status).to eq(%w[open draft])
         expect(form.level).to eq(%w[primary])
@@ -21,6 +26,8 @@ RSpec.describe Publish::Courses::FilterForm do
 
     context "when a value is not recognised" do
       let(:attributes) { { status: %w[open bogus], funding: %w[bogus] } }
+
+      before { create(:course, :published, provider:, application_status: :open) }
 
       it "drops it from the group" do
         expect(form.status).to eq(%w[open])
@@ -42,6 +49,8 @@ RSpec.describe Publish::Courses::FilterForm do
 
     context "when a single value arrives as a string rather than an array" do
       let(:attributes) { { level: "secondary" } }
+
+      before { create(:course, provider:, level: :secondary) }
 
       it "wraps it" do
         expect(form.level).to eq(%w[secondary])
@@ -79,6 +88,8 @@ RSpec.describe Publish::Courses::FilterForm do
     context "when several groups are selected" do
       let(:attributes) { { status: %w[open], study_mode: %w[part_time] } }
 
+      before { create(:course, :published, provider:, application_status: :open) }
+
       it "includes only the groups with a selection" do
         expect(form.filter_params).to eq(status: %w[open], study_mode: %w[part_time])
       end
@@ -87,6 +98,11 @@ RSpec.describe Publish::Courses::FilterForm do
 
   describe "#filter_counts" do
     let(:attributes) { { status: %w[open closed], level: %w[primary] } }
+
+    before do
+      create(:course, :published, provider:, application_status: :open, level: :primary)
+      create(:course, :published, provider:, application_status: :closed, level: :primary)
+    end
 
     it "counts the selections in each group" do
       expect(form.filter_counts[:status]).to eq(2)
@@ -110,6 +126,8 @@ RSpec.describe Publish::Courses::FilterForm do
     context "when something is selected" do
       let(:attributes) { { level: %w[primary] } }
 
+      before { create(:course, provider:, level: :primary) }
+
       it "is true" do
         expect(form.any_filters?).to be(true)
       end
@@ -125,17 +143,26 @@ RSpec.describe Publish::Courses::FilterForm do
   end
 
   describe "#options_for" do
-    it "labels the statuses as the provider sees them on the list" do
-      expect(form.options_for(:status).map(&:label))
-        .to eq(["Open", "Closed", "Draft", "Rolled over", "Scheduled", "Withdrawn"])
+    it "offers only the statuses present on the course list, in panel order" do
+      create(:course, :withdrawn, provider:)
+      create(:course, :draft_enrichment, provider:)
+      create(:course, :published, provider:, application_status: :closed)
+
+      expect(form.options_for(:status).map(&:label)).to eq(%w[Closed Draft Withdrawn])
     end
 
-    it "labels the education phases" do
-      expect(form.options_for(:level).map(&:label)).to eq(["Primary", "Secondary", "Further education"])
+    it "offers only the education phases present on the course list" do
+      create(:course, provider:, level: :secondary)
+      create(:course, provider:, level: :primary)
+
+      expect(form.options_for(:level).map(&:label)).to eq(%w[Primary Secondary])
     end
 
-    it "labels the funding types" do
-      expect(form.options_for(:funding).map(&:label)).to eq(%w[Fee-paying Salary Apprenticeship])
+    it "offers only the funding types present on the course list" do
+      create(:course, :salary, provider:)
+      create(:course, :fee, provider:)
+
+      expect(form.options_for(:funding).map(&:label)).to eq(%w[Fee-paying Salary])
     end
 
     it "labels the qualifications" do
@@ -187,6 +214,11 @@ RSpec.describe Publish::Courses::FilterForm do
 
   describe "#active_filters" do
     let(:attributes) { { study_mode: %w[part_time], status: %w[open closed] } }
+
+    before do
+      create(:course, :published, provider:, application_status: :open)
+      create(:course, :published, provider:, application_status: :closed)
+    end
 
     it "orders them by filter group, then by selection" do
       expect(form.active_filters.map(&:formatted_value)).to eq(["Open", "Closed", "Part time"])
