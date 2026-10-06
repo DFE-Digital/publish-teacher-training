@@ -35,6 +35,8 @@ module Publish
         study_mode: STUDY_MODE_OPTIONS,
       }.freeze
 
+      PRESENT_OPTION_GROUPS = %i[status level funding].freeze
+
       GROUPS.each do |group|
         attribute group
 
@@ -62,8 +64,6 @@ module Publish
       def any_filters?
         filter_params.any?
       end
-
-      PRESENT_OPTION_GROUPS = %i[status level funding].freeze
 
       def options_for(group)
         if group == :start_date
