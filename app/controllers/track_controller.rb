@@ -12,7 +12,6 @@ class TrackController < ApplicationController
     qa.apply-for-teacher-training.service.gov.uk
     staging.apply-for-teacher-training.service.gov.uk
     sandbox.apply-for-teacher-training.service.gov.uk
-    apply-loadtest.london.cloudapps.digital
   ].freeze
 
   def track_click
