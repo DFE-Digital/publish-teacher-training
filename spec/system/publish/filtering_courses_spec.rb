@@ -68,7 +68,7 @@ RSpec.describe "Filtering the course list" do
   scenario "I filter everything out" do
     given_my_provider_has_primary_and_secondary_courses
     when_i_visit_the_courses_page
-    when_i_filter_by("Further education")
+    when_i_filter_by("Secondary", "Salary")
     then_i_am_told_no_courses_were_found
   end
 
@@ -86,9 +86,22 @@ RSpec.describe "Filtering the course list" do
   scenario "no accredited provider has courses matching my filters" do
     given_my_courses_are_ratified_by_two_accredited_providers
     when_i_visit_the_courses_page
-    when_i_filter_by("Further education")
+    when_i_filter_by("Primary", "QTS only")
     then_i_am_told_no_courses_were_found
     and_i_see_no_accredited_provider_headings
+  end
+
+  scenario "I only see the statuses my courses use" do
+    given_my_provider_has_courses_in_different_states
+    when_i_visit_the_courses_page
+    then_the_group_offers("Status", "Open", "Draft", "Withdrawn")
+  end
+
+  scenario "I only see the phases and funding my courses use" do
+    given_my_provider_has_primary_and_secondary_courses
+    when_i_visit_the_courses_page
+    then_the_group_offers("Education phase", "Primary", "Secondary")
+    then_the_group_offers("Fee or salary", "Fee-paying", "Salary")
   end
 
   scenario "I only see the start dates my courses use" do
@@ -279,6 +292,10 @@ RSpec.describe "Filtering the course list" do
 
   def then_i_am_told_no_courses_were_found
     expect(publish_provider_courses_index_page.empty_message.text).to eq("No courses found")
+  end
+
+  def then_the_group_offers(heading, *labels)
+    expect(filter_group(heading).option_labels).to eq(labels)
   end
 
   def then_the_start_date_group_offers(*labels)

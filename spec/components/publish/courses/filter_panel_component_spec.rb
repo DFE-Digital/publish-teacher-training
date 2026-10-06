@@ -61,10 +61,10 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
         .to eq(["status[]", "level[]", "funding[]", "qualification[]", "study_mode[]", "start_date[]"])
     end
 
-    it "offers every status the list can show" do
+    it "offers only the statuses present on the course list" do
       labels = rendered.css("input[name='status[]']").map { |input| rendered.css("label[for='#{input[:id]}']").text.strip }
 
-      expect(labels).to eq(["Open", "Closed", "Draft", "Rolled over", "Scheduled", "Withdrawn"])
+      expect(labels).to eq(%w[Draft])
     end
 
     it "offers only the months the provider's courses start in" do
@@ -86,6 +86,11 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
 
   describe "the selected options" do
     let(:attributes) { { status: %w[open closed], level: %w[primary] } }
+
+    before do
+      create(:course, :published, provider:, application_status: :open, level: :primary)
+      create(:course, :published, provider:, application_status: :closed, level: :primary)
+    end
 
     it "ticks them" do
       checked = rendered.css("input[type='checkbox'][checked]").map { |input| input[:value] }
@@ -116,6 +121,8 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
   describe "the active filters" do
     context "when filters are applied" do
       let(:attributes) { { status: %w[open], level: %w[primary] } }
+
+      before { create(:course, :published, provider:, application_status: :open, level: :primary) }
 
       it "shows a chip for each one" do
         expect(rendered.css(".app-active-filters__remove-filter").map { |chip| chip.text.gsub("Remove filter", "").strip })
