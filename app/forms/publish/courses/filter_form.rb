@@ -10,10 +10,10 @@ module Publish
     # the values that group offers. That single choke point means an unrecognised
     # value in the query string reaches neither the SQL nor an active filter chip.
     #
-    # Every group but start date, status, education phase and funding offers a
-    # fixed list of options. Those four offer only the values the provider's
-    # courses actually have, so narrowing that list narrows the checkboxes, the
-    # allowed values and the chip labels together.
+    # Checkboxes for every group offer only the values on the course list.
+    # A bookmarked status, phase, funding, qualification or study mode from the
+    # full list is still applied. Start date has no fixed list: a month is
+    # allowed only when a course starts then.
     class FilterForm < ApplicationForm
       Option = Data.define(:value, :label)
 
@@ -35,8 +35,6 @@ module Publish
         study_mode: STUDY_MODE_OPTIONS,
       }.freeze
 
-      PRESENT_OPTION_GROUPS = %i[status level funding].freeze
-
       GROUPS.each do |group|
         attribute group
 
@@ -45,9 +43,15 @@ module Publish
 
       attr_reader :provider
 
-      def initialize(provider:, **attributes)
+      def initialize(provider:, courses: [], **attributes)
         @provider = provider
+        @courses = courses
         super(attributes)
+      end
+
+      def courses=(courses)
+        @courses = courses
+        @available_filter_options = nil
       end
 
       # The selected values, ready to hand to Publish::Courses::Query.
@@ -66,13 +70,10 @@ module Publish
       end
 
       def options_for(group)
-        if group == :start_date
-          start_date_options
-        elsif PRESENT_OPTION_GROUPS.include?(group)
-          present_options_for(group)
-        else
-          static_options_for(group)
-        end
+        return start_date_options if group == :start_date
+
+        present = available_filter_options.fetch(group)
+        static_options_for(group).select { |option| present.include?(option.value) }
       end
 
       # Chips, in group order, each removing only its own value.
@@ -100,21 +101,14 @@ module Publish
         end
       end
 
-      # Only the months the provider's courses actually start in, so the panel
-      # never offers a month that would narrow the list to nothing.
       def start_date_options
-        @start_date_options ||= ::Publish::Courses::AvailableStartMonths.for(provider).map do |month|
+        available_filter_options.fetch(:start_date).map do |month|
           Option.new(value: month.to_fs(:year_and_month), label: I18n.l(month, format: :short))
         end
       end
 
-      def present_options_for(group)
-        present = available_filter_options.fetch(group)
-        static_options_for(group).select { |option| present.include?(option.value) }
-      end
-
       def available_filter_options
-        @available_filter_options ||= ::Publish::Courses::AvailableFilterOptions.for(provider)
+        @available_filter_options ||= ::Publish::Courses::AvailableFilterOptions.for(@courses)
       end
 
       def static_options_for(group)
@@ -124,11 +118,18 @@ module Publish
       end
 
       def allowed_values_for(group)
-        options_for(group).map(&:value)
+        catalogue_for(group).map(&:value)
       end
 
       def label_for(group, value)
-        options_for(group).find { |option| option.value == value }&.label
+        catalogue_for(group).find { |option| option.value == value }&.label
+      end
+
+      # Checkboxes follow the courses on the list. The URL is checked against
+      # the full static list, except start date, which has no list beyond the
+      # months courses actually start in.
+      def catalogue_for(group)
+        group == :start_date ? options_for(group) : static_options_for(group)
       end
     end
   end

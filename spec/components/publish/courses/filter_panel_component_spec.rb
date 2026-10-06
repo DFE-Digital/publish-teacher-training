@@ -9,7 +9,7 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
   let(:cycle_year) { provider.recruitment_cycle_year.to_i }
   let(:attributes) { {} }
   let(:options) { {} }
-  let(:filter_form) { Publish::Courses::FilterForm.new(provider:, **attributes) }
+  let(:filter_form) { Publish::Courses::FilterForm.new(provider:, courses: Publish::CourseList.new(provider:).unfiltered_courses, **attributes) }
 
   # The start date group offers the months the provider's courses start in, so
   # the panel needs courses before it has any start date checkboxes to render.

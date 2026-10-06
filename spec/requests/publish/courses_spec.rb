@@ -168,6 +168,15 @@ describe "Publish::CoursesController#index" do
       expect(response.parsed_body.text).to include("No courses found")
     end
 
+    it "keeps a bookmarked education phase that no course has" do
+      get_courses(level: %w[further_education])
+
+      expect(response.parsed_body.text).to include("No courses found")
+      chips = response.parsed_body.css(".app-active-filters__remove-filter").map { |chip| chip.text.gsub("Remove filter", "").strip }
+      expect(chips).to eq(["Further education"])
+      expect(response.parsed_body.css("input[name='level[]']").map { |input| input[:value] }).to eq(%w[primary secondary])
+    end
+
     it "ignores a filter value it does not recognise" do
       get_courses(level: %w[bogus])
 

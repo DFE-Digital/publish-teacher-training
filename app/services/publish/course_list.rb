@@ -65,9 +65,10 @@ module Publish
       @unfiltered_courses ||= params.blank? ? courses : Publish::Courses::Query.call(provider:).to_a
     end
 
-    def initialize(provider:, params: {})
+    def initialize(provider:, params: {}, unfiltered_courses: nil)
       @provider = provider
       @params = params
+      @unfiltered_courses = unfiltered_courses
     end
 
     # Course-information fields whose value varies across the provider's whole
@@ -115,7 +116,11 @@ module Publish
     end
 
     def courses
-      @courses ||= Publish::Courses::Query.call(provider:, params:).to_a
+      @courses ||= if params.blank? && @unfiltered_courses
+                     @unfiltered_courses
+                   else
+                     Publish::Courses::Query.call(provider:, params:).to_a
+                   end
     end
   end
 end

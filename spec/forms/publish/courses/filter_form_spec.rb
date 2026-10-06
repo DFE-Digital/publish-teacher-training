@@ -3,11 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Publish::Courses::FilterForm do
-  subject(:form) { described_class.new(provider:, **attributes) }
+  subject(:form) { described_class.new(provider:, courses: listed_courses, **attributes) }
 
   let(:provider) { create(:provider) }
   let(:cycle_year) { provider.recruitment_cycle.year.to_i }
   let(:attributes) { {} }
+
+  def listed_courses
+    Publish::CourseList.new(provider:).unfiltered_courses
+  end
 
   describe "allowed values" do
     context "when every value is recognised" do
@@ -54,6 +58,24 @@ RSpec.describe Publish::Courses::FilterForm do
 
       it "wraps it" do
         expect(form.level).to eq(%w[secondary])
+      end
+    end
+
+    context "when a bookmarked status is no longer on the list" do
+      let(:attributes) { { status: %w[draft] } }
+
+      before { create(:course, :published, provider:, application_status: :open) }
+
+      it "keeps it, so the list stays filtered" do
+        expect(form.status).to eq(%w[draft])
+      end
+
+      it "does not offer it as a checkbox" do
+        expect(form.options_for(:status).map(&:value)).to eq(%w[open])
+      end
+
+      it "still labels the chip" do
+        expect(form.active_filters.map(&:formatted_value)).to eq(%w[Draft])
       end
     end
 
@@ -165,12 +187,24 @@ RSpec.describe Publish::Courses::FilterForm do
       expect(form.options_for(:funding).map(&:label)).to eq(%w[Fee-paying Salary])
     end
 
-    it "labels the qualifications" do
+    it "offers only the qualifications present on the course list" do
+      create(:course, :resulting_in_qts, provider:)
+      create(:course, :resulting_in_pgce_with_qts, provider:)
+
       expect(form.options_for(:qualification).map(&:label)).to eq(["QTS only", "QTS with PGCE or PGDE"])
     end
 
-    it "labels the study modes" do
+    it "offers only the study modes present on the course list" do
+      create(:course, provider:, study_mode: :full_time)
+      create(:course, provider:, study_mode: :part_time)
+
       expect(form.options_for(:study_mode).map(&:label)).to eq(["Full time", "Part time"])
+    end
+
+    it "counts a course offered either way towards both study modes" do
+      create(:course, provider:, study_mode: :full_time_or_part_time)
+
+      expect(form.options_for(:study_mode).map(&:value)).to eq(%w[full_time part_time])
     end
   end
 
@@ -207,7 +241,7 @@ RSpec.describe Publish::Courses::FilterForm do
       create(:course, provider:, start_date: Time.zone.local(cycle_year, 1, 1))
 
       travel_to(Time.zone.local(cycle_year, 6, 15)) do
-        expect(described_class.new(provider:).options_for(:start_date).first.label).to eq("January #{cycle_year}")
+        expect(described_class.new(provider:, courses: listed_courses).options_for(:start_date).first.label).to eq("January #{cycle_year}")
       end
     end
   end
