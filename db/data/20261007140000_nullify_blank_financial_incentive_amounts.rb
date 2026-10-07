@@ -5,7 +5,7 @@ class NullifyBlankFinancialIncentiveAmounts < ActiveRecord::Migration[8.1]
 
   def up
     AMOUNTS.each do |column|
-      FinancialIncentive.where("#{column} ~ '^[[:space:]]*0*[[:space:]]*$'").update_all(column => nil)
+      FinancialIncentive.where("regexp_replace(#{column}, '[[:space:]\u00A0£,]', '', 'g') ~ '^[-+]?0*\\.?0*$'").update_all(column => nil)
     end
   end
 
