@@ -41,10 +41,7 @@ module Publish
         define_method(group) { Array(super()) & allowed_values_for(group) }
       end
 
-      attr_reader :provider
-
-      def initialize(provider:, courses:, **attributes)
-        @provider = provider
+      def initialize(courses:, **attributes)
         @courses = courses
         super(attributes)
       end
@@ -66,8 +63,10 @@ module Publish
 
       # A group is shown when it offers a real choice, or when a value is already
       # selected so Apply does not drop a bookmark the panel cannot untick.
+      # One start-date checkbox still counts as a choice when some courses have
+      # no start date: ticking it drops those courses.
       def visible_groups
-        GROUPS.select { |group| options_for(group).size > 1 || public_send(group).any? }
+        GROUPS.select { |group| show_group?(group) }
       end
 
       def options_for(group)
@@ -83,6 +82,14 @@ module Publish
       end
 
     private
+
+      def show_group?(group)
+        public_send(group).any? || options_for(group).size > 1 || start_date_narrows_the_list?(group)
+      end
+
+      def start_date_narrows_the_list?(group)
+        group == :start_date && options_for(group).one? && @courses.any? { |course| course.start_date.blank? }
+      end
 
       def active_filters_for(group)
         values = public_send(group)

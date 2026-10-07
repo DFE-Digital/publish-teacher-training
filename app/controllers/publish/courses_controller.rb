@@ -8,7 +8,7 @@ module Publish
 
     def index
       unfiltered_courses = ::Publish::Courses::Query.call(provider:).to_a
-      @filter_form = ::Publish::Courses::FilterForm.new(provider:, courses: unfiltered_courses, **course_filter_params)
+      @filter_form = ::Publish::Courses::FilterForm.new(courses: unfiltered_courses, **course_filter_params)
       @course_list = ::Publish::CourseList.new(provider:, params: @filter_form.filter_params, unfiltered_courses:)
     end
 
