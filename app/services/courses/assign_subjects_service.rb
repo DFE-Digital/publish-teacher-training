@@ -46,7 +46,7 @@ module Courses
 
       elsif course.persisted?
         Course.transaction do
-          course.course_subjects.clear
+          course.course_subjects.destroy_all
           subject_ids.each_with_index do |subject_id, index|
             course.course_subjects.create(subject_id:, position: index)
           end

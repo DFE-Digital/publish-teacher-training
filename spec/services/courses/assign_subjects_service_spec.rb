@@ -3,6 +3,8 @@
 require "rails_helper"
 
 describe Courses::AssignSubjectsService do
+  include ActiveJob::TestHelper
+
   subject do
     described_class.call(
       course:,
@@ -278,6 +280,16 @@ describe Courses::AssignSubjectsService do
 
         expect(course.course_subjects.map(&:subject_id)).to eq(subject_ids)
         expect(course.course_subjects.map(&:position)).to eq([0, 1])
+      end
+
+      it "enqueues an analytics delete event for the replaced subjects" do
+        course
+        clear_enqueued_jobs
+        allow(Settings.features).to receive(:send_request_data_to_bigquery).and_return(true)
+
+        subject
+
+        expect(:delete_entity).to have_been_enqueued_as_analytics_events
       end
 
       it "sets master_subject_id to the first subject" do
