@@ -40,6 +40,14 @@ describe FinancialIncentive do
     end
   end
 
+  describe "normalization" do
+    it "stores blank incentive amounts as nil" do
+      financial_incentive = described_class.new(bursary_amount: "", scholarship: " ", early_career_payments: "")
+
+      expect(financial_incentive.attributes.slice("bursary_amount", "scholarship", "early_career_payments").values).to all(be_nil)
+    end
+  end
+
   describe "#display!" do
     let(:subject_record) { find_or_create(:primary_subject, :primary) }
 

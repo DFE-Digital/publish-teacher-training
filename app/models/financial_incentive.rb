@@ -26,6 +26,8 @@ class FinancialIncentive < ApplicationRecord
 
   belongs_to :subject
 
+  normalizes :bursary_amount, :scholarship, :early_career_payments, with: ->(value) { value.presence }
+
   scope :displayed, -> { where(displayed: true) }
   scope :for_year, ->(year) { where(year: year.to_i) }
 
