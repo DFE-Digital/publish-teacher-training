@@ -168,9 +168,12 @@ class Course < ApplicationRecord
 
   accepts_nested_attributes_for :site_statuses
 
+  # A course only links to existing sites, so a site failing its own
+  # validation (e.g. a duplicated URN) must not stop the course saving.
   has_many :sites,
            -> { distinct.joins(:site_statuses).where(site_statuses: { status: %i[new_status running] }) },
-           through: :site_statuses
+           through: :site_statuses,
+           validate: false
 
   has_many :study_sites, through: :study_site_placements, source: :site
 

@@ -487,6 +487,24 @@ describe Courses::CreationService do
       end
     end
 
+    # Existing data has pairs of kept school sites sharing a URN, which fails
+    # the site's own uniqueness validation. The course only links to the site,
+    # so it must not refuse to save because of it.
+    context "when the selected site shares its URN with another of the provider's sites" do
+      let!(:site_two) { create(:site, :with_provider_school, provider:) }
+      let(:valid_course_params) { super().merge("school_uuids" => [site_two.uuid]) }
+
+      before { site_two.update_columns(urn: site.urn) }
+
+      it "saves the course on the selected site" do
+        created_course.valid?(:new)
+
+        expect(created_course.errors.full_messages).to be_empty
+        expect(created_course.save).to be(true)
+        expect(created_course.reload.sites.map(&:id)).to eq([site_two.id])
+      end
+    end
+
     # The two writes must not be allowed to disagree: a school with no
     # Provider::School would otherwise be attached as a site while producing no
     # Course::School, leaving the course running at fewer schools than were
