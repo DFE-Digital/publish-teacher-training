@@ -5,7 +5,7 @@ class NullifyBlankFinancialIncentiveAmounts < ActiveRecord::Migration[8.1]
 
   def up
     AMOUNTS.each do |column|
-      FinancialIncentive.where("btrim(#{column}) = ''").update_all(column => nil)
+      FinancialIncentive.where("#{column} ~ '^[[:space:]]*$'").update_all(column => nil)
     end
   end
 
