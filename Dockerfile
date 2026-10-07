@@ -1,11 +1,11 @@
-ARG ZLIB_VERSION=1.3.2-r0
+ARG ZLIB_VERSION=1.3.2-r1
 ARG LIBEXPAT_VERSION=2.8.5-r0
 
 FROM ruby:3.4.10-alpine3.23 AS middleman
 ARG ZLIB_VERSION
 ARG LIBEXPAT_VERSION
 # TODO: remove zlib pin when ruby:3.4.8-alpine3.23 base image is refreshed.
-RUN apk add --no-cache zlib=${ZLIB_VERSION} libexpat=${LIBEXPAT_VERSION} libxml2
+RUN apk add --no-cache "zlib>=${ZLIB_VERSION}" libexpat=${LIBEXPAT_VERSION} libxml2
 RUN apk add --update --no-cache npm git build-base
 
 COPY docs/Gemfile docs/Gemfile.lock /
@@ -26,7 +26,7 @@ FROM ruby:3.4.10-alpine3.23
 ARG ZLIB_VERSION
 ARG LIBEXPAT_VERSION
 
-RUN apk add --no-cache zlib=${ZLIB_VERSION} libexpat=${LIBEXPAT_VERSION} libxml2 yaml-dev
+RUN apk add --no-cache "zlib>=${ZLIB_VERSION}" libexpat=${LIBEXPAT_VERSION} libxml2 yaml-dev
 
 RUN apk add --update --no-cache tzdata && \
   cp /usr/share/zoneinfo/Europe/London /etc/localtime && \
