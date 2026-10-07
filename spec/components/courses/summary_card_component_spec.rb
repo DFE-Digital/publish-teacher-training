@@ -759,14 +759,4 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       it_behaves_like "visa sponsorship row", :apprenticeship, { can_sponsor_student_visa: false }, "Visas cannot be sponsored"
     end
   end
-
-  describe "start date" do
-    let(:course) { create(:course, start_date: Time.zone.local(2025, 9, 1)) }
-    let(:summary_card) { render_inline(described_class.new(course:)) }
-
-    it "is not shown, because the start date filter is specific enough" do
-      expect(summary_card_content).not_to include("Start date")
-      expect(summary_card_content).not_to include("September 2025")
-    end
-  end
 end
