@@ -11,7 +11,7 @@ class MigrateFindStartDateFilterValues < ActiveRecord::Migration[8.1]
   # the old alert is unsubscribed rather than duplicating it.
   def up
     [Candidate::EmailAlert, RecentSearch].each do |model|
-      legacy_start_dates(model).find_each { |record| migrate(record) }
+      legacy_start_dates(model).find_each { |record| rewrite_start_date(record) }
     end
   end
 
@@ -28,7 +28,7 @@ private
     )
   end
 
-  def migrate(record)
+  def rewrite_start_date(record)
     start_date = Courses::StartDateOptions.normalise(record.search_attributes["start_date"])
     record.search_attributes = record.search_attributes.merge("start_date" => start_date).compact_blank
     digest = record.compute_filter_key_digest
