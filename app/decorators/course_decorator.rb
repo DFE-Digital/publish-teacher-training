@@ -175,15 +175,10 @@ class CourseDecorator < ApplicationDecorator
     object.study_sites.sort_by(&:location_name)
   end
 
-  def preview_site_statuses
-    object.site_statuses.new_or_running.sort_by { |status| status.site.location_name }
-  end
-
   # Placement schools for the shared placements partial, over the canonical
   # course_school -> provider_school -> gias_school chain.
   #
-  # course_school has no status column, so unlike preview_site_statuses this
-  # cannot filter to new_or_running - every attached school is listed.
+  # course_school has no status column, so every attached school is listed.
   #
   # uniq on gias_school_id because course_school is unique on
   # (course_id, provider_school_id), so a course can reach one GIAS school

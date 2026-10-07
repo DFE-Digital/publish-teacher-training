@@ -50,11 +50,6 @@ FactoryBot.define do
       longitude { -0.7501 }
     end
 
-    trait :guildford do
-      latitude { 51.2362 }
-      longitude { -0.5704 }
-    end
-
     trait :lewisham do
       latitude { 51.4539 }
       longitude { -0.016 }
@@ -98,11 +93,6 @@ FactoryBot.define do
     trait :wimbledon do
       latitude { 51.4230 }
       longitude { -0.2195 }
-    end
-
-    trait :woking do
-      latitude { 51.3200 }
-      longitude { -0.5582 }
     end
   end
 end

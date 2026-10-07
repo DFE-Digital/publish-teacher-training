@@ -10,8 +10,9 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
   context "when searching by location" do
     let(:london) { build(:location, :london) }
-    let!(:course_london_result) { course_at(london, name: "Mathematics (London)", distance: 0.0) }
-    let!(:course_canary_wharf_result) { course_at(canary_wharf, name: "Science (Canary Wharf)", distance: 4.46) }
+    let(:london_provider) { create(:provider, provider_name: "London university") }
+    let!(:course_london_result) { course_at(london, name: "Mathematics (London)", distance: 0.0, provider: london_provider) }
+    let!(:course_canary_wharf_result) { course_at(canary_wharf, name: "Science (Canary Wharf)", distance: 4.46, provider: london_provider) }
     let!(:course_lewisham_result) { course_at(lewisham, name: "Science (Lewisham)", distance: 6.07) }
     let!(:course_romford_result) { course_at(romford, name: "Science (Romford)", distance: 14.36) }
     let!(:course_cambridge_result) { course_at(cambridge, name: "Chemistry (Cambridge)", distance: 49.38) }
@@ -54,6 +55,18 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    context "when radius is nil default radius to 10 miles" do
+      it_behaves_like "location search results", radius: nil do
+        let(:expected) { [course_london_result, course_canary_wharf_result, course_lewisham_result] }
+      end
+    end
+
+    context "when radius is blank default radius to 10 miles" do
+      it_behaves_like "location search results", radius: "" do
+        let(:expected) { [course_london_result, course_canary_wharf_result, course_lewisham_result] }
+      end
+    end
+
     it "defaults to ordering by distance when latitude and longitude are given" do
       results = described_class.call(
         params: { latitude: london.latitude, longitude: london.longitude, radius: 10 },
@@ -61,6 +74,38 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
       expect(results).to match_collection(
         [course_london_result, course_canary_wharf_result, course_lewisham_result],
+        attribute_names: %w[name minimum_distance_to_search_location],
+      )
+    end
+
+    it "defaults to ordering by distance when search by provider code" do
+      results = described_class.call(
+        params: {
+          latitude: london.latitude,
+          longitude: london.longitude,
+          radius: 10,
+          provider_code: london_provider.provider_code,
+        },
+      )
+
+      expect(results).to match_collection(
+        [course_london_result, course_canary_wharf_result],
+        attribute_names: %w[name minimum_distance_to_search_location],
+      )
+    end
+
+    it "defaults to ordering by distance when search by provider name" do
+      results = described_class.call(
+        params: {
+          latitude: london.latitude,
+          longitude: london.longitude,
+          radius: 10,
+          provider_name: london_provider.provider_name,
+        },
+      )
+
+      expect(results).to match_collection(
+        [course_london_result, course_canary_wharf_result],
         attribute_names: %w[name minimum_distance_to_search_location],
       )
     end
