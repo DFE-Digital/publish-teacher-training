@@ -41,8 +41,8 @@ describe FinancialIncentive do
   end
 
   describe "normalization" do
-    it "stores blank incentive amounts as nil" do
-      financial_incentive = described_class.new(bursary_amount: "", scholarship: " ", early_career_payments: "")
+    it "stores blank and zero incentive amounts as nil" do
+      financial_incentive = described_class.new(bursary_amount: "", scholarship: "0", early_career_payments: " 00 ")
 
       expect(financial_incentive.attributes.slice("bursary_amount", "scholarship", "early_career_payments").values).to all(be_nil)
     end
