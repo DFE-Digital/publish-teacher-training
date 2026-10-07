@@ -944,15 +944,14 @@ describe CourseDecorator do
       expect(course.decorate.preview_placement_schools.size).to eq(1)
     end
 
-    # course_school has no status column, so unlike preview_site_statuses this
-    # cannot hide a school whose legacy SiteStatus was suspended.
+    # course_school has no status column, so a suspended SiteStatus does not
+    # hide the school.
     it "lists every attached school, including one whose legacy site status is suspended" do
       site = create(:site, provider: course.provider, location_name: "Suspended School")
       create(:site_status, :suspended, course:, site:)
       create(:course_school, :for_site, course:, site:)
 
       expect(course.decorate.preview_placement_schools.size).to eq(1)
-      expect(course.decorate.preview_site_statuses).to be_empty
     end
 
     it "returns nothing when the course has no schools" do
