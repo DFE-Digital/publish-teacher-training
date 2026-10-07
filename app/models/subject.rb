@@ -31,7 +31,7 @@ class Subject < ApplicationRecord
   def self.secondary_subject_codes_with_bursary
     secondary
       .joins(:financial_incentive)
-      .merge(FinancialIncentive.where.not(bursary_amount: [nil, ""]))
+      .merge(FinancialIncentive.where.not(bursary_amount: nil))
       .pluck(:subject_code)
   end
 

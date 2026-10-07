@@ -20,10 +20,8 @@ module Shared
           end
 
           def bursary_amount_text
-            amount = number_to_currency(bursary_amount)
-            return t("find.financial_support.bursary_amount", amount:) unless degree_dependent?
-
-            safe_join([t("find.financial_support.bursary_up_to_amount", amount:), t("find.financial_support.amount_depends_on_degree")], " ")
+            key = degree_dependent? ? "bursary_up_to_amount" : "bursary_amount"
+            t("find.financial_support.#{key}", amount: number_to_currency(bursary_amount))
           end
         end
       end

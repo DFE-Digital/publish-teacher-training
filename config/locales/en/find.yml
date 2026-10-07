@@ -49,8 +49,7 @@ en:
       bursaries: Bursaries
       bursary_and_scholarships: Bursaries and scholarships
       bursary_amount: Bursaries of %{amount} are available to eligible trainees.
-      bursary_up_to_amount: Bursaries of up to %{amount} are available to eligible trainees.
-      amount_depends_on_degree: The amount you are eligible for will depend on your degree.
+      bursary_up_to_amount: Bursaries of up to %{amount} are available to eligible trainees. The amount you are eligible for will depend on your degree.
       bursary_and_scholarship_amount: Bursaries of %{bursary_amount} and scholarships of %{scholarship_amount} are available to eligible trainees.
       not_yet_announced: Details of financial support for courses starting in the %{cycle_year_range} academic year will be released soon.
       eligible_for_bursary: Find out whether you’re eligible for a bursary.

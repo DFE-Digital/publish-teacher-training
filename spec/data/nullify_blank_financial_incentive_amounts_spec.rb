@@ -6,7 +6,9 @@ require Rails.root.join("db/data/20261007120000_nullify_blank_financial_incentiv
 describe NullifyBlankFinancialIncentiveAmounts do
   it "replaces blank incentive amounts with nil and leaves amounts alone" do
     financial_incentive = create(:secondary_subject, bursary_amount: "29000").financial_incentive
-    financial_incentive.update_columns(scholarship: "", early_career_payments: "")
+    FinancialIncentive.connection.exec_update(
+      "UPDATE financial_incentive SET scholarship = '', early_career_payments = E'\\t ' WHERE id = #{financial_incentive.id}",
+    )
 
     described_class.new.up
 

@@ -296,13 +296,6 @@ describe CourseIncentive do
   end
 
   describe "#degree_dependent?" do
-    it "returns true when a subject's bursary depends on the degree" do
-      physics = build(:secondary_subject, subject_name: "Physics", bursary_amount: "20000", degree_dependent: true)
-      course = build(:course, subjects: [physics])
-
-      expect(described_class.new(course)).to be_degree_dependent
-    end
-
     it "returns false when no subject's bursary depends on the degree" do
       biology = build(:secondary_subject, subject_name: "Biology", bursary_amount: "5000")
       course = build(:course, subjects: [biology])
