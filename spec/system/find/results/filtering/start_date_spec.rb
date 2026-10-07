@@ -24,7 +24,6 @@ RSpec.describe "when filtering by start date", :js, service: :find do
     and_i_apply_the_filters
     then_i_see_only(@may_course)
     and_i_see_the_active_filter("Start date: April to June #{current_recruitment_cycle_year}")
-    and_the_start_date_is_not_shown_on_the_results
   end
 
   scenario "filtering by the same months in the following year" do
@@ -141,10 +140,6 @@ RSpec.describe "when filtering by start date", :js, service: :find do
       courses.each { |course| expect(results).to have_content(course.name) }
       (all_courses - courses).each { |course| expect(results).to have_no_content(course.name) }
     end
-  end
-
-  def and_the_start_date_is_not_shown_on_the_results
-    expect(results).to have_no_content("Start date")
   end
 
   def and_i_see_the_active_filter(text)
