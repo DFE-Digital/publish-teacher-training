@@ -10,10 +10,10 @@ module Publish
     # the values that group offers. That single choke point means an unrecognised
     # value in the query string reaches neither the SQL nor an active filter chip.
     #
-    # Checkboxes for every group offer only the values on the course list.
-    # A bookmarked status, phase, funding, qualification or study mode from the
-    # full list is still applied. Start date has no fixed list: a month is
-    # allowed only when a course starts then.
+    # Checkboxes offer the values on the course list, plus any value already
+    # selected. A bookmarked ?status[]=draft stays ticked after the last draft
+    # is published, so Apply does not drop it. Start date has no fixed list: a
+    # month is allowed only when a course starts then.
     class FilterForm < ApplicationForm
       Option = Data.define(:value, :label)
 
@@ -43,15 +43,10 @@ module Publish
 
       attr_reader :provider
 
-      def initialize(provider:, courses: [], **attributes)
+      def initialize(provider:, courses:, **attributes)
         @provider = provider
         @courses = courses
         super(attributes)
-      end
-
-      def courses=(courses)
-        @courses = courses
-        @available_filter_options = nil
       end
 
       # The selected values, ready to hand to Publish::Courses::Query.
@@ -69,11 +64,17 @@ module Publish
         filter_params.any?
       end
 
+      # A group is shown when it offers a real choice, or when a value is already
+      # selected so Apply does not drop a bookmark the panel cannot untick.
+      def visible_groups
+        GROUPS.select { |group| options_for(group).size > 1 || public_send(group).any? }
+      end
+
       def options_for(group)
         return start_date_options if group == :start_date
 
-        present = available_filter_options.fetch(group)
-        static_options_for(group).select { |option| present.include?(option.value) }
+        shown = available_filter_options.fetch(group) | public_send(group)
+        static_options_for(group).select { |option| shown.include?(option.value) }
       end
 
       # Chips, in group order, each removing only its own value.

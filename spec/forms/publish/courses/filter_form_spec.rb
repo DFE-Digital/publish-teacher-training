@@ -70,8 +70,8 @@ RSpec.describe Publish::Courses::FilterForm do
         expect(form.status).to eq(%w[draft])
       end
 
-      it "does not offer it as a checkbox" do
-        expect(form.options_for(:status).map(&:value)).to eq(%w[open])
+      it "still offers it as a ticked checkbox" do
+        expect(form.options_for(:status).map(&:value)).to eq(%w[open draft])
       end
 
       it "still labels the chip" do

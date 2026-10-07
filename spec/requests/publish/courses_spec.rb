@@ -174,7 +174,8 @@ describe "Publish::CoursesController#index" do
       expect(response.parsed_body.text).to include("No courses found")
       chips = response.parsed_body.css(".app-active-filters__remove-filter").map { |chip| chip.text.gsub("Remove filter", "").strip }
       expect(chips).to eq(["Further education"])
-      expect(response.parsed_body.css("input[name='level[]']").map { |input| input[:value] }).to eq(%w[primary secondary])
+      expect(response.parsed_body.css("input[name='level[]']").map { |input| input[:value] }).to eq(%w[primary secondary further_education])
+      expect(response.parsed_body.css("input[name='level[]'][checked]").map { |input| input[:value] }).to eq(%w[further_education])
     end
 
     it "ignores a filter value it does not recognise" do
