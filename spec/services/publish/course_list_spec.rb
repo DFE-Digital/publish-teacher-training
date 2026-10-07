@@ -204,7 +204,7 @@ RSpec.describe Publish::CourseList do
     end
   end
 
-  describe "#visible_filter_groups" do
+  describe "#visible_groups" do
     let(:provider) { create(:provider, :accredited_provider) }
 
     # Shared defaults keep every non-target facet uniform, so each test isolates
@@ -214,11 +214,16 @@ RSpec.describe Publish::CourseList do
                                            level: :primary, start_date: Time.zone.local(2026, 9, 1), **attrs)
     end
 
+    def visible_groups(filter_params = {})
+      list = Publish::CourseList.new(provider: provider.reload, unfiltered_courses: Publish::Courses::Query.call(provider:).to_a)
+      Publish::Courses::FilterForm.new(provider:, courses: list.unfiltered_courses, **filter_params).visible_groups
+    end
+
     context "when the provider has one course" do
       before { create_course }
 
       it "shows no filter groups" do
-        expect(course_list.visible_filter_groups).to eq([])
+        expect(visible_groups).to eq([])
       end
     end
 
@@ -229,7 +234,7 @@ RSpec.describe Publish::CourseList do
       end
 
       it "shows the level filter" do
-        expect(course_list.visible_filter_groups).to eq([:level])
+        expect(visible_groups).to eq([:level])
       end
     end
 
@@ -240,7 +245,7 @@ RSpec.describe Publish::CourseList do
       end
 
       it "shows those filters in panel order" do
-        expect(course_list.visible_filter_groups).to eq(%i[funding qualification study_mode])
+        expect(visible_groups).to eq(%i[funding qualification study_mode])
       end
     end
 
@@ -251,21 +256,18 @@ RSpec.describe Publish::CourseList do
       end
 
       it "shows the start date filter" do
-        expect(course_list.visible_filter_groups).to eq([:start_date])
+        expect(visible_groups).to eq([:start_date])
       end
     end
 
-    # The filter offers only the months courses start in, so this group shows a
-    # single checkbox — which still narrows the list to the courses that have a
-    # start date at all, so it is worth showing.
     context "when some courses have no start date and the rest share a month" do
       before do
         create_course
         create_course(start_date: nil)
       end
 
-      it "shows the start date filter" do
-        expect(course_list.visible_filter_groups).to eq([:start_date])
+      it "hides the start date filter, which would offer a single checkbox" do
+        expect(visible_groups).not_to include(:start_date)
       end
     end
 
@@ -276,7 +278,7 @@ RSpec.describe Publish::CourseList do
       end
 
       it "does not show the start date filter, which groups by month" do
-        expect(course_list.visible_filter_groups).not_to include(:start_date)
+        expect(visible_groups).not_to include(:start_date)
       end
     end
 
@@ -287,8 +289,8 @@ RSpec.describe Publish::CourseList do
       end
 
       it "shows the status filter first" do
-        expect(course_list.visible_filter_groups).to include(:status)
-        expect(course_list.visible_filter_groups.first).to eq(:status)
+        expect(visible_groups).to include(:status)
+        expect(visible_groups.first).to eq(:status)
       end
     end
 
@@ -296,17 +298,37 @@ RSpec.describe Publish::CourseList do
       before { create_list(:course, 2, :without_validation, provider:) }
 
       it "does not show the status filter" do
-        expect(course_list.visible_filter_groups).not_to include(:status)
+        expect(visible_groups).not_to include(:status)
       end
     end
 
     context "when a uniform facet has an applied filter" do
-      subject(:course_list) { described_class.new(provider: provider.reload, params: { study_mode: %w[full_time] }) }
-
       before { create_list(:course, 2, :without_validation, provider:, study_mode: :full_time) }
 
       it "keeps that group visible so the active filter can be seen" do
-        expect(course_list.visible_filter_groups).to include(:study_mode)
+        expect(visible_groups(study_mode: %w[full_time])).to include(:study_mode)
+      end
+    end
+
+    context "when courses are PGCE and PGDE without QTS" do
+      before do
+        create_course(qualification: :pgce)
+        create_course(qualification: :pgde)
+      end
+
+      it "hides qualification, which has no checkbox for those qualifications" do
+        expect(visible_groups).not_to include(:qualification)
+      end
+    end
+
+    context "when courses are PGCE with QTS and PGDE with QTS" do
+      before do
+        create_course(qualification: :pgce_with_qts)
+        create_course(qualification: :pgde_with_qts)
+      end
+
+      it "hides qualification, which offers a single checkbox" do
+        expect(visible_groups).not_to include(:qualification)
       end
     end
   end
