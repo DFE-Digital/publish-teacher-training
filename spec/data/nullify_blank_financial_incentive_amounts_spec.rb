@@ -7,7 +7,7 @@ describe NullifyBlankFinancialIncentiveAmounts do
   it "replaces blank and zero incentive amounts with nil and leaves amounts alone" do
     financial_incentive = create(:secondary_subject, bursary_amount: "20000").financial_incentive
     FinancialIncentive.connection.exec_update(
-      "UPDATE financial_incentive SET scholarship = '0', early_career_payments = E'\\t ' WHERE id = #{financial_incentive.id}",
+      "UPDATE financial_incentive SET scholarship = E'\\t£0.00 ', early_career_payments = '' WHERE id = #{financial_incentive.id}",
     )
 
     described_class.new.up

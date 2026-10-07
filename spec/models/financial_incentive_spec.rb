@@ -41,10 +41,12 @@ describe FinancialIncentive do
   end
 
   describe "normalization" do
-    it "stores blank and zero incentive amounts as nil" do
-      financial_incentive = described_class.new(bursary_amount: "", scholarship: "0", early_career_payments: " 00 ")
+    it "stores every spelling of zero as nil and keeps real amounts" do
+      amounts = %i[bursary_amount scholarship early_career_payments]
+      zeros = ["", " 00 ", "0.00", "£0", "0,000", "-0", "\u00A00"]
 
-      expect(financial_incentive.attributes.slice("bursary_amount", "scholarship", "early_career_payments").values).to all(be_nil)
+      expect(amounts.product(zeros).map { |amount, zero| described_class.normalize_value_for(amount, zero) }).to all(be_nil)
+      expect(amounts.map { |amount| described_class.normalize_value_for(amount, "21000") }).to all(eq("21000"))
     end
   end
 
