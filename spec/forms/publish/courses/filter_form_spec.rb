@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Publish::Courses::FilterForm do
-  subject(:form) { described_class.new(provider:, courses: listed_courses, **attributes) }
+  subject(:form) { described_class.new(courses: listed_courses, **attributes) }
 
   let(:provider) { create(:provider) }
   let(:cycle_year) { provider.recruitment_cycle.year.to_i }
@@ -241,7 +241,7 @@ RSpec.describe Publish::Courses::FilterForm do
       create(:course, provider:, start_date: Time.zone.local(cycle_year, 1, 1))
 
       travel_to(Time.zone.local(cycle_year, 6, 15)) do
-        expect(described_class.new(provider:, courses: listed_courses).options_for(:start_date).first.label).to eq("January #{cycle_year}")
+        expect(described_class.new(courses: listed_courses).options_for(:start_date).first.label).to eq("January #{cycle_year}")
       end
     end
   end
@@ -289,6 +289,130 @@ RSpec.describe Publish::Courses::FilterForm do
 
       it "is empty" do
         expect(form.active_filters).to be_empty
+      end
+    end
+  end
+
+  describe "#visible_groups" do
+    # Shared defaults keep every non-target facet uniform, so each test isolates
+    # the one facet it varies. A single course means every facet is uniform.
+    def create_course(**attrs)
+      create(:course, :without_validation, provider:, funding: "fee", qualification: :qts, study_mode: :full_time,
+                                           level: :primary, start_date: Time.zone.local(cycle_year, 9, 1), **attrs)
+    end
+
+    context "when the provider has one course" do
+      before { create_course }
+
+      it "shows no filter groups" do
+        expect(form.visible_groups).to eq([])
+      end
+    end
+
+    context "when courses differ by education phase" do
+      before do
+        create_course(level: :primary)
+        create_course(level: :secondary)
+      end
+
+      it "shows the level filter" do
+        expect(form.visible_groups).to eq([:level])
+      end
+    end
+
+    context "when courses differ by funding, qualification and study mode" do
+      before do
+        create_course(funding: "fee", qualification: :qts, study_mode: :full_time)
+        create_course(funding: "salary", qualification: :pgce_with_qts, study_mode: :part_time)
+      end
+
+      it "shows those filters in panel order" do
+        expect(form.visible_groups).to eq(%i[funding qualification study_mode])
+      end
+    end
+
+    context "when courses start in different months" do
+      before do
+        create_course(start_date: Time.zone.local(cycle_year, 9, 1))
+        create_course(start_date: Time.zone.local(cycle_year + 1, 1, 1))
+      end
+
+      it "shows the start date filter" do
+        expect(form.visible_groups).to eq([:start_date])
+      end
+    end
+
+    context "when some courses have no start date and the rest share a month" do
+      before do
+        create_course
+        create_course(start_date: nil)
+      end
+
+      it "shows the start date filter, which still drops courses with no start date" do
+        expect(form.visible_groups).to eq([:start_date])
+      end
+    end
+
+    context "when courses start on different days of the same month" do
+      before do
+        create_course(start_date: Time.zone.local(cycle_year, 9, 1))
+        create_course(start_date: Time.zone.local(cycle_year, 9, 20))
+      end
+
+      it "does not show the start date filter, which groups by month" do
+        expect(form.visible_groups).not_to include(:start_date)
+      end
+    end
+
+    context "when courses display different statuses" do
+      before do
+        create(:course, :without_validation, provider:, name: "Draft course")
+        create(:course, :withdrawn, provider:, name: "Withdrawn course")
+      end
+
+      it "shows the status filter first" do
+        expect(form.visible_groups).to include(:status)
+        expect(form.visible_groups.first).to eq(:status)
+      end
+    end
+
+    context "when every course displays the same status" do
+      before { create_list(:course, 2, :without_validation, provider:) }
+
+      it "does not show the status filter" do
+        expect(form.visible_groups).not_to include(:status)
+      end
+    end
+
+    context "when a uniform facet has an applied filter" do
+      let(:attributes) { { study_mode: %w[full_time] } }
+
+      before { create_list(:course, 2, :without_validation, provider:, study_mode: :full_time) }
+
+      it "keeps that group visible so the active filter can be seen" do
+        expect(form.visible_groups).to include(:study_mode)
+      end
+    end
+
+    context "when courses are PGCE and PGDE without QTS" do
+      before do
+        create_course(qualification: :pgce)
+        create_course(qualification: :pgde)
+      end
+
+      it "hides qualification, which has no checkbox for those qualifications" do
+        expect(form.visible_groups).not_to include(:qualification)
+      end
+    end
+
+    context "when courses are PGCE with QTS and PGDE with QTS" do
+      before do
+        create_course(qualification: :pgce_with_qts)
+        create_course(qualification: :pgde_with_qts)
+      end
+
+      it "hides qualification, which offers a single checkbox" do
+        expect(form.visible_groups).not_to include(:qualification)
       end
     end
   end

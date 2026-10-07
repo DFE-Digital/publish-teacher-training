@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
-  subject(:rendered) { render_inline(described_class.new(filter_form:, provider:, **options)) }
+  subject(:rendered) { render_inline(described_class.new(filter_form:, provider:)) }
 
   let(:provider) { create(:provider) }
   let(:cycle_year) { provider.recruitment_cycle_year.to_i }
   let(:attributes) { {} }
-  let(:options) { {} }
-  let(:filter_form) { Publish::Courses::FilterForm.new(provider:, courses: Publish::CourseList.new(provider:).unfiltered_courses, **attributes) }
+  let(:filter_form) { Publish::Courses::FilterForm.new(courses: Publish::CourseList.new(provider:).unfiltered_courses, **attributes) }
 
   # The start date group offers the months the provider's courses start in, so
   # the panel needs courses before it has any start date checkboxes to render.
@@ -49,22 +48,21 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
   end
 
   describe "the filter groups" do
-    it "renders one collapsible section per group, in order" do
-      expect(rendered.css("details.app-c-filter-section").size).to eq(6)
-      expect(group_headings).to eq(
-        ["Status", "Education phase", "Fee or salary", "Qualification", "Full time or part time", "Start date"],
-      )
+    it "renders a section for each group the form shows" do
+      expect(rendered.css("details.app-c-filter-section").size).to eq(1)
+      expect(group_headings).to eq(["Start date"])
     end
 
-    it "names the checkboxes so each group arrives as an array" do
-      expect(rendered.css("input[type='checkbox']").map { |input| input[:name] }.uniq)
-        .to eq(["status[]", "level[]", "funding[]", "qualification[]", "study_mode[]", "start_date[]"])
+    it "names the checkboxes so the group arrives as an array" do
+      expect(rendered.css("input[type='checkbox']").map { |input| input[:name] }.uniq).to eq(["start_date[]"])
     end
 
     it "offers only the statuses present on the course list" do
+      create(:course, :published, provider:, application_status: :open)
+
       labels = rendered.css("input[name='status[]']").map { |input| rendered.css("label[for='#{input[:id]}']").text.strip }
 
-      expect(labels).to eq(%w[Draft])
+      expect(labels).to eq(%w[Open Draft])
     end
 
     it "offers only the months the provider's courses start in" do
@@ -73,14 +71,6 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
       expect(inputs.map { |input| input[:value] }).to eq(["#{cycle_year}-09", "#{cycle_year + 1}-01"])
       expect(inputs.map { |input| rendered.css("label[for='#{input[:id]}']").text.strip })
         .to eq(["September #{cycle_year}", "January #{cycle_year + 1}"])
-    end
-
-    context "when only some groups are visible" do
-      let(:options) { { visible_groups: %i[status funding] } }
-
-      it "renders only those" do
-        expect(group_headings).to eq(["Status", "Fee or salary"])
-      end
     end
   end
 
@@ -108,9 +98,9 @@ RSpec.describe Publish::Courses::FilterPanelComponent, type: :component do
     end
 
     it "leaves the hint off groups with nothing selected" do
-      funding = rendered.css(".app-c-filter-section").find { |s| s.text.include?("Fee or salary") }
+      start_date = rendered.css(".app-c-filter-section").find { |section| section.text.include?("Start date") }
 
-      expect(funding.css(".app-c-filter-section__count")).to be_empty
+      expect(start_date.css(".app-c-filter-section__count")).to be_empty
     end
 
     it "keeps every group collapsed, even those with a selection" do

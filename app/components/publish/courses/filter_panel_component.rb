@@ -5,18 +5,16 @@ module Publish
     # The filter sidebar on the publish course list: the active filter chips,
     # then one collapsible section of checkboxes per filter group.
     #
-    # Which groups are shown is a caller's decision, so that a provider whose
-    # courses do not vary on an attribute can be shown a shorter panel without
-    # this component knowing anything about their courses.
+    # The groups shown are the form's: a provider whose courses do not vary on
+    # an attribute gets a shorter panel.
     class FilterPanelComponent < ApplicationComponent
-      def initialize(filter_form:, provider:, visible_groups: ::Publish::Courses::FilterForm::GROUPS, classes: [], html_attributes: {})
+      def initialize(filter_form:, provider:, classes: [], html_attributes: {})
         super(classes:, html_attributes:)
         @filter_form = filter_form
         @provider = provider
-        @visible_groups = visible_groups
       end
 
-      attr_reader :filter_form, :provider, :visible_groups
+      attr_reader :filter_form, :provider
 
       def courses_path(params = {})
         helpers.publish_provider_recruitment_cycle_courses_path(
