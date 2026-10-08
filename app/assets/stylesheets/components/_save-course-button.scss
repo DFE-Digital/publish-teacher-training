@@ -45,10 +45,10 @@ body:not(.js-enabled) {
 }
 
 .results-save-course-button__unstyled-button {
-  float: right;
+  float: none;
 
   @include govuk-media-query($until: tablet) {
-    float: left;
+    float: none;
   }
 }
 
@@ -64,7 +64,7 @@ body:not(.js-enabled) {
   &__text {
     @include govuk-font(19);
 
-    font-weight: 700;
+    font-weight: 400;
 
     color: $govuk-link-colour;
 
@@ -72,4 +72,9 @@ body:not(.js-enabled) {
       color: $govuk-link-hover-colour;
     }
   }
+}
+
+.save-toggle-heart {
+  margin-top: 3px;
+  margin-right: 8px;
 }

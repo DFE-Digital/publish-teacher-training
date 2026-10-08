@@ -36,26 +36,25 @@ class CourseIncentive::View
 
     return if bursary.blank? && scholarship.blank?
 
-    text = if bursary.present? && scholarship.present?
-             I18n.t(
-               "financial_incentive.hint.bursaries_and_scholarship",
-               bursary_amount: ActiveSupport::NumberHelper.number_to_currency(bursary),
-               scholarship_amount: ActiveSupport::NumberHelper.number_to_currency(scholarship),
-             )
-           elsif bursary.present?
-             I18n.t(
-               "financial_incentive.hint.bursaries_only",
-               bursary_amount: ActiveSupport::NumberHelper.number_to_currency(bursary),
-             )
-           else
-             I18n.t(
-               "financial_incentive.hint.scholarship_only",
-               scholarship_amount: ActiveSupport::NumberHelper.number_to_currency(scholarship),
-             )
-           end
+    if bursary.present? && scholarship.present?
+      I18n.t(
+        "financial_incentive.hint.bursaries_and_scholarship",
+        bursary_amount: ActiveSupport::NumberHelper.number_to_currency(bursary),
+        scholarship_amount: ActiveSupport::NumberHelper.number_to_currency(scholarship),
+      )
+    elsif bursary.present?
+      I18n.t(
+        "financial_incentive.hint.bursaries_only",
+        bursary_amount: ActiveSupport::NumberHelper.number_to_currency(bursary),
+      )
+    else
+      I18n.t(
+        "financial_incentive.hint.scholarship_only",
+        scholarship_amount: ActiveSupport::NumberHelper.number_to_currency(scholarship),
+      )
+    end
 
-    text += " for UK citizens" unless non_uk_funding_available
-    text
+    # text += " for UK citizens" unless non_uk_funding_available
   end
 
   def hint_text
