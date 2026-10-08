@@ -35,10 +35,7 @@ class CourseWizard
       graph.add_node :study_sites, Steps::StudySites, skip_when: -> { skip_study_sites? }
       graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
-      graph.add_node :visa_sponsorship, Steps::VisaSponsorship
-      graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
-      graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
-      graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
+      graph.add_sub_wizard :visa, VisaSubWizard, exit_to: :start_date
 
       graph.add_node :check_answers, Steps::CheckAnswers
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
@@ -125,32 +122,6 @@ class CourseWizard
         ],
         default: :start_date,
       )
-
-      graph.add_multiple_conditional_edges(
-        from: :visa_sponsorship,
-        branches: [
-          { when: :visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_multiple_conditional_edges(
-        from: :skilled_worker_visa,
-        branches: [
-          { when: :skilled_worker_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_multiple_conditional_edges(
-        from: :visa_sponsorship_application_deadline_required,
-        branches: [
-          { when: :deadline_for_application_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_at },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
 
       graph.add_edge from: :start_date, to: :check_answers
       graph.add_edge from: :check_answers, to: :courses_index
