@@ -3,18 +3,14 @@
 require "rails_helper"
 
 RSpec.describe "API::Public::V1::Providers::Courses::LocationsController#index", service: :api do
-  # The legacy branch, which serves Course#sites; after the cutover year the
-  # endpoint serves Course#schools instead, preloaded by its own query.
+  # Course locations are Course::School rows. The endpoint preloads the
+  # school, its GIAS record and its provider school.
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year) }
   let(:provider) { create(:provider, recruitment_cycle:) }
 
-  def render_locations_for(site_count)
+  def render_locations_for(school_count)
     course = create(:course, provider:)
-    # Each site on a provider of its own, as the docs spec builds them: sites
-    # the course's own provider owns come back with that provider already
-    # loaded, and sites sharing one provider would hide what serialising a
-    # provider reads.
-    course.sites << Array.new(site_count) { build(:site, provider: create(:provider, recruitment_cycle:)) }
+    create_list(:course_school, school_count, course:)
 
     count_queries do
       get "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses/#{course.course_code}/locations",

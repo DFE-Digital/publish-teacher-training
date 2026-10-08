@@ -6,26 +6,16 @@ module API
       module Providers
         class LocationsController < API::Public::V1::ApplicationController
           def index
-            meta = if schools_remodelled
-                     { count: locations.count("provider_school.id") }
-                   else
-                     { count: locations.count("site.id") }
-                   end
-
             render jsonapi: locations,
                    include: include_param,
-                   meta:,
+                   meta: { count: locations.count("provider_school.id") },
                    class: API::Public::V1::SerializerService.call
           end
 
         private
 
           def locations
-            @locations ||= if schools_remodelled
-                             provider.schools.includes(:gias_school)
-                           else
-                             provider.sites
-                           end
+            @locations ||= provider.schools.includes(:gias_school)
           end
 
           def provider

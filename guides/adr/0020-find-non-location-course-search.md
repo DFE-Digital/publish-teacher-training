@@ -94,7 +94,7 @@ Use one query object, `Courses::Query`, for Find search. Location is an optional
 
 - `course` rows that are not discarded;
 - an inner join to the current recruitment cycle’s non-discarded `provider` rows; and
-- `findable_courses_sql`, which mirrors `Course#is_published?`.
+- `publication_visibility_sql`, which is `Course.visible_in_find_sql`.
 
 A course is findable when it has a published enrichment and its latest enrichment is not rolled over or withdrawn. That pair keeps a course findable if a legacy subsequent draft is still present, while excluding draft-only, rolled-over and withdrawn courses.
 
@@ -171,7 +171,7 @@ A code is used when both are present. Keeps courses run by that provider, and co
 
 **Preload** — `optimisation_scope`
 
-Always runs, including on this path, and it does not read a search parameter. It preloads `schools` (`course_school` rows), `site_statuses`, the latest published enrichment, the provider, and subjects with financial incentives.
+Always runs, including on this path, and it does not read a search parameter. It preloads `schools` (`course_school` rows), the latest published enrichment, the provider, and subjects with financial incentives.
 
 The result card calls `Course#without_employing_school?`, which asks `schools.none?`, to choose the placement copy for a course that has no employing school. Loading those rows here avoids one query per card. The preload does not join schools into the filter and does not calculate a distance.
 
@@ -198,7 +198,7 @@ Non-location search reads:
 - `course_enrichment` (publication and some filters / fee ordering)
 - `subject` / `course_subject`
 
-The filter does not join `course_school`, `gias_school` or `site`. `optimisation_scope` still preloads the school models on every search, including when there is no location: `:schools` (`course_school` rows) and `:site_statuses`, plus the latest published enrichment, the provider, and subjects with financial incentives. The result card uses those school rows to see whether a school is attached. GIAS coordinates are read only once a search has coordinates, as described in [ADR 21](0021-find-location-course-search.md).
+The filter does not join `course_school`, `gias_school` or `site`. `optimisation_scope` still preloads `:schools` (`course_school` rows) on every search, including when there is no location, plus the latest published enrichment, the provider, and subjects with financial incentives. The result card uses those school rows to see whether a school is attached. GIAS coordinates are read only once a search has coordinates, as described in [ADR 21](0021-find-location-course-search.md).
 
 ### Reuse
 

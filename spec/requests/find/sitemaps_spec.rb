@@ -15,13 +15,8 @@ describe "/sitemap.xml" do
         course_code:,
         provider:,
         changed_at:,
-        site_statuses: [site_status],
       )
     end
-
-    let(:site_status) { build(:site_status, :running, :published, site: site1) }
-
-    let(:site1) { build(:site, location_name: "location 1") }
 
     before do
       Timecop.travel(Find::CycleTimetable.mid_cycle)
@@ -97,6 +92,41 @@ describe "/sitemap.xml" do
 
     it "lists the course" do
       expect(response.body).to include("<loc>http://find.localhost/course/T92/X102</loc>")
+    end
+  end
+
+  context "when the course is not published" do
+    let(:provider) { build(:provider, provider_code: "T92") }
+
+    before { Timecop.travel(Find::CycleTimetable.mid_cycle) }
+
+    it "omits a draft course" do
+      create(:course, :draft_enrichment, course_code: "X102", provider:)
+
+      get "/sitemap.xml"
+
+      expect(response.body).not_to include("http://find.localhost/course/T92/X102")
+    end
+
+    it "omits a withdrawn course" do
+      create(:course, :withdrawn, course_code: "X102", provider:)
+
+      get "/sitemap.xml"
+
+      expect(response.body).not_to include("http://find.localhost/course/T92/X102")
+    end
+
+    it "omits a rolled-over course" do
+      create(
+        :course,
+        course_code: "X102",
+        provider:,
+        enrichments: [build(:course_enrichment, :rolled_over)],
+      )
+
+      get "/sitemap.xml"
+
+      expect(response.body).not_to include("http://find.localhost/course/T92/X102")
     end
   end
 end

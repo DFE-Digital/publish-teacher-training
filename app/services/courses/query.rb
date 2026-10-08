@@ -30,7 +30,7 @@ module Courses
                  .where(
                    provider: { recruitment_cycle_id: @current_recruitment_cycle.id },
                  )
-                 .where(findable_courses_sql)
+                 .where(publication_visibility_sql)
     end
 
     def call
@@ -69,7 +69,6 @@ module Courses
 
     def optimisation_scope
       @scope.preload(
-        :site_statuses,
         :schools,
         :latest_published_enrichment,
         provider: :recruitment_cycle,
@@ -498,10 +497,10 @@ module Courses
 
   private
 
-    # Find shows published courses only — nothing in draft, rolled over or
-    # withdrawn — regardless of whether the course has schools/sites attached.
-    # Findability is therefore exactly Course#is_published?.
-    def findable_courses_sql
+    # Published courses only. Draft, rolled-over and withdrawn courses are
+    # excluded by Course.visible_in_find_sql. School and site status are not
+    # part of this.
+    def publication_visibility_sql
       Course.visible_in_find_sql
     end
 

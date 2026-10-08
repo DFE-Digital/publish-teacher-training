@@ -21,17 +21,11 @@ module API
             # provider's schools we fell back to because the course is exempt
             # from needing schools and has none of its own (false).
             def meta
-              return unless schools_remodelled
-
               { has_course_schools: course&.schools.present? }
             end
 
             def locations
-              @locations ||= if schools_remodelled
-                               remodelled_locations
-                             else
-                               course&.sites
-                             end
+              @locations ||= remodelled_locations
             end
 
             # A course that support has approved to publish without schools
@@ -46,30 +40,14 @@ module API
               course.schools.presence || provider.schools.includes(:gias_school)
             end
 
-            # On the schools path each Course::School serializes its own
-            # SchoolLocationStatus, so there is no site_statuses collection to
-            # expose (and reading course.site_statuses would query the legacy
-            # course_site table for nothing).
+            # Each Course::School serializes its own SchoolLocationStatus, so
+            # there is no site_statuses collection to expose.
             def exposures
-              return { course: } if schools_remodelled
-
-              { course:, location_statuses: }
-            end
-
-            def location_statuses
-              @location_statuses ||= course&.site_statuses
+              { course: }
             end
 
             def course
-              @course ||= if schools_remodelled
-                            provider.courses.includes(schools: %i[gias_school provider_school]).find_by(course_code: params[:course_code])
-                          else
-                            # sites, not site_statuses.site: they are separate
-                            # associations, and sites is the one serialised.
-                            # Each location links to its provider, and a
-                            # serialised provider reads its own cycle.
-                            provider.courses.includes({ sites: { provider: :recruitment_cycle } }, :site_statuses).find_by(course_code: params[:course_code])
-                          end
+              @course ||= provider.courses.includes(schools: %i[gias_school provider_school]).find_by(course_code: params[:course_code])
             end
 
             def provider

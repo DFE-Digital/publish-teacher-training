@@ -596,73 +596,41 @@ describe Provider do
     end
 
     describe ".with_findable_courses" do
-      subject do
-        described_class.with_findable_courses
+      subject { described_class.with_findable_courses }
+
+      let(:published_course) { create(:course, :published) }
+
+      let(:published_course_with_accrediting_provider) do
+        create(
+          :course,
+          :published,
+          :with_accrediting_provider,
+          site_statuses: [build(:site_status)],
+        )
       end
 
-      let(:findable_course) do
-        create(:course, site_statuses: [build(:site_status, :findable)])
+      it "returns the provider and accrediting provider of a published course, even when the site is not findable" do
+        published_course
+        published_course_with_accrediting_provider
+
+        expect(subject).to contain_exactly(
+          published_course.provider,
+          published_course_with_accrediting_provider.provider,
+          published_course_with_accrediting_provider.accrediting_provider,
+        )
       end
 
-      let(:findable_course_with_accrediting_provider) do
-        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status, :findable)])
-      end
+      it "excludes draft, withdrawn and rolled-over courses" do
+        draft = create(:course, :draft_enrichment)
+        withdrawn = create(:course, :withdrawn, :with_accrediting_provider)
+        rolled_over = create(:course, enrichments: [build(:course_enrichment, :rolled_over)])
 
-      let(:non_findable_course) do
-        create(:course, site_statuses: [build(:site_status)])
-      end
-
-      let(:non_findable_course_with_accrediting_provider) do
-        create(:course, :with_accrediting_provider, site_statuses: [build(:site_status)])
-      end
-
-      it "returns only findable courses' provider and/or accrediting provider" do
-        findable_course
-        findable_course_with_accrediting_provider
-
-        non_findable_course
-        non_findable_course_with_accrediting_provider
-        expect(subject.map(&:id)).to contain_exactly(findable_course.provider.id,
-                                                     findable_course_with_accrediting_provider.provider.id,
-                                                     findable_course_with_accrediting_provider.accrediting_provider.id)
-      end
-
-      context "when the provider is the accredited provider for a course" do
-        before do
-          findable_course_with_accrediting_provider
-          non_findable_course_with_accrediting_provider
-        end
-
-        it "is returned" do
-          expect(subject).to contain_exactly(
-            findable_course_with_accrediting_provider.provider,
-            findable_course_with_accrediting_provider.accrediting_provider,
-          )
-        end
-      end
-
-      context "when the course is delivered by the provider" do
-        before do
-          findable_course
-          non_findable_course
-        end
-
-        it "is returned" do
-          expect(subject).to contain_exactly(findable_course.provider)
-        end
-      end
-
-      context "when the course is not findable" do
-        before do
-          non_findable_course
-          non_findable_course_with_accrediting_provider
-        end
-
-        it "is not returned" do
-          expect(subject).not_to include(non_findable_course.provider,
-                                         non_findable_course_with_accrediting_provider.provider,
-                                         non_findable_course_with_accrediting_provider.accrediting_provider)
-        end
+        expect(subject).not_to include(
+          draft.provider,
+          withdrawn.provider,
+          withdrawn.accrediting_provider,
+          rolled_over.provider,
+        )
       end
     end
 

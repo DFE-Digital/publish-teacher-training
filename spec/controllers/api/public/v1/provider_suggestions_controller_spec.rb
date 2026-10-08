@@ -4,11 +4,9 @@ require "rails_helper"
 
 RSpec.describe API::Public::V1::ProviderSuggestionsController do
   describe "#index" do
-    let(:published_running_site) { create(:site_status, :published, :running) }
-
     before do
       @provider = create(:provider, provider_code: "oxf")
-      create(:course, provider: @provider, site_statuses: [published_running_site])
+      create(:course, :published, provider: @provider)
       get :index, params: {
         query: "oxf",
       }
