@@ -13,7 +13,7 @@ describe Shared::Courses::FinancialSupport::BursaryComponent::View, type: :compo
     end
 
     it "renders bursary details" do
-      expect(page.has_text?("Find out whether you’re eligible for a bursary")).to be true
+      expect(page).to have_link("Find out more about bursaries.", href: /url=#{CGI.escape('https://getintoteaching.education.gov.uk/funding-and-support/bursaries')}&/)
       expect(page.has_text?("Bursaries of £3,000 are available to eligible trainees.")).to be true
       expect(page.has_text?("will depend on your degree")).to be false
     end
