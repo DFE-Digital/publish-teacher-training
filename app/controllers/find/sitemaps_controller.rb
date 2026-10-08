@@ -9,9 +9,10 @@ module Find
       # (with enrichments, schools and providers) took ~25s and ~1.5GB per
       # request, which is what crawlers fetching this twice a day looked like
       # in the pod memory graphs.
-      @courses = Course.where(id: RecruitmentCycle.current.courses.findable.select(:id))
-                       .joins(:provider)
-                       .pluck("provider.provider_code", "course.course_code", "course.changed_at")
+      @courses = RecruitmentCycle.current.courses
+                                 .visible_in_find
+                                 .joins(:provider)
+                                 .pluck("provider.provider_code", "course.course_code", "course.changed_at")
 
       expires_in(1.day, public: true)
     end

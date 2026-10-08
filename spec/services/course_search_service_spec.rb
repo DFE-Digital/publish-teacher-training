@@ -213,8 +213,13 @@ RSpec.describe CourseSearchService do
         let(:radius) { 5 }
         let(:filter) { { longitude:, latitude:, radius: } }
 
-        it "adds the within scope" do
-          expect(scope).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(course_ids_scope)
+        it "joins gias_schools and merges the GiasSchool.within scope" do
+          joins_scope = class_double(Course)
+          gias_school_within_scope = double
+
+          expect(scope).to receive(:joins).with(:gias_schools).and_return(joins_scope)
+          expect(GiasSchool).to receive(:within).with(radius, origin: [latitude, longitude]).and_return(gias_school_within_scope)
+          expect(joins_scope).to receive(:merge).with(gias_school_within_scope).and_return(course_ids_scope)
           expect(course_ids_scope).to receive(:select).and_return(inner_query_scope)
           expect(course_with_includes).to receive(:where).and_return(expected_scope)
           expect(subject).to eq(expected_scope)
@@ -226,8 +231,12 @@ RSpec.describe CourseSearchService do
         let(:latitude) { 1 }
         let(:filter) { { longitude:, latitude: } }
 
-        it "does not add the within scope" do
-          expect(scope).not_to receive(:within)
+        it "does not add the gias_schools join or within scope" do
+          expect(GiasSchool).not_to receive(:within)
+          expect(scope).not_to receive(:joins)
+          expect(scope).to receive(:select).and_return(inner_query_scope)
+          expect(course_with_includes).to receive(:where).and_return(expected_scope)
+          expect(subject).to eq(expected_scope)
         end
       end
     end
@@ -796,8 +805,9 @@ RSpec.describe CourseSearchService do
 
       let(:university_course) do
         create(:course, provider: university_provider,
-                        site_statuses: [build(:site_status, :findable, site:)],
-                        enrichments: [build(:course_enrichment, :published)])
+                        enrichments: [build(:course_enrichment, :published)]).tap do |course|
+                          create(:course_school, course:, gias_school: create(:gias_school, **over_5_miles_from_null_island))
+                        end
       end
       let(:scope) do
         Course.all
@@ -805,29 +815,17 @@ RSpec.describe CourseSearchService do
 
       let(:non_university_course) do
         create(:course, provider: non_university_provider,
-                        site_statuses: [build(:site_status, :findable, site: site2)],
-                        enrichments: [build(:course_enrichment, :published)])
+                        enrichments: [build(:course_enrichment, :published)]).tap do |course|
+                          create(:course_school, course:, gias_school: create(:gias_school, **null_island))
+                        end
       end
 
       let(:courses) do
         [university_course, non_university_course]
       end
 
-      let(:site) do
-        build(:site, **over_5_miles_from_null_island)
-      end
-
-      let(:site2) do
-        build(:site, **null_island)
-      end
-
-      let(:university_provider) do
-        build(:provider, provider_type: :university, sites: [site])
-      end
-
-      let(:non_university_provider) do
-        build(:provider, provider_type: :scitt, sites: [site2])
-      end
+      let(:university_provider) { build(:provider, provider_type: :university) }
+      let(:non_university_provider) { build(:provider, provider_type: :scitt) }
 
       before do
         courses
