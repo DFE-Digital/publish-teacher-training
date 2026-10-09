@@ -44,7 +44,10 @@ RSpec.describe Courses::WizardParamsSerializer do
       **base_state.merge(state_overrides),
     )
   end
-  let(:wizard) { instance_double(CourseWizard, state_store:, accrediting_provider: nil) }
+  # Every answer is on the path here; the draft spec covers off-path answers.
+  let(:wizard) do
+    instance_double(CourseWizard, state_store:, data: { steps: { all: base_state.merge(state_overrides) } })
+  end
 
   describe "key translations" do
     it "maps the canonical wizard keys to creation-service keys" do

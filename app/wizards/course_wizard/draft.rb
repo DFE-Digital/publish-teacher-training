@@ -4,22 +4,35 @@ class CourseWizard
   class Draft
     attr_reader :wizard, :state_store
 
-    delegate :level,
-             :is_send,
-             :qualification,
-             :campaign_name,
-             :start_date,
-             :primary_master_subject_id,
-             :secondary_master_subject_id,
-             :subordinate_subject_id,
-             :can_sponsor_student_visa,
-             :visa_sponsorship_application_deadline_required,
-             :accredited_provider_code,
-             to: :state_store
+    ANSWERS = %i[
+      level
+      is_send
+      qualification
+      campaign_name
+      start_date
+      primary_master_subject_id
+      secondary_master_subject_id
+      subordinate_subject_id
+      can_sponsor_student_visa
+      visa_sponsorship_application_deadline_required
+      accredited_provider_code
+    ].freeze
+
+    ANSWERS.each do |attribute|
+      define_method(attribute) { answer(attribute) }
+    end
 
     def initialize(wizard:)
       @wizard = wizard
       @state_store = wizard.state_store
+    end
+
+    # An answer whose step is on the path to check answers, or nil. An answer
+    # left behind on another branch (for example a visa answer kept after the
+    # level changed to further education) never reaches the course or the
+    # review rows.
+    def answer(attribute)
+      state_store.public_send(attribute) if on_path_attributes.include?(attribute)
     end
 
     def tda?
@@ -27,9 +40,9 @@ class CourseWizard
     end
 
     def funding
-      return "apprenticeship" if tda? && state_store.funding_type.blank?
+      return "apprenticeship" if tda? && answer(:funding_type).blank?
 
-      state_store.funding_type
+      answer(:funding_type)
     end
 
     def employment_based?
@@ -37,7 +50,7 @@ class CourseWizard
     end
 
     def study_modes
-      patterns = Array(state_store.study_pattern).compact_blank
+      patterns = Array(answer(:study_pattern)).compact_blank
       return patterns if patterns.present?
       return %w[full_time] if tda?
 
@@ -45,20 +58,20 @@ class CourseWizard
     end
 
     def can_sponsor_skilled_worker_visa
-      return false if tda? && state_store.can_sponsor_skilled_worker_visa.nil?
+      return false if tda? && answer(:can_sponsor_skilled_worker_visa).nil?
 
-      state_store.can_sponsor_skilled_worker_visa
+      answer(:can_sponsor_skilled_worker_visa)
     end
 
     def study_patterns_for_display
-      patterns = Array(state_store.study_pattern).compact_blank
+      patterns = Array(answer(:study_pattern)).compact_blank
       return %w[full_time] if patterns.empty? && tda?
 
       patterns
     end
 
     def age_range_choice
-      state_store.age_range_in_years
+      answer(:age_range_in_years)
     end
 
     def age_range_in_years
@@ -68,19 +81,23 @@ class CourseWizard
       "#{course_age_range_in_years_other_from}_to_#{course_age_range_in_years_other_to}"
     end
 
-    delegate :course_age_range_in_years_other_from, to: :state_store
+    def course_age_range_in_years_other_from
+      answer(:course_age_range_in_years_other_from)
+    end
 
-    delegate :course_age_range_in_years_other_to, to: :state_store
+    def course_age_range_in_years_other_to
+      answer(:course_age_range_in_years_other_to)
+    end
 
     def master_subject_id
       return if state_store.further_education_level?
 
-      state_store.primary_level? ? state_store.primary_master_subject_id : state_store.secondary_master_subject_id
+      state_store.primary_level? ? primary_master_subject_id : secondary_master_subject_id
     end
 
     def subject_ids
       return [] if state_store.further_education_level?
-      return [state_store.primary_master_subject_id].compact_blank if state_store.primary_level?
+      return [primary_master_subject_id].compact_blank if state_store.primary_level?
 
       secondary_subject_ids_with_grouped_specialisms
     end
@@ -90,7 +107,7 @@ class CourseWizard
     end
 
     def school_uuids
-      Array(state_store.school_uuids).compact_blank
+      Array(answer(:school_uuids)).compact_blank
     end
 
     def schools
@@ -98,20 +115,25 @@ class CourseWizard
     end
 
     def study_site_ids
-      return nil if state_store.study_sites_ids.nil?
+      return nil if answer(:study_sites_ids).nil?
 
-      Array(state_store.study_sites_ids).compact_blank
+      Array(answer(:study_sites_ids)).compact_blank
     end
 
     def selected_study_site_ids
-      Array(state_store.study_sites_ids).compact_blank
+      Array(answer(:study_sites_ids)).compact_blank
     end
 
     def study_sites
       @study_sites ||= ordered_study_site_records(selected_study_site_ids)
     end
 
-    delegate :accrediting_provider, to: :wizard
+    def accrediting_provider
+      @accrediting_provider ||= Accreditation.new(
+        provider: wizard.provider,
+        selected_provider_code: accredited_provider_code,
+      ).accrediting_provider
+    end
 
     def accreditation_provider_name
       return if accredited_provider_code.blank?
@@ -120,10 +142,14 @@ class CourseWizard
     end
 
     def visa_deadline
-      @visa_deadline ||= VisaDeadline.wrap(state_store.visa_sponsorship_application_deadline_at)
+      @visa_deadline ||= VisaDeadline.wrap(answer(:visa_sponsorship_application_deadline_at))
     end
 
   private
+
+    def on_path_attributes
+      @on_path_attributes ||= wizard.data[:steps].values.flat_map(&:keys).to_set(&:to_sym)
+    end
 
     def secondary_subject_ids_with_grouped_specialisms
       secondary_parent_ids.each_with_object([]) { |parent_id, ordered_ids|
@@ -134,8 +160,8 @@ class CourseWizard
 
     def secondary_parent_ids
       [
-        state_store.secondary_master_subject_id,
-        state_store.subordinate_subject_id,
+        secondary_master_subject_id,
+        subordinate_subject_id,
       ].compact_blank
     end
 
@@ -143,11 +169,11 @@ class CourseWizard
       ids = []
 
       if state_store.modern_languages_specialisms? && parent_id.to_s == modern_languages_subject_id
-        ids.concat(Array(state_store.language_ids))
+        ids.concat(Array(answer(:language_ids)))
       end
 
       if state_store.design_technology_specialisms? && parent_id.to_s == design_technology_subject_id
-        ids.concat(Array(state_store.design_technology_ids))
+        ids.concat(Array(answer(:design_technology_ids)))
       end
 
       ids.compact_blank

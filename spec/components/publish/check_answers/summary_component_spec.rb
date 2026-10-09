@@ -42,7 +42,8 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   end
 
   it "renders the engineers row when physics specialisms are saved" do
-    state_store.write(campaign_name: "engineers_teach_physics")
+    physics = find_or_create(:secondary_subject, :physics)
+    state_store.write(level: "secondary", secondary_master_subject_id: physics.id.to_s, campaign_name: "engineers_teach_physics")
     allow(wizard).to receive(:flow_steps).and_return([wizard.step(:physics_specialisms)])
     allow(wizard).to receive(:saved?).with(:physics_specialisms).and_return(true)
 
@@ -150,21 +151,32 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_sites']", text: "Change")
   end
 
-  it "renders accredited provider row with and without change link depending on saved state" do
-    accrediting_provider = instance_double(Provider, provider_name: "Acme Accreditor", provider_code: "AC1")
-    allow(wizard).to receive_messages(accrediting_provider: accrediting_provider, flow_steps: [wizard.step(:accredited_provider)])
-    allow(wizard).to receive(:saved?).with(:accredited_provider).and_return(true)
+  context "when the provider has more than one accredited partner" do
+    let(:provider) do
+      school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: accredited_partner)
+      create(:provider_partnership, training_provider: school_provider, accredited_provider: create(:accredited_provider, recruitment_cycle:))
+      school_provider
+    end
+    let(:accredited_partner) { create(:accredited_provider, provider_name: "Acme Accreditor", recruitment_cycle:) }
 
-    expect(rendered_component).to have_text("Accredited provider")
-    expect(rendered_component).to have_text("Acme Accreditor")
-    expect(rendered_component).to have_link("Change", href: /return_to_review=accredited_provider/)
+    it "renders accredited provider row with and without change link depending on saved state" do
+      state_store.write(level: "secondary", accredited_provider_code: accredited_partner.provider_code)
+      allow(wizard).to receive(:flow_steps).and_return([wizard.step(:accredited_provider)])
+      allow(wizard).to receive(:saved?).with(:accredited_provider).and_return(true)
+
+      expect(rendered_component).to have_text("Accredited provider")
+      expect(rendered_component).to have_text("Acme Accreditor")
+      expect(rendered_component).to have_link("Change", href: /return_to_review=accredited_provider/)
+    end
   end
 
-  it "renders visa rows including skilled worker and deadline rows" do
+  it "renders the student visa and deadline rows of a fee-paying course" do
     state_store.write(
-      qualification: "undergraduate_degree_with_qts",
+      level: "secondary",
+      qualification: "qts",
+      funding_type: "fee",
       can_sponsor_student_visa: true,
-      can_sponsor_skilled_worker_visa: false,
       visa_sponsorship_application_deadline_required: true,
       visa_sponsorship_application_deadline_at: CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt::DateParts.new("2027", "3", "1"),
     )
@@ -172,24 +184,29 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     allow(wizard).to receive(:flow_steps).and_return(
       [
         wizard.step(:visa_sponsorship),
-        wizard.step(:skilled_worker_visa),
         wizard.step(:visa_sponsorship_application_deadline_required),
         wizard.step(:visa_sponsorship_application_deadline_at),
       ],
     )
     allow(wizard).to receive(:saved?).with(:visa_sponsorship).and_return(true)
-    allow(wizard).to receive(:saved?).with(:skilled_worker_visa).and_return(true)
     allow(wizard).to receive(:saved?).with(:visa_sponsorship_application_deadline_required).and_return(true)
     allow(wizard).to receive(:saved?).with(:visa_sponsorship_application_deadline_at).and_return(true)
 
     expect(rendered_component).to have_text("Student visas")
     expect(rendered_component).to have_text("Yes - can sponsor")
-    expect(rendered_component).to have_text("Skilled Worker visas")
-    expect(rendered_component).to have_text("No - cannot sponsor")
     expect(rendered_component).to have_text("Is there a visa sponsorship deadline?")
     expect(rendered_component).to have_text("Yes")
     expect(rendered_component).to have_text("Visa sponsorship deadline")
     expect(rendered_component).to have_text(Date.new(2027, 3, 1).to_fs(:govuk_date))
-    expect(rendered_component).to have_no_link("Change skilled worker visas")
+    expect(rendered_component).to have_no_text("Skilled Worker visas")
+  end
+
+  it "renders a salaried course's skilled worker visa row" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "salary", can_sponsor_skilled_worker_visa: false)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:skilled_worker_visa)])
+    allow(wizard).to receive(:saved?).with(:skilled_worker_visa).and_return(true)
+
+    expect(rendered_component).to have_text("Skilled Worker visas")
+    expect(rendered_component).to have_text("No - cannot sponsor")
   end
 end
