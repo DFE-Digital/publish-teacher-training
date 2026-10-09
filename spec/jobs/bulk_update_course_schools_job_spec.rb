@@ -11,6 +11,24 @@ describe BulkUpdateCourseSchoolsJob do
     Publish::Schools::BulkUpdate::Apply::Result.new(updated_ids: updated, failed_ids: failed)
   end
 
+  it_behaves_like "a Solid Queue job", queue: "default"
+
+  it "can finish a native Sidekiq payload queued before the adapter migration" do
+    stub_apply(result(updated: [course.id]))
+    payload = {
+      "class" => described_class.name,
+      "jid" => "legacy-sidekiq-jid",
+      "args" => [[course.id], %w[added], %w[removed]],
+    }
+
+    worker = payload.fetch("class").constantize.new
+    worker.jid = payload.fetch("jid")
+    worker.perform(*payload.fetch("args"))
+
+    expect(worker.jid).to eq("legacy-sidekiq-jid")
+    expect(Publish::Schools::BulkUpdate::Apply).to have_received(:call)
+  end
+
   def stub_apply(returning)
     allow(Publish::Schools::BulkUpdate::Apply).to receive(:call).and_return(returning)
   end
@@ -39,32 +57,31 @@ describe BulkUpdateCourseSchoolsJob do
 
   it "asks for nothing more when every course was updated" do
     stub_apply(result(updated: [course.id]))
-    allow(described_class).to receive(:perform_in)
 
     described_class.new.perform([course.id], [], [])
 
-    expect(described_class).not_to have_received(:perform_in)
+    expect(described_class).not_to have_been_enqueued
   end
 
   describe "when some courses could not be updated" do
     before { stub_apply(result(updated: [course.id], failed: [other_course.id])) }
 
     it "comes back for the ones that failed, and only those" do
-      allow(described_class).to receive(:perform_in)
+      freeze_time do
+        described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1)
 
-      described_class.new.perform([course.id, other_course.id], %w[a], %w[b], 1)
-
-      expect(described_class).to have_received(:perform_in)
-        .with(kind_of(ActiveSupport::Duration), [other_course.id], %w[a], %w[b], 2)
+        expect(described_class).to have_been_enqueued
+          .with([other_course.id], %w[a], %w[b], 2)
+          .at(described_class::RETRY_AFTER.from_now)
+      end
     end
 
     it "gives up once it has tried enough times" do
-      allow(described_class).to receive(:perform_in)
       allow(Sentry).to receive(:capture_message)
 
       described_class.new.perform([other_course.id], [], [], described_class::MAX_ATTEMPTS)
 
-      expect(described_class).not_to have_received(:perform_in)
+      expect(described_class).not_to have_been_enqueued
       expect(Sentry).to have_received(:capture_message)
     end
 

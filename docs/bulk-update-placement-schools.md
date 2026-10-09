@@ -87,7 +87,7 @@ sequenceDiagram
     A->>T: stamp the provider once
     A-->>J: Result(updated_ids, failed_ids)
     alt failures, attempts left
-        J->>J: perform_in(5 min, failed_ids only, attempt + 1)
+        J->>J: set(wait: 5 min).perform_later(failed_ids only, attempt + 1)
     else failures, none left
         J->>J: Sentry once, naming every course outstanding
     end
@@ -107,8 +107,8 @@ of them would be hundreds of emails saying the same thing.
 
 A course that fails does not hold up the rest and is not dropped: the job comes
 back for those alone. Anything escaping `Apply` entirely still bubbles, and
-Sidekiq retries as it would any job. Per-course failure is ours; whole-job
-failure is Sidekiq's.
+Active Job reschedules the Solid Queue job. Per-course failure is ours;
+whole-job failure uses the shared job retry policy.
 
 ## The pieces
 

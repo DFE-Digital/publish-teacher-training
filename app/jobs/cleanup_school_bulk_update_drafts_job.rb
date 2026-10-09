@@ -3,6 +3,10 @@
 # A bulk update draft that was never applied is not worth keeping once the
 # state key in the provider's URL has stopped resolving it.
 class CleanupSchoolBulkUpdateDraftsJob < ApplicationJob
+  self.queue_adapter = :solid_queue
+  queue_as :low_priority
+  retry_on_failure
+
   def perform
     Course::SchoolBulkUpdateDraft.expired.delete_all
   end

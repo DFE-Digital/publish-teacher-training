@@ -23,7 +23,7 @@ bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
-    queue: save_statistic
+    queue: low_priority
 
 basic_auth:
   username: admin
@@ -31,5 +31,3 @@ basic_auth:
 
 one_login:
   enabled: false
-
-STATE_CHANGE_SLACK_URL: https://example.com/webhook

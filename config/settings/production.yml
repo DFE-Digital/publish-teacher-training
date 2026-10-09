@@ -20,8 +20,6 @@ api_hosts:
 
 base_url: https://www.publish-teacher-training-courses.service.gov.uk
 
-STATE_CHANGE_SLACK_URL:
-
 dfe_signin:
   issuer: https://oidc.signin.education.gov.uk
   secret: please_change_me # Override with SETTINGS__DFE_SIGNIN__SECRET
@@ -43,7 +41,7 @@ bg_jobs:
   save_statistic:
     cron: "0 0 * * *" # daily at midnight
     class: "SaveStatisticJob"
-    queue: save_statistic
+    queue: low_priority
   send_entity_table_checks_to_bigquery:
     cron: "30 0 * * *" # daily at 00:30
     class: "DfE::Analytics::EntityTableCheckJob"
@@ -51,15 +49,15 @@ bg_jobs:
   import_gias_schools:
     cron: "30 2 * * *" # daily at 02:30
     class: "GiasImportJob"
-    queue: default
+    queue: low_priority
   cleanup_recent_searches:
     cron: "0 3 * * *" # daily at 03:00
     class: "CleanupRecentSearchesJob"
-    queue: default
+    queue: low_priority
   cleanup_school_bulk_update_drafts:
     cron: "0 3 * * *" # daily at 03:00
     class: "CleanupSchoolBulkUpdateDraftsJob"
-    queue: default
+    queue: low_priority
   send_weekly_email_alerts:
     cron: "0 3 * * 5" # weekly on Friday at 03:00
     class: "SendWeeklyEmailAlertsJob"

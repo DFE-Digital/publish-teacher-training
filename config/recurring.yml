@@ -25,7 +25,7 @@ production:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
   send_entity_table_checks_to_bigquery:
     class: DfE::Analytics::EntityTableCheckJob
@@ -33,15 +33,15 @@ production:
     schedule: "30 0 * * * Europe/London"
   import_gias_schools:
     class: GiasImportJob
-    queue: default
+    queue: low_priority
     schedule: "30 2 * * * Europe/London"
   cleanup_recent_searches:
     class: CleanupRecentSearchesJob
-    queue: default
+    queue: low_priority
     schedule: "0 3 * * * Europe/London"
   cleanup_school_bulk_update_drafts:
     class: CleanupSchoolBulkUpdateDraftsJob
-    queue: default
+    queue: low_priority
     schedule: "0 3 * * * Europe/London"
   send_weekly_email_alerts:
     class: SendWeeklyEmailAlertsJob
@@ -52,22 +52,22 @@ qa:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
   cleanup_recent_searches:
     class: CleanupRecentSearchesJob
-    queue: default
+    queue: low_priority
     schedule: "0 3 * * * Europe/London"
   cleanup_school_bulk_update_drafts:
     class: CleanupSchoolBulkUpdateDraftsJob
-    queue: default
+    queue: low_priority
     schedule: "0 3 * * * Europe/London"
 
 staging:
   <<: *cleanup
   save_statistic:
     class: SaveStatisticJob
-    queue: save_statistic
+    queue: low_priority
     schedule: "0 0 * * * Europe/London"
 
 # No Sidekiq Cron schedules today — keep empty so a future SKIP_RECURRING=false
