@@ -299,10 +299,6 @@ en:
       further_education_title: "Further education"
       etp_title: "Engineers teach physics"
     summary_card_component:
-      location_key:
-        fee: Nearest placement school
-        salary: Nearest employing school
-        apprenticeship: Nearest employing schools
       location_value:
         not_listed: Not listed yet
         no_employing_schools: No employing schools listed
@@ -312,7 +308,8 @@ en:
         potential_schools:
           one: "1 potential %{school_term} school"
           other: "%{count} potential %{school_term} schools"
-        distance: "%{distance} from %{location}"
+        nearest_school_html: Nearest %{school_term} school %{distance}
+        from_location: from %{location}
         placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
@@ -321,57 +318,31 @@ en:
         fee:
           uk_fees_html: "%{value} <b>fee</b> for UK citizens"
           international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
-      length_key: Course length
+      funding:
+        salary: Salary
+        apprenticeship: Apprenticeship (salary)
+        bursaries_available: "- Bursaries available"
+        fee:
+          uk: "%{value} fee for UK citizens"
+          international: "%{value} fee for non-UK citizens"
       length_value:
         OneYear: 1 year
         TwoYears: Up to 2 years
         ThreeYears: 3 years
         FourYears: 4 years
-      age_group_key: Age group
-      experience_key: School experience
-      experience_value: Required or strongly recommended
-      qualification_key: Qualification awarded
+      age_range: Ages %{range}
+      school_experience: School experience is required or strongly recommended
       qualification_value:
-        qts_html: <abbr title='Qualified teacher status'>QTS</abbr> only
+        qts_html: <abbr title='Qualified teacher status'>QTS</abbr>
         pgce_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>
         pgde_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate diploma in education'>PGDE</abbr>
         pgce_html: <abbr title='Postgraduate certificate in education'>PGCE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         pgde_html: <abbr title='Postgraduate diploma in education'>PGDE</abbr> without <abbr title='Qualified teacher status'>QTS</abbr>
         undergraduate_degree_with_qts_html: Teacher degree apprenticeship with <abbr title='Qualified teacher status'>QTS</abbr>
-      degree_requirements_key: Degree required
-      degree_requirements_value:
-        postgraduate:
-          two_one: "2:1 bachelor’s degree"
-          two_two: "2:2 bachelor’s degree"
-          third_class: "Bachelor’s degree"
-          not_required: "Bachelor’s degree"
-        undergraduate:
-          not_required: No degree required
-      degree_requirements_hint:
-        two_one: &two_one_html
-          html: "<br><span class='govuk-hint govuk-!-font-size-16'>or above or equivalent qualification</span>"
-        two_two:
-          <<: *two_one_html
-        third_class:
-          html: <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
-            </span>
-            <br>
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            This should be an honours degree (Third or above), or equivalent
-            </span>
-        not_required:
-          html: <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
-            </span>
-      visa_sponsorship_key: Visa sponsorship
-      visa_sponsorship_value:
-        no_sponsorship: Visas cannot be sponsored
-        can_sponsor_student_visa: Student visas can be sponsored
-        can_sponsor_skilled_worker_visa: Skilled Worker visas can be sponsored
+      study_mode:
+        full_time: full time
+        part_time: part time
+        full_time_or_part_time: full time or part time
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"

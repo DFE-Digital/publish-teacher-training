@@ -15,6 +15,15 @@ module Courses
     end
 
     def title
+      status_tag = application_status_tag
+
+      safe_join([
+        content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
+        (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?),
+      ].compact)
+    end
+
+    def course_link
       url = find_course_path(
         provider_code: course.provider_code,
         course_code: course.course_code,
@@ -22,29 +31,7 @@ module Courses
         distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
       )
 
-      course_link = govuk_link_to(url, class: "govuk-link govuk-!-font-size-24") do
-        safe_join([
-          content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
-          content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
-        ])
-      end
-
-      status_tag = application_status_tag
-      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
-
-      title_content = safe_join([course_link, status_block].compact)
-
-      classes = [
-        ("govuk-grid-column-one-half" if save_toggle_button),
-        ("govuk-!-padding-left-2" unless save_toggle_button),
-      ].compact.join(" ")
-
-      content_tag(:div, class: "govuk-grid-row") do
-        safe_join([
-          content_tag(:div, title_content, class: classes),
-          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0"),
-        ])
-      end
+      govuk_link_to(course.name_and_code, url, class: "app-search-result__course-name")
     end
 
     def save_toggle_button
@@ -71,20 +58,19 @@ module Courses
       course.without_employing_school?
     end
 
-    def location_value
-      return unless search_by_location?
-
+    def nearest_school_distance
       t(
-        ".location_value.distance",
+        ".location_value.nearest_school_html",
         school_term:,
-        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
-        location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),
-      ).html_safe
+        distance: content_tag(:strong, pluralize(course.minimum_distance_to_search_location.ceil, "mile")),
+      )
+    end
+
+    def nearest_school_from
+      t(".location_value.from_location", location: sanitize(@short_address.presence || @location))
     end
 
     def location_hint
-      return if search_by_location?
-
       t(".location_value.placement_hint_html", school_term:)
     end
 
@@ -100,64 +86,31 @@ module Courses
       end
     end
 
-    def length_key
-      t(".length_key")
+    def funding_text
+      return t(".funding.#{course.funding}") if course.salary? || course.apprenticeship?
+
+      uk_fee_line = safe_join([
+        (t(".funding.fee.uk", value: number_to_currency(enrichment.fee_uk_eu.to_f)) if enrichment.fee_uk_eu.present?),
+        bursary_hint,
+      ].compact, " ")
+      international_fee_line = t(".funding.fee.international", value: number_to_currency(enrichment.fee_international.to_f)) if enrichment.fee_international.present?
+
+      safe_join([uk_fee_line, international_fee_line].compact_blank, tag.br)
     end
 
-    def length_value(course_length = enrichment.course_length)
-      translated_course_length = t(".length_value.#{course_length}", default: course_length)
-
-      [translated_course_length, course.study_mode.humanize.downcase].join(" - ")
-    end
-
-    def show_age_group_row?
+    def show_age_range?
       course.age_range_in_years.present?
     end
 
-    def age_group_key
-      t(".age_group_key")
+    def age_range_text
+      t(".age_range", range: course.age_range_in_years.humanize)
     end
 
-    def age_group_value
-      "#{course.level.humanize} - #{course.age_range_in_years.humanize}"
-    end
-
-    def qualification_key
-      t(".qualification_key")
-    end
-
-    def experience_key
-      t(".experience_key")
-    end
-
-    def experience_value
-      t(".experience_value")
-    end
-
-    def qualification_value
-      t(".qualification_value.#{course.qualification}_html")
-    end
-
-    def degree_requirements_key
-      t(".degree_requirements_key")
-    end
-
-    def degree_requirements_value
-      t(".degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
-    end
-
-    def degree_requirements_hint
-      return if course.undergraduate_degree_type?
-
-      t(".degree_requirements_hint.#{course.degree_grade}.html")
-    end
-
-    def visa_sponsorship_key
-      t(".visa_sponsorship_key")
-    end
-
-    def visa_sponsorship_value
-      t(".visa_sponsorship_value.#{course.visa_sponsorship}")
+    def qualification_and_study_mode
+      safe_join([
+        t(".qualification_value.#{course.qualification}_html"),
+        t(".study_mode.#{course.study_mode}"),
+      ], ", ")
     end
 
     def search_by_location?
@@ -180,6 +133,10 @@ module Courses
 
     def incentive_hint
       incentive_view.hint_text
+    end
+
+    def bursary_hint
+      tag.span(t(".funding.bursaries_available"), class: "govuk-hint govuk-!-font-size-16") if incentive_view.has_bursary?
     end
 
     def incentive_view

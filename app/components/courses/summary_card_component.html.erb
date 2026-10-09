@@ -1,68 +1,29 @@
 <li class="app-search-results__item">
-  <%= govuk_summary_card(classes: %w[course-summary-card], title:) do |card| %>
-    <%= card.with_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: t(".location_key.#{course.funding}")) %>
-        <% row.with_value do %>
-          <% if no_employing_schools? %>
-            <%= t(".location_value.no_employing_schools") %>
-          <% else %>
-            <%= location_value %>
+  <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><%= course_link %></p>
+    <% if show_age_range? %>
+      <p class="govuk-hint govuk-!-font-size-16"><%= age_range_text %></p>
+    <% end %>
 
-            <% if location_hint.present? %>
-              <div class="govuk-hint govuk-!-font-size-16"><%= location_hint %></div>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
+    <% if no_employing_schools? %>
+      <p class="govuk-body"><%= t(".location_value.no_employing_schools") %></p>
+    <% elsif search_by_location? %>
+      <p class="govuk-body govuk-!-margin-bottom-0"><%= nearest_school_distance %></p>
+      <p class="govuk-hint govuk-!-font-size-16"><%= nearest_school_from %></p>
+    <% else %>
+      <p class="govuk-hint govuk-!-font-size-16"><%= location_hint %></p>
+    <% end %>
 
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: fee_key) %>
-        <% row.with_value do %>
-          <%= fee_value %>
-          <div class="govuk-hint govuk-!-font-size-16"><%= incentive_hint %></div>
-        <% end %>
-      <% end %>
+    <p class="govuk-body"><%= funding_text %></p>
 
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: length_key) %>
-        <% row.with_value(text: length_value) %>
-      <% end %>
+    <p class="govuk-body"><%= qualification_and_study_mode %></p>
 
-      <% if show_age_group_row? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: age_group_key) %>
-          <% row.with_value(text: age_group_value) %>
-        <% end %>
-      <% end %>
+    <%= save_toggle_button %>
 
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: qualification_key) %>
-        <% row.with_value(text: qualification_value) %>
-      <% end %>
-
-      <% if course.show_school_experience? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: experience_key) %>
-          <% row.with_value(text: experience_value) %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: degree_requirements_key) %>
-        <% row.with_value do %>
-          <%= degree_requirements_value %>
-
-          <% if degree_requirements_hint.present? %>
-            <%= degree_requirements_hint %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: visa_sponsorship_key) %>
-        <% row.with_value(text: visa_sponsorship_value) %>
-      <% end %>
+    <% if course.show_school_experience? %>
+      <div class="app-search-result__school-experience">
+        <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".school_experience") %></p>
+      </div>
     <% end %>
   <% end %>
 </li>

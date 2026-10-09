@@ -366,7 +366,7 @@ module ResultsHelper
 
   def then_i_see_mathematics_courses_in_48_miles_from_penzance_that_sponsors_visa
     expect(results).to have_content(@penzance_mathematics_course.name_and_code)
-    expect(results).to have_content("48 miles from Cornwall")
+    expect(results).to have_content("Nearest placement school 48 miles from Cornwall", normalize_ws: true)
 
     expect(results).to have_no_content(@penzance_primary_course.name_and_code)
   end

@@ -45,6 +45,25 @@
   text-decoration: underline;
 }
 
+// The save toggle sits at the bottom of the card, left aligned, as a regular weight link
+.app-search-results .app-search-results__item {
+  .save-course-html {
+    text-align: start;
+  }
+
+  .save-course-button__text {
+    font-weight: 400;
+  }
+}
+
+.app-search-result__school-experience {
+  @include govuk-responsive-margin(3, "top");
+  padding: govuk-spacing(3);
+
+  background-color: #f4f8fb;
+  border-radius: 4px;
+}
+
 .app-search__controls {
   padding: govuk-spacing(3);
   margin-bottom: govuk-spacing(5);
