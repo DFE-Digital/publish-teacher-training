@@ -30,7 +30,7 @@ class CourseSearchService
     scope = scope.with_subjects(subject_codes) if subject_codes.any?
     scope = scope.with_provider_name(provider_name) if provider_name.present?
     scope = scope.with_send if send_courses_filter?
-    scope = scope.within(filter[:radius], origin:) if locations_filter?
+    scope = scope.joins(:gias_schools).merge(GiasSchool.within(filter[:radius], origin:)) if locations_filter?
     scope = scope.with_funding_types(funding_types) if funding_types.any?
     scope = scope.with_degree_grades(degree_grades_accepted) if degrees_accepted?
     scope = scope.with_degree_grades(degree_grades) if degree_grades.any?
@@ -127,55 +127,21 @@ private
     EOSQL
   end
 
-  def locatable_sites
-    site_statuses = SiteStatus.arel_table
-    sites = Site.arel_table
+  def locatable_gias_schools
+    course_schools = Course::School.arel_table
+    gias_schools = GiasSchool.arel_table
 
-    # Create virtual table with sites and site statuses
-    site_statuses.join(sites).on(site_statuses[:site_id].eq(sites[:id]))
-                 .where(site_statuses_criteria(site_statuses))
-                 .where(has_been_geocoded_criteria(sites))
-                 .where(locatable_address_criteria(sites))
-  end
-
-  def site_statuses_criteria(site_statuses)
-    # Only running and published site statuses
-    running_and_published_criteria = site_statuses[:status].eq(SiteStatus.statuses[:running]).and(site_statuses[:publish].eq(SiteStatus.publishes[:published]))
-
-    if has_vacancies?
-      # Only site statuses with vacancies
-      running_and_published_criteria
-        .and(site_statuses[:vac_status])
-        .eq_any([
-          SiteStatus.vac_statuses[:full_time_vacancies],
-          SiteStatus.vac_statuses[:part_time_vacancies],
-          SiteStatus.vac_statuses[:both_full_time_and_part_time_vacancies],
-        ])
-    else
-      running_and_published_criteria
-    end
-  end
-
-  def has_been_geocoded_criteria(sites)
-    # we only want sites that have been geocoded
-    sites[:latitude].not_eq(nil).and(sites[:longitude].not_eq(nil))
-  end
-
-  def locatable_address_criteria(sites)
-    # only sites that have a locatable address
-    # there are some sites with no address1 or postcode that cannot be
-    # accurately geocoded. We don't want to return these as the closest site.
-    # This should be removed once the data is fixed
-    sites[:address1].not_eq("").or(sites[:postcode].not_eq(""))
+    course_schools.join(gias_schools).on(course_schools[:gias_school_id].eq(gias_schools[:id]))
+                  .where(gias_schools[:latitude].not_eq(nil).and(gias_schools[:longitude].not_eq(nil)))
   end
 
   def course_id_with_lowest_locatable_distance
-    # select course_id and nearest site with shortest distance from origin
-    # as courses may have multiple sites
+    # select course_id and nearest school with shortest distance from origin
+    # as courses may have multiple schools
     # this will remove duplicates by aggregating on course_id
     origin_lat_long = Struct.new(:latitude, :longitude).new(origin[0].to_f, origin[1].to_f)
-    lowest_locatable_distance = Arel.sql("MIN#{Site.sanitize_sql(Site.distance_sql(origin_lat_long))} as distance")
-    locatable_sites.project(:course_id, lowest_locatable_distance).group(:course_id)
+    lowest_locatable_distance = Arel.sql("MIN#{GiasSchool.sanitize_sql(GiasSchool.distance_sql(origin_lat_long))} as distance")
+    locatable_gias_schools.project(:course_id, lowest_locatable_distance).group(:course_id)
   end
 
   def distance_table
@@ -245,10 +211,6 @@ private
     filter[:qualification] |= %w[pgde_with_qts] if filter[:qualification].is_a?(Array) && filter[:qualification].include?("pgce_with_qts")
 
     filter[:qualification]
-  end
-
-  def has_vacancies?
-    filter[:has_vacancies].to_s.downcase == "true"
   end
 
   def applications_open?
