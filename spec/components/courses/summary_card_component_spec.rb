@@ -449,21 +449,47 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples "course qualification row" do |course_qualification, expected_output|
-    let(:course) { create(:course, qualification: course_qualification) }
+  describe "when displaying qualification and study type" do
+    {
+      qts: "QTS",
+      pgce_with_qts: "QTS with PGCE",
+      pgde_with_qts: "QTS with PGDE",
+      pgce: "PGCE without QTS",
+      pgde: "PGDE without QTS",
+      undergraduate_degree_with_qts: "Teacher degree apprenticeship with QTS",
+    }.each do |qualification, expected_qualification|
+      context "when the qualification is #{qualification}" do
+        let(:course) { create(:course, qualification:, study_mode: :full_time) }
 
-    it "returns the correct qualification row for #{course_qualification}" do
-      expect(summary_card_content).to include("Qualification awarded#{expected_output}")
+        it "shows the qualification followed by the study type" do
+          expect(summary_card_content).to include("#{expected_qualification}, full time")
+        end
+      end
     end
-  end
 
-  describe "when displaying qualification" do
-    it_behaves_like "course qualification row", :qts, "QTS only"
-    it_behaves_like "course qualification row", :pgce_with_qts, "QTS with PGCE"
-    it_behaves_like "course qualification row", :pgde_with_qts, "QTS with PGDE"
-    it_behaves_like "course qualification row", :pgce, "PGCE without QTS"
-    it_behaves_like "course qualification row", :pgde, "PGDE without QTS"
-    it_behaves_like "course qualification row", :undergraduate_degree_with_qts, "Teacher degree apprenticeship with QTS"
+    {
+      full_time: "full time",
+      part_time: "part time",
+      full_time_or_part_time: "full time or part time",
+    }.each do |study_mode, expected_study_mode|
+      context "when the study mode is #{study_mode}" do
+        let(:course) { create(:course, qualification: :pgce_with_qts, study_mode:) }
+
+        it "shows #{expected_study_mode}" do
+          expect(summary_card_content).to include("QTS with PGCE, #{expected_study_mode}")
+        end
+      end
+    end
+
+    context "when the qualification is QTS" do
+      let(:course) { create(:course, qualification: :qts) }
+
+      it "keeps the abbreviation but drops 'only'" do
+        expect(summary_card).to have_css("abbr[title='Qualified teacher status']", text: "QTS")
+        expect(summary_card_content).not_to include("QTS only")
+        expect(summary_card_content).not_to include("Qualification awarded")
+      end
+    end
   end
 
   describe "when displaying school experience" do
