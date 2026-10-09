@@ -23,22 +23,26 @@ class CourseWizard
       graph.add_node :secondary_subjects, Steps::SecondarySubjects
 
       # Secondary Subject specialist flows
-      graph.add_node :design_technology_specialisms, Steps::DesignTechnologySpecialisms
-      graph.add_node :physics_specialisms, Steps::PhysicsSpecialisms
-      graph.add_node :modern_languages_specialisms, Steps::ModernLanguagesSpecialisms
+      graph.add_node :design_technology_specialisms, Steps::DesignTechnologySpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
+      graph.add_node :physics_specialisms, Steps::PhysicsSpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
+      graph.add_node :modern_languages_specialisms, Steps::ModernLanguagesSpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
 
       graph.add_node :age_range, Steps::AgeRange
       graph.add_node :qualifications, Steps::Qualifications
-      graph.add_node :funding_type, Steps::FundingType
-      graph.add_node :study_pattern, Steps::StudyPattern
+      graph.add_node :funding_type, Steps::FundingType, depends_on: %i[qualification]
+      graph.add_node :study_pattern, Steps::StudyPattern, depends_on: %i[qualification]
       graph.add_node :schools, Steps::Schools
       graph.add_node :study_sites, Steps::StudySites, skip_when: -> { skip_study_sites? }
       graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
-      graph.add_sub_wizard :visa, VisaSubWizard, exit_to: :start_date
+      graph.add_sub_wizard :visa, VisaSubWizard, exit_to: :start_date, depends_on: %i[qualification funding_type]
 
       graph.add_node :check_answers, Steps::CheckAnswers
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
+      graph.check_answers :check_answers
 
       graph.add_multiple_conditional_edges(
         from: :level,
@@ -125,9 +129,6 @@ class CourseWizard
 
       graph.add_edge from: :start_date, to: :check_answers
       graph.add_edge from: :check_answers, to: :courses_index
-
-      graph.before_next_step(:handle_return_to_review)
-      graph.before_previous_step(:handle_back_to_review)
     end
   end
 
@@ -226,24 +227,6 @@ class CourseWizard
 
     state_store.write(**reset_attributes)
     nil
-  end
-
-  def handle_return_to_review
-    return if return_to_review_param.blank?
-
-    handle_return_to_check_your_answers(:check_answers)
-  end
-
-  def handle_back_to_review
-    return if return_to_review_param.blank?
-
-    handle_back_in_check_your_answers(:check_answers, return_to_review_param)
-  end
-
-  def return_to_review_param
-    # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
-    # so we need raw request params for return_to_review callback routing.
-    @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
   end
 
 private
