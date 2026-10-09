@@ -29,7 +29,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     fee_branch_changeable_steps.each do |step|
       when_i_click_change_link_for(step)
-      then_i_am_on_step(step)
+      then_i_am_on_step(first_step_of_change(step, visa_step: :visa_sponsorship))
       when_i_visit_check_answers_page
       then_i_am_taken_to_the_check_answers_page
     end
@@ -43,7 +43,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     salary_branch_changeable_steps.each do |step|
       when_i_click_change_link_for(step)
-      then_i_am_on_step(step)
+      then_i_am_on_step(first_step_of_change(step, visa_step: :skilled_worker_visa))
       when_i_visit_check_answers_page
       then_i_am_taken_to_the_check_answers_page
     end
@@ -59,25 +59,16 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     choose "QTS"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:funding_type)
+    then_i_am_on_step(:funding_type)
     choose "Fee - no salary"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:study_pattern)
+    then_i_am_on_step(:study_pattern)
     check "Full time"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:schools)
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:study_sites)
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
+    then_i_am_on_step(:visa_sponsorship)
     choose "No"
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:start_date)
     and_i_click_continue
 
     then_i_am_taken_to_the_check_answers_page
@@ -458,6 +449,8 @@ private
     link.click
   end
 
+  # A change journey starts with a redirect to the step, without
+  # return_to_review in the URL.
   def then_i_am_on_step(step)
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_wizard_path(
@@ -465,22 +458,16 @@ private
         recruitment_cycle_year: provider.recruitment_cycle_year,
         step:,
         state_key: wizard_state_key,
-        return_to_review: step,
       ),
       ignore_query: false,
     )
   end
 
-  def then_i_am_on_step_without_return_to_review(step)
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_wizard_path(
-        provider_code: provider.provider_code,
-        recruitment_cycle_year: provider.recruitment_cycle_year,
-        step:,
-        state_key: wizard_state_key,
-      ),
-      ignore_query: true,
-    )
+  # The deadline rows belong to the visa sub-wizard, so their change
+  # journey starts at the sub-wizard's first step on the path.
+  def first_step_of_change(step, visa_step:)
+    deadline_steps = %i[visa_sponsorship_application_deadline_required visa_sponsorship_application_deadline_at]
+    deadline_steps.include?(step) ? visa_step : step
   end
 
   def and_i_complete_step_for_return(step)
