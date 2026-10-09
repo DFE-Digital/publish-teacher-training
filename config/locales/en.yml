@@ -327,7 +327,7 @@ en:
         TwoYears: Up to 2 years
         ThreeYears: 3 years
         FourYears: 4 years
-      age_group_key: Age group
+      age_range: Ages %{range}
       experience_key: School experience
       experience_value: Required or strongly recommended
       qualification_key: Qualification awarded
