@@ -507,15 +507,23 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     context "when the course is in the 2027 cycle or later and school experience is required" do
       let(:school_experience_required) { true }
 
-      it "displays the school experience row" do
-        expect(summary_card_content).to include("School experienceRequired or strongly recommended")
+      it "displays the school experience box at the end of the card" do
+        expect(summary_card).to have_css(
+          ".govuk-summary-card__content > .app-search-result__school-experience:last-child",
+          text: "School experience is required or strongly recommended",
+        )
+      end
+
+      it "no longer displays the school experience row" do
+        expect(summary_card_content).not_to include("School experienceRequired or strongly recommended")
       end
     end
 
     context "when school experience is not required" do
       let(:school_experience_required) { false }
 
-      it "does not display the school experience row" do
+      it "does not display the school experience box" do
+        expect(summary_card).not_to have_css(".app-search-result__school-experience")
         expect(summary_card_content).not_to include("School experience")
       end
     end
@@ -524,7 +532,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       let(:cycle_year) { 2026 }
       let(:school_experience_required) { true }
 
-      it "does not display the school experience row" do
+      it "does not display the school experience box" do
+        expect(summary_card).not_to have_css(".app-search-result__school-experience")
         expect(summary_card_content).not_to include("School experience")
       end
     end
