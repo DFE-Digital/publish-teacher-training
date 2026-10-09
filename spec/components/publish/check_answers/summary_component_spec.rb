@@ -217,4 +217,21 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
     expect(row.css(".govuk-summary-list__value").text.strip).to eq("Not entered")
   end
+
+  # A required question on the path can be blank when the user skips ahead to
+  # check answers. Its row says so rather than disappearing.
+  {
+    age_range: "Age range",
+    qualifications: "Qualification",
+    visa_sponsorship: "Student visas",
+    visa_sponsorship_application_deadline_at: "Visa sponsorship deadline",
+    start_date: "Course start date",
+  }.each do |step_id, label|
+    it "renders Not entered for an unanswered #{step_id} step on the path" do
+      allow(wizard).to receive(:flow_steps).and_return([wizard.step(step_id)])
+
+      row = rendered_component.css(".govuk-summary-list__row").find { |node| node.css(".govuk-summary-list__key").text.strip == label }
+      expect(row&.css(".govuk-summary-list__value")&.text&.strip).to eq("Not entered")
+    end
+  end
 end
