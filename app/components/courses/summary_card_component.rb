@@ -58,20 +58,19 @@ module Courses
       course.without_employing_school?
     end
 
-    def location_value
-      return unless search_by_location?
-
+    def nearest_school_distance
       t(
-        ".location_value.distance",
+        ".location_value.nearest_school_html",
         school_term:,
-        distance: content_tag(:span, pluralize(course.minimum_distance_to_search_location.ceil, "mile"), class: "govuk-!-font-weight-bold"),
-        location: content_tag(:span, sanitize(@short_address.presence || @location), class: "govuk-!-font-weight-bold"),
-      ).html_safe
+        distance: content_tag(:strong, pluralize(course.minimum_distance_to_search_location.ceil, "mile")),
+      )
+    end
+
+    def nearest_school_from
+      t(".location_value.from_location", location: sanitize(@short_address.presence || @location))
     end
 
     def location_hint
-      return if search_by_location?
-
       t(".location_value.placement_hint_html", school_term:)
     end
 

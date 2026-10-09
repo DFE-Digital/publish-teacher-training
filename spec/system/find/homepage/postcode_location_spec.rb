@@ -146,7 +146,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
 
   def then_i_see_mathematics_courses_in_3_miles_from_postcode_that_sponsors_visa
     expect(results).to have_content(@postcode_mathematics_course.name_and_code)
-    expect(results).to have_content("3 miles from Beacon Road, Marazion")
+    expect(results).to have_content("Nearest placement school 3 miles from Beacon Road, Marazion", normalize_ws: true)
 
     expect(results).to have_no_content(@penzance_primary_course.name_and_code)
   end

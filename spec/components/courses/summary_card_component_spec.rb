@@ -78,16 +78,18 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       )
     end
 
-    context "when funding is 'fee'" do
-      it_behaves_like "school location row", :fee, "Nearest placement school"
-    end
+    context "when not searching by location" do
+      it_behaves_like "school location row", :fee, "Search by city, town or postcode to find the nearest potential placement school"
 
-    context "when funding is 'salary'" do
-      it_behaves_like "school location row", :salary, "Nearest employing school"
-    end
+      context "when funding is 'fee'" do
+        let(:funding) { :fee }
 
-    context "when funding is 'apprenticeship'" do
-      it_behaves_like "school location row", :apprenticeship, "Nearest employing school"
+        it "renders the hint without a nearest school heading or distance" do
+          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16", text: "Search by city, town or postcode")
+          expect(summary_card_content).not_to include("Nearest placement school")
+          expect(summary_card).not_to have_css(".govuk-summary-list__key", text: "Nearest placement school")
+        end
+      end
     end
   end
 
@@ -103,8 +105,8 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         expect(summary_card_content).to include("No employing schools listed")
       end
 
-      it "keeps the 'Nearest employing school' key" do
-        expect(summary_card).to have_css(".govuk-summary-list__key", text: "Nearest employing school")
+      it "does not render a nearest school distance" do
+        expect(summary_card_content).not_to include("Nearest employing school")
       end
 
       it "does not show the misleading search-by-location hint" do
@@ -206,9 +208,44 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         course.define_singleton_method(:minimum_distance_to_search_location) { 0.2 }
       end
 
-      it_behaves_like "school location row", :fee, "1 mile from London"
-      it_behaves_like "school location row", :salary, "1 mile from London"
-      it_behaves_like "school location row", :apprenticeship, "1 mile from London"
+      it_behaves_like "school location row", :fee, "Nearest placement school 1 mile from London"
+      it_behaves_like "school location row", :salary, "Nearest employing school 1 mile from London"
+      it_behaves_like "school location row", :apprenticeship, "Nearest employing school 1 mile from London"
+
+      context "when funding is 'fee'" do
+        let(:funding) { :fee }
+
+        it "renders the distance in bold and the search location as a hint underneath" do
+          expect(summary_card).to have_css("p", text: "Nearest placement school 1 mile")
+          expect(summary_card).to have_css("strong", text: "1 mile")
+          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16", text: "from London")
+        end
+
+        it "does not render the search by location hint" do
+          expect(summary_card_content).not_to include("Search by city, town or postcode")
+        end
+      end
+
+      context "when the nearest school is further than a mile" do
+        let(:funding) { :fee }
+
+        before { course.define_singleton_method(:minimum_distance_to_search_location) { 4.3 } }
+
+        it "rounds up and pluralises the distance" do
+          expect(summary_card).to have_css("strong", text: "5 miles")
+        end
+      end
+
+      context "when the search has a short address" do
+        let(:funding) { :fee }
+        let(:summary_card) do
+          render_inline(described_class.new(course:, location: "London, UK", short_address: "London"))
+        end
+
+        it "uses the short address" do
+          expect(summary_card).to have_css(".govuk-hint", text: /\Afrom London\z/)
+        end
+      end
 
       context "sanitize dangerous user input" do
         let(:funding) { :fee }
