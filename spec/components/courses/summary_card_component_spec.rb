@@ -32,16 +32,17 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       )
     end
 
-    it "renders the correct link with provider and course name" do
-      expect(summary_card).to have_link("University", href: find_course_path(provider_code: "B1T", course_code: "37CP"))
+    it "renders the provider name in the title without a link" do
+      expect(summary_card).to have_css(".govuk-summary-card__title .app-search-result__provider-name", text: "University")
+      expect(summary_card).not_to have_css(".govuk-summary-card__title a")
     end
 
-    it "renders the provider name with the correct class" do
-      expect(summary_card).to have_css(".app-search-result__provider-name", text: "University")
-    end
-
-    it "renders the course name and code with the correct class" do
-      expect(summary_card).to have_css(".app-search-result__course-name", text: "Mathematics (37CP)")
+    it "renders the course name and code as a link at the top of the content" do
+      expect(summary_card).to have_css(
+        ".govuk-summary-card__content a.app-search-result__course-name",
+        text: "Mathematics (37CP)",
+      )
+      expect(summary_card).to have_link("Mathematics (37CP)", href: find_course_path(provider_code: "B1T", course_code: "37CP"))
     end
 
     context "when the course is closed" do

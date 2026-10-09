@@ -15,6 +15,15 @@ module Courses
     end
 
     def title
+      status_tag = application_status_tag
+
+      safe_join([
+        content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
+        (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?),
+      ].compact)
+    end
+
+    def course_link
       url = find_course_path(
         provider_code: course.provider_code,
         course_code: course.course_code,
@@ -22,29 +31,7 @@ module Courses
         distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
       )
 
-      course_link = govuk_link_to(url, class: "govuk-link govuk-!-font-size-24") do
-        safe_join([
-          content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
-          content_tag(:span, course.name_and_code, class: "app-search-result__course-name"),
-        ])
-      end
-
-      status_tag = application_status_tag
-      status_block = (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?)
-
-      title_content = safe_join([course_link, status_block].compact)
-
-      classes = [
-        ("govuk-grid-column-one-half" if save_toggle_button),
-        ("govuk-!-padding-left-2" unless save_toggle_button),
-      ].compact.join(" ")
-
-      content_tag(:div, class: "govuk-grid-row") do
-        safe_join([
-          content_tag(:div, title_content, class: classes),
-          content_tag(:div, save_toggle_button || "", class: "govuk-grid-column-one-half govuk-!-padding-top-2 govuk-!-padding-right-0"),
-        ])
-      end
+      govuk_link_to(course.name_and_code, url, class: "app-search-result__course-name")
     end
 
     def save_toggle_button
