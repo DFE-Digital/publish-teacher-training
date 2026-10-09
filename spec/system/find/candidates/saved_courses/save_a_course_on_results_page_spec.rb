@@ -17,6 +17,12 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
     and_screen_readers_are_told("Saved")
   end
 
+  scenario "The save link sits at the bottom of the course card" do
+    when_i_visit_a_course_without_signing_in
+
+    then_the_save_link_is_below_the_course_information
+  end
+
   scenario "A signed-in candidate is told to try again when saving fails" do
     given_saving_fails
     when_i_sign_in_as_a_candidate
@@ -115,6 +121,15 @@ RSpec.describe "Saving a course on the results page", :js, service: :find do
   def when_i_visit_a_course_without_signing_in
     visit "/"
     visit find_results_path
+  end
+
+  def then_the_save_link_is_below_the_course_information
+    within(".course-summary-card") do
+      expect(page).to have_no_css(".govuk-summary-card__title", text: "Sign in to save this course")
+
+      card_content = page.find(".govuk-summary-card__content").text
+      expect(card_content.index("QTS with PGCE, full time")).to be < card_content.index("Sign in to save this course")
+    end
   end
 
   def given_saving_fails

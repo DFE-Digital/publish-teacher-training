@@ -44,14 +44,6 @@ body:not(.js-enabled) {
   }
 }
 
-.results-save-course-button__unstyled-button {
-  float: right;
-
-  @include govuk-media-query($until: tablet) {
-    float: left;
-  }
-}
-
 .save-course-button {
   text-align: end;
 
