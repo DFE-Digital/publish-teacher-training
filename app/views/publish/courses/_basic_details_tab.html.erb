@@ -79,8 +79,13 @@
        if course.cannot_change_funding_type?
          row.with_action
        else
+         funding_type_path = if FeatureService.enabled?(:course_edit_wizard)
+                               new_edit_wizard_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, unit: :funding_type)
+                             else
+                               funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+                             end
          row.with_action(
-           href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+           href: course.draft_or_rolled_over? ? funding_type_path : nil,
            visually_hidden_text: "funding type",
          )
        end

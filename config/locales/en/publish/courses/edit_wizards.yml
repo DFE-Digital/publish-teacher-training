@@ -1,0 +1,9 @@
+en:
+  publish:
+    courses:
+      edit_wizards:
+        ended: This change has already been saved or has expired. Check the course details.
+        update:
+          committed: Funding type updated
+          stale: This course was changed by someone else. Your changes were not saved.
+          failed: Your changes were not saved
