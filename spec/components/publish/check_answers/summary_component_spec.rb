@@ -209,4 +209,12 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Skilled Worker visas")
     expect(rendered_component).to have_text("No - cannot sponsor")
   end
+
+  it "renders Not entered for a blank row that is always shown" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+
+    row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
+    expect(row.css(".govuk-summary-list__value").text.strip).to eq("Not entered")
+  end
 end
