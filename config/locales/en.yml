@@ -325,7 +325,6 @@ en:
         fee:
           uk: "%{value} fee for UK citizens"
           international: "%{value} fee for non-UK citizens"
-      length_key: Course length
       length_value:
         OneYear: 1 year
         TwoYears: Up to 2 years
@@ -344,40 +343,6 @@ en:
         full_time: full time
         part_time: part time
         full_time_or_part_time: full time or part time
-      degree_requirements_key: Degree required
-      degree_requirements_value:
-        postgraduate:
-          two_one: "2:1 bachelor’s degree"
-          two_two: "2:2 bachelor’s degree"
-          third_class: "Bachelor’s degree"
-          not_required: "Bachelor’s degree"
-        undergraduate:
-          not_required: No degree required
-      degree_requirements_hint:
-        two_one: &two_one_html
-          html: "<br><span class='govuk-hint govuk-!-font-size-16'>or above or equivalent qualification</span>"
-        two_two:
-          <<: *two_one_html
-        third_class:
-          html: <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
-            </span>
-            <br>
-            <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            This should be an honours degree (Third or above), or equivalent
-            </span>
-        not_required:
-          html: <br>
-            <span class="govuk-hint govuk-!-font-size-16">
-            or equivalent qualification
-            </span>
-      visa_sponsorship_key: Visa sponsorship
-      visa_sponsorship_value:
-        no_sponsorship: Visas cannot be sponsored
-        can_sponsor_student_visa: Student visas can be sponsored
-        can_sponsor_skilled_worker_visa: Skilled Worker visas can be sponsored
   visa_sponsorships:
     student: "Student"
     skilled_worker: "Skilled Worker"

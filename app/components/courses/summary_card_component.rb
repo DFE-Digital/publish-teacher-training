@@ -98,16 +98,6 @@ module Courses
       safe_join([uk_fee_line, international_fee_line].compact_blank, tag.br)
     end
 
-    def length_key
-      t(".length_key")
-    end
-
-    def length_value(course_length = enrichment.course_length)
-      translated_course_length = t(".length_value.#{course_length}", default: course_length)
-
-      [translated_course_length, course.study_mode.humanize.downcase].join(" - ")
-    end
-
     def show_age_range?
       course.age_range_in_years.present?
     end
@@ -121,28 +111,6 @@ module Courses
         t(".qualification_value.#{course.qualification}_html"),
         t(".study_mode.#{course.study_mode}"),
       ], ", ")
-    end
-
-    def degree_requirements_key
-      t(".degree_requirements_key")
-    end
-
-    def degree_requirements_value
-      t(".degree_requirements_value.#{course.degree_type}.#{course.degree_grade}")
-    end
-
-    def degree_requirements_hint
-      return if course.undergraduate_degree_type?
-
-      t(".degree_requirements_hint.#{course.degree_grade}.html")
-    end
-
-    def visa_sponsorship_key
-      t(".visa_sponsorship_key")
-    end
-
-    def visa_sponsorship_value
-      t(".visa_sponsorship_value.#{course.visa_sponsorship}")
     end
 
     def search_by_location?

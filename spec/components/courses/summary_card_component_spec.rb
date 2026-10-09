@@ -383,38 +383,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples "course length row" do |course_length, course_study_mode, expected_output|
-    let(:course) do
-      create(:course, study_mode:, enrichments: [build(:course_enrichment, :published, course_length: length)])
-    end
-    let(:length) { course_length }
-    let(:study_mode) { course_study_mode }
-
-    it "returns the correct course length row for #{course_length} and #{course_study_mode}" do
-      expect(summary_card_content).to include("Course length#{expected_output}")
-    end
-  end
-
-  describe "when displaying course length" do
-    context "when course length is one year" do
-      it_behaves_like "course length row", "OneYear", :full_time, "1 year - full time"
-      it_behaves_like "course length row", "OneYear", :part_time, "1 year - part time"
-      it_behaves_like "course length row", "OneYear", :full_time_or_part_time, "1 year - full time or part time"
-    end
-
-    context "when course length is two years" do
-      it_behaves_like "course length row", "TwoYears", :full_time, "Up to 2 years - full time"
-      it_behaves_like "course length row", "TwoYears", :part_time, "Up to 2 years - part time"
-      it_behaves_like "course length row", "TwoYears", :full_time_or_part_time, "Up to 2 years - full time or part time"
-    end
-
-    context "when custom course length" do
-      it_behaves_like "course length row", "4 years", :full_time, "4 years - full time"
-      it_behaves_like "course length row", "4 years", :part_time, "4 years - part time"
-      it_behaves_like "course length row", "4 years", :full_time_or_part_time, "4 years - full time or part time"
-    end
-  end
-
   describe "when displaying the age range" do
     let(:course) { create(:course, name: "Mathematics", course_code: "37CP", age_range_in_years:) }
 
@@ -539,86 +507,30 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples "course degree requirements row" do |course_degree_type, course_degree_grade_required, expected_output|
-    let(:course) { create(:course, degree_type:, degree_grade:) }
-    let(:degree_type) { course_degree_type }
-    let(:degree_grade) { course_degree_grade_required }
-
-    it "returns the correct degree requirements row for #{course_degree_type} and #{course_degree_grade_required}" do
-      expect(summary_card_content).to include("Degree required #{expected_output}")
-    end
-  end
-
-  describe "when displaying course degree requirements" do
-    context "when course requires 2:1 degree" do
-      it_behaves_like "course degree requirements row", :postgraduate, "two_one", "2:1 bachelor’s degree or above or equivalent qualification"
-    end
-
-    context "when course requires 2:2 degree" do
-      it_behaves_like "course degree requirements row", :postgraduate, "two_two", "2:2 bachelor’s degree or above or equivalent qualification"
-    end
-
-    context "when course requires third class degree" do
-      it_behaves_like "course degree requirements row",
-                      :postgraduate,
-                      "third_class",
-                      "Bachelor’s degree or equivalent qualification This should be an honours degree (Third or above), or equivalent"
-    end
-
-    context 'when course requires "Pass" degree' do
-      it_behaves_like "course degree requirements row", :postgraduate, "not_required", "Bachelor’s degree or equivalent qualification"
-    end
-
-    context "when course requires no degree" do
-      it_behaves_like "course degree requirements row", :undergraduate, "not_required", "No degree required"
-
-      it "does not render the hint text" do
-        course = create(:course, degree_type: "undergraduate", degree_grade: "not_required")
-        expect(render_inline(described_class.new(course:))).not_to include("or equivalent qualification")
-      end
-    end
-  end
-
-  shared_examples "visa sponsorship row" do |funding, visa_sponsorship, expected_text|
+  describe "information removed from the card" do
     let(:course) do
       create(
         :course,
-        funding:,
-        can_sponsor_student_visa:,
-        can_sponsor_skilled_worker_visa:,
+        :can_sponsor_student_visa,
+        study_mode: :full_time,
+        degree_type: :postgraduate,
+        degree_grade: :two_one,
+        enrichments: [build(:course_enrichment, :published, course_length: "OneYear")],
       )
     end
-    let(:can_sponsor_student_visa) { visa_sponsorship[:can_sponsor_student_visa] }
-    let(:can_sponsor_skilled_worker_visa) { visa_sponsorship[:can_sponsor_skilled_worker_visa] }
 
-    it "displays the correct visa sponsorship text for #{funding} courses with #{visa_sponsorship}" do
-      expect(summary_card_content).to include("Visa sponsorship#{expected_text}")
-    end
-  end
-
-  describe "when displaying course visa sponsorship" do
-    context "when the provider sponsor skilled worker visa for a salaried course" do
-      it_behaves_like "visa sponsorship row", :salary, { can_sponsor_skilled_worker_visa: true }, "Skilled Worker visas can be sponsored"
-      it_behaves_like "visa sponsorship row", :apprenticeship, { can_sponsor_skilled_worker_visa: true }, "Skilled Worker visas can be sponsored"
+    it "does not display course length, degree required, visa sponsorship or start date" do
+      expect(summary_card_content).not_to include("Course length")
+      expect(summary_card_content).not_to include("1 year")
+      expect(summary_card_content).not_to include("Degree required")
+      expect(summary_card_content).not_to include("2:1 bachelor’s degree")
+      expect(summary_card_content).not_to include("Visa sponsorship")
+      expect(summary_card_content).not_to include("Student visas can be sponsored")
+      expect(summary_card_content).not_to include("Start date")
     end
 
-    context "when the provider sponsor skilled worker visa sponsorship for an unsalaried course" do
-      it_behaves_like "visa sponsorship row", :fee, { can_sponsor_skilled_worker_visa: true }, "Visas cannot be sponsored"
-    end
-
-    context "when the provider specifies student visa sponsorship for an salaried course" do
-      it_behaves_like "visa sponsorship row", :salary, { can_sponsor_student_visa: true }, "Visas cannot be sponsored"
-      it_behaves_like "visa sponsorship row", :apprenticeship, { can_sponsor_student_visa: true }, "Visas cannot be sponsored"
-    end
-
-    context "when the provider specifies student visa sponsorship for an unsalaried course" do
-      it_behaves_like "visa sponsorship row", :fee, { can_sponsor_student_visa: true }, "Student visas can be sponsored"
-    end
-
-    context "when neither kind of visa is sponsored" do
-      it_behaves_like "visa sponsorship row", :fee, { can_sponsor_student_visa: false }, "Visas cannot be sponsored"
-      it_behaves_like "visa sponsorship row", :salary, { can_sponsor_student_visa: false }, "Visas cannot be sponsored"
-      it_behaves_like "visa sponsorship row", :apprenticeship, { can_sponsor_student_visa: false }, "Visas cannot be sponsored"
+    it "does not render a summary list" do
+      expect(summary_card).not_to have_css(".govuk-summary-list")
     end
   end
 end

@@ -18,29 +18,6 @@
 
     <p class="govuk-body"><%= qualification_and_study_mode %></p>
 
-    <%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: length_key) %>
-        <% row.with_value(text: length_value) %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: degree_requirements_key) %>
-        <% row.with_value do %>
-          <%= degree_requirements_value %>
-
-          <% if degree_requirements_hint.present? %>
-            <%= degree_requirements_hint %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: visa_sponsorship_key) %>
-        <% row.with_value(text: visa_sponsorship_value) %>
-      <% end %>
-    <% end %>
-
     <%= save_toggle_button %>
 
     <% if course.show_school_experience? %>
