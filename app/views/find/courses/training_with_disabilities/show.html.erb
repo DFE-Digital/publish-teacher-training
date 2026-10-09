@@ -26,8 +26,8 @@
     <%= govuk_inset_text classes: "app-callout app-callout--purple app-callout--min-height govuk-!-margin-top-0" do %>
       <h3><%= t(".funding_and_support") %></h3>
 
-      <p><%= t(".neurodivergent_html", link: govuk_link_to(t(".neurodivergent_link_text"), find_track_click_path(utm_content: "training_disabilities_neurodivergent", url: t(".neurodivergent_link")))) %>.</p>
-      <p><%= t(".adjustments_html", link: govuk_link_to(t(".adjustments_link_text"), find_track_click_path(utm_content: "training_disabilities_adjustments", url: t(".adjustments_link")))) %>.</p>
+      <p><%= t(".neurodivergent_html", link: tracked_link_to(t(".neurodivergent_link_text"), utm_content: "training_disabilities_neurodivergent", url: t(".neurodivergent_link"))) %>.</p>
+      <p><%= t(".adjustments_html", link: tracked_link_to(t(".adjustments_link_text"), utm_content: "training_disabilities_adjustments", url: t(".adjustments_link"))) %>.</p>
     <% end %>
   </div>
 </div>

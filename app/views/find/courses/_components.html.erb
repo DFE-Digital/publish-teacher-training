@@ -66,12 +66,12 @@
       ),
     ) %>
     <% else %>
-      <%= govuk_link_to(
+      <%= tracked_link_to(
       t("find.courses.show.training_with_disabilities_link", provider_name: course.provider_name),
-      find_track_click_path(url: find_training_with_disabilities_path(
+      url: find_training_with_disabilities_path(
         course.provider_code,
         course.course_code,
-      )),
+      ),
     ) %>
     <% end %>
   </p>

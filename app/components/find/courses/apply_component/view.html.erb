@@ -13,6 +13,7 @@
                 text: t(".apply_to_course"),
                 href: preview ? apply_path : find_track_click_path(utm_content:, url: apply_path),
                 classes: "govuk-!-margin-0",
+                html_attributes: { rel: "nofollow" },
               ) %>
         <% end %>
       </p>

@@ -57,23 +57,19 @@
       <p class="govuk-body">
         <%= t(
               "find.courses.confirm_apply.school_experience_interruption.salaried_callout_body_two_html",
-              bursary_link: govuk_link_to(
+              bursary_link: tracked_link_to(
                 t("find.courses.confirm_apply.school_experience_interruption.bursary_link_text"),
-                find_track_click_path(
-                  url: t("find.courses.confirm_apply.school_experience_interruption.bursary_link_url"),
-                  utm_content: "school_experience_interruption_bursary",
-                ),
+                url: t("find.courses.confirm_apply.school_experience_interruption.bursary_link_url"),
+                utm_content: "school_experience_interruption_bursary",
                 target: "_blank",
               ),
             ) %>
       </p>
       <p class="govuk-body govuk-!-margin-bottom-0">
-        <%= govuk_link_to(
+        <%= tracked_link_to(
               t("find.courses.confirm_apply.school_experience_interruption.salaried_callout_link_text"),
-              find_track_click_path(
-                url: t("find.get_into_teaching.url_teacher_salaries"),
-                utm_content: "school_experience_interruption_salaried_courses",
-              ),
+              url: t("find.get_into_teaching.url_teacher_salaries"),
+              utm_content: "school_experience_interruption_salaried_courses",
             ) %>
       </p>
     <% end %>
@@ -84,16 +80,14 @@
         <p class="govuk-body govuk-!-margin-bottom-0">
           <%= t(
                 "find.courses.confirm_apply.school_experience_interruption.support_callout_body_html",
-                contact_git_link: govuk_link_to(
+                contact_git_link: tracked_link_to(
                   t("find.courses.confirm_apply.school_experience_interruption.support_callout_link_text"),
-                  find_track_click_path(
-                    url: find_get_into_teaching_redirect_path(
-                      @course.provider_code,
-                      @course.course_code,
-                      "help_and_support",
-                    ),
-                    utm_content: "school_experience_interruption_contact_get_into_teaching",
+                  url: find_get_into_teaching_redirect_path(
+                    @course.provider_code,
+                    @course.course_code,
+                    "help_and_support",
                   ),
+                  utm_content: "school_experience_interruption_contact_get_into_teaching",
                 ),
               ) %>
         </p>
@@ -102,12 +96,10 @@
         <p class="govuk-body govuk-!-margin-bottom-0">
           <%= t(
                 "find.courses.confirm_apply.school_experience_interruption.adviser_callout_body_html",
-                teacher_training_adviser_link: govuk_link_to(
+                teacher_training_adviser_link: tracked_link_to(
                   t("find.courses.confirm_apply.school_experience_interruption.adviser_callout_link_text"),
-                  find_track_click_path(
-                    url: t("find.get_into_teaching.url_training_adviser"),
-                    utm_content: "school_experience_interruption_teacher_training_adviser",
-                  ),
+                  url: t("find.get_into_teaching.url_training_adviser"),
+                  utm_content: "school_experience_interruption_teacher_training_adviser",
                 ),
               ) %>
         </p>

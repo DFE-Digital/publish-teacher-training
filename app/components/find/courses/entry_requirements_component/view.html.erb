@@ -33,13 +33,13 @@
 
                 <% if engineers_teach_physics_content? %>
                   <p class="govuk-body">
-                  This <%= govuk_link_to "Engineers teach physics", find_track_click_path(url: t("find.get_into_teaching.url_engineers_teach_physics")) %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
+                  This <%= helpers.tracked_link_to "Engineers teach physics", url: t("find.get_into_teaching.url_engineers_teach_physics") %> course is designed for candidates who have a background in materials science and engineering. If your degree is in physics, please apply to our physics course.
                   </p>
                 <% end %>
 
                 <% if show_subject_knowledge_enhancement_content? %>
                   <p class="govuk-body">
-                  If you need to improve your subject knowledge, you may be asked to complete a <%= govuk_link_to "subject knowledge enhancement (SKE) course.", find_track_click_path(url: t("find.get_into_teaching.url_subject_knowledge_enhancement")) %>
+                  If you need to improve your subject knowledge, you may be asked to complete a <%= helpers.tracked_link_to "subject knowledge enhancement (SKE) course.", url: t("find.get_into_teaching.url_subject_knowledge_enhancement") %>
                   </p>
                 <% end %>
               <% end %>
@@ -97,7 +97,7 @@
         <p class="govuk-body"><%= t("find.get_into_teaching.qualifications_outside_uk_body") %> </p>
 
         <p class="govuk-body">
-        <%= t("find.get_into_teaching.apply_for_uk_enic_html", enic_link: govuk_link_to(t("find.get_into_teaching.apply_for_uk_enic"), find_track_click_path(url: t("find.get_into_teaching.url_enic_statement_of_comparability")))) %>
+        <%= t("find.get_into_teaching.apply_for_uk_enic_html", enic_link: helpers.tracked_link_to(t("find.get_into_teaching.apply_for_uk_enic"), url: t("find.get_into_teaching.url_enic_statement_of_comparability"))) %>
         </p>
 
         <p class="govuk-body">
@@ -105,7 +105,7 @@
         </p>
 
         <p class="govuk-body govuk-!-padding-bottom-4">
-        <%= t("find.get_into_teaching.learn_more_about_non_uk_qualifications_html", link: govuk_link_to(t("find.get_into_teaching.check_your_qualifications"), find_track_click_path(url: t("find.get_into_teaching.url_non_uk_qualifications")))) %>
+        <%= t("find.get_into_teaching.learn_more_about_non_uk_qualifications_html", link: helpers.tracked_link_to(t("find.get_into_teaching.check_your_qualifications"), url: t("find.get_into_teaching.url_non_uk_qualifications"))) %>
         </p>
       <% end %>
     <% end %>
