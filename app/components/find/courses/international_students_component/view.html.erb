@@ -5,7 +5,7 @@
       <p class="govuk-body">To apply for this teaching apprenticeship course, you’ll need to have lived in the UK for at least 3 years before the start of the course.</p>
 
       <p class="govuk-body">EEA nationals with settled or pre-settled status under the
-        <%= govuk_link_to("EU Settlement Scheme", find_track_click_path(url: t("links.eu_settlement_scheme"))) %> who have lived continuously in the
+        <%= helpers.tracked_link_to("EU Settlement Scheme", url: t("links.eu_settlement_scheme")) %> who have lived continuously in the
         EEA, Switzerland, Gibraltar, or the UK for at least the previous 3 years will also be eligible.</p>
     <% end %>
 
@@ -15,7 +15,7 @@
 
     <ul class="govuk-list govuk-list--bullet">
       <li>are an Irish citizen</li>
-      <li>have settled or pre-settled status under the <%= govuk_link_to("EU Settlement Scheme", find_track_click_path(url: t("links.eu_settlement_scheme"))) %> (you may still be able to apply)</li>
+      <li>have settled or pre-settled status under the <%= helpers.tracked_link_to("EU Settlement Scheme", url: t("links.eu_settlement_scheme")) %> (you may still be able to apply)</li>
       <li>have indefinite leave to remain in the UK</li>
     </ul>
 
@@ -23,7 +23,7 @@
       <p class="govuk-body">
         <%= t(
           "find.international_candidates.find_out_about_visa_types_html",
-          link: govuk_link_to(t("find.international_candidates.find_out_about_visa_types_link"), visa_types_url),
+          link: govuk_link_to(t("find.international_candidates.find_out_about_visa_types_link"), visa_types_url, rel: "nofollow"),
         ) %>
       </p>
 
@@ -33,12 +33,12 @@
         <p class="govuk-body">
           <%= t(
             "find.international_candidates.#{visa_type}.contact_provider_html",
-            link: govuk_link_to(t("find.international_candidates.contact_the_training_provider"), contact_the_training_provider_url),
+            link: govuk_link_to(t("find.international_candidates.contact_the_training_provider"), contact_the_training_provider_url, rel: "nofollow"),
           ) %>
         </p>
       <% end %>
     <% end %>
 
-    <p class="govuk-body">Learn more about <%= govuk_link_to("training to teach in England as a non-UK citizen", find_track_click_path(url: t("find.get_into_teaching.url_train_to_teach_as_international_candidate"))) %>.</p>
+    <p class="govuk-body">Learn more about <%= helpers.tracked_link_to("training to teach in England as a non-UK citizen", url: t("find.get_into_teaching.url_train_to_teach_as_international_candidate")) %>.</p>
   </div>
 <% end %>
