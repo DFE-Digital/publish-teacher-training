@@ -16,15 +16,12 @@
 
     <p class="govuk-body"><%= funding_text %></p>
 
+    <p class="govuk-body"><%= qualification_and_study_mode %></p>
+
     <%= govuk_summary_list(actions: false, classes: ["govuk-summary-list--no-border"]) do |summary_list| %>
       <% summary_list.with_row do |row| %>
         <% row.with_key(text: length_key) %>
         <% row.with_value(text: length_value) %>
-      <% end %>
-
-      <% summary_list.with_row do |row| %>
-        <% row.with_key(text: qualification_key) %>
-        <% row.with_value(text: qualification_value) %>
       <% end %>
 
       <% if course.show_school_experience? %>
