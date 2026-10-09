@@ -86,6 +86,18 @@ module Courses
       end
     end
 
+    def funding_text
+      return t(".funding.#{course.funding}") if course.salary? || course.apprenticeship?
+
+      uk_fee_line = safe_join([
+        (t(".funding.fee.uk", value: number_to_currency(enrichment.fee_uk_eu.to_f)) if enrichment.fee_uk_eu.present?),
+        bursary_hint,
+      ].compact, " ")
+      international_fee_line = t(".funding.fee.international", value: number_to_currency(enrichment.fee_international.to_f)) if enrichment.fee_international.present?
+
+      safe_join([uk_fee_line, international_fee_line].compact_blank, tag.br)
+    end
+
     def length_key
       t(".length_key")
     end
@@ -162,6 +174,10 @@ module Courses
 
     def incentive_hint
       incentive_view.hint_text
+    end
+
+    def bursary_hint
+      tag.span(t(".funding.bursaries_available"), class: "govuk-hint govuk-!-font-size-16") if incentive_view.has_bursary?
     end
 
     def incentive_view

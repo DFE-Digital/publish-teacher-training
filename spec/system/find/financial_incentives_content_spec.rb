@@ -14,7 +14,7 @@ RSpec.describe "financial incentives call out boxes content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000)
         and_there_is_a_hidden_future_financial_incentive(non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         when_i_visit_the_find_results_page
-        then_i_see_the_displayed_search_result_financial_incentive_is_for_uk_citizens
+        then_i_see_bursaries_are_available_in_the_search_result
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
 
@@ -31,7 +31,7 @@ RSpec.describe "financial incentives call out boxes content" do
         given_there_is_a_findable_course(bursary_amount: 4000, scholarship_amount: 2000, subject: :physics, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true)
         and_there_is_a_hidden_future_financial_incentive
         when_i_visit_the_find_results_page
-        then_i_see_the_displayed_search_result_financial_incentive_is_available_to_non_uk_citizens
+        then_i_see_bursaries_are_available_in_the_search_result
         and_i_do_not_see_the_hidden_future_financial_incentive
       end
 
@@ -216,13 +216,12 @@ RSpec.describe "financial incentives call out boxes content" do
     end
   end
 
-  def then_i_see_the_displayed_search_result_financial_incentive_is_for_uk_citizens
-    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
-  end
-
-  def then_i_see_the_displayed_search_result_financial_incentive_is_available_to_non_uk_citizens
-    expect(page).to have_content("Scholarships of £2,000 or bursaries of £4,000 are available")
-    expect(page).to have_no_content("Scholarships of £2,000 or bursaries of £4,000 are available to UK citizens")
+  def then_i_see_bursaries_are_available_in_the_search_result
+    within(".course-summary-card") do
+      expect(page).to have_content("fee for UK citizens - Bursaries available")
+      expect(page).to have_no_content("£4,000")
+      expect(page).to have_no_content("£2,000")
+    end
   end
 
   def then_i_see_the_displayed_course_page_financial_incentive_is_for_uk_citizens

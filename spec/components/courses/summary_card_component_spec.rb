@@ -262,326 +262,123 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples "fee or salary row" do |funding_type, params, expected_output|
-    let(:funding) { funding_type }
-    let(:search_params) { params }
-
-    it "returns the correct fee or salary row for #{funding_type}" do
-      expect(summary_card_content).to include(expected_output)
-    end
-  end
-
-  describe "when displaying fee or salary" do
-    let(:course) do
-      create(
-        :course,
-        funding:,
-      )
-    end
-
+  describe "when displaying funding" do
     before do
       FeatureFlag.activate(:bursaries_and_scholarships_announced)
     end
 
-    context "when course funding is salary" do
-      let(:funding) { :salary }
+    def fee_course(subjects:, fee_uk_eu: 9790, fee_international: 29_790)
+      create(
+        :course,
+        :secondary,
+        :fee_type_based,
+        name: "Physics with Drama",
+        subjects:,
+        enrichments: [create(:course_enrichment, :published, fee_uk_eu:, fee_international:)],
+      )
+    end
 
-      it "does not show bursaries or scholarship" do
+    context "when course funding is salary" do
+      let(:course) { create(:course, funding: :salary) }
+
+      it "shows salary without bursaries or scholarships" do
         expect(summary_card_content).to include("Salary")
+        expect(summary_card_content).not_to include("fee for UK citizens")
         expect(summary_card_content).not_to include("Bursaries")
         expect(summary_card_content).not_to include("Scholarships")
       end
     end
 
     context "when course funding is apprenticeship" do
-      let(:funding) { :apprenticeship }
+      let(:course) { create(:course, funding: :apprenticeship) }
 
-      it "does not show bursaries or scholarship" do
-        expect(summary_card_content).to include("Salary (apprenticeship)")
+      it "shows apprenticeship (salary) without bursaries or scholarships" do
+        expect(summary_card_content).to include("Apprenticeship (salary)")
+        expect(summary_card_content).not_to include("Salary (apprenticeship)")
         expect(summary_card_content).not_to include("Bursaries")
         expect(summary_card_content).not_to include("Scholarships")
       end
     end
 
-    context "when course funding is fee and user searches for visa sponsorship" do
-      context "when subject has non-UK bursary eligibility" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            name: "Physics with Drama",
-            subjects: [
-              build(:secondary_subject, :physics, bursary_amount: 10_000, non_uk_bursary_eligible: true),
-              build(:secondary_subject, :drama),
-            ],
-            funding:,
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 9250, fee_international: 17_900)],
-          )
-        end
+    context "when the course has UK and non-UK fees and no financial incentive" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :dance), build(:secondary_subject, :drama)]) }
 
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£9,250 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£17,900 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Bursaries of £10,000 are available"
+      it "shows the UK fee with the non-UK fee on the next line" do
+        expect(summary_card.to_html).to include("£9,790 fee for UK citizens<br>£29,790 fee for non-UK citizens")
       end
 
-      context "when subject has non-UK scholarship eligibility" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            name: "Physics with Drama",
-            subjects: [
-              build(:secondary_subject, :physics, scholarship: 10_000, non_uk_scholarship_eligible: true),
-              build(:secondary_subject, :drama),
-            ],
-            funding:,
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6000, fee_international: 11_000)],
-          )
-        end
-
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£6,000 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£11,000 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Scholarships of £10,000 are available"
+      it "does not show a bursaries hint" do
+        expect(summary_card_content).not_to include("Bursaries")
       end
 
-      context "when subject has both non-UK bursary and scholarship eligibility" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            name: "Physics with Drama",
-            subjects: [
-              build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000, non_uk_bursary_eligible: true, non_uk_scholarship_eligible: true),
-              build(:secondary_subject, :drama),
-            ],
-            funding:,
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7000, fee_international: 7000)],
-          )
-        end
-
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£7,000 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£7,000 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "Scholarships of £10,000 or bursaries of £9,000 are available"
-      end
-
-      context "when no subjects have non-UK eligibility flags" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Physics with Drama",
-            subjects: [
-              build(:secondary_subject, :drama),
-              build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 8000, fee_international: 8000)],
-          )
-        end
-
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£8,000 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£8,000 fee for Non-UK citizens"
-
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
-        end
-      end
-
-      context "when subject has bursary but is not non-UK eligible" do
-        let(:search_params) { { can_sponsor_visa: true } }
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "English with Drama",
-            subjects: [
-              build(:secondary_subject, :english, bursary_amount: 6000, scholarship: 5000),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 10_000, fee_international: nil)],
-          )
-        end
-
-        it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("to UK citizens")
-        end
-      end
-
-      context "when languages is the second subject" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Physics with Drama",
-            subjects: [
-              build(:secondary_subject, :drama),
-              build(:secondary_subject, :physics, bursary_amount: 9000, scholarship: 10_000),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)],
-          )
-        end
-
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£6,250 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, { can_sponsor_visa: true }, "£6,900 fee for Non-UK citizens"
-
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
-        end
-      end
-
-      context "when is not physics" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "History with Drama",
-            subjects: [
-              build(:secondary_subject, :history, bursary_amount: 9000, scholarship: 10_000),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: nil)],
-          )
-        end
-        let(:search_params) { { can_sponsor_visa: true } }
-
-        it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("to UK citizens")
-        end
-      end
-
-      context "when is not languages" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Biology with Drama",
-            subjects: [
-              build(:secondary_subject, :biology, bursary_amount: 9000, scholarship: 10_000),
-              build(:secondary_subject, :drama),
-            ],
-          )
-        end
-        let(:search_params) { { can_sponsor_visa: true } }
-
-        it "shows bursaries and scholarship with UK citizens qualifier" do
-          expect(summary_card_content).to include("to UK citizens")
-        end
+      it "no longer renders the fee or salary key or the bold fee" do
+        expect(summary_card_content).not_to include("Fee or salary")
+        expect(summary_card).not_to have_css("b", text: "fee")
       end
     end
 
-    context "when course funding is fee and user does not search for visa sponsorship" do
-      context "when main subject offers bursary" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Dance with Drama",
-            subjects: [
-              build(:secondary_subject, :dance, bursary_amount: 9000),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)],
-          )
-        end
+    context "when the course only has a UK fee" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :dance)], fee_international: nil) }
 
-        it_behaves_like "fee or salary row", :fee, {}, "£6,250 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "£6,900 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "Bursaries of £9,000 are available"
+      it "shows only the UK fee" do
+        expect(summary_card_content).to include("£9,790 fee for UK citizens")
+        expect(summary_card_content).not_to include("non-UK citizens")
       end
+    end
 
-      context "when main subject offers scholarship" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Dance with Drama",
-            subjects: [
-              build(:secondary_subject, :dance, scholarship: 9000),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 6250, fee_international: 6900)],
-          )
-        end
+    context "when the main subject offers a bursary" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :dance, bursary_amount: 9000), build(:secondary_subject, :drama)]) }
 
-        it_behaves_like "fee or salary row", :fee, {}, "£6,250 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "£6,900 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "Scholarships of £9,000 are available"
+      it "shows bursaries available as a hint after the UK fee, without the amount" do
+        expect(summary_card_content).to include("£9,790 fee for UK citizens - Bursaries available")
+        expect(summary_card.to_html).to include("- Bursaries available</span><br>£29,790 fee for non-UK citizens")
+        expect(summary_card).to have_css("span.govuk-hint.govuk-\\!-font-size-16", text: "- Bursaries available")
+        expect(summary_card_content).not_to include("£9,000")
       end
+    end
 
-      context "when main subject offers bursaries and scholarship" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Dance with Drama",
-            subjects: [
-              build(:secondary_subject, :dance, bursary_amount: 7000, scholarship: 9000),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7250, fee_international: 6900)],
-          )
-        end
+    context "when the bursary is not available to non-UK citizens" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :english, bursary_amount: 6000), build(:secondary_subject, :drama)]) }
 
-        it_behaves_like "fee or salary row", :fee, {}, "£7,250 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "£6,900 fee for Non-UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "Scholarships of £9,000 or bursaries of £7,000 are available"
+      it "shows bursaries available without a UK citizens qualifier" do
+        expect(summary_card_content).to include("- Bursaries available")
+        expect(summary_card_content).not_to include("to UK citizens")
       end
+    end
 
-      context "when main subject does not offer bursary or scholarship" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Dance with Drama",
-            subjects: [
-              build(:secondary_subject, :drama),
-              build(:secondary_subject, :dance, bursary_amount: 7000, scholarship: 9000),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 7500, fee_international: 6900)],
-          )
-        end
+    context "when the main subject offers a bursary and a scholarship" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :physics, bursary_amount: 7000, scholarship: 9000), build(:secondary_subject, :drama)]) }
 
-        it_behaves_like "fee or salary row", :fee, {}, "£7,500 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "£6,900 fee for Non-UK citizens"
-
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
-        end
+      it "shows bursaries available and does not mention scholarships" do
+        expect(summary_card_content).to include("- Bursaries available")
+        expect(summary_card_content).not_to include("Scholarships")
       end
+    end
 
-      context "when all subjects does not offer bursary or scholarship" do
-        let(:course) do
-          create(
-            :course,
-            :secondary,
-            :fee_type_based,
-            name: "Dance with Drama",
-            subjects: [
-              build(:secondary_subject, :dance),
-              build(:secondary_subject, :drama),
-            ],
-            enrichments: [create(:course_enrichment, :published, fee_uk_eu: 8500, fee_international: 8500)],
-          )
-        end
+    context "when the main subject only offers a scholarship" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :dance, scholarship: 9000), build(:secondary_subject, :drama)]) }
 
-        it_behaves_like "fee or salary row", :fee, {}, "£8,500 fee for UK citizens"
-        it_behaves_like "fee or salary row", :fee, {}, "£8,500 fee for Non-UK citizens"
+      it "does not show a financial incentive hint" do
+        expect(summary_card_content).not_to include("Bursaries")
+        expect(summary_card_content).not_to include("Scholarships")
+      end
+    end
 
-        it "does not show bursaries or scholarship" do
-          expect(summary_card_content).not_to include("Bursaries")
-          expect(summary_card_content).not_to include("Scholarships")
-        end
+    context "when only the second subject offers a bursary" do
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :drama), build(:secondary_subject, :physics, bursary_amount: 9000)]) }
+
+      it "does not show a bursaries hint" do
+        expect(summary_card_content).not_to include("Bursaries")
+      end
+    end
+
+    context "when bursaries and scholarships have not been announced" do
+      before { FeatureFlag.deactivate(:bursaries_and_scholarships_announced) }
+
+      let(:course) { fee_course(subjects: [build(:secondary_subject, :dance, bursary_amount: 9000)]) }
+
+      it "does not show a bursaries hint" do
+        expect(summary_card_content).not_to include("Bursaries")
       end
     end
   end
