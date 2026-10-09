@@ -299,10 +299,6 @@ en:
       further_education_title: "Further education"
       etp_title: "Engineers teach physics"
     summary_card_component:
-      location_key:
-        fee: Nearest placement school
-        salary: Nearest employing school
-        apprenticeship: Nearest employing schools
       location_value:
         not_listed: Not listed yet
         no_employing_schools: No employing schools listed
@@ -312,7 +308,8 @@ en:
         potential_schools:
           one: "1 potential %{school_term} school"
           other: "%{count} potential %{school_term} schools"
-        distance: "%{distance} from %{location}"
+        nearest_school_html: Nearest %{school_term} school %{distance}
+        from_location: from %{location}
         placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
