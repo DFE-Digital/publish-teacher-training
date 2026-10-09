@@ -116,14 +116,6 @@ module Courses
       t(".age_range", range: course.age_range_in_years.humanize)
     end
 
-    def experience_key
-      t(".experience_key")
-    end
-
-    def experience_value
-      t(".experience_value")
-    end
-
     def qualification_and_study_mode
       safe_join([
         t(".qualification_value.#{course.qualification}_html"),

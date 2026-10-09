@@ -332,8 +332,7 @@ en:
         ThreeYears: 3 years
         FourYears: 4 years
       age_range: Ages %{range}
-      experience_key: School experience
-      experience_value: Required or strongly recommended
+      school_experience: School experience is required or strongly recommended
       qualification_value:
         qts_html: <abbr title='Qualified teacher status'>QTS</abbr>
         pgce_with_qts_html: <abbr title='Qualified teacher status'>QTS</abbr> with <abbr title='Postgraduate certificate in education'>PGCE</abbr>

@@ -24,13 +24,6 @@
         <% row.with_value(text: length_value) %>
       <% end %>
 
-      <% if course.show_school_experience? %>
-        <% summary_list.with_row do |row| %>
-          <% row.with_key(text: experience_key) %>
-          <% row.with_value(text: experience_value) %>
-        <% end %>
-      <% end %>
-
       <% summary_list.with_row do |row| %>
         <% row.with_key(text: degree_requirements_key) %>
         <% row.with_value do %>
@@ -49,5 +42,11 @@
     <% end %>
 
     <%= save_toggle_button %>
+
+    <% if course.show_school_experience? %>
+      <div class="app-search-result__school-experience">
+        <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".school_experience") %></p>
+      </div>
+    <% end %>
   <% end %>
 </li>

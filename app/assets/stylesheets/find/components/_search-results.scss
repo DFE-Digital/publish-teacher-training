@@ -45,6 +45,14 @@
   text-decoration: underline;
 }
 
+.app-search-result__school-experience {
+  @include govuk-responsive-margin(3, "top");
+  padding: govuk-spacing(3);
+
+  background-color: #f4f8fb;
+  border-radius: 4px;
+}
+
 .app-search__controls {
   padding: govuk-spacing(3);
   margin-bottom: govuk-spacing(5);
