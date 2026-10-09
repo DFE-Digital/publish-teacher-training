@@ -135,7 +135,13 @@ class CourseWizard
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
       builder.on_step(:check_answers, use: [Operations::CreateCourse])
+      builder.on_commit(use: [Operations::UpdateCourse])
     end
+  end
+
+  # Seeds an edit of a saved course (built with record:)
+  def mapper
+    Mapper.new
   end
 
   def route_strategy
@@ -150,6 +156,8 @@ class CourseWizard
             **options.except(:state_key),
           )
         else
+          next edit_step_path(helpers, step_id, options) if editing?
+
           helpers.publish_provider_recruitment_cycle_course_wizard_path(
             provider_code:,
             recruitment_cycle_year:,
@@ -220,6 +228,17 @@ class CourseWizard
   end
 
 private
+
+  def edit_step_path(helpers, step_id, options)
+    helpers.edit_wizard_publish_provider_recruitment_cycle_course_path(
+      provider_code:,
+      recruitment_cycle_year:,
+      code: record.course_code,
+      state_key:,
+      step: step_id,
+      **options,
+    )
+  end
 
   def ensure_review_step(steps, step_id)
     return steps if steps.any? { |step| step.step_id == step_id }
