@@ -97,16 +97,12 @@ module Courses
       [translated_course_length, course.study_mode.humanize.downcase].join(" - ")
     end
 
-    def show_age_group_row?
+    def show_age_range?
       course.age_range_in_years.present?
     end
 
-    def age_group_key
-      t(".age_group_key")
-    end
-
-    def age_group_value
-      "#{course.level.humanize} - #{course.age_range_in_years.humanize}"
+    def age_range_text
+      t(".age_range", range: course.age_range_in_years.humanize)
     end
 
     def qualification_key

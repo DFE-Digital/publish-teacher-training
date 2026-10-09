@@ -581,44 +581,36 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
   end
 
-  shared_examples "course age group row" do |course_level, course_age_group, expected_output|
-    let(:course) { create(:course, level:, age_range_in_years:) }
-    let(:level) { course_level.downcase }
-    let(:age_range_in_years) { course_age_group }
+  describe "when displaying the age range" do
+    let(:course) { create(:course, name: "Mathematics", course_code: "37CP", age_range_in_years:) }
 
-    it "returns the correct age group row for #{course_level} and #{course_age_group}" do
-      expect(summary_card_content).to include("Age group#{expected_output}")
-    end
-  end
+    %w[3_to_7 5_to_14 11_to_16 14_to_19].each do |range|
+      context "when the age range is #{range}" do
+        let(:age_range_in_years) { range }
 
-  describe "when displaying age group" do
-    context "when course is primary" do
-      it_behaves_like "course age group row", "Primary", "3_to_11", "Primary - 3 to 11"
-      it_behaves_like "course age group row", "Primary", "3_to_7", "Primary - 3 to 7"
-      it_behaves_like "course age group row", "Primary", "4_to_11", "Primary - 4 to 11"
-      it_behaves_like "course age group row", "Primary", "5_to_11", "Primary - 5 to 11"
-      it_behaves_like "course age group row", "Primary", "5_to_14", "Primary - 5 to 14"
-      it_behaves_like "course age group row", "Primary", "7_to_11", "Primary - 7 to 11"
-      it_behaves_like "course age group row", "Primary", "7_to_14", "Primary - 7 to 14"
+        it "renders the age range as a hint under the course name" do
+          expect(summary_card).to have_css(
+            ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
+            text: "Ages #{range.humanize}",
+          )
+          expect(summary_card_content).to include("Mathematics (37CP) Ages #{range.humanize}")
+        end
+      end
     end
 
-    context "when course is secondary" do
-      it_behaves_like "course age group row", "Secondary", "5_to_18", "Secondary - 5 to 18"
-      it_behaves_like "course age group row", "Secondary", "7_to_14", "Secondary - 7 to 14"
-      it_behaves_like "course age group row", "Secondary", "9_to_16", "Secondary - 9 to 16"
-      it_behaves_like "course age group row", "Secondary", "11_to_16", "Secondary - 11 to 16"
-      it_behaves_like "course age group row", "Secondary", "11_to_18", "Secondary - 11 to 18"
-      it_behaves_like "course age group row", "Secondary", "11_to_19", "Secondary - 11 to 19"
-      it_behaves_like "course age group row", "Secondary", "13_to_18", "Secondary - 13 to 18"
-      it_behaves_like "course age group row", "Secondary", "14_to_18", "Secondary - 14 to 18"
-      it_behaves_like "course age group row", "Secondary", "14_to_19", "Secondary - 14 to 19"
+    context "when the course has an age range" do
+      let(:age_range_in_years) { "11_to_16" }
+
+      it "does not render the old age group row" do
+        expect(summary_card_content).not_to include("Age group")
+      end
     end
 
     context "when course is further education" do
       let(:course) { create(:course, :further_education, age_range_in_years: nil) }
 
-      it "does not include age group row" do
-        expect(summary_card_content).not_to include("Age group")
+      it "does not render an age range" do
+        expect(summary_card_content).not_to include("Ages")
       end
     end
   end
