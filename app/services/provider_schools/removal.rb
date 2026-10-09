@@ -2,9 +2,12 @@
 
 module ProviderSchools
   class Removal
-    def initialize(provider:, uuid:)
+    # legacy_site: false leaves the legacy Site alone. Support no longer
+    # dual-writes to Site; Publish still does.
+    def initialize(provider:, uuid:, legacy_site: true)
       @provider = provider
       @uuid = uuid
+      @legacy_site = legacy_site
     end
 
     def call
@@ -60,7 +63,7 @@ module ProviderSchools
 
   private
 
-    attr_reader :provider, :uuid
+    attr_reader :provider, :uuid, :legacy_site
 
     def destroy_records_if_removable!
       return false unless removable?
@@ -71,7 +74,7 @@ module ProviderSchools
 
     def destroy_records!
       school.destroy!
-      site&.destroy!
+      site&.destroy! if legacy_site
     end
 
     # Lock kept courses this school is on, in id order, before the sole-school

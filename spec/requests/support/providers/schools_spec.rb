@@ -220,6 +220,10 @@ RSpec.describe "Support provider schools" do
       expect(response).to redirect_to(support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider))
     end
 
+    it "leaves the legacy site alone" do
+      expect { remove_school }.not_to(change { Site.where(id: site.id).count })
+    end
+
     # A course that is allowed to publish without schools is served by the API
     # with all of its provider's schools as locations, so removing one changes
     # that course's payload.

@@ -31,7 +31,7 @@ RSpec.describe "Adding school to provider as an admin" do
       when_i_click_add_school
       then_i_see_a_confirmation_message
       and_the_school_is_in_the_database
-      and_the_provider_school_row_is_created
+      and_no_legacy_site_is_created
     end
 
     scenario "i can select a school using the autocomplete", :js do
@@ -174,16 +174,8 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def given_the_provider_already_has_a_school_with_the_same_urn
-    # Create an existing site with the same URN as the GIAS school we're trying to add
-    @provider.sites.create!(
-      location_name: "Existing School with Same URN",
-      urn: @gias_school.urn,
-      address1: "Different Street",
-      town: "Different Town",
-      postcode: "SW1A 2AA",
-      site_type: :school,
-    )
-    @initial_school_count = @provider.sites.count
+    create(:provider_school, provider: @provider, gias_school: @gias_school)
+    @initial_school_count = @provider.schools.count
   end
 
   def then_i_see_a_duplicate_urn_error
@@ -192,21 +184,14 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def and_the_school_is_not_added_to_the_database
-    expect(@provider.sites.count).to eq(@initial_school_count)
+    expect(@provider.schools.count).to eq(@initial_school_count)
   end
 
   def and_the_school_is_in_the_database
-    expect(@provider.sites.count).to eq(1)
-    added_school = @provider.sites.find_by(urn: @gias_school.urn)
-    expect(added_school).to be_present
-    expect(added_school.location_name).to eq(@gias_school.name)
+    expect(@provider.schools.where(gias_school: @gias_school)).to exist
   end
 
-  def and_the_provider_school_row_is_created
-    added_site = @provider.sites.find_by(urn: @gias_school.urn)
-    provider_school = @provider.schools.find_by(gias_school_id: @gias_school.id, site_code: added_site.code)
-    expect(provider_school).to be_present
-    expect(provider_school.site_code).to eq(added_site.code)
-    expect(provider_school.uuid).to eq(added_site.uuid)
+  def and_no_legacy_site_is_created
+    expect(@provider.sites.where(urn: @gias_school.urn)).to be_empty
   end
 end
