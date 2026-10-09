@@ -318,6 +318,13 @@ en:
         fee:
           uk_fees_html: "%{value} <b>fee</b> for UK citizens"
           international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
+      funding:
+        salary: Salary
+        apprenticeship: Apprenticeship (salary)
+        bursaries_available: "- Bursaries available"
+        fee:
+          uk: "%{value} fee for UK citizens"
+          international: "%{value} fee for non-UK citizens"
       length_key: Course length
       length_value:
         OneYear: 1 year
