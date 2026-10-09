@@ -11,7 +11,7 @@ class CourseWizard
       validates :start_date, presence: { message: I18n.t("course_wizard.steps.start_date.errors.start_date.blank") }
 
       review do |r|
-        r.row label: :start_date, value: ->(draft) { draft.start_date }
+        r.row label: :start_date, value: ->(draft) { draft.start_date }, show_when_blank: true
       end
 
       # Once a start date has been picked, every month stays on offer so that a

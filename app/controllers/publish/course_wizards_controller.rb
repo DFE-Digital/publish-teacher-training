@@ -33,6 +33,8 @@ module Publish
     end
 
     def update
+      return redirect_to_first_invalid_step if @wizard.final_step? && @wizard.first_invalid_step
+
       if @wizard.save_current_step
         @wizard.clear_stale_specialism_answers
         return complete_course if @wizard.final_step?
@@ -44,6 +46,14 @@ module Publish
     end
 
   private
+
+    # Sends the user back to the question they still need to answer. The
+    # return_to_review param brings them back to check answers once the path
+    # is valid again.
+    def redirect_to_first_invalid_step
+      step_id = @wizard.first_invalid_step
+      redirect_to @wizard.route_strategy.resolve(step_id:, options: { return_to_review: step_id })
+    end
 
     def complete_course
       flash[:success_with_body] = t("publish.course_wizards.flash.success_with_body").to_h

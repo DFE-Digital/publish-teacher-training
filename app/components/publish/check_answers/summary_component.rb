@@ -31,6 +31,7 @@ module Publish
         return unless wizard.saved?(spec.step_id) || spec.show_when_blank
 
         value = format_value(spec)
+        value = helpers.value_provided?(nil) if spec.show_when_blank && !present_value?(value)
         row = Row.new(
           label: t_label(spec.label_key, **resolved_label_options(spec)),
           value:,

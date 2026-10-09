@@ -27,20 +27,56 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       )
     end
 
-    it "delegates simple state attributes" do
+    it "reads the answers whose steps are on the path" do
       aggregate_failures do
         expect(draft.level).to eq("secondary")
         expect(draft.is_send).to eq("false")
         expect(draft.qualification).to eq("pgce_with_qts")
-        expect(draft.campaign_name).to eq("no_campaign")
         expect(draft.start_date).to eq("July 2027")
-        expect(draft.primary_master_subject_id).to eq("11")
         expect(draft.secondary_master_subject_id).to eq("12")
         expect(draft.subordinate_subject_id).to eq("13")
         expect(draft.can_sponsor_student_visa).to be(true)
-        expect(draft.can_sponsor_skilled_worker_visa).to be(false)
         expect(draft.visa_sponsorship_application_deadline_required).to be(true)
-        expect(draft.accredited_provider_code).to eq(provider.provider_code)
+      end
+    end
+
+    # Subjects 12 and 13 are not physics, the course is fee-based (no funding
+    # answer), and the provider is accredited, so these steps are off the path.
+    it "returns nil for answers whose steps are off the path" do
+      aggregate_failures do
+        expect(draft.campaign_name).to be_nil
+        expect(draft.primary_master_subject_id).to be_nil
+        expect(draft.can_sponsor_skilled_worker_visa).to be_nil
+        expect(draft.accredited_provider_code).to be_nil
+      end
+    end
+  end
+
+  describe "answers left on another branch" do
+    it "drops the visa answers when the level changes to further education" do
+      state_store.write(level: "secondary", can_sponsor_student_visa: true)
+      state_store.write(level: "further_education")
+
+      expect(draft.can_sponsor_student_visa).to be_nil
+    end
+
+    it "drops the Engineers teach physics answer when physics is no longer a subject" do
+      physics = find_or_create(:secondary_subject, :physics)
+      mathematics = find_or_create(:secondary_subject, :mathematics)
+      state_store.write(level: "secondary", secondary_master_subject_id: physics.id.to_s, campaign_name: "engineers_teach_physics")
+      state_store.write(secondary_master_subject_id: mathematics.id.to_s)
+
+      expect(draft.campaign_name).to be_nil
+    end
+
+    it "uses the TDA defaults rather than funding and study pattern from an earlier qualification" do
+      state_store.write(qualification: "qts", funding_type: "fee", study_pattern: %w[part_time], can_sponsor_skilled_worker_visa: true)
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+
+      aggregate_failures do
+        expect(draft.funding).to eq("apprenticeship")
+        expect(draft.study_modes).to eq(%w[full_time])
+        expect(draft.can_sponsor_skilled_worker_visa).to be(false)
       end
     end
   end
@@ -173,13 +209,13 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       secondary_subject = find_or_create(:secondary_subject, :physics)
 
       state_store.write(level: "primary", primary_master_subject_id: primary_subject.id.to_s)
-      expect(draft.master_subject_id).to eq(primary_subject.id.to_s)
+      expect(described_class.new(wizard:).master_subject_id).to eq(primary_subject.id.to_s)
 
       state_store.write(level: "secondary", secondary_master_subject_id: secondary_subject.id.to_s)
-      expect(draft.master_subject_id).to eq(secondary_subject.id.to_s)
+      expect(described_class.new(wizard:).master_subject_id).to eq(secondary_subject.id.to_s)
 
       state_store.write(level: "further_education")
-      expect(draft.master_subject_id).to be_nil
+      expect(described_class.new(wizard:).master_subject_id).to be_nil
     end
 
     it "returns ordered subject records" do
@@ -261,17 +297,37 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.study_sites).to eq([])
     end
 
-    it "delegates accrediting_provider and resolves accreditation provider name" do
-      accrediting_provider = instance_double(Provider)
-      allow(wizard).to receive(:accrediting_provider).and_return(accrediting_provider)
-      state_store.write(accredited_provider_code: provider.provider_code)
+    context "when the provider has more than one accredited partner" do
+      let(:provider) do
+        school_provider = create(:provider, provider_type: :lead_school, provider_code:, recruitment_cycle:)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: accredited_partner_one)
+        create(:provider_partnership, training_provider: school_provider, accredited_provider: accredited_partner_two)
+        school_provider
+      end
+      let(:accredited_partner_one) { create(:accredited_provider, provider_name: "Middlesex University", recruitment_cycle:) }
+      let(:accredited_partner_two) { create(:accredited_provider, provider_name: "University of Hertfordshire", recruitment_cycle:) }
 
-      expect(draft.accrediting_provider).to eq(accrediting_provider)
-      expect(draft.accreditation_provider_name).to eq(provider.provider_name)
+      it "resolves the accrediting provider and its name from the chosen code" do
+        state_store.write(level: "secondary", accredited_provider_code: accredited_partner_two.provider_code)
+
+        expect(draft.accrediting_provider).to eq(accredited_partner_two)
+        expect(draft.accreditation_provider_name).to eq("University of Hertfordshire")
+      end
+
+      it "ignores the chosen code for a further education course, which skips that step" do
+        state_store.write(level: "further_education", accredited_provider_code: accredited_partner_two.provider_code)
+
+        expect(draft.accredited_provider_code).to be_nil
+        expect(draft.accrediting_provider).to be_nil
+      end
     end
   end
 
   describe "visa deadline parsing" do
+    before do
+      state_store.write(level: "secondary", can_sponsor_student_visa: true, visa_sponsorship_application_deadline_required: true)
+    end
+
     it "normalizes DateParts for shared display/serialization use" do
       state_store.write(
         visa_sponsorship_application_deadline_at: CourseWizard::Steps::VisaSponsorshipApplicationDeadlineAt::DateParts.new("2027", "3", "1"),
