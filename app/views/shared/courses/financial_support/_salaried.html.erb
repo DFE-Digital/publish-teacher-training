@@ -9,10 +9,10 @@
         <!-- pgde_with_qts, undergraduate_degree_with_qts, qts -->
         <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.paid_salary") %></p>
       <% end %>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), find_track_click_path(utm_content: "uk_citizens_salaried_national_pay_scales", url: t("find.links.national_pay_scales"))) %></p>
+      <p class="govuk-body"><%= tracked_link_to(t("find.financial_support.uk_citizens.salaried_courses.pay_scale"), utm_content: "uk_citizens_salaried_national_pay_scales", url: t("find.links.national_pay_scales")) %></p>
       <h4 class="govuk-heading-s"><%= t("find.financial_support.uk_citizens.salaried_courses.financial_support_heading") %></h4>
       <p class="govuk-body"><%= t("find.financial_support.uk_citizens.salaried_courses.financial_support") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.uk_citizens.salaried_courses.find_out_more"), find_track_click_path(utm_content: "uk_citizens_salaried_teacher_salaries", url: t("find.get_into_teaching.url_teacher_salaries"))) %></p>
+      <p class="govuk-body"><%= tracked_link_to(t("find.financial_support.uk_citizens.salaried_courses.find_out_more"), utm_content: "uk_citizens_salaried_teacher_salaries", url: t("find.get_into_teaching.url_teacher_salaries")) %></p>
     </div>
   <% end %>
 <% end %>
@@ -21,7 +21,7 @@
     <div class="course-salary-details-non-uk">
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.competitive") %></p>
       <p class="govuk-body"><%= t("find.financial_support.non_uk_citizens.salaried_courses.entry_requirements") %></p>
-      <p class="govuk-body"><%= govuk_link_to(t("find.financial_support.non_uk_citizens.what_support"), find_track_click_path(utm_content: "non_uk_citizens_salaried_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees"))) %></p>
+      <p class="govuk-body"><%= tracked_link_to(t("find.financial_support.non_uk_citizens.what_support"), utm_content: "non_uk_citizens_salaried_non_uk_trainees", url: t("find.get_into_teaching.url_non_uk_trainees")) %></p>
     </div>
   <% end %>
 <% end %>
