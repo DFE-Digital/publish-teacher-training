@@ -243,7 +243,63 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_no_text("Visa sponsorship deadline")
   end
 
+  scenario "sends the user to a question the path still needs instead of adding the course" do
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
+    given_i_have_completed_secondary_fee_wizard_state
+    and_the_visa_deadline_questions_are_unanswered
+    when_i_visit_check_answers_page
+    then_i_see_the_visa_deadline_question_is_not_entered
+
+    and_i_click_add_course
+    then_i_am_on_step(:visa_sponsorship_application_deadline_required)
+    expect(provider.courses.count).to eq(0)
+
+    choose "No"
+    and_i_click_continue
+    then_i_am_taken_to_the_check_answers_page
+
+    and_i_click_add_course
+    then_a_course_is_created
+  end
+
+  scenario "a further education course does not keep a visa answer from an earlier branch" do
+    given_i_have_completed_further_education_wizard_state
+    and_a_student_visa_answer_is_left_from_an_earlier_branch
+    when_i_visit_check_answers_page
+    then_i_am_taken_to_the_check_answers_page
+
+    and_i_click_add_course
+    then_a_course_is_created
+    expect(provider.courses.order(:created_at).last.can_sponsor_student_visa).to be(false)
+  end
+
 private
+
+  def wizard_state_store
+    repository = CourseWizard::Repositories::Course.new(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
+      expires_in: 24.hours,
+    )
+    CourseWizard::StateStores::CourseWizardStore.new(repository:)
+  end
+
+  def and_the_visa_deadline_questions_are_unanswered
+    wizard_state_store.write(
+      visa_sponsorship_application_deadline_required: nil,
+      visa_sponsorship_application_deadline_at: nil,
+    )
+  end
+
+  def and_a_student_visa_answer_is_left_from_an_earlier_branch
+    wizard_state_store.write(can_sponsor_student_visa: true)
+  end
+
+  def then_i_see_the_visa_deadline_question_is_not_entered
+    row = page.find(".govuk-summary-list__row", text: "Is there a visa sponsorship deadline?")
+    expect(row).to have_css(".govuk-summary-list__value", exact_text: "Not entered")
+  end
 
   def tda_changeable_steps
     %i[

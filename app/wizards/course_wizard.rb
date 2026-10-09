@@ -217,6 +217,14 @@ class CourseWizard
     current_step_name == :check_answers
   end
 
+  # The first step on the path to check answers that has no valid answer, or
+  # nil when every step has one. A step can be left unanswered when an earlier
+  # answer changes the path, for example "yes" to visa sponsorship after the
+  # deadline steps were skipped.
+  def first_invalid_step
+    flow_path(:check_answers).find { |step_id| step_id != :check_answers && !valid?(step_id) }
+  end
+
   def review_steps(draft:)
     steps = flow_steps
     steps = ensure_review_step(steps, :study_sites)
