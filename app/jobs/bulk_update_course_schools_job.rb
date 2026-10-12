@@ -12,7 +12,6 @@
 # it stops. Anything that escapes Apply entirely - a dropped connection, say -
 # still bubbles, and the whole job is retried a few times with backoff.
 class BulkUpdateCourseSchoolsJob < ApplicationJob
-  self.queue_adapter = :solid_queue
   queue_as :default
   retry_on_failure
 

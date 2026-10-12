@@ -37,32 +37,6 @@ one_login:
   # URL of the users profile
   profile_url: https://home.account.gov.uk
 
-bg_jobs:
-  save_statistic:
-    cron: "0 0 * * *" # daily at midnight
-    class: "SaveStatisticJob"
-    queue: low_priority
-  send_entity_table_checks_to_bigquery:
-    cron: "30 0 * * *" # daily at 00:30
-    class: "DfE::Analytics::EntityTableCheckJob"
-    queue: low_priority
-  import_gias_schools:
-    cron: "30 2 * * *" # daily at 02:30
-    class: "GiasImportJob"
-    queue: low_priority
-  cleanup_recent_searches:
-    cron: "0 3 * * *" # daily at 03:00
-    class: "CleanupRecentSearchesJob"
-    queue: low_priority
-  cleanup_school_bulk_update_drafts:
-    cron: "0 3 * * *" # daily at 03:00
-    class: "CleanupSchoolBulkUpdateDraftsJob"
-    queue: low_priority
-  send_weekly_email_alerts:
-    cron: "0 3 * * 5" # weekly on Friday at 03:00
-    class: "SendWeeklyEmailAlertsJob"
-    queue: low_priority
-
 skylight:
   enable: true
 

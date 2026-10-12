@@ -7,7 +7,7 @@ class ApplicationJob < ActiveJob::Base
 
   # Opt-in: discard StandardError with no Active Job / Sidekiq auto-retries.
   # A bare `retry_on ..., attempts: 0` re-raises into Sidekiq's JobWrapper
-  # (retry: true) while the global adapter is still :sidekiq.
+  # (retry: true) for legacy payloads still draining from Sidekiq.
   #
   # `report: true` sends failures through ActiveSupport::ErrorReporter (Sentry
   # when `config.rails.register_error_subscriber` is enabled).

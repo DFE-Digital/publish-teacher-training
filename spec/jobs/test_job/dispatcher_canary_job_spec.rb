@@ -3,10 +3,6 @@
 require "rails_helper"
 
 RSpec.describe TestJob::DispatcherCanaryJob do
-  it "uses Solid Queue explicitly for this canary job" do
-    expect(described_class.queue_adapter_name).to eq("solid_queue")
-  end
-
   it "can be enqueued onto Solid Queue", :solid_queue do
     expect {
       described_class.set(wait_until: 1.minute.from_now).perform_later

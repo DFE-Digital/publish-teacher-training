@@ -1,6 +1,5 @@
 module BlankCoordinatesBackfill
   class BatchJob < ApplicationJob
-    self.queue_adapter = :solid_queue
     # Off the geocoding queue so a backfill cannot hold up GeocodeJob for new addresses.
     queue_as :low_priority
     without_auto_retry

@@ -21,23 +21,31 @@ RSpec.describe "Solid Queue recurring configuration" do
     section_for(env).reject { |_key, task| task.key?("command") }
   end
 
-  it "keeps the Solid Queue worker skipping recurrence until cutover" do
+  it "runs the recurring scheduler on the Solid Queue worker" do
     terraform = Rails.root.join("terraform/aks/application.tf").read
 
-    expect(terraform).to include("SOLID_QUEUE_SKIP_RECURRING=true")
+    expect(terraform).not_to include("SOLID_QUEUE_SKIP_RECURRING=true")
   end
 
-  it "documents the atomic cutover and rollback steps" do
+  it "leaves Sidekiq Cron with no schedules to load and clears persisted entries" do
+    initializer = Rails.root.join("config/initializers/sidekiq.rb").read
+
+    expect(Settings.bg_jobs).to be_nil
+    expect(initializer).to include("Sidekiq::Cron::Job.destroy_all!")
+    expect(initializer).not_to include("load_from_hash")
+  end
+
+  it "documents the cutover and rollback steps" do
     expect(Rails.root.join("guides/solid-queue-recurring-cutover.md")).to exist
   end
 
-  it "defines empty schedules for environments without Sidekiq Cron" do
+  it "defines empty schedules for environments without recurring jobs" do
     %w[sandbox review development test loadtest rollover].each do |env|
       expect(section_for(env)).to eq({})
     end
   end
 
-  it "mirrors production Sidekiq Cron jobs with matching class, queue and cron" do
+  it "schedules every production job with its class, queue and cron" do
     production_tasks = application_job_tasks("production")
 
     expect(production_tasks.keys).to contain_exactly(
@@ -81,7 +89,7 @@ RSpec.describe "Solid Queue recurring configuration" do
     )
   end
 
-  it "mirrors QA and staging Sidekiq Cron job sets" do
+  it "schedules the QA and staging job sets" do
     qa_tasks = application_job_tasks("qa")
 
     expect(qa_tasks.keys).to contain_exactly(

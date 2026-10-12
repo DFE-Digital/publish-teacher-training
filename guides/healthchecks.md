@@ -21,7 +21,7 @@ results. For example:
   "checks": {
     "database": true,
     "redis": true,
-    "sidekiq_processes": true
+    "solid_queue_processes": true
   }
 }
 ```
@@ -34,32 +34,19 @@ Check that 'ActiveRecord' connection to the database is active.
 
 ### `redis`
 
-Checks that Sidekiq can connect to the Redis server.
+Checks that the app can connect to the worker Redis server. Feature flags, site
+settings and some form state still live there.
 
-### `sidekiq_processes`
+### `solid_queue_processes`
 
-Check which queues currently have jobs, as reported by Sidekiq, and checks that
-there is a Sidekiq running for each one. In theory there should be a process for
-each queue that is being used, and we determine which queues are being used by
-looking at what jobs we have queued up.
+Checks that the `solid-queue-worker` has a Solid Queue worker and dispatcher with
+a heartbeat inside `SolidQueue.process_alive_threshold` (5 minutes). In
+environments with tasks in `config/recurring.yml`, it also needs a live
+scheduler, unless `SOLID_QUEUE_SKIP_RECURRING` is set.
 
-#### Failures caused by stale jobs
-
-This check will fail if there are stale jobs in a queue that doesn't have a
-processor running. You can check which queues have jobs by starting the Rails
-console and running:
+If this check fails, look at the `solid-queue-worker` pods and at the processes
+in Mission Control, or run this in a Rails console:
 
 ```ruby
-stats = Sidekiq::Stats.new
-processes = Sidekiq::ProcessSet.new
-stats.queues.keys.each do |queue|
-  running = processes.any? { |process| queue.in? process["queues"] }
-  puts "#{queue} running? #{running}"
-end
+SolidQueue::Process.group(:kind).maximum(:last_heartbeat_at)
 ```
-
-If you see jobs in a queue that shouldn't be running anymore (e.g. we've retired
-`find_sync` and shouldn't see any jobs for it) then you'll need to remove any
-job queues that exist for it for this test to return `true`. If, on the other
-hand, you only have the queues you expected listed, but no process is listed for
-them, then you have a problem.

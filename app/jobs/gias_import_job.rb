@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class GiasImportJob < ApplicationJob
-  self.queue_adapter = :solid_queue
   queue_as :low_priority
 
   # The import upserts by URN, so a later attempt is always safe. The specific

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RolloverMonitoringJob < ApplicationJob
-  self.queue_adapter = :solid_queue
   queue_as :default
   without_auto_retry
 

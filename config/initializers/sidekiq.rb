@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
-load_cron_jobs = lambda do
-  if Settings.bg_jobs
-    cron_jobs = SolidQueueCronHandoffWorker.wrap(Settings.bg_jobs.to_h)
-    Sidekiq::Cron::Job.load_from_hash(cron_jobs)
-  end
-end
+# config/recurring.yml is the only schedule source. Sidekiq Cron entries persist
+# in Redis, so clear them whenever Sidekiq boots while it drains legacy payloads.
+clear_cron_jobs = -> { Sidekiq::Cron::Job.destroy_all! }
 
 if ENV.key?("REDIS_WORKER_URL")
   Sidekiq.configure_server do |config|
@@ -14,7 +11,7 @@ if ENV.key?("REDIS_WORKER_URL")
     }
     config.logger.level = Logger::WARN
 
-    config.on(:startup, &load_cron_jobs)
+    config.on(:startup, &clear_cron_jobs)
   end
 
   Sidekiq.configure_client do |config|
@@ -36,7 +33,7 @@ else
       password: Settings.mcbg.redis_password,
     }
 
-    config.on(:startup, &load_cron_jobs)
+    config.on(:startup, &clear_cron_jobs)
   end
 
 end
