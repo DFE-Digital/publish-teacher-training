@@ -10,6 +10,7 @@ class EmailAlertMailerJob < ApplicationJob
   # Notify's limit is per minute, so back off long enough for the window to reset.
   retry_on Notifications::Client::RateLimitError, attempts: 5, wait: 1.minute
   fail_without_retry_on Notifications::Client::ServerError, Net::ReadTimeout, ActiveRecord::Deadlocked
+  discard_on ActiveRecord::RecordNotFound
 
   def perform(email_alert_id, course_ids, delivery_week = nil)
     alert = Candidate::EmailAlert.find(email_alert_id)

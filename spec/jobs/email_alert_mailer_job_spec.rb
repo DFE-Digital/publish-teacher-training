@@ -151,6 +151,16 @@ RSpec.describe EmailAlertMailerJob do
         .to have_enqueued_job(described_class).at(a_value_between(1.minute.from_now, 75.seconds.from_now))
     end
 
+    it "discards the job when the alert has been deleted" do
+      allow(EmailAlertMailer).to receive(:weekly_digest)
+      alert_id = alert.id
+      alert.destroy!
+
+      expect { described_class.perform_now(alert_id, [course.id]) }.not_to raise_error
+      expect(EmailAlertMailer).not_to have_received(:weekly_digest)
+      expect(described_class).not_to have_been_enqueued
+    end
+
     it "does not retry when Notify rejects the request" do
       allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(notify_error(Notifications::Client::BadRequestError, "400"))
 
