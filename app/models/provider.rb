@@ -142,7 +142,7 @@ class Provider < ApplicationRecord
     )
   }
 
-  scope :with_findable_courses, lambda {
+  scope :with_courses_visible_in_find, lambda {
     visible_courses = Course.kept.visible_in_find
 
     where(id: visible_courses.select(:provider_id))

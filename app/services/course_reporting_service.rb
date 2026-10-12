@@ -3,9 +3,9 @@
 class CourseReportingService
   def initialize(courses_scope: Course)
     @courses = courses_scope.distinct
-    @findable_courses = @courses.findable
-    @open_courses = @findable_courses.application_status_open
-    @closed_courses = @findable_courses.application_status_closed
+    @visible_courses = @courses.visible_in_find
+    @open_courses = @visible_courses.application_status_open
+    @closed_courses = @visible_courses.application_status_closed
   end
 
   class << self
@@ -18,8 +18,10 @@ class CourseReportingService
     {
       total: {
         all: @courses.count,
-        non_findable: @courses.count - @findable_courses.count,
-        all_findable: @findable_courses.count,
+        # Keys stay findable_* so GET /reporting keeps its existing shape.
+        # The figures are Course.visible_in_find, not SiteStatus findability.
+        non_findable: @courses.count - @visible_courses.count,
+        all_findable: @visible_courses.count,
       },
       findable_total: {
         open: @open_courses.count,
