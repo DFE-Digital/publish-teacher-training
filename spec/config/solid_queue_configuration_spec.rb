@@ -10,7 +10,6 @@ RSpec.describe "Solid Queue configuration" do
       default
       mailers
       geocoding
-      save_statistic
       low_priority
       solid_queue_recurring
     ]
@@ -86,11 +85,11 @@ RSpec.describe "Solid Queue configuration" do
     expect(section_for("rollover").fetch("workers").first["queues"]).to eq(%w[default geocoding mailers])
   end
 
-  it "keeps Sidekiq as the application-default Active Job adapter" do
+  it "uses Solid Queue as the application-default Active Job adapter" do
     application_config = Rails.root.join("config/application.rb").read
 
-    expect(application_config).to match(/config\.active_job\.queue_adapter\s*=\s*:sidekiq/)
-    expect(application_config).not_to match(/config\.active_job\.queue_adapter\s*=\s*:solid_queue/)
+    expect(application_config).to match(/config\.active_job\.queue_adapter\s*=\s*:solid_queue/)
+    expect(application_config).not_to match(/config\.active_job\.queue_adapter\s*=\s*:sidekiq/)
   end
 
   it "boots Solid Queue via start_when_ready so workers wait for schema" do

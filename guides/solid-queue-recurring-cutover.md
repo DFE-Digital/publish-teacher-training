@@ -1,35 +1,74 @@
-# Solid Queue recurring cutover
+# Solid Queue cutover
 
-PTT keeps Sidekiq Cron (`Settings.bg_jobs`) as the live scheduler until the
-global Active Job adapter cutover. `config/recurring.yml` is the Solid Queue
-replacement; the `solid-queue-worker` pod starts with
-`SOLID_QUEUE_SKIP_RECURRING=true` so both systems cannot enqueue the same
-schedule at once.
+Solid Queue is the Active Job adapter (`config.active_job.queue_adapter`) and
+`config/recurring.yml` is the only schedule source. Sidekiq and Redis stay
+deployed so legacy Sidekiq payloads can drain and so the cutover can be rolled
+back.
 
-## Cutover (run once, atomically)
+## How the cutover happens
 
-1. Confirm every queue in `config/queue.yml` is consumed, including
-   `solid_queue_recurring`, `mailers`, and `low_priority`.
-2. In a production Rails console (or equivalent Sidekiq Cron admin path),
-   destroy every Sidekiq Cron entry that matches `Settings.bg_jobs` keys for
-   that environment. Do not leave cron polling enabled with empty jobs if the
-   initializer would reload them on the next Sidekiq boot — disable cron load
-   or remove `bg_jobs` as part of the same release that enables Solid Queue
-   recurrence.
-3. Remove `SOLID_QUEUE_SKIP_RECURRING=true` from the `solid-queue-worker`
-   Terraform command (or set it to `false`) and apply so the scheduler boots.
-4. Verify Mission Control / `solid_queue_recurring_tasks` shows exactly one
-   source for each expected task, and that the next run times are UK-local.
-5. Confirm Sidekiq Cron no longer enqueues the same classes.
+The release that switched the adapter does it per environment as it deploys:
+
+1. Every job enqueued by the new web and worker pods goes to Solid Queue.
+2. The `solid-queue-worker` starts without `SOLID_QUEUE_SKIP_RECURRING`, so its
+   scheduler loads `config/recurring.yml`. Each replica runs a scheduler; the
+   unique `(task_key, run_at)` index on `solid_queue_recurring_executions`
+   enqueues each run once.
+3. When the Sidekiq pods boot on the new release they run
+   `Sidekiq::Cron::Job.destroy_all!` (`config/initializers/sidekiq.rb`). Sidekiq
+   Cron entries persist in Redis, so this is what stops the old schedules.
+4. Sidekiq keeps working through whatever was already in its queues, retry set
+   and scheduled set.
+
+Deploy on a weekday daytime, Monday to Wednesday, so no schedule (00:00 to
+03:00 UK time) falls inside the deploy and a Friday 03:00 weekly alert run
+lands inside the soak. Avoid rollover and Find opening.
+
+## Checks after each environment deploys
+
+In a Rails console:
+
+```ruby
+Sidekiq::Cron::Job.all.size # => 0
+SolidQueue::RecurringTask.pluck(:key) # matches the table below for this environment
+SolidQueue::Process.group(:kind).maximum(:last_heartbeat_at) # Worker, Dispatcher and Scheduler all recent
+```
+
+- `/healthcheck` reports `solid_queue_processes: true`.
+- Mail: trigger a magic link (QA) and check the `mailers` job finishes and the
+  email arrives.
+- Analytics: request events reach BigQuery, and the 00:30 entity table check
+  runs (production).
+- Cache: `SolidCache::ExpiryJob` executions appear on `low_priority`.
+- Dispatcher: `TestJob::DispatcherCanaryJob.set(wait_until: 1.minute.from_now).perform_later`
+  moves from scheduled to finished.
+- Monitor oldest ready job age per queue, failed executions, worker memory and
+  restarts, Postgres CPU, connections, locks and WAL, and Airbyte lag.
+
+## Draining Sidekiq
+
+Watch the Sidekiq queues, retry set and scheduled set reach zero.
+`BulkUpdateCourseSchoolsJob` reschedules failed courses five minutes later, so
+wait for those scheduled entries to clear. Deal with the dead set one job at a
+time: re-enqueue on Solid Queue only after checking the job is safe to run
+again, otherwise delete it. Record each decision.
+
+Never run `FLUSHDB` or delete keys by pattern: feature flags, site settings and
+form state share the worker Redis.
+
+Scale the Sidekiq workers to zero only once the drain is signed off.
 
 ## Rollback
 
-1. Set `SOLID_QUEUE_SKIP_RECURRING=true` on the Solid Queue worker and roll out
-   so the scheduler stops first.
-2. Restore Sidekiq Cron (`Settings.bg_jobs` load) and scale Sidekiq workers as
-   needed.
-3. Reconcile any jobs already accepted by Solid Queue before replaying them —
-   do not double-send weekly email alerts or GIAS imports.
+1. Set `SOLID_QUEUE_SKIP_RECURRING: true` in
+   `terraform/aks/workspace_variables/app_config.yml` and apply, so the Solid
+   Queue scheduler stops first. `/healthcheck` stops expecting a scheduler.
+2. Revert the cutover release. That restores the Sidekiq adapter, the
+   `bg_jobs` settings and the Sidekiq Cron loader, which reloads the schedules
+   when Sidekiq boots.
+3. Scale the Sidekiq workers back up if they were scaled down.
+4. Check Solid Queue's ready and scheduled jobs before letting anything replay,
+   so nothing runs twice. Weekly email alerts and the GIAS import matter most.
 
 ## Environment parity
 

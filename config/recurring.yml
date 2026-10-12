@@ -1,13 +1,12 @@
-# Solid Queue recurring tasks — mirrors Settings.bg_jobs (Sidekiq Cron) by environment.
+# Solid Queue recurring tasks — the only schedule source for PTT background jobs.
 #
-# Schedules use Europe/London so UK local midnight / DST behaviour matches Sidekiq Cron
-# under config.time_zone = "Europe/London".
+# Schedules use Europe/London so UK local midnight / DST behaviour matches
+# config.time_zone = "Europe/London".
 #
-# The Solid Queue scheduler is skipped in every deployed environment until the global
-# adapter cutover (SOLID_QUEUE_SKIP_RECURRING=true on the solid-queue-worker). Enabling
-# recurrence before destroying Sidekiq Cron entries would double-enqueue schedules.
+# The solid-queue-worker runs the scheduler. Every replica runs one, and the unique
+# (task_key, run_at) index on solid_queue_recurring_executions enqueues each run once.
 #
-# Cutover / rollback steps: guides/solid-queue-recurring-cutover.md
+# Rollback steps: guides/solid-queue-recurring-cutover.md
 
 # Finished-job / batch cleanup for environments that will run the scheduler after cutover.
 # Routed to low_priority so command jobs land on a consumed queue.
@@ -70,8 +69,8 @@ staging:
     queue: low_priority
     schedule: "0 0 * * * Europe/London"
 
-# No Sidekiq Cron schedules today — keep empty so a future SKIP_RECURRING=false
-# still does not invent production-like recurrence.
+# No schedules in these environments — keep empty so the scheduler does not
+# invent production-like recurrence.
 sandbox: {}
 review: {}
 development: {}

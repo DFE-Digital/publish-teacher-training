@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "sidekiq/api"
-
 class HeartbeatController < ActionController::API
   def ping
     render body: "PONG"
@@ -11,7 +9,7 @@ class HeartbeatController < ActionController::API
     checks = {
       database: database_alive?,
       redis: redis_alive?,
-      sidekiq_processes: sidekiq_processes_checks,
+      solid_queue_processes: solid_queue_processes_checks,
     }
 
     status = checks.values.all? ? :ok : :service_unavailable
@@ -42,16 +40,27 @@ private
     false
   end
 
-  def sidekiq_processes_checks
-    stats = Sidekiq::Stats.new
-    processes = Sidekiq::ProcessSet.new
+  def solid_queue_processes_checks
+    alive_kinds = SolidQueue::Process
+      .where(last_heartbeat_at: SolidQueue.process_alive_threshold.ago..)
+      .distinct
+      .pluck(:kind)
 
-    # Iterate over each Sidekiq queue and ensure that there is a process
-    # running for it.
-    stats.queues.keys.all? do |queue|
-      processes.any? { |process| queue.in? process["queues"] }
-    end
+    expected_solid_queue_kinds.all? { |kind| kind.in?(alive_kinds) }
   rescue StandardError
     false
+  end
+
+  # Solid Queue only boots a scheduler when this environment has recurring
+  # tasks and SOLID_QUEUE_SKIP_RECURRING is not set.
+  def expected_solid_queue_kinds
+    kinds = %w[Worker Dispatcher]
+    kinds << "Scheduler" if recurring_tasks_scheduled?
+    kinds
+  end
+
+  def recurring_tasks_scheduled?
+    Rails.application.config_for(:recurring).any? &&
+      !ActiveModel::Type::Boolean.new.cast(ENV["SOLID_QUEUE_SKIP_RECURRING"])
   end
 end

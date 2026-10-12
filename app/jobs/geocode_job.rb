@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class GeocodeJob < ApplicationJob
-  # Solid Queue pilot — rollback by removing this line (global adapter stays Sidekiq).
-  self.queue_adapter = :solid_queue
   queue_as :geocoding
 
   # Solid Queue has no Sidekiq-style auto-retries. Lat/lon overwrite is idempotent,

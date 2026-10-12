@@ -12,17 +12,19 @@ describe "heartbeat requests" do
   end
 
   describe "GET /healthcheck" do
-    let(:stats)      { instance_double(Sidekiq::Stats) }
-    let(:process)    { instance_double(Sidekiq::Process) }
-    let(:queue_name) { "quest" }
-    let(:queues)     { { queue_name => 0 } }
+    def register_solid_queue_process(kind, last_heartbeat_at: Time.current)
+      SolidQueue::Process.create!(
+        kind:,
+        name: "#{kind.downcase}-#{SecureRandom.hex(4)}",
+        pid: 1,
+        hostname: "solid-queue-worker",
+        last_heartbeat_at:,
+      )
+    end
 
     before do
-      allow(Sidekiq::Stats).to receive(:new).and_return(stats)
-      allow(stats).to receive(:queues).and_return(queues)
-
-      allow(Sidekiq::ProcessSet).to receive(:new).and_return([process])
-      allow(process).to receive(:[]).with("queues").and_return([queue_name])
+      register_solid_queue_process("Worker")
+      register_solid_queue_process("Dispatcher")
 
       allow(ActiveRecord::Base.connection).to receive(:active?).and_return(true)
       allow(Sidekiq).to receive(:redis_info).and_return({})
@@ -46,14 +48,14 @@ describe "heartbeat requests" do
         expect(response.body).to eq({ checks: {
           database: true,
           redis: true,
-          sidekiq_processes: true,
+          solid_queue_processes: true,
         } }.to_json)
       end
     end
 
-    context "there's no process for a queue" do
+    context "when no Solid Queue worker has a recent heartbeat" do
       before do
-        allow(process).to receive(:[]).with("queues").and_return([])
+        SolidQueue::Process.where(kind: "Worker").update_all(last_heartbeat_at: 10.minutes.ago)
       end
 
       it("returns 503") do
@@ -62,12 +64,37 @@ describe "heartbeat requests" do
         expect(response).to have_http_status(:service_unavailable)
       end
 
-      it "sets the sidekiq queue to false" do
+      it "sets the Solid Queue check to false" do
         get "/healthcheck"
 
-        json_response = response.parsed_body
+        expect(response.parsed_body["checks"]["solid_queue_processes"]).to be false
+      end
+    end
 
-        expect(json_response["checks"]["sidekiq_processes"]).to be false
+    context "when the environment has recurring tasks" do
+      before do
+        allow(Rails.application).to receive(:config_for).and_call_original
+        allow(Rails.application).to receive(:config_for).with(:recurring).and_return({ save_statistic: {} })
+      end
+
+      it "needs a live scheduler" do
+        get "/healthcheck"
+
+        expect(response.parsed_body["checks"]["solid_queue_processes"]).to be false
+
+        register_solid_queue_process("Scheduler")
+        get "/healthcheck"
+
+        expect(response.parsed_body["checks"]["solid_queue_processes"]).to be true
+      end
+
+      it "does not need a scheduler when recurring tasks are skipped" do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("SOLID_QUEUE_SKIP_RECURRING").and_return("true")
+
+        get "/healthcheck"
+
+        expect(response.parsed_body["checks"]["solid_queue_processes"]).to be true
       end
     end
 

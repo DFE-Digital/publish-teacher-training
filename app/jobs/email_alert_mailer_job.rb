@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EmailAlertMailerJob < ApplicationJob
-  self.queue_adapter = :solid_queue
   queue_as :mailers
 
   # Only failures where Notify has not accepted the email. Anything else would

@@ -4,11 +4,13 @@ require "rails_helper"
 require "erb"
 require "yaml"
 
-# PTT-owned jobs run on Solid Queue with per-class adapters while the global
-# adapter stays on Sidekiq, so a new job must opt in explicitly.
+# Solid Queue only runs jobs from queues a worker polls, so a job on an unpolled
+# queue sits there silently.
 RSpec.describe "Solid Queue job routing" do
-  # Framework jobs such as Sentry::SendEventJob also subclass ApplicationJob;
-  # they stay on the global adapter until card 8.
+  def load_yaml(path)
+    YAML.safe_load(ERB.new(Rails.root.join(path).read).result, aliases: true)
+  end
+
   def ptt_jobs
     jobs_dir = Rails.root.join("app/jobs").to_s
     Rails.autoloaders.main.eager_load_dir(jobs_dir)
@@ -19,37 +21,38 @@ RSpec.describe "Solid Queue job routing" do
   end
 
   def consumed_queues(env)
-    config = YAML.safe_load(ERB.new(Rails.root.join("config/queue.yml").read).result, aliases: true)
-    config.fetch(env).fetch("workers").flat_map { |worker| Array(worker.fetch("queues")) }
+    load_yaml("config/queue.yml").fetch(env).fetch("workers").flat_map { |worker| Array(worker.fetch("queues")) }
   end
 
-  it "routes every PTT job to Solid Queue" do
-    not_on_solid_queue = ptt_jobs.reject { |job| job.queue_adapter_name == "solid_queue" }
-
-    expect(not_on_solid_queue.map(&:name)).to be_empty
-  end
-
-  it "puts every Solid Queue job on a queue the workers consume" do
-    solid_queue_jobs = ptt_jobs.select { |job| job.queue_adapter_name == "solid_queue" }
-
+  it "puts every PTT job on a queue the workers consume" do
     %w[production review].each do |env|
-      solid_queue_jobs.each do |job|
+      ptt_jobs.each do |job|
         expect(consumed_queues(env)).to include(job.new.queue_name), "#{job.name} queue not consumed in #{env}"
       end
     end
   end
 
-  it "keeps Sidekiq Cron entries for Solid Queue jobs on queues the workers consume" do
-    production_settings = YAML.safe_load(
-      ERB.new(Rails.root.join("config/settings/production.yml").read).result,
-      aliases: true,
-    )
+  it "puts mailer, analytics and cache expiry jobs on queues the workers consume" do
+    framework_queues = {
+      "Action Mailer" => Rails.application.config.action_mailer.deliver_later_queue_name,
+      "DfE Analytics" => DfE::Analytics.config.queue,
+      "Solid Cache expiry" => Rails.application.config_for(:cache, env: "production").dig(:store_options, :expiry_queue),
+    }
 
-    production_settings.fetch("bg_jobs").each_value do |entry|
-      job = entry.fetch("class").safe_constantize
-      next unless job.respond_to?(:queue_adapter_name) && job.queue_adapter_name == "solid_queue"
+    %w[production review].each do |env|
+      framework_queues.each do |name, queue|
+        expect(consumed_queues(env)).to include(queue.to_s), "#{name} queue #{queue} not consumed in #{env}"
+      end
+    end
+  end
 
-      expect(consumed_queues("production")).to include(entry.fetch("queue")), "#{entry['class']} cron queue not consumed"
+  it "puts every recurring task on a queue the workers consume" do
+    load_yaml("config/recurring.yml").slice("production", "qa", "staging").each do |env, tasks|
+      tasks.each do |key, task|
+        queue = task.fetch("queue", "solid_queue_recurring")
+
+        expect(consumed_queues(env)).to include(queue), "#{key} queue #{queue} not consumed in #{env}"
+      end
     end
   end
 end

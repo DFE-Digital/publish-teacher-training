@@ -66,8 +66,8 @@ First you need to create a new cycle.
 
 ### 3. Monitor Progress
 
-- Many jobs will run in the background (using **Sidekiq**).
-- To check progress, visit `/sidekiq` on Publish.
+- Many jobs will run in the background (using **Solid Queue**).
+- To check progress, visit `/jobs` (Mission Control) on Publish.
 
 ### 4. Verify Data and System Status
 
@@ -157,7 +157,7 @@ Here are some common reasons why rollover data might not match expectations:
 
 If a provider or course fails during rollover:
 
-1. **Check Sidekiq** for error messages.
+1. **Check the failed jobs in Mission Control** (`/jobs`) for error messages.
 2. If needed, investigate further:
     - Use the latest backup (see [seeding data guide](https://github.com/DFE-Digital/publish-teacher-training/blob/main/guides/setup-development.md#seeding-data))
     - Run rollover locally
@@ -201,4 +201,4 @@ copy_courses_to_provider_service.execute(course:, new_provider:)
 - **Rollover** is an annual process to prepare for the new recruitment cycle.
 - Follow the steps above to ensure a smooth transition.
 - Use the images to guide you through the interface.
-- If you encounter issues, use Sidekiq logs and the Rails console for troubleshooting.
+- If you encounter issues, use the `solid-queue-worker` logs and the Rails console for troubleshooting.

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RolloverProviderJob < ApplicationJob
-  self.queue_adapter = :solid_queue
   queue_as :low_priority
   without_auto_retry
 
