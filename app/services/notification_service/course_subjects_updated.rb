@@ -38,7 +38,7 @@ module NotificationService
 
     def notify_accredited_provider?
       return false if course.self_accredited?
-      return false unless course.findable?
+      return false unless course.is_published?
 
       true
     end

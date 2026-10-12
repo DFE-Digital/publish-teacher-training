@@ -47,6 +47,19 @@ RSpec.describe Courses::PublishService do
     end
   end
 
+  describe "notifying the accredited provider" do
+    let(:course) { create(:course, :publishable, sites: [], uuid:) }
+
+    it "emails publish subscribers when the course has no legacy sites" do
+      attach_course_school(course)
+      create(:user_notification, course_publish: true, provider_code: course.accredited_provider_code)
+      course_queried = Course.includes(:latest_draft_enrichment, site_statuses: [:site]).find(course.id)
+
+      expect { described_class.new(course: course_queried, user:).call }
+        .to have_enqueued_mail(CoursePublishEmailMailer, :course_publish_email)
+    end
+  end
+
   describe "publishing during rollover" do
     let(:course) { create(:course, :unpublished, :with_accrediting_provider, :with_gcse_equivalency, uuid:) }
     let(:v1_enrichment) { create(:course_enrichment, :v1, status: "rolled_over", course:) }

@@ -39,10 +39,10 @@ module NotificationService
     end
 
     def course_needs_to_notify?
-      course.findable? &&
+      notifiable_changes.any? &&
         !course.self_accredited? &&
-        notifiable_changes.any? &&
-        course.in_current_cycle?
+        course.in_current_cycle? &&
+        course.is_published?
     end
   end
 end

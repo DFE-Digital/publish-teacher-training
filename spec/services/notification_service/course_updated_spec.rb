@@ -18,6 +18,7 @@ module NotificationService
     let(:course) do
       create(
         :course,
+        enrichment_status,
         age_range_in_years: "3_to_7",
         accrediting_provider: accredited_provider,
         english: "expect_to_achieve_before_training_begins",
@@ -26,12 +27,12 @@ module NotificationService
     end
 
     let(:service_call) { described_class.call(course:) }
-    let(:findable) { true }
+    let(:enrichment_status) { :published }
     let(:self_accredited) { false }
 
     def setup_notifications
       allow(CourseUpdateEmailMailer).to receive(:course_update_email).and_return(double(deliver_later: true))
-      allow(course).to receive_messages(self_accredited?: self_accredited, findable?: findable)
+      allow(course).to receive_messages(self_accredited?: self_accredited)
       user_notifications
     end
 
@@ -47,7 +48,7 @@ module NotificationService
 
     context "with a course that is not in the current cycle" do
       let(:provider) { create(:provider, :next_recruitment_cycle) }
-      let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code, provider:) }
+      let(:course) { create(:course, enrichment_status, accredited_provider_code: accredited_provider.provider_code, provider:) }
 
       before { setup_notifications }
 
@@ -58,7 +59,7 @@ module NotificationService
       end
     end
 
-    context "course is findable" do
+    context "course is published" do
       before do
         setup_notifications
       end
@@ -114,8 +115,8 @@ module NotificationService
       end
     end
 
-    context "course is not findable" do
-      let(:findable) { false }
+    context "course is withdrawn" do
+      let(:enrichment_status) { :withdrawn }
 
       before do
         setup_notifications
