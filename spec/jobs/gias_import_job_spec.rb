@@ -53,11 +53,21 @@ describe GiasImportJob do
     end
   end
 
-  it "does not retry other failures" do
+  it "tries other failures again with backoff" do
     allow(Gias::Downloader).to receive(:call).and_return(StringIO.new)
     allow(Gias::Transformer).to receive(:call).and_raise(ArgumentError)
 
-    expect { described_class.perform_now }.to raise_error(ArgumentError)
+    expect { described_class.perform_now }.to have_enqueued_job(described_class)
+  end
+
+  it "gives up on other failures after the last attempt" do
+    allow(Gias::Downloader).to receive(:call).and_return(StringIO.new)
+    allow(Gias::Transformer).to receive(:call).and_raise(ArgumentError)
+
+    job = described_class.new
+    job.exception_executions = { "[StandardError]" => 2 }
+
+    expect { job.perform_now }.to raise_error(ArgumentError)
     expect(described_class).not_to have_been_enqueued
   end
 end

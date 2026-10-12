@@ -4,8 +4,11 @@ class GiasImportJob < ApplicationJob
   self.queue_adapter = :solid_queue
   queue_as :low_priority
 
-  # Yesterday's GIAS file is sometimes late or the download drops. The import
-  # upserts by URN, so a later attempt is safe.
+  # The import upserts by URN, so a later attempt is always safe. The specific
+  # retries below must stay after `retry_on_failure` so their waits win (LIFO).
+  retry_on_failure
+
+  # Yesterday's GIAS file is sometimes late or the download drops.
   retry_on Gias::DownloadError, attempts: 3, wait: 30.minutes
   retry_on(
     ActiveRecord::ConnectionFailed,
