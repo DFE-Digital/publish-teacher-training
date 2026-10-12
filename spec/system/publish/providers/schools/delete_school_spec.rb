@@ -300,7 +300,7 @@ RSpec.describe "Delete a provider's schools" do
 
   def and_i_see_the_confirm_page_for_a_school_with_no_courses
     expect(publish_school_delete_page.heading).to have_text("Remove #{school_name}")
-    expect(page).to have_css("p.govuk-body.govuk-hint", text: provider_school.full_address)
+    expect(page).to have_css("p.govuk-body.govuk-hint", text: provider_school.decorate.full_address)
     expect(page).to have_css("p.govuk-body.govuk-hint", text: "URN: #{provider_school.urn}")
     expect(page).to have_content("Are you sure you want to remove this school from your account?")
     expect(page).to have_content("This school is not attached to any courses")

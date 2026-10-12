@@ -7,7 +7,7 @@ module NotificationService
     describe "#call" do
       let(:accredited_provider) { create(:provider, :accredited_provider) }
       let(:other_accredited_provider) { create(:provider, :accredited_provider) }
-      let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code) }
+      let(:course) { create(:course, enrichment_status, accredited_provider_code: accredited_provider.provider_code) }
       let(:previous_subject_names) { ["primary with english"] }
       let(:updated_subject_names) { ["primary with mathematics"] }
       let(:previous_course_name) { previous_subject_names.first }
@@ -44,14 +44,14 @@ module NotificationService
         )
       end
       let(:self_accredited) { false }
-      let(:findable) { true }
+      let(:enrichment_status) { :published }
 
       def setup_notifications
         allow(CourseSubjectsUpdatedEmailMailer).to receive(:course_subjects_updated_email).and_return(double(deliver_later: true))
         subscribed_notification
         non_subscribed_notification
         other_provider_notification
-        allow(course).to receive_messages(self_accredited?: self_accredited, findable?: findable)
+        allow(course).to receive_messages(self_accredited?: self_accredited)
       end
 
       def call_service
@@ -75,7 +75,7 @@ module NotificationService
 
       context "with a course that is not in the current cycle" do
         let(:provider) { create(:provider, :next_recruitment_cycle) }
-        let(:course) { create(:course, accredited_provider_code: accredited_provider.provider_code, provider:) }
+        let(:course) { create(:course, enrichment_status, accredited_provider_code: accredited_provider.provider_code, provider:) }
 
         it "does not send a notification" do
           expect(CourseSubjectsUpdatedEmailMailer).not_to receive(:course_subjects_updated_email)
@@ -86,7 +86,7 @@ module NotificationService
       end
 
       context "non self-accredited course" do
-        context "that is findable" do
+        context "that is published" do
           it "mails subscribed users" do
             expect(CourseSubjectsUpdatedEmailMailer)
               .to receive(:course_subjects_updated_email)
@@ -111,8 +111,8 @@ module NotificationService
           end
         end
 
-        context "that is not findable?" do
-          let(:findable) { false }
+        context "that is withdrawn" do
+          let(:enrichment_status) { :withdrawn }
 
           it "does not mail subscribed users" do
             expect(CourseSubjectsUpdatedEmailMailer)
