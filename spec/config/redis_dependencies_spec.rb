@@ -4,8 +4,8 @@ require "rails_helper"
 
 # Redis is being retired. Background jobs run on Solid Queue and the cache on
 # Solid Cache; the files below are the only remaining Redis or Sidekiq users,
-# and each one has a card to remove it. A new call site would quietly keep
-# Redis alive, so it must be added here on purpose.
+# and each is due to be removed. A new call site would quietly keep Redis
+# alive, so it must be added here on purpose.
 RSpec.describe "Redis and Sidekiq dependencies" do
   known_call_sites = %w[
     app/controllers/heartbeat_controller.rb
