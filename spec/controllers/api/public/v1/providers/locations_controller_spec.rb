@@ -6,7 +6,11 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
   let(:provider) { create(:provider) }
 
   def create_locations(provider, count)
-    create_list(:provider_school, count, provider:)
+    if provider.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      create_list(:provider_school, count, provider:)
+    else
+      provider.sites << build_list(:site, count, provider:)
+    end
   end
 
   describe "#index" do
@@ -92,7 +96,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
         let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
 
         before do
-          create_list(:provider_school, 3, provider:)
+          provider.sites << build_list(:site, 3, provider:)
 
           get :index, params: {
             recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -100,7 +104,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
           }
         end
 
-        it "returns the schools as locations" do
+        it "returns the legacy sites as locations" do
           expect(json_response["data"].size).to be(3)
           expect(json_response["meta"]["count"]).to be(3)
         end
@@ -200,7 +204,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
       let(:provider) { create(:provider, recruitment_cycle: find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year)) }
 
       before do
-        create_list(:provider_school, 3, provider:)
+        provider.sites << build_list(:site, 3, provider:)
 
         get :index, params: {
           recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -208,7 +212,7 @@ RSpec.describe API::Public::V1::Providers::LocationsController do
         }
       end
 
-      it "returns the schools as locations" do
+      it "returns the legacy sites as locations" do
         expect(json_response["data"].size).to be(3)
       end
     end
