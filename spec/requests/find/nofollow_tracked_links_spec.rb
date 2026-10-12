@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Find links to robots-blocked URLs", service: :find, travel: mid_cycle(2027) do
+RSpec.describe "Find links to robots-blocked URLs", service: :find do
   let(:course) do
     create(
       :course,
