@@ -39,20 +39,12 @@ describe "API" do
         schema({ '$ref': "#/components/schemas/ProviderLocationListResponse" })
 
         before do
-          2.times do
-            create(
-              :provider_school,
-              provider:,
-              gias_school: build(
-                :gias_school,
-                address2: Faker::Address.secondary_address,
-                address3: Faker::Address.street_name,
-                county: Faker::Address.state,
-                latitude: Faker::Address.latitude,
-                longitude: Faker::Address.longitude,
-              ),
-            )
-          end
+          provider.sites << build_list(
+            :site,
+            2,
+            latitude: Faker::Address.latitude,
+            longitude: Faker::Address.longitude,
+          )
         end
 
         run_test!

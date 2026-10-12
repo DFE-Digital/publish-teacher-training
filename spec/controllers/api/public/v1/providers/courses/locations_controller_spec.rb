@@ -7,7 +7,11 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
   let(:provider) { course.provider }
 
   def create_course_locations(course, count)
-    create_list(:course_school, count, course:)
+    if course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+      create_list(:course_school, count, course:)
+    else
+      course.sites << build_list(:site, count, provider: course.provider)
+    end
   end
 
   describe "#index" do
@@ -65,7 +69,11 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
           expect(recruitment_cycle_id).to eq(provider.recruitment_cycle.id)
           expect(provider_id).to eq(provider.id)
           expect(course_id).to eq(course.id)
-          expected_location_status_id = course.schools.first.id
+          expected_location_status_id = if course.recruitment_cycle.after?(Settings.schools_remodel_cycle_year)
+                                          course.schools.first.id
+                                        else
+                                          course.site_statuses.first.id
+                                        end
 
           expect(location_status_id).to eq(expected_location_status_id)
         end
@@ -91,7 +99,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
         }
       end
 
-      it "returns the schools as locations" do
+      it "returns the legacy sites as locations" do
         expect(json_response["data"].size).to be(2)
       end
     end
@@ -285,7 +293,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
     let(:course) { create(:course, provider:) }
 
     before do
-      create_list(:course_school, 2, course:)
+      course.sites << build_list(:site, 2, provider:)
 
       get :index, params: {
         recruitment_cycle_year: provider.recruitment_cycle.year,
@@ -294,7 +302,7 @@ RSpec.describe API::Public::V1::Providers::Courses::LocationsController do
       }
     end
 
-    it "returns the schools as locations" do
+    it "returns the legacy sites as locations" do
       expect(json_response["data"].size).to be(2)
     end
   end
