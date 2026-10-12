@@ -35,12 +35,8 @@ class RolloverReportingService
 
 private
 
-  def next_findable
-    @rollover_scope.next.courses.findable
-  end
-
   def published_courses
-    next_findable
+    @rollover_scope.next.courses.visible_in_find
   end
 
   def published_courses_count
@@ -48,7 +44,7 @@ private
   end
 
   def new_courses_published
-    next_findable.distinct.created_at_since(RecruitmentCycle.next.created_at + 1.day)
+    published_courses.distinct.created_at_since(RecruitmentCycle.next.created_at + 1.day)
   end
 
   def new_courses_published_count

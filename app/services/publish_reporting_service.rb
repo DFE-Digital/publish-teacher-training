@@ -108,18 +108,19 @@ private
   def course_breakdown
     courses_changed_recently = @courses.changed_at_since(days_ago)
 
-    findable_courses = courses_changed_recently.findable.distinct
-    open_courses = findable_courses.application_status_open
-    closed_courses = findable_courses.application_status_closed
+    visible_courses = courses_changed_recently.visible_in_find.distinct
+    open_courses = visible_courses.application_status_open
+    closed_courses = visible_courses.application_status_closed
 
     courses_changed_recently_count = courses_changed_recently.count
-    findable_courses_count = findable_courses.count
+    visible_courses_count = visible_courses.count
 
     {
       total_updated_recently: courses_changed_recently_count,
-      updated_non_findable_recently: courses_changed_recently_count - findable_courses_count,
+      # Keys stay findable_* so GET /reporting keeps its existing shape.
+      updated_non_findable_recently: courses_changed_recently_count - visible_courses_count,
 
-      updated_findable_recently: findable_courses_count,
+      updated_findable_recently: visible_courses_count,
       updated_open_courses_recently: open_courses.count,
       updated_closed_courses_recently: closed_courses.count,
 

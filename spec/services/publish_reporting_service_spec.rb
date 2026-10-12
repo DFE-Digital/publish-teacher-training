@@ -100,7 +100,7 @@ describe PublishReportingService do
         expect(providers_scope).to receive(:count).and_return(providers_count)
 
         expect(courses_scope).to receive(:changed_at_since).and_return(courses_changed_at_since_scope)
-        expect(courses_changed_at_since_scope).to receive_message_chain(:findable, :distinct).and_return(courses_findable_scope)
+        expect(courses_changed_at_since_scope).to receive_message_chain(:visible_in_find, :distinct).and_return(courses_findable_scope)
         expect(courses_findable_scope).to receive(:application_status_open).and_return(open_courses_scope)
         expect(courses_findable_scope).to receive(:application_status_closed).and_return(closed_courses_scope)
         expect(courses_changed_at_since_scope).to receive(:count).and_return(courses_changed_at_since_count)
@@ -111,6 +111,28 @@ describe PublishReportingService do
         expect(courses_scope).to receive_message_chain(:created_at_since, :count).and_return(courses_created_at_since_count)
 
         expect(subject).to eq(expected)
+      end
+    end
+
+    describe "publication status" do
+      it "counts a recently changed published course and not a withdrawn or rolled-over course" do
+        recruitment_cycle = find_or_create(:recruitment_cycle, :next)
+        provider = create(:provider, recruitment_cycle:)
+        published = create(:course, :published, provider:, changed_at: 1.day.ago)
+        withdrawn = create(:course, :withdrawn, provider:, changed_at: 1.day.ago)
+        rolled_over = create(:course, provider:, changed_at: 1.day.ago, enrichments: [build(:course_enrichment, :rolled_over)])
+
+        visible = recruitment_cycle.courses.changed_at_since(30.days.ago).visible_in_find
+
+        expect(visible).to include(published)
+        expect(visible).not_to include(withdrawn, rolled_over)
+
+        result = described_class.call(recruitment_cycle_scope: recruitment_cycle)
+
+        expect(result[:courses][:updated_findable_recently]).to eq(visible.distinct.count)
+        expect(result[:courses][:updated_non_findable_recently]).to eq(
+          recruitment_cycle.courses.changed_at_since(30.days.ago).count - visible.distinct.count,
+        )
       end
     end
   end

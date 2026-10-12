@@ -4,8 +4,8 @@ class ProviderReportingService
   def initialize(providers_scope: Provider)
     @providers = providers_scope.distinct
 
-    @training_providers = @providers.where(id: Course.findable.select(:provider_id))
-    @open_providers = @providers.where(id: Course.findable.application_status_open.select(:provider_id))
+    @training_providers = @providers.where(id: Course.visible_in_find.select(:provider_id))
+    @open_providers = @providers.where(id: Course.visible_in_find.application_status_open.select(:provider_id))
 
     @closed_providers = @training_providers.where.not(id: @open_providers)
   end
@@ -24,6 +24,7 @@ class ProviderReportingService
         training_providers: @training_providers.count,
       },
       training_providers: {
+        # Key stays findable_total so GET /reporting keeps its existing shape.
         findable_total: {
           open: @open_providers.count,
           closed: @closed_providers.count,

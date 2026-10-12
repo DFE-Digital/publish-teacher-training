@@ -595,8 +595,8 @@ describe Provider do
       end
     end
 
-    describe ".with_findable_courses" do
-      subject { described_class.with_findable_courses }
+    describe ".with_courses_visible_in_find" do
+      subject { described_class.with_courses_visible_in_find }
 
       let(:published_course) { create(:course, :published) }
 

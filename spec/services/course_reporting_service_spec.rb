@@ -111,7 +111,7 @@ describe CourseReportingService do
         expect(courses_scope).to receive(:distinct).and_return(distinct_courses_scope)
         expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
         expect(distinct_courses_scope).to receive(:count).and_return(courses_count)
-        expect(distinct_courses_scope).to receive(:findable).and_return(findable_courses_scope)
+        expect(distinct_courses_scope).to receive(:visible_in_find).and_return(findable_courses_scope)
 
         expect(findable_courses_scope).to receive(:application_status_open).and_return(open_courses_scope)
         expect(findable_courses_scope).to receive(:application_status_closed).and_return(closed_courses_scope)
@@ -186,6 +186,24 @@ describe CourseReportingService do
         expect(closed_course_subjects_grouped).to receive(:count).and_return({})
 
         expect(subject).to eq(expected)
+      end
+    end
+
+    describe "publication status" do
+      it "counts a published course and not a withdrawn or rolled-over course" do
+        recruitment_cycle = find_or_create(:recruitment_cycle, :next)
+        provider = create(:provider, recruitment_cycle:)
+        published = create(:course, :published, provider:)
+        withdrawn = create(:course, :withdrawn, provider:)
+        rolled_over = create(:course, provider:, enrichments: [build(:course_enrichment, :rolled_over)])
+
+        result = described_class.call(
+          courses_scope: recruitment_cycle.courses.where(id: [published.id, withdrawn.id, rolled_over.id]),
+        )
+
+        expect(result[:total][:all]).to eq(3)
+        expect(result[:total][:all_findable]).to eq(1)
+        expect(result[:total][:non_findable]).to eq(2)
       end
     end
   end

@@ -3,12 +3,12 @@
 require "rails_helper"
 
 describe RolloverReportingService do
-  let(:published_running_site) { create(:site_status, :published, :running) }
   let(:provider) { create(:provider, :next_recruitment_cycle) }
-  let(:published_course) { create(:course, provider:, site_statuses: [published_running_site]) }
-  let(:new_published_course) { create(:course, age: provider.recruitment_cycle.created_at + 28.hours, provider:, site_statuses: [published_running_site]) }
+  let(:published_course) { create(:course, :published, provider:) }
+  let(:new_published_course) { create(:course, :published, age: provider.recruitment_cycle.created_at + 28.hours, provider:) }
   let(:deleted_course) { create(:course, :deleted, provider:) }
   let(:course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 25.hours, provider:) }
+  let(:course_in_review) { create(:course, age: provider.recruitment_cycle.created_at, provider:) }
   let(:second_course_in_draft) { create(:course, age: provider.recruitment_cycle.created_at + 26.hours, provider:) }
 
   describe ".call" do
@@ -65,6 +65,7 @@ describe RolloverReportingService do
       before do
         provider
         course_in_draft
+        course_in_review
         new_published_course
         deleted_course
         published_course
@@ -72,6 +73,26 @@ describe RolloverReportingService do
 
       it "returns the correct courses in review" do
         expect(result[:total][:existing_courses_in_review]).to eq 1
+      end
+    end
+
+    context "when a course is withdrawn" do
+      before do
+        create(:course, :withdrawn, provider:)
+      end
+
+      it "does not count it as published" do
+        expect(result[:total][:published_courses]).to eq 0
+      end
+    end
+
+    context "when a course is rolled over" do
+      before do
+        create(:course, provider:, enrichments: [build(:course_enrichment, :rolled_over)])
+      end
+
+      it "does not count it as published" do
+        expect(result[:total][:published_courses]).to eq 0
       end
     end
 
