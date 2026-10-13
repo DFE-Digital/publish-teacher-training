@@ -4,18 +4,41 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, provider_search: false, accredited_provider_conflicts: Set.new)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
+      @provider_search = provider_search
+      @accredited_provider_conflicts = accredited_provider_conflicts
 
       super()
     end
 
     def title
-      content_tag(:span, course.provider_name, class: "app-search-result__provider-name")
+      provider_name = content_tag(:span, course.provider_name, class: "app-search-result__provider-name")
+      return provider_name if accredited_provider_name.blank? || accredited_provider_under_course?
+
+      safe_join([
+        provider_name,
+        tag.span(t(".accredited_by", provider: accredited_provider_name), class: "govuk-hint govuk-!-font-size-16 app-search-result__accredited-by"),
+      ])
+    end
+
+    # Only shown when the user has searched by provider, so they can see why a
+    # training partner's course matched their search for its accredited provider.
+    def accredited_provider_name
+      return unless @provider_search
+      return if course.accredited_provider_code.blank? || course.accredited_provider_code == course.provider_code
+
+      course.accrediting_provider&.provider_name
+    end
+
+    # When a provider offers the same subject through more than one accredited
+    # provider, the accredited provider sits under the course name instead.
+    def accredited_provider_under_course?
+      @accredited_provider_conflicts.include?([course.provider_id, course.master_subject_id])
     end
 
     def course_link
