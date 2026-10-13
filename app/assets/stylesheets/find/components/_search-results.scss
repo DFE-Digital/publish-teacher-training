@@ -39,6 +39,12 @@
   @include govuk-font($size: 19, $weight: "bold");
 }
 
+.app-search-result__accredited-by {
+  display: block;
+
+  margin-bottom: 0;
+}
+
 .app-search-result__course-name {
   display: block;
 
