@@ -621,19 +621,17 @@ describe Provider do
       end
 
       it "excludes a provider whose only published course has been deleted" do
-        published_course.discard
+        deleted_course = create(:course, :published, :deleted)
 
-        expect(subject).not_to include(
-          published_course.provider,
-        )
+        expect(subject).not_to include(deleted_course.provider)
       end
 
       it "excludes the accrediting provider when that published course has been deleted" do
-        published_course_with_accrediting_provider.discard
+        deleted_course = create(:course, :published, :deleted, :with_accrediting_provider)
 
         expect(subject).not_to include(
-          published_course_with_accrediting_provider.provider,
-          published_course_with_accrediting_provider.accrediting_provider,
+          deleted_course.provider,
+          deleted_course.accrediting_provider,
         )
       end
 
