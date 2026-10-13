@@ -310,7 +310,6 @@ en:
           other: "%{count} potential %{school_term} schools"
         nearest_school_html: Nearest %{school_term} school %{distance}
         from_location: from %{location}
-        placement_hint_html: Search by city, town or postcode to find the nearest potential %{school_term} school
       fee_key: Fee or salary
       fee_value:
         salary: Salary

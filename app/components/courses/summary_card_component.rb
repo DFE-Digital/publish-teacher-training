@@ -70,10 +70,6 @@ module Courses
       t(".location_value.from_location", location: sanitize(@short_address.presence || @location))
     end
 
-    def location_hint
-      t(".location_value.placement_hint_html", school_term:)
-    end
-
     def fee_key
       t(".fee_key")
     end

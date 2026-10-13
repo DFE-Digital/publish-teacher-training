@@ -79,15 +79,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context "when not searching by location" do
-      it_behaves_like "school location row", :fee, "Search by city, town or postcode to find the nearest potential placement school"
+      %i[fee salary apprenticeship].each do |funding_type|
+        context "when funding is '#{funding_type}'" do
+          let(:funding) { funding_type }
 
-      context "when funding is 'fee'" do
-        let(:funding) { :fee }
-
-        it "renders the hint without a nearest school heading or distance" do
-          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16", text: "Search by city, town or postcode")
-          expect(summary_card_content).not_to include("Nearest placement school")
-          expect(summary_card).not_to have_css(".govuk-summary-list__key", text: "Nearest placement school")
+          it "does not render any location information" do
+            expect(summary_card_content).not_to include("Search by city, town or postcode")
+            expect(summary_card_content).not_to include("Nearest")
+          end
         end
       end
     end
@@ -147,12 +146,6 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         :course,
         funding:,
       )
-    end
-
-    context "when there are placements and is not a location search" do
-      it_behaves_like "school location row", :fee, "Search by city, town or postcode to find the nearest potential placement school"
-      it_behaves_like "school location row", :salary, "Search by city, town or postcode to find the nearest potential employing school"
-      it_behaves_like "school location row", :apprenticeship, "Search by city, town or postcode to find the nearest potential employing school"
     end
 
     describe "#search_by_location?" do
