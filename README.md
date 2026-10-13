@@ -47,6 +47,7 @@ This repo is home to three services:
 - [Rollover](guides/rollover.md)
 - [Cycle period testing](guides/cycle-period-testing.md)
 - [Wizards](guides/wizards)
+- [DDoS playbook](https://dfedigital.atlassian.net/wiki/x/IgCOiQE)
 
 ### Infrastructure
 
