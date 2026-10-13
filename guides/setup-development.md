@@ -124,6 +124,13 @@ To start all the processes run:
 ./bin/dev
 ```
 
+This includes the Solid Queue worker, so background jobs and `deliver_later`
+emails run locally. To run it on its own:
+
+```bash
+bundle exec rake solid_queue:start
+```
+
 ## Using Docker
 
 Run this in a shell and leave it running after cloning the repo:

@@ -40,7 +40,7 @@ services:
 
   bgJobs:
     image: ghcr.io/dfe-digital/publish-teacher-training:${IMAGE_TAG:-latest}
-    command: bundle exec sidekiq -c 5 -C config/sidekiq.yml
+    command: bundle exec rake solid_queue:start
     depends_on:
       - web
       - db

@@ -3,5 +3,5 @@ js-publish: yarn build:js:publish --watch
 css-find: yarn build:css:find --watch
 css-publish: yarn build:css:publish --watch
 web: bin/rails server -p 3001
-worker: bundle exec sidekiq -t 25 -C config/sidekiq.yml
+worker: bundle exec rake solid_queue:start
 caddy: caddy run --config Caddyfile.dev --adapter caddyfile
