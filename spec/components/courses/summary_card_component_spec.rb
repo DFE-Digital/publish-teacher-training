@@ -222,7 +222,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         it "renders the distance in bold and the search location as a hint underneath" do
           expect(summary_card).to have_css("p", text: "Nearest placement school 1 mile")
           expect(summary_card).to have_css("strong", text: "1 mile")
-          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16", text: "from London")
+          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16.govuk-\\!-margin-top-0", text: "from London")
         end
 
         it "does not render the search by location hint" do
@@ -396,7 +396,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
         it "renders the age range as a hint under the course name" do
           expect(summary_card).to have_css(
-            ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
+            ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16.govuk-\\!-margin-top-0",
             text: "Ages #{range.humanize}",
           )
           expect(summary_card_content).to include("Mathematics (37CP) Ages #{range.humanize}")
