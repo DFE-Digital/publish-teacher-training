@@ -41,6 +41,23 @@ module Publish
         end
       end
 
+      context "when a published course has no running school" do
+        let(:course) { create(:course, :published, provider:) }
+        let(:school_uuids) { [site_one.uuid] }
+
+        before do
+          course.site_statuses.create!(site: site_one, status: :new_status, publish: :unpublished)
+        end
+
+        it "runs and publishes its SiteStatus" do
+          service_call
+
+          site_status = course.reload.site_statuses.find_by!(site: site_one)
+          expect(site_status).to be_status_running
+          expect(site_status).to be_published_on_ucas
+        end
+      end
+
       context "when a school is removed from a published course" do
         let(:course) { create(:course, :published, provider:) }
         let(:school_uuids) { [site_two.uuid] }

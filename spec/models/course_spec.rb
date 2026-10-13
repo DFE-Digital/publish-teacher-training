@@ -964,13 +964,13 @@ describe Course do
 
   describe "no site statuses" do
     its(:site_statuses) { is_expected.to be_empty }
-    its(:findable?) { is_expected.to be false }
+    its(:legacy_running?) { is_expected.to be false }
     its(:open_for_applications?) { is_expected.to be false }
     its(:has_vacancies?) { is_expected.to be false }
   end
 
   context "with sites" do
-    subject { create(:course, provider:, site_statuses: [first_site_status, second_site_status]) }
+    subject { create(:course, :published, provider:, site_statuses: [first_site_status, second_site_status]) }
 
     let(:provider) { build(:provider) }
     let(:first_site) { build(:site, provider:) }
@@ -993,7 +993,7 @@ describe Course do
         subject.sites = [second_site, new_site]
       end
 
-      context "with a ucas_status of new" do
+      context "with a draft course" do
         subject { create(:course, provider:, site_statuses: [new_site_status]) }
 
         it "does not set the site to running" do
@@ -1059,79 +1059,34 @@ describe Course do
     let(:published_discontinued_with_no_vacancies) { build(:site_status, :published, :suspended, :no_vacancies, site:) }
     let(:site_statuses) { [] }
 
-    describe "#findable_site_statuses" do
-      context "with a site_statuses association that have been loaded" do
-        it "uses #select on the association" do
-          allow(subject.site_statuses).to receive(:select).and_return([])
-
-          subject.findable_site_statuses
-
-          expect(subject.site_statuses).to have_received(:select)
-        end
-
-        context "with a findable site" do
-          let(:site_statuses) { [findable] }
-
-          its(:findable_site_statuses) { is_expected.not_to be_empty }
-        end
-
-        context "with no findable sites" do
-          let(:site_statuses) { [suspended] }
-
-          its(:findable_site_statuses) { is_expected.to be_empty }
-        end
-
-        context "with at least one findable sites" do
+    describe "#legacy_running?" do
+      context "with site statuses loaded" do
+        context "with a running published site" do
           let(:site_statuses) { [findable, suspended] }
 
-          its(:findable_site_statuses) { is_expected.not_to be_empty }
+          its(:legacy_running?) { is_expected.to be true }
+        end
+
+        context "with no running published site" do
+          let(:site_statuses) { [suspended, new_site_status] }
+
+          its(:legacy_running?) { is_expected.to be false }
         end
       end
 
-      context "with a site_statuses association that has not been loaded" do
-        it "uses #select on the association" do
-          course_with_site_statuses_not_loaded = described_class.find(course.id)
-          allow(course_with_site_statuses_not_loaded.site_statuses)
-            .to receive(:findable).and_return([])
+      context "with site statuses not loaded" do
+        subject { described_class.find(create(:course, provider:, site_statuses:).id) }
 
-          course_with_site_statuses_not_loaded.findable_site_statuses
-
-          expect(course_with_site_statuses_not_loaded.site_statuses)
-            .to have_received(:findable)
-        end
-
-        context "with a findable site" do
-          let(:site_statuses) { [findable] }
-
-          its(:findable_site_statuses) { is_expected.not_to be_empty }
-        end
-
-        context "with no findable sites" do
-          let(:site_statuses) { [suspended] }
-
-          its(:findable_site_statuses) { is_expected.to be_empty }
-        end
-
-        context "with at least one findable sites" do
+        context "with a running published site" do
           let(:site_statuses) { [findable, suspended] }
 
-          its(:findable_site_statuses) { is_expected.not_to be_empty }
+          its(:legacy_running?) { is_expected.to be true }
         end
-      end
-    end
 
-    describe "#findable?" do
-      context "when #findable_site_statuses returns site statuses" do
-        it "returns true" do
-          allow(course).to receive(:findable_site_statuses).and_return([findable])
-          expect(course.findable?).to be_truthy
-        end
-      end
+        context "with no running published site" do
+          let(:site_statuses) { [suspended, new_site_status] }
 
-      context "when #findable_site_statuses returns no site statuses" do
-        it "returns false" do
-          allow(course).to receive(:findable_site_statuses).and_return([])
-          expect(course.findable?).to be_falsey
+          its(:legacy_running?) { is_expected.to be false }
         end
       end
     end
@@ -1390,33 +1345,17 @@ describe Course do
       end
     end
 
-    describe "ucas_status" do
-      context "without any site statuses" do
-        subject { create(:course) }
+    describe "#is_withdrawn?" do
+      context "with a withdrawn enrichment" do
+        subject { create(:course, :withdrawn, site_statuses: [suspended]) }
 
-        its(:ucas_status) { is_expected.to eq :new }
+        its(:is_withdrawn?) { is_expected.to be true }
       end
 
-      context "with a running site_status" do
-        subject { create(:course, site_statuses: [findable]) }
+      context "when published with every site suspended" do
+        subject { create(:course, :published, site_statuses: [suspended]) }
 
-        its(:ucas_status) { is_expected.to eq :running }
-      end
-
-      context "with a new site_status" do
-        subject { create(:course, site_statuses: [new]) }
-
-        let(:new) { build(:site_status, :new_status) }
-
-        its(:ucas_status) { is_expected.to eq :new }
-      end
-
-      context "with a not running site_status" do
-        subject { create(:course, site_statuses: [suspended]) }
-
-        let(:suspended) { build(:site_status, :suspended) }
-
-        its(:ucas_status) { is_expected.to eq :not_running }
+        its(:is_withdrawn?) { is_expected.to be false }
       end
     end
 
@@ -1445,7 +1384,7 @@ describe Course do
     end
 
     its(:site_statuses) { is_expected.to be_empty }
-    its(:findable?) { is_expected.to be false }
+    its(:legacy_running?) { is_expected.to be false }
     its(:open_for_applications?) { is_expected.to be false }
     its(:has_vacancies?) { is_expected.to be false }
   end
@@ -1658,7 +1597,9 @@ describe Course do
     let(:existing_site) { create(:site, provider:, code: "B") }
     let(:new_site_status) { subject.site_statuses.find_by!(site: new_site) }
 
-    context "for running courses" do
+    context "for published courses" do
+      subject { create(:course, :published, site_statuses: [existing_site_status]) }
+
       let(:existing_site_status) { create(:site_status, :running, :published, site: existing_site) }
 
       it "destroys the site_status when an existing site is removed" do
@@ -1698,7 +1639,9 @@ describe Course do
       end
     end
 
-    context "for courses with a previously-suspended site_status" do
+    context "for published courses with a previously-suspended site_status" do
+      subject { create(:course, :published, site_statuses: [existing_site_status]) }
+
       # This state is reachable via Course#withdraw (course-level), not via
       # remove_site! anymore, but the AASM start! event still permits the
       # suspended → running transition.
@@ -1712,6 +1655,18 @@ describe Course do
       it "sets the site to running when an existing site is added" do
         expect { subject.sites = [existing_site] }
           .to change { existing_site_status.reload.status }.from("suspended").to("running")
+      end
+    end
+
+    context "for withdrawn courses" do
+      subject { create(:course, :withdrawn, site_statuses: [existing_site_status]) }
+
+      let(:existing_site_status) { create(:site_status, :suspended, site: existing_site) }
+
+      it "sets the site to new when a new site is added" do
+        subject.sites = [new_site]
+
+        expect(new_site_status.status).to eq("new_status")
       end
     end
 
@@ -1933,18 +1888,29 @@ describe Course do
           expect(described_class.discarded.size).to eq(1)
         end
       end
+    end
 
-      context "incorrect actions" do
-        it "raises error when deleted and course status is running" do
-          course = subject
+    context "when published without a running site" do
+      let(:course) { create(:course, :published, site_statuses: [build(:site_status, :suspended)]) }
 
-          site = create(:site)
-          create(:site_status, :running, :published, site:, course:)
+      it "raises" do
+        expect { course.discard }.to raise_error("You cannot delete the published course #{course}")
+      end
+    end
 
-          expect { course.discard }.to raise_error(
-            "You cannot delete the running course #{course}",
-          )
-        end
+    context "when withdrawn" do
+      let(:course) { create(:course, :withdrawn, site_statuses: [build(:site_status, :suspended)]) }
+
+      it "discards" do
+        expect { course.discard }.to change(course, :discarded?).to(true)
+      end
+    end
+
+    context "when rolled over with a running site" do
+      let(:course) { create(:course, enrichments: [build(:course_enrichment, :rolled_over)], site_statuses: [build(:site_status, :findable)]) }
+
+      it "discards" do
+        expect { course.discard }.to change(course, :discarded?).to(true)
       end
     end
   end

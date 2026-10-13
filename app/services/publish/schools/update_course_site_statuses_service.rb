@@ -88,13 +88,14 @@ module Publish
         # cached collection used to flip a freshly-suspended row back to
         # running, leaving the unticked school still attached on the
         # rendered page.
+        attributes = site_status_attributes
         course.site_statuses.reload.new_or_running.each do |site_status|
-          site_status.update!(site_status_attributes)
+          site_status.update!(attributes)
         end
       end
 
       def site_status_attributes
-        return { publish: :published, status: :running } if course.findable?
+        return { publish: :published, status: :running } if course.is_published?
 
         { publish: :unpublished, status: :new_status }
       end

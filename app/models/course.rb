@@ -18,7 +18,7 @@ class Course < ApplicationRecord
   }.freeze
 
   before_discard do
-    raise "You cannot delete the running course #{self}" unless %i[new not_running].include?(ucas_status)
+    raise "You cannot delete the published course #{self}" if is_published?
   end
 
   has_associated_audits
@@ -526,15 +526,12 @@ class Course < ApplicationRecord
     valid? :update
   end
 
-  def findable?
-    findable_site_statuses.any?
-  end
-
-  def findable_site_statuses
+  # TODO School data remodel removal - delete once the API stops reading running from SiteStatus. # rubocop:disable Style/CommentAnnotation
+  def legacy_running?
     if site_statuses.loaded?
-      site_statuses.select(&:findable?)
+      site_statuses.any?(&:findable?)
     else
-      site_statuses.findable
+      site_statuses.findable.exists?
     end
   end
 
@@ -551,7 +548,7 @@ class Course < ApplicationRecord
   end
 
   def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.zone.now && findable? && application_status_open?
+    applications_open_from.present? && applications_open_from <= Time.zone.now && legacy_running? && application_status_open?
   end
 
   def has_vacancies?
@@ -613,13 +610,6 @@ class Course < ApplicationRecord
 
   def content_status
     services[:content_status].execute(enrichment: latest_enrichment)
-  end
-
-  def ucas_status
-    return :running if findable?
-    return :new if site_statuses.empty? || site_statuses.any?(&:status_new_status?)
-
-    :not_running
   end
 
   def program
@@ -794,20 +784,8 @@ class Course < ApplicationRecord
     enrichments.draft.most_recent.first
   end
 
-  def is_running?
-    ucas_status == :running
-  end
-
   def is_withdrawn?
-    content_status.match?(/withdrawn/) || not_running?
-  end
-
-  def not_running?
-    ucas_status == :not_running
-  end
-
-  def new_and_not_running?
-    ucas_status == :new
+    content_status == :withdrawn
   end
 
   def funding_type=(funding_type)
@@ -1019,9 +997,8 @@ private
   end
 
   def add_site!(site:)
-    is_course_new = ucas_status == :new
     site_status = site_statuses.find_or_initialize_by(site:)
-    site_status.start! unless is_course_new
+    site_status.start! if is_published?
     site_status.save!
     # A found row is a separate instance from the one in the loaded
     # collection, so the next read of site_statuses must not trust the cache.
@@ -1171,10 +1148,6 @@ private
 
   def validate_modern_languages
     errors.add(:subjects, "Modern languages subjects must also have the modern_languages subject") if has_any_modern_language_subject_type? && !has_the_modern_languages_secondary_subject_type?
-  end
-
-  def validate_site_status_findable
-    errors.add(:site_statuses, "must be findable") unless findable?
   end
 
   def has_the_modern_languages_secondary_subject_type?

@@ -122,7 +122,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
       end
 
       it "returns findable true without inspecting SiteStatus" do
-        allow(course).to receive(:findable?).and_return(false)
+        allow(course).to receive(:legacy_running?).and_return(false)
 
         expect(course.site_statuses).to be_empty
         expect(subject).to have_attribute(:findable).with_value(true)
@@ -192,7 +192,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:required_qualifications_english).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_maths).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_science).with_value("must_have_qualification_at_application_time") }
-  it { is_expected.to have_attribute(:running).with_value(course.findable?) }
+  it { is_expected.to have_attribute(:running).with_value(course.legacy_running?) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
   it { is_expected.to have_attribute(:salary_fee_details).with_value(course.latest_published_enrichment.salary_fee_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }

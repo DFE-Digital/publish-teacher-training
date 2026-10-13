@@ -37,6 +37,14 @@ RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :
         expect(response.parsed_body["data"].size).to eq(6)
         expect(many).to eq(few)
       end
+
+      it "reports an unpublished course with a running published site as running and open" do
+        create(:course, :draft_enrichment, :open, provider:, applications_open_from: 1.day.ago, site_statuses: [build(:site_status, :findable)])
+
+        get "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses"
+
+        expect(response.parsed_body["data"].sole["attributes"]).to include("findable" => false, "running" => true, "open_for_applications" => true)
+      end
     end
   end
 end

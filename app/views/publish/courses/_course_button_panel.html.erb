@@ -1,5 +1,5 @@
 <div data-qa="course__button_panel">
-  <% if course.is_published? && (course.is_running? || course.without_employing_school?) %>
+  <% if course.is_published? %>
     <%= render partial: "publish/courses/course_button_panel/published" %>
   <% elsif course.is_withdrawn? %>
     <%= render partial: "publish/courses/course_button_panel/withdrawn" %>

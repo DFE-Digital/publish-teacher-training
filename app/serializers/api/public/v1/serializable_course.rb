@@ -143,7 +143,7 @@ module API
         end
 
         attribute :running do
-          @object.findable?
+          @object.legacy_running?
         end
 
         attribute :start_date do

@@ -38,7 +38,7 @@ describe Courses::PublishRules::LiveOnFind do
       it "applies when no site is published, which Find serves anyway" do
         course = running_course(site_statuses: [build(:site_status, status: :new_status, publish: "N")])
 
-        expect(course.is_running?).to be(false)
+        expect(course.legacy_running?).to be(false)
         expect(applies?(course)).to be(true)
       end
     end
