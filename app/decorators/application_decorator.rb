@@ -7,14 +7,10 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def status_text
-    return status_tags[:withdrawn][:text] if object.ucas_status == "not_running"
-
     status_tags[object.content_status.to_sym][:text]
   end
 
   def status_colour
-    return status_tags[:withdrawn][:colour] if object.ucas_status == "not_running"
-
     status_tags[object.content_status.to_sym][:colour]
   end
 
