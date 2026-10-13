@@ -5,7 +5,7 @@ class SendWeeklyEmailAlertsJob < ApplicationJob
   queue_as :low_priority
   without_auto_retry
 
-  def perform(since: 1.week.ago, delivery_week: Time.zone.today.beginning_of_week)
-    Find::ProcessWeeklyEmailAlertsService.call(since:, delivery_week:)
+  def perform(since: 1.week.ago, delivery_date: EmailAlertMailerJob.delivery_date_for(Time.current))
+    Find::ProcessWeeklyEmailAlertsService.call(since:, delivery_date:)
   end
 end
