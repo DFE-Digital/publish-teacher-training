@@ -188,4 +188,72 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       )
     end
   end
+
+  describe "#provider_subjects_with_multiple_accredited_providers" do
+    subject(:pairs) do
+      query = described_class.new(params:)
+      query.call
+      query.provider_subjects_with_multiple_accredited_providers
+    end
+
+    let(:biology) { find_or_create(:secondary_subject, :biology) }
+    let(:physics) { find_or_create(:secondary_subject, :physics) }
+    let(:mmu) { create(:provider, :accredited_provider, provider_name: "Manchester Metropolitan University") }
+    let(:edge_hill) { create(:provider, :accredited_provider, provider_name: "Edge Hill University") }
+    let(:oakwood) { create(:provider, provider_name: "Oakwood Academy") }
+
+    context "when the training partner offers the same subject with different accredited providers" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [physics], master_subject_id: physics.id)
+      end
+
+      it "returns the provider and subject pair" do
+        expect(pairs).to eq(Set[[oakwood.id, biology.id]])
+      end
+    end
+
+    context "when the training partner offers different subjects with different accredited providers" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [physics], master_subject_id: physics.id)
+      end
+
+      it "returns nothing" do
+        expect(pairs).to be_empty
+      end
+    end
+
+    context "when searching by the accredited provider" do
+      let(:params) { { provider_name: "Manchester Metropolitan University" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: mmu, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+      end
+
+      it "returns nothing because each training partner only has that accredited provider in the results" do
+        expect(pairs).to be_empty
+      end
+    end
+
+    context "when not searching by provider" do
+      let(:params) { {} }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+      end
+
+      it "returns nothing" do
+        expect(pairs).to be_empty
+      end
+    end
+  end
 end
