@@ -620,6 +620,23 @@ describe Provider do
         )
       end
 
+      it "excludes a provider whose only published course has been deleted" do
+        published_course.discard
+
+        expect(subject).not_to include(
+          published_course.provider,
+        )
+      end
+
+      it "excludes the accrediting provider when that published course has been deleted" do
+        published_course_with_accrediting_provider.discard
+
+        expect(subject).not_to include(
+          published_course_with_accrediting_provider.provider,
+          published_course_with_accrediting_provider.accrediting_provider,
+        )
+      end
+
       it "excludes draft, withdrawn and rolled-over courses" do
         draft = create(:course, :draft_enrichment)
         withdrawn = create(:course, :withdrawn, :with_accrediting_provider)

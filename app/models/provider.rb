@@ -143,8 +143,10 @@ class Provider < ApplicationRecord
   }
 
   scope :with_findable_courses, lambda {
-    where(id: Course.visible_in_find.select(:provider_id))
-      .or(where(provider_code: Course.visible_in_find.select(:accredited_provider_code)))
+    visible_courses = Course.kept.visible_in_find
+
+    where(id: visible_courses.select(:provider_id))
+      .or(where(provider_code: visible_courses.select(:accredited_provider_code)))
   }
 
   scope :in_current_cycle, -> { where(recruitment_cycle: RecruitmentCycle.current_recruitment_cycle) }
