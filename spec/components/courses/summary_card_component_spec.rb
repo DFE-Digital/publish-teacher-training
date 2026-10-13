@@ -452,7 +452,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     let(:accredited_provider) { create(:provider, :accredited_provider, provider_name: "Manchester Metropolitan University") }
     let(:provider) { create(:provider, provider_name: "Oakwood Academy") }
     let(:course) do
-      create(:course, provider:, accredited_provider_code: accredited_provider.provider_code, name: "Primary", course_code: "37HL")
+      create(:course, :open, provider:, accredited_provider_code: accredited_provider.provider_code, name: "Primary", course_code: "37HL")
     end
 
     it "renders the accredited provider under the provider name" do
@@ -475,6 +475,43 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
       it "does not render the accredited provider" do
         expect(summary_card).not_to have_content("Accredited by")
+      end
+    end
+
+    context "when the provider offers the same subject with different accredited providers" do
+      let(:summary_card) do
+        render_inline(
+          described_class.new(
+            course:,
+            provider_search:,
+            accredited_provider_conflicts: Set[[course.provider_id, course.master_subject_id]],
+          ),
+        )
+      end
+
+      it "renders the accredited provider after the age range under the course name" do
+        expect(summary_card).to have_css(
+          ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
+          text: "Ages 3 to 7, accredited by Manchester Metropolitan University",
+        )
+        expect(summary_card_content).to include("Primary (37HL) at Oakwood Academy Ages 3 to 7, accredited by Manchester Metropolitan University")
+      end
+
+      it "does not render the accredited provider under the provider name" do
+        expect(summary_card).not_to have_css(".govuk-summary-card__title", text: "Accredited by")
+      end
+
+      context "when the course has no age range" do
+        let(:course) do
+          create(:course, :further_education, provider:, accredited_provider_code: accredited_provider.provider_code, age_range_in_years: nil)
+        end
+
+        it "renders the accredited provider on its own under the course name" do
+          expect(summary_card).to have_css(
+            ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
+            text: /\AAccredited by Manchester Metropolitan University\z/,
+          )
+        end
       end
     end
   end
