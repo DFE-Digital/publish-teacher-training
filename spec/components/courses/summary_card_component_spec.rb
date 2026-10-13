@@ -48,8 +48,19 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     context "when the course is closed" do
       let(:course) { create(:course, :closed, name: "Mathematics", course_code: "37CP") }
 
-      it "renders the not accepting applications status tag" do
-        expect(summary_card).to have_css(".app-saved-course__status-tag", text: "Not accepting applications")
+      it "renders the not accepting applications status tag under the course name, not in the title" do
+        expect(summary_card).to have_css(
+          ".govuk-summary-card__content .app-saved-course__status-tag",
+          text: "Not accepting applications",
+        )
+        expect(summary_card).not_to have_css(".govuk-summary-card__title .app-saved-course__status-tag")
+      end
+
+      it "renders the status tag between the course name and the age range" do
+        content = summary_card.css(".govuk-summary-card__content").text
+
+        expect(content.index("Mathematics (37CP)")).to be < content.index("Not accepting applications")
+        expect(content.index("Not accepting applications")).to be < content.index("Ages")
       end
     end
 
@@ -377,7 +388,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
   end
 
   describe "when displaying the age range" do
-    let(:course) { create(:course, name: "Mathematics", course_code: "37CP", age_range_in_years:) }
+    let(:course) { create(:course, :open, name: "Mathematics", course_code: "37CP", age_range_in_years:) }
 
     %w[3_to_7 5_to_14 11_to_16 14_to_19].each do |range|
       context "when the age range is #{range}" do

@@ -1,6 +1,9 @@
 <li class="app-search-results__item">
   <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><%= course_link %></p>
+    <% if application_status_tag %>
+      <div class="app-saved-course__status-tag"><%= application_status_tag %></div>
+    <% end %>
     <% if show_age_range? %>
       <p class="govuk-hint govuk-!-font-size-16"><%= age_range_text %></p>
     <% end %>
