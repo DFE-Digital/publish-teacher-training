@@ -68,27 +68,27 @@ RSpec.describe EmailAlertMailerJob do
       end
     end
 
-    it "does not send an alert again during the same calendar week" do
+    it "does not send an alert again for the same Friday" do
       allow(EmailAlertMailer).to receive(:weekly_digest)
-      delivery_week = Time.zone.today.beginning_of_week
-      alert.update!(last_sent_at: delivery_week + 2.days)
+      friday = Date.new(2026, 10, 16)
+      alert.update!(last_sent_at: friday.in_time_zone + 3.hours)
 
-      described_class.new.perform(alert.id, course_ids, delivery_week)
+      described_class.new.perform(alert.id, course_ids, friday)
 
       expect(EmailAlertMailer).not_to have_received(:weekly_digest)
     end
 
-    it "sends again in the next calendar week" do
+    it "still sends the next Friday's digest after a mid-week catch-up run" do
       allow(EmailAlertMailer).to receive(:weekly_digest).and_return(double(deliver_now: true))
-      previous_week = Time.zone.today.beginning_of_week
-      alert.update!(last_sent_at: previous_week + 2.days)
+      friday = Date.new(2026, 10, 16)
+      alert.update!(last_sent_at: Date.new(2026, 10, 12).in_time_zone + 10.hours)
 
-      described_class.new.perform(alert.id, course_ids, previous_week + 1.week)
+      described_class.new.perform(alert.id, course_ids, friday)
 
       expect(EmailAlertMailer).to have_received(:weekly_digest)
     end
 
-    it "uses the enqueue week for a two-argument job queued before this change" do
+    it "uses the enqueue date for a two-argument job queued before this change" do
       allow(EmailAlertMailer).to receive(:weekly_digest)
       job = described_class.new(alert.id, course_ids)
       job.enqueued_at = 2.days.ago
@@ -104,11 +104,22 @@ RSpec.describe EmailAlertMailerJob do
       allow(EmailAlertMailer).to receive(:weekly_digest).and_return(mail)
       allow(Candidate::EmailAlert).to receive(:find).with(alert.id).and_return(alert)
       expect(alert).to receive(:with_lock).twice.and_call_original
-      delivery_week = Time.zone.today.beginning_of_week
+      delivery_date = described_class.delivery_date_for(Time.current)
 
-      2.times { described_class.new.perform(alert.id, course_ids, delivery_week) }
+      2.times { described_class.new.perform(alert.id, course_ids, delivery_date) }
 
       expect(mail).to have_received(:deliver_now).once
+    end
+  end
+
+  describe ".delivery_date_for" do
+    it "uses the day itself on a Friday" do
+      expect(described_class.delivery_date_for(Time.zone.local(2026, 10, 16, 3))).to eq(Date.new(2026, 10, 16))
+    end
+
+    it "treats a run later in the week as the previous Friday's" do
+      expect(described_class.delivery_date_for(Time.zone.local(2026, 10, 12, 10))).to eq(Date.new(2026, 10, 9))
+      expect(described_class.delivery_date_for(Time.zone.local(2026, 10, 15, 23))).to eq(Date.new(2026, 10, 9))
     end
   end
 
@@ -138,10 +149,16 @@ RSpec.describe EmailAlertMailerJob do
       expect(described_class).not_to have_been_enqueued
     end
 
-    it "tries again when the connection cannot be opened" do
-      allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(Net::OpenTimeout, "timed out")
+    [
+      [Net::OpenTimeout, "the connection times out"],
+      [SocketError, "DNS lookup fails"],
+      [Errno::ECONNREFUSED, "the connection is refused"],
+    ].each do |error, description|
+      it "tries again when #{description}" do
+        allow(EmailAlertMailer).to receive(:weekly_digest).and_raise(error)
 
-      expect { described_class.perform_now(alert.id, [course.id]) }.to have_enqueued_job(described_class)
+        expect { described_class.perform_now(alert.id, [course.id]) }.to have_enqueued_job(described_class)
+      end
     end
 
     it "waits a minute before trying again when Notify rate limits" do
