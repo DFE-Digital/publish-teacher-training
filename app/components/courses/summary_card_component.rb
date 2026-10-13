@@ -105,12 +105,12 @@ module Courses
       safe_join([uk_fee_line, international_fee_line].compact_blank, tag.br)
     end
 
-    def show_age_range?
-      course.age_range_in_years.present?
-    end
+    def course_hint
+      age_range = t(".age_range", range: course.age_range_in_years.humanize) if course.age_range_in_years.present?
+      return age_range unless accredited_provider_name.present? && accredited_provider_under_course?
+      return t(".accredited_by", provider: accredited_provider_name) if age_range.blank?
 
-    def age_range_text
-      t(".age_range", range: course.age_range_in_years.humanize)
+      t(".age_range_and_accredited_by", range: course.age_range_in_years.humanize, provider: accredited_provider_name)
     end
 
     def qualification_and_study_mode
