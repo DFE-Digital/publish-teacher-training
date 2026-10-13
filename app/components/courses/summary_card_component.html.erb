@@ -2,17 +2,17 @@
   <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
     <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><%= course_link %></p>
     <% if application_status_tag %>
-      <div class="app-saved-course__status-tag"><%= application_status_tag %></div>
+      <div class="app-saved-course__status-tag govuk-!-margin-bottom-1"><%= application_status_tag %></div>
     <% end %>
     <% if show_age_range? %>
-      <p class="govuk-hint govuk-!-font-size-16"><%= age_range_text %></p>
+      <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= age_range_text %></p>
     <% end %>
 
     <% if no_employing_schools? %>
       <p class="govuk-body"><%= t(".location_value.no_employing_schools") %></p>
     <% elsif search_by_location? %>
       <p class="govuk-body govuk-!-margin-bottom-0"><%= nearest_school_distance %></p>
-      <p class="govuk-hint govuk-!-font-size-16"><%= nearest_school_from %></p>
+      <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= nearest_school_from %></p>
     <% end %>
 
     <p class="govuk-body"><%= funding_text %></p>
