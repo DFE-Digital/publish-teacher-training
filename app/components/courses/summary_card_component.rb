@@ -15,12 +15,7 @@ module Courses
     end
 
     def title
-      status_tag = application_status_tag
-
-      safe_join([
-        content_tag(:span, course.provider_name, class: "app-search-result__provider-name"),
-        (content_tag(:div, status_tag, class: "app-saved-course__status-tag") if status_tag.present?),
-      ].compact)
+      content_tag(:span, course.provider_name, class: "app-search-result__provider-name")
     end
 
     def course_link
