@@ -23,7 +23,7 @@ module Courses
       safe_join([
         provider_name,
         tag.span(t(".accredited_by", provider: accredited_provider_name), class: "govuk-hint govuk-!-font-size-16 app-search-result__accredited-by"),
-      ])
+      ], " ")
     end
 
     # Only shown when the user has searched by provider, so they can see why a
