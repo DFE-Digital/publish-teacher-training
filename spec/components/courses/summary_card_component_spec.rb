@@ -42,6 +42,14 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       expect(summary_card).to have_css(".govuk-summary-card__content h3 a.app-search-result__course-name", text: "Mathematics (37CP)")
     end
 
+    it "includes the provider name as visually hidden text in the course link" do
+      expect(summary_card).to have_link("Mathematics (37CP) at University", exact: true)
+      expect(summary_card).to have_css(
+        "a.app-search-result__course-name .govuk-visually-hidden",
+        text: /\A at University\z/,
+      )
+    end
+
     it "renders the course name and code as a link at the top of the content" do
       expect(summary_card).to have_css(
         ".govuk-summary-card__content a.app-search-result__course-name",
@@ -414,7 +422,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
             ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16.govuk-\\!-margin-top-0",
             text: "Ages #{range.humanize}",
           )
-          expect(summary_card_content).to include("Mathematics (37CP) Ages #{range.humanize}")
+          expect(summary_card_content).to include("Mathematics (37CP) at #{course.provider_name} Ages #{range.humanize}")
         end
       end
     end

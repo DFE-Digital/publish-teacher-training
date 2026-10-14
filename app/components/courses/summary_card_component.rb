@@ -26,7 +26,12 @@ module Courses
         distance_from_location: search_by_location? ? course.minimum_distance_to_search_location.ceil : nil,
       )
 
-      govuk_link_to(course.name_and_code, url, class: "app-search-result__course-name")
+      govuk_link_to(url, class: "app-search-result__course-name") do
+        safe_join([
+          course.name_and_code,
+          tag.span(t(".course_link_provider", provider_name: course.provider_name), class: "govuk-visually-hidden"),
+        ])
+      end
     end
 
     def save_toggle_button

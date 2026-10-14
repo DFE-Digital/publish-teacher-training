@@ -32,8 +32,13 @@ module OrderingHelper
     page.all(".course-summary-card", minimum: 1).map do |card|
       [
         card.find(".app-search-result__provider-name").text,
-        card.find(".app-search-result__course-name").text,
+        visible_course_name(card.find(".app-search-result__course-name")),
       ].join(" ")
     end
+  end
+
+  # The course link ends with the provider name as visually hidden text
+  def visible_course_name(link)
+    link.text.delete_suffix(link.find(".govuk-visually-hidden").text).strip
   end
 end
