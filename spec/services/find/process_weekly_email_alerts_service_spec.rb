@@ -29,6 +29,21 @@ module Find
           .not_to have_enqueued_job(EmailAlertMailerJob)
       end
 
+      it "only includes courses published up to and including the before time" do
+        cutoff = Time.zone.local(2026, 10, 9, 3)
+        on_cutoff = create(:course, :published_postgraduate)
+        on_cutoff.enrichments.first.update!(last_published_timestamp_utc: cutoff)
+        after_cutoff = create(:course, :published_postgraduate)
+        after_cutoff.enrichments.first.update!(last_published_timestamp_utc: cutoff + 1.second)
+
+        alert = create(:email_alert, candidate:, subjects: [])
+        delivery_date = Date.new(2026, 10, 9)
+
+        expect { described_class.call(since: cutoff - 1.week, before: cutoff, delivery_date:) }
+          .to have_enqueued_job(EmailAlertMailerJob)
+          .with(alert.id, [on_cutoff.id], delivery_date)
+      end
+
       it "does not enqueue a job for unsubscribed alerts" do
         course = create(:course, :published_postgraduate)
         course.enrichments.first.update!(last_published_timestamp_utc: 2.days.ago)
