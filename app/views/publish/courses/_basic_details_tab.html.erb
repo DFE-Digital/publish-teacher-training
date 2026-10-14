@@ -174,7 +174,8 @@
        end
      end
 
-     visa_edit_path = if FeatureService.enabled?(:course_edit_wizard)
+     # CourseWizard has no visa questions for a further education course
+     visa_edit_path = if FeatureService.enabled?(:course_edit_wizard) && !course.further_education_course?
                         new_edit_wizard_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, unit: :visa)
                       end
 
