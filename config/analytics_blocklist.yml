@@ -188,6 +188,18 @@
   - created_at
   - key_hash
   - byte_size
+  :feature_flag_state:
+  - id
+  - name
+  - active
+  - created_at
+  - updated_at
+  :site_setting:
+  - id
+  - name
+  - value
+  - created_at
+  - updated_at
   :solid_queue_batches:
   - id
   - active_job_batch_id
