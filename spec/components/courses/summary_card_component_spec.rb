@@ -560,4 +560,16 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       expect(summary_card).not_to have_css(".govuk-summary-list")
     end
   end
+
+  describe "saved course card helpers" do
+    let(:course) { build(:course) }
+
+    it "leaves the fee or salary row methods to the saved courses card" do
+      component = described_class.new(course:)
+
+      %i[fee_key fee_value uk_fees international_fees incentive_hint].each do |method|
+        expect(component.respond_to?(method, true)).to be(false), "expected ##{method} not to be defined"
+      end
+    end
+  end
 end

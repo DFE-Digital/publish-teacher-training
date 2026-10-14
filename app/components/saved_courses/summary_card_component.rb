@@ -75,5 +75,31 @@ module SavedCourses
     def course_from_previous_year?
       @course_from_previous_year ||= course.recruitment_cycle.year.to_i < Find::CycleTimetable.current_year
     end
+
+    def fee_key
+      t(".fee_key")
+    end
+
+    def fee_value
+      if course.salary? || course.apprenticeship?
+        t(".fee_value.#{course.funding}")
+      else
+        safe_join([uk_fees, international_fees].compact_blank, tag.br)
+      end
+    end
+
+  private
+
+    def uk_fees(fee_uk = enrichment.fee_uk_eu)
+      t(".fee_value.fee.uk_fees_html", value: content_tag(:b, number_to_currency(fee_uk.to_f))) if fee_uk.present?
+    end
+
+    def international_fees(fee_international = enrichment.fee_international)
+      t(".fee_value.fee.international_fees_html", value: content_tag(:b, number_to_currency(fee_international.to_f))) if fee_international.present?
+    end
+
+    def incentive_hint
+      incentive_view.hint_text
+    end
   end
 end
