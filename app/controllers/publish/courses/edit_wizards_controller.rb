@@ -61,7 +61,9 @@ module Publish
 
       def authorize_edit
         authorize(provider, :update?)
-        authorize(course, :can_update_funding_type?) if edit_unit == :funding_type
+        # Only a visa edit leaves the funding type alone. Any other unit, or
+        # none, gets the funding type check.
+        authorize(course, :can_update_funding_type?) unless edit_unit == :visa
       end
 
       # The unit the edit started with: the entry point's unit param, then
