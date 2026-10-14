@@ -300,23 +300,12 @@ en:
       etp_title: "Engineers teach physics"
     summary_card_component:
       location_value:
-        not_listed: Not listed yet
         no_employing_schools: No employing schools listed
         school_term:
           fee: "placement"
           default: "employing"
-        potential_schools:
-          one: "1 potential %{school_term} school"
-          other: "%{count} potential %{school_term} schools"
         nearest_school_html: Nearest %{school_term} school %{distance}
         from_location_html: from %{location}
-      fee_key: Fee or salary
-      fee_value:
-        salary: Salary
-        apprenticeship: Salary (apprenticeship)
-        fee:
-          uk_fees_html: "%{value} <b>fee</b> for UK citizens"
-          international_fees_html: "%{value} <b>fee</b> for Non-UK citizens"
       funding:
         salary: Salary
         apprenticeship: Apprenticeship (salary)
