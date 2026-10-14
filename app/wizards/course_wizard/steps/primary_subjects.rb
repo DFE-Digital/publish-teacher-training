@@ -17,6 +17,7 @@ class CourseWizard
           label_options: ->(draft) { { count: draft.subjects.count } },
           value: ->(draft) { draft.subjects.map(&:subject_name) },
           format: Publish::CheckAnswers::Formatters::List.new(separator: :br),
+          show_when_blank: true,
         )
       end
 
