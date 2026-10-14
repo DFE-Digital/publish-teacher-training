@@ -53,8 +53,9 @@ wait for those scheduled entries to clear. Deal with the dead set one job at a
 time: re-enqueue on Solid Queue only after checking the job is safe to run
 again, otherwise delete it. Record each decision.
 
-Never run `FLUSHDB` or delete keys by pattern: feature flags, site settings and
-form state share the worker Redis.
+Never run `FLUSHDB` or delete keys by pattern: feature flags and site settings
+are still mirrored to the worker Redis for rollback (see
+[redis-application-state.md](redis-application-state.md)).
 
 Scale the Sidekiq workers to zero only once the drain is signed off.
 
