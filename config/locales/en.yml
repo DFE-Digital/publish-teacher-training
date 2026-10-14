@@ -329,6 +329,7 @@ en:
         TwoYears: Up to 2 years
         ThreeYears: 3 years
         FourYears: 4 years
+      course_link_provider: " at %{provider_name}"
       age_range: Ages %{range}
       school_experience: School experience is required or strongly recommended
       qualification_value:

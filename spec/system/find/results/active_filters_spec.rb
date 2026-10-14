@@ -609,6 +609,8 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
   end
 
   def results
-    page.all(".app-search-result__course-name").map(&:text)
+    page.all(".app-search-result__course-name").map do |link|
+      link.text.delete_suffix(link.find(".govuk-visually-hidden").text).strip
+    end
   end
 end
