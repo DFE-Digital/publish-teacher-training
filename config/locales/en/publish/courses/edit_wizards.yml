@@ -5,6 +5,7 @@ en:
         ended: This change has already been saved or has expired. Check the course details.
         confirm_changes:
           sections:
+            funding_type: Funding type
             visa: Visa sponsorship
         update:
           committed:

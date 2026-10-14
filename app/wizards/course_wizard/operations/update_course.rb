@@ -3,8 +3,9 @@
 class CourseWizard
   module Operations
     # Commits an edit of a saved course. dfe-wizard runs it once, when the
-    # edit's last question is saved, unless nothing changed or the course
-    # changed since the edit started.
+    # edit's last question is saved (for a published course, when the user
+    # confirms the changes), unless nothing changed or the course changed
+    # since the edit started.
     #
     # It maps the changeset diff (the changed answers on the path) to the
     # course, then applies the funding and visa rules whatever the diff
