@@ -29,6 +29,8 @@ module Publish
         end
 
         def call(value, _draft, _view)
+          return if value.nil?
+
           key = ActiveModel::Type::Boolean.new.cast(value) ? @yes_key : @no_key
           I18n.t(key)
         end

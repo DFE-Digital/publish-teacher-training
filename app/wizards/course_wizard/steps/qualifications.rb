@@ -22,6 +22,7 @@ class CourseWizard
           label: :qualification,
           value: ->(draft) { draft.qualification },
           format: Publish::CheckAnswers::Formatters::Enum.new(scope: "course_wizard.steps.qualifications.options"),
+          show_when_blank: true,
         )
       end
 
