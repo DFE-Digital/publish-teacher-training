@@ -6,16 +6,17 @@ module Publish
     # seeds a changeset under a new state_key and starts a change journey
     # for one unit. Each step request then reads that changeset. The save of
     # the journey's last question commits the edit and returns to the
-    # course page.
+    # course page. An edit of a published course asks the user to confirm
+    # first (the confirm_changes step), and commits when they do.
     #
-    # Only for draft or rolled over courses, and behind the
-    # course_edit_wizard setting.
+    # Behind the course_edit_wizard setting. A funding type edit is only for
+    # draft or rolled over courses.
     class EditWizardsController < ApplicationController
       CACHE_EXPIRY = 24.hours
 
       before_action :require_course_edit_wizard
-      before_action :authorize_edit
       before_action :set_wizard, except: :new
+      before_action :authorize_edit
 
       rescue_from DfE::Wizard::ChangesetExpired, DfE::Wizard::ChangesetMismatch, with: :edit_ended
 
@@ -43,8 +44,9 @@ module Publish
       def update
         return redirect_to_current_unit unless @wizard.step_accessible?(current_step_name)
 
+        unit = edit_unit
         if @wizard.save_current_step
-          flash_commit_result if @wizard.commit_result
+          flash_commit_result(unit) if @wizard.commit_result
           redirect_to @wizard.next_step_path
         else
           render :show, status: :unprocessable_entity
@@ -59,7 +61,13 @@ module Publish
 
       def authorize_edit
         authorize(provider, :update?)
-        authorize(course, :can_update_funding_type?)
+        authorize(course, :can_update_funding_type?) if edit_unit == :funding_type
+      end
+
+      # The unit the edit started with: the entry point's unit param, then
+      # the one the changeset keeps
+      def edit_unit
+        action_name == "new" ? params[:unit].to_sym : @wizard.changeset.edit_unit
       end
 
       def course
@@ -94,12 +102,12 @@ module Publish
         redirect_to @wizard.resolve_step_path(@wizard.redirect_step)
       end
 
-      def flash_commit_result
+      def flash_commit_result(unit)
         result = @wizard.commit_result
 
         case result[:status]
         when :committed
-          flash[:success] = t(".committed")
+          flash[:success] = t(".committed.#{unit}")
         when :stale
           flash[:warning] = t(".stale")
         when :failed

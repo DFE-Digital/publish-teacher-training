@@ -14,7 +14,11 @@
     </div>
 
     <div class="govuk-grid-column-two-thirds">
-      <%= render "publish/course_wizards/steps/#{current_step_name}", form:, caption: @wizard.record.name_and_code %>
+      <% if current_step_name == :confirm_changes %>
+        <%= render "confirm_changes", form: %>
+      <% else %>
+        <%= render "publish/course_wizards/steps/#{current_step_name}", form:, caption: @wizard.record.name_and_code %>
+      <% end %>
       <p class="govuk-body">
         <%= govuk_link_to(t("course_wizard.show.cancel"), @wizard.changeset.caller_url) %>
       </p>
