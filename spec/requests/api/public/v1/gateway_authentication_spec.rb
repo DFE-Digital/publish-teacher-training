@@ -16,10 +16,21 @@ RSpec.describe "API gateway authentication", service: :api do
       get "/api/public/v1/subjects"
 
       expect(response).to have_http_status(:unauthorized)
+      expect(response.parsed_body).to eq(
+        "errors" => [{ "status" => 401, "title" => "UNAUTHORIZED", "detail" => "Requests must come through the API gateway" }],
+      )
     end
 
     it "rejects a request with the wrong gateway secret" do
       get "/api/public/v1/subjects", headers: { "X-Gateway-Secret" => "guess" }
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it "rejects every request while no gateway secret is configured" do
+      allow(Settings.api_gateway).to receive(:secret).and_return("")
+
+      get "/api/public/v1/subjects", headers: { "X-Gateway-Secret" => "" }
 
       expect(response).to have_http_status(:unauthorized)
     end

@@ -94,7 +94,7 @@ basic_auth:
   enabled: false
 
 api_gateway:
-  secret: please_change_me
+  secret: ""
 
 google:
   maps_api_key: replace_me

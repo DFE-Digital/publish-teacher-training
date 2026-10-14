@@ -11,13 +11,18 @@ module API
   private
 
     def authenticate_gateway
-      head :unauthorized unless gateway_secret_matches?
+      return if gateway_secret_matches?
+
+      render_json_error(status: 401)
     end
 
     def gateway_secret_matches?
+      secret = Settings.api_gateway.secret.to_s
+      return false if secret.blank?
+
       ActiveSupport::SecurityUtils.secure_compare(
-        request.headers["X-Gateway-Secret"].to_s,
-        Settings.api_gateway.secret.to_s,
+        ::Digest::SHA256.hexdigest(request.headers["X-Gateway-Secret"].to_s),
+        ::Digest::SHA256.hexdigest(secret),
       )
     end
   end
