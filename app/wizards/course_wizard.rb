@@ -44,6 +44,10 @@ class CourseWizard
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
       graph.check_answers :check_answers
 
+      # Edits of a published course end here, before they are saved
+      graph.add_node :confirm_changes, Steps::ConfirmChanges, skip_when: -> { skip_confirm_changes? }
+      graph.edit_review :confirm_changes
+
       graph.add_multiple_conditional_edges(
         from: :level,
         branches: [
@@ -180,6 +184,12 @@ class CourseWizard
 
   def skip_study_sites?
     provider.study_sites.none?
+  end
+
+  # Only an edit of a published course asks the user to confirm, because
+  # its changes go live when they are saved
+  def skip_confirm_changes?
+    !record&.is_published?
   end
 
   def accredited_provider_selection_required?
