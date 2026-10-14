@@ -4,7 +4,14 @@ module Stores
   class BaseStore
     class InvalidKeyError < StandardError; end
 
+    KEY_NAMESPACE = "form_stores"
+    EXPIRES_IN = 24.hours
+
     attr_accessor :identifier_model
+
+    def self.cache
+      @cache ||= SolidCache::Store.new
+    end
 
     def initialize(identifier_model)
       @identifier_model = identifier_model
@@ -15,7 +22,9 @@ module Stores
     end
 
     def clear_stash(store_key)
-      set(store_key, nil)
+      cache.delete(identifier(store_key))
+
+      true
     end
 
     def stash(store_key, value)
@@ -23,7 +32,7 @@ module Stores
     end
 
     def get(store_key)
-      value = redis.get(identifier(store_key))
+      value = cache.read(identifier(store_key))
       JSON.parse(value) if value.present?
     end
 
@@ -36,17 +45,17 @@ module Stores
     def identifier(store_key)
       raise(InvalidKeyError) unless store_keys.include?(store_key)
 
-      "#{identifier_id}_#{store_key}"
+      "#{KEY_NAMESPACE}/#{identifier_id}_#{store_key}"
     end
 
     def set(store_key, values)
-      redis.set(identifier(store_key), values.to_json)
+      cache.write(identifier(store_key), values.to_json, expires_in: EXPIRES_IN)
 
       true
     end
 
-    def redis
-      @redis ||= RedisClient.current
+    def cache
+      BaseStore.cache
     end
   end
 end

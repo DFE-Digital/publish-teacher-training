@@ -3,120 +3,51 @@
 shared_examples "store" do |identifier_model_type, form_store_keys|
   let(:identifier_model) { create(identifier_model_type) }
   let(:store) { described_class.new(identifier_model) }
-  let(:redis) { double }
   let(:invalid_key_error) { "#{described_class}::InvalidKeyError".constantize }
 
-  before do
-    allow(RedisClient).to receive(:current).and_return(redis)
-  end
+  it { expect(described_class::FORM_STORE_KEYS).to match_array(form_store_keys) }
 
-  describe "#clear_stash" do
-    subject do
-      store.clear_stash(form_store_key)
-    end
-
-    let(:form_store_key) { nil }
-
-    context "when form_store_key is nil" do
-      let(:form_store_key) { nil }
-
-      it "returns an error" do
-        expect { subject }.to raise_error(invalid_key_error)
-      end
-    end
-
-    it { expect(described_class::FORM_STORE_KEYS).to match_array(form_store_keys) }
-
-    form_store_keys.each do |store_key|
-      context "when form_store_key is #{store_key}" do
-        let(:form_store_key) { store_key }
-        let(:value) { nil }
-        let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
-
-        before do
-          allow(RedisClient).to receive(:current).and_return(redis)
-          allow(redis).to receive(:set)
-        end
-
-        it "does not return an error" do
-          expect { subject }.not_to raise_error
-        end
-
-        it "returns true" do
-          expect(subject).to be(true)
-        end
-
-        it "sets the redis value to nil" do
-          subject
-          expect(RedisClient).to have_received(:current)
-          expect(redis).to have_received(:set).with(redis_key, value.to_json)
-        end
-      end
-    end
+  it "rejects keys it does not own" do
+    expect { store.stash(nil, "bob") }.to raise_error(invalid_key_error)
+    expect { store.get(:unknown) }.to raise_error(invalid_key_error)
+    expect { store.clear_stash(nil) }.to raise_error(invalid_key_error)
   end
 
   form_store_keys.each do |store_key|
-    let(:form_store_key) { store_key }
-    let(:redis_key) { "#{described_class}_#{identifier_model.id}_#{form_store_key}" }
+    context "with #{store_key}" do
+      let(:cache_key) { "form_stores/#{described_class}_#{identifier_model.id}_#{store_key}" }
 
-    describe "#stash" do
-      subject do
-        store.stash(form_store_key, value)
+      it "stashes and reads back the value" do
+        expect(store.stash(store_key, { "name" => "bob" })).to be(true)
+
+        expect(store.get(store_key)).to eq("name" => "bob")
       end
 
-      let(:value) { "bob" }
+      it "writes to a namespaced Solid Cache key" do
+        store.stash(store_key, "bob")
 
-      context "when form_store_key is nil" do
-        let(:form_store_key) { nil }
-
-        it "returns an error" do
-          expect { subject }.to raise_error(invalid_key_error)
-        end
+        expect(Stores::BaseStore.cache.read(cache_key)).to eq("bob".to_json)
       end
 
-      context "when form_store_key is #{store_key}" do
-        before do
-          allow(redis).to receive(:set)
-        end
+      it "expires after 24 hours" do
+        store.stash(store_key, "bob")
 
-        it "does not return an error" do
-          expect { subject }.not_to raise_error
-        end
-
-        it "returns true" do
-          expect(subject).to be(true)
-        end
-
-        it "sets the redis value to bob" do
-          subject
-          expect(RedisClient).to have_received(:current)
-          expect(redis).to have_received(:set).with(redis_key, value.to_json)
-        end
-      end
-    end
-
-    describe "#get" do
-      subject do
-        store.get(form_store_key)
+        travel(23.hours) { expect(store.get(store_key)).to eq("bob") }
+        travel(25.hours) { expect(store.get(store_key)).to be_nil }
       end
 
-      context "when form_store_key is #{store_key}" do
-        let(:redis) { double }
-        let(:value) { "builder".to_json }
+      it "clears the stash" do
+        store.stash(store_key, "bob")
 
-        before do
-          allow(redis).to receive(:get).and_return(value)
-        end
+        expect(store.clear_stash(store_key)).to be(true)
+        expect(store.get(store_key)).to be_nil
+      end
 
-        it "returns builder" do
-          expect(subject).to eq(JSON.parse(value))
-        end
+      it "does not use Redis" do
+        expect(RedisClient).not_to receive(:current)
 
-        it "sets the redis value to nil" do
-          subject
-          expect(RedisClient).to have_received(:current)
-          expect(redis).to have_received(:get).with(redis_key)
-        end
+        store.stash(store_key, "bob")
+        store.get(store_key)
       end
     end
   end
