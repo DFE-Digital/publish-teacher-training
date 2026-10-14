@@ -47,15 +47,29 @@ namespace :solid_queue do
     deadline = Time.zone.now + Integer(ENV.fetch("SOLID_QUEUE_SCHEMA_WAIT_SECONDS", "900"))
     poll_interval = Float(ENV.fetch("SOLID_QUEUE_SCHEMA_POLL_SECONDS", "2"))
 
-    loop do
-      break if SolidQueueBoot.schema_ready?
+    # Pods are routinely replaced (new review deploy, teardown) while still waiting.
+    # Without a trap, SIGTERM surfaces as an unhandled SignalException in Sentry.
+    shutdown_requested = false
+    previous_traps = %w[TERM INT].index_with { |signal| Signal.trap(signal) { shutdown_requested = true } }
 
-      if Time.zone.now >= deadline
-        raise "[solid_queue] timed out waiting for Solid Queue schema to be ready"
+    begin
+      loop do
+        if shutdown_requested
+          Rails.logger.info("[solid_queue] shutdown requested before schema was ready; exiting")
+          exit
+        end
+
+        break if SolidQueueBoot.schema_ready?
+
+        if Time.zone.now >= deadline
+          raise "[solid_queue] timed out waiting for Solid Queue schema to be ready"
+        end
+
+        Rails.logger.warn("[solid_queue] waiting for Solid Queue schema to be ready")
+        Kernel.sleep(poll_interval)
       end
-
-      Rails.logger.warn("[solid_queue] waiting for Solid Queue schema to be ready")
-      Kernel.sleep(poll_interval)
+    ensure
+      previous_traps.each { |signal, handler| Signal.trap(signal, handler) }
     end
 
     ActiveRecord::Base.connection_handler.clear_active_connections!
