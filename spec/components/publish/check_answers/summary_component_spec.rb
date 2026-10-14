@@ -211,6 +211,26 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(row.css(".govuk-summary-list__actions")).to be_empty
   end
 
+  it "renders a red prompt for a blank row whose question has an error" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+    errors = ActiveModel::Errors.new(nil)
+    errors.add(:visa_sponsorship_application_deadline_required, "Select if there is a deadline for applications that require visa sponsorship")
+
+    rendered = render_inline(described_class.new(wizard:, errors:))
+    row = rendered.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
+    expect(row.css(".app-inset-text--error a").text.strip).to eq("Select if there is a visa sponsorship deadline")
+    expect(row.css(".app-inset-text--important")).to be_empty
+  end
+
+  it "gives a blank row the id the error summary links to" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+
+    row = rendered_component.at_css("#check-answers-visa-sponsorship-application-deadline-required-field-error")
+    expect(row&.text).to include("Is there a visa sponsorship deadline?")
+  end
+
   # A required question on the path can be blank when the user skips ahead to
   # check answers. Its row prompts the user to answer it rather than
   # disappearing.
