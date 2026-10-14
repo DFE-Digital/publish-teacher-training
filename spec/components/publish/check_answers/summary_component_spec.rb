@@ -51,6 +51,15 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_link("Change", href: /return_to_review=physics_specialisms/)
   end
 
+  it "renders No on the engineers row when the course is not part of the programme" do
+    state_store.write(campaign_name: "no_campaign")
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:physics_specialisms)])
+    allow(wizard).to receive(:saved?).with(:physics_specialisms).and_return(true)
+
+    row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Engineers Teach Physics") }
+    expect(row.css(".govuk-summary-list__value").text.strip).to eq("No")
+  end
+
   it "renders TDA defaults for funding, study pattern and skilled worker visa without change links" do
     primary_subject = find_or_create(:primary_subject, :primary)
 
@@ -206,6 +215,9 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
   # check answers. Its row prompts the user to answer it rather than
   # disappearing.
   {
+    primary_subjects: ["Subjects", "Select a subject"],
+    secondary_subjects: ["Subjects", "Select a subject"],
+    physics_specialisms: ["Engineers Teach Physics", "Select if this course is part of Engineers Teach Physics"],
     age_range: ["Age range", "Select an age range"],
     qualifications: ["Qualification", "Select a qualification"],
     visa_sponsorship: ["Student visas", "Select if Student visas can be sponsored"],

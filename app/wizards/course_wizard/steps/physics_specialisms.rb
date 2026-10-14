@@ -16,11 +16,12 @@ class CourseWizard
       review do |r|
         r.row(
           label: :engineers,
-          value: ->(draft) { draft.campaign_name == "engineers_teach_physics" },
+          value: ->(draft) { draft.campaign_name == "engineers_teach_physics" if draft.campaign_name.present? },
           format: Publish::CheckAnswers::Formatters::Bool.new(
             yes_key: "course_wizard.steps.check_answers.answers.yes",
             no_key: "course_wizard.steps.check_answers.answers.no",
           ),
+          show_when_blank: true,
         )
       end
 
