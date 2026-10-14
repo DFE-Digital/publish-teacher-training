@@ -37,6 +37,21 @@ module Publish
         }
       end
 
+      context "when the course has no schools" do
+        before { course.schools.destroy_all }
+
+        it "renders the details tab with the schools error" do
+          post :publish, params: {
+            recruitment_cycle_year: provider.recruitment_cycle.year,
+            provider_code: provider.provider_code,
+            code: course.course_code,
+          }
+
+          expect(controller.instance_variable_get(:@current_tab)).to eq(:details)
+          expect(controller.instance_variable_get(:@errors)[:schools]).to include("Select at least one school")
+        end
+      end
+
       describe "When rolled over v1 enrichment exists" do
         let(:v1_enrichment) { create(:course_enrichment, :v1, status: "rolled_over", course:) }
         let(:v2_enrichment) { create(:course_enrichment, status: "draft", course:) }

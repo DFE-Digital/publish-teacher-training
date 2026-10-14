@@ -82,8 +82,7 @@ RSpec.describe CourseSchoolSelectionValidator do
     let(:course) { build_course(submitted: [""], sites: [], provider_schools: []) }
 
     it "leaves it to CoursePublishableSchoolsPresenceValidator" do
-      expect(errors).to be_empty
-      expect(course.errors.full_messages_for(:sites)).to include("Select at least one school")
+      expect(errors).to contain_exactly("Select at least one school")
     end
   end
 

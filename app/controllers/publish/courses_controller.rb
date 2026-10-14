@@ -58,7 +58,7 @@ module Publish
       else
         @errors = format_publish_error_messages
 
-        if @errors.key?(:sites)
+        if @errors.key?(:schools)
           @current_tab = :details
           render :details
         else

@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-# Publish-context replacement for `validates :sites, presence: true`.
-# School presence is read from the Course::School association.
+# Validates school presence using the Course::School association.
 class CoursePublishableSchoolsPresenceValidator < ActiveModel::Validator
   def validate(course)
     return if course.schools.any?
     return if Courses::PublishRules::SchoolPresenceExemption.applies?(course)
     return if selection_made_but_unresolved?(course)
 
-    course.errors.add(:sites, :blank)
+    course.errors.add(:schools, :blank)
   end
 
 private

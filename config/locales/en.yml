@@ -728,10 +728,8 @@ en:
               inclusion: "^Select an option for science"
             enrichments:
               blank: "^Complete your course information before publishing"
-            sites:
-              blank: "^Select at least one school"
             schools:
-              blank: "Select at least one school"
+              blank: "^Select at least one school"
             age_range_in_years:
               blank: "^Select an age range"
             program_type:
