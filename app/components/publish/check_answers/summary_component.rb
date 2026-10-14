@@ -31,15 +31,25 @@ module Publish
         return unless wizard.saved?(spec.step_id) || spec.show_when_blank
 
         value = format_value(spec)
-        row = Row.new(
-          label: t_label(spec.label_key, **resolved_label_options(spec)),
-          value:,
-          change_path: spec.changeable? ? change_path_for(spec.step_id) : nil,
-        )
+        change_path = spec.changeable? ? change_path_for(spec.step_id) : nil
+        label = t_label(spec.label_key, **resolved_label_options(spec))
+        return blank_row(spec, label, change_path) if spec.show_when_blank && !present_value?(value)
+
+        row = Row.new(label:, value:, change_path:)
         return row if spec.show_when_blank
         return if !present_value?(spec.value) && !present_value?(value)
 
         row
+      end
+
+      # A required question left blank. The row is the prompt to answer it, so
+      # the link takes the place of the Change action.
+      def blank_row(spec, label, change_path)
+        Row.new(
+          label:,
+          value: helpers.value_prompt(t("course_wizard.steps.check_answers.prompts.#{spec.label_key}"), change_path),
+          change_path: nil,
+        )
       end
 
       def format_value(spec)
