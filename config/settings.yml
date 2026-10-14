@@ -93,6 +93,9 @@ render_json_errors: false
 basic_auth:
   enabled: false
 
+api_gateway:
+  secret: please_change_me
+
 google:
   maps_api_key: replace_me
   gcp_api_key: replace_me
@@ -109,6 +112,7 @@ feedback:
 
 features:
   send_request_data_to_bigquery: false
+  api_gateway_authentication: false
   rollover:
     # Normally a short period of time between rollover and the next cycle
     # actually starting when it would be set to false
