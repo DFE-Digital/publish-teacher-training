@@ -62,7 +62,7 @@ module Courses
     end
 
     def nearest_school_from
-      t(".location_value.from_location", location: sanitize(@short_address.presence || @location))
+      t(".location_value.from_location_html", location: sanitize(@short_address.presence || @location))
     end
 
     def fee_key

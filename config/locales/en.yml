@@ -309,7 +309,7 @@ en:
           one: "1 potential %{school_term} school"
           other: "%{count} potential %{school_term} schools"
         nearest_school_html: Nearest %{school_term} school %{distance}
-        from_location: from %{location}
+        from_location_html: from %{location}
       fee_key: Fee or salary
       fee_value:
         salary: Salary

@@ -251,6 +251,16 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
       end
 
+      context "when the search location contains an ampersand" do
+        let(:funding) { :fee }
+        let(:search_params) { { location: "Hammersmith & City, London", latitude: 1, longitude: 1 } }
+
+        it "shows the ampersand once, without double escaping it" do
+          expect(summary_card).to have_css(".govuk-hint", text: /\Afrom Hammersmith & City, London\z/)
+          expect(summary_card.to_html).not_to include("&amp;amp;")
+        end
+      end
+
       context "sanitize dangerous user input" do
         let(:funding) { :fee }
         let(:search_params) do
