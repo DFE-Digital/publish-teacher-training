@@ -37,6 +37,11 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       expect(summary_card).not_to have_css(".govuk-summary-card__title a")
     end
 
+    it "renders the provider name as the card's h2 and the course name as an h3 under it" do
+      expect(summary_card).to have_css("h2.govuk-summary-card__title", text: "University")
+      expect(summary_card).to have_css(".govuk-summary-card__content h3 a.app-search-result__course-name", text: "Mathematics (37CP)")
+    end
+
     it "renders the course name and code as a link at the top of the content" do
       expect(summary_card).to have_css(
         ".govuk-summary-card__content a.app-search-result__course-name",
