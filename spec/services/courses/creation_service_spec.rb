@@ -606,8 +606,7 @@ describe Courses::CreationService do
       end
 
       it "adds the empty-selection error and builds no Course::School" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
-        expect(created_course.errors[:schools]).to be_empty
+        expect(created_course.errors[:schools]).to include("Select at least one school")
         expect(created_course.schools).to be_empty
       end
     end
@@ -617,9 +616,8 @@ describe Courses::CreationService do
     context "when the school checkboxes are submitted with nothing ticked" do
       let(:valid_course_params) { super().merge("school_uuids" => [""]) }
 
-      it "reports the empty checkbox selection on :sites and builds no Course::School" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
-        expect(created_course.errors[:schools]).to be_empty
+      it "reports the empty checkbox selection on :schools and builds no Course::School" do
+        expect(created_course.errors[:schools]).to include("Select at least one school")
         expect(created_course.sites).to be_empty
         expect(created_course.schools).to be_empty
       end
@@ -628,9 +626,8 @@ describe Courses::CreationService do
     context "when no school selection is submitted at all" do
       let(:valid_course_params) { super().except("school_uuids") }
 
-      it "reports the missing schools on :sites, not :schools" do
-        expect(created_course.errors[:sites]).to include("Select at least one school")
-        expect(created_course.errors[:schools]).to be_empty
+      it "reports the missing schools on :schools" do
+        expect(created_course.errors[:schools]).to include("Select at least one school")
         expect(created_course.schools).to be_empty
       end
     end

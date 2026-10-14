@@ -15,16 +15,16 @@ describe CoursePublishableSchoolsPresenceValidator do
 
     run_validator
 
-    expect(course.errors[:sites]).to be_empty
+    expect(course.errors[:schools]).to be_empty
   end
 
-  it "adds a :blank error on :sites when no course schools are attached" do
+  it "adds a :blank error on :schools when no course schools are attached" do
     allow(course.schools).to receive(:any?).and_return(false)
     allow(Courses::PublishRules::SchoolPresenceExemption).to receive(:applies?).with(course).and_return(false)
 
     run_validator
 
-    expect(course.errors.details[:sites]).to include(error: :blank)
+    expect(course.errors.details[:schools]).to include(error: :blank)
   end
 
   it "does not add an error when no schools are attached but the exemption applies" do
@@ -33,7 +33,7 @@ describe CoursePublishableSchoolsPresenceValidator do
 
     run_validator
 
-    expect(course.errors[:sites]).to be_empty
+    expect(course.errors[:schools]).to be_empty
   end
 
   # Integration of the validator with the real exemption rule and real
@@ -61,15 +61,15 @@ describe CoursePublishableSchoolsPresenceValidator do
         let(:funding) { funding }
         let(:exemption) { exemption }
 
-        it "expects #{expected == :no_error ? 'no :sites error' : "a :sites #{expected} error"}" do
+        it "expects #{expected == :no_error ? 'no :schools error' : "a :schools #{expected} error"}" do
           attach_school if has_school
           course.errors.clear
           described_class.new.validate(course)
 
           if expected == :no_error
-            expect(course.errors[:sites]).to be_empty
+            expect(course.errors[:schools]).to be_empty
           else
-            expect(course.errors.details[:sites]).to include(error: expected)
+            expect(course.errors.details[:schools]).to include(error: expected)
           end
         end
       end
