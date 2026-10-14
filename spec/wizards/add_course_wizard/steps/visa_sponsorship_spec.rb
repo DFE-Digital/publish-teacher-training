@@ -186,13 +186,43 @@ RSpec.describe CourseWizard::Steps::VisaSponsorship do
     context "when there is a single accredited partner that cannot sponsor student visas" do
       let(:accredited_partner_can_sponsor_student_visa) { false }
 
-      it "defaults can_sponsor_student_visa to false" do
-        expect(wizard_step.can_sponsor_student_visa).to be(false)
+      it "pre-selects cannot sponsor" do
+        expect(wizard_step.cannot_sponsor_checked?).to be(true)
       end
 
-      it "is valid without explicitly setting can_sponsor_student_visa" do
-        expect(wizard_step).to be_valid
+      it "does not pre-select cannot sponsor once the user has answered yes" do
+        wizard_step.can_sponsor_student_visa = true
+
+        expect(wizard_step.cannot_sponsor_checked?).to be(false)
       end
+
+      it "leaves can_sponsor_student_visa blank" do
+        expect(wizard_step.can_sponsor_student_visa).to be_nil
+      end
+
+      it "is not valid without explicitly setting can_sponsor_student_visa" do
+        expect(wizard_step).not_to be_valid
+      end
+    end
+
+    context "when there is a single accredited partner that can sponsor student visas" do
+      let(:accredited_partner_can_sponsor_student_visa) { true }
+
+      it "does not pre-select cannot sponsor" do
+        expect(wizard_step.cannot_sponsor_checked?).to be(false)
+      end
+    end
+  end
+
+  describe "#cannot_sponsor_checked?" do
+    it "is true when the user has answered no" do
+      wizard_step.can_sponsor_student_visa = false
+
+      expect(wizard_step.cannot_sponsor_checked?).to be(true)
+    end
+
+    it "is false when the step is unanswered and there is no accrediting provider default" do
+      expect(wizard_step.cannot_sponsor_checked?).to be(false)
     end
   end
 

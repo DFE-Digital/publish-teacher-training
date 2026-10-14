@@ -243,7 +243,41 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_no_text("Visa sponsorship deadline")
   end
 
+  scenario "changing salary to fee asks the Student visa question before adding the course" do
+    given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Find::CycleTimetable.current_year)
+    and_the_partner_cannot_sponsor_student_visas
+    given_i_have_completed_secondary_salary_wizard_state
+    when_i_visit_check_answers_page
+    when_i_click_change_link_for(:funding_type)
+    choose "Fee - no salary"
+    and_i_click_continue
+    and_i_continue_until_the_student_visa_question
+
+    expect(page).to have_checked_field("No")
+    and_i_click_continue
+    then_i_am_on_step_without_return_to_review(:start_date)
+    and_i_click_continue
+    then_i_am_taken_to_the_check_answers_page
+
+    and_i_click_add_course
+    then_a_course_is_created
+    expect(provider.courses.order(:created_at).last.can_sponsor_student_visa).to be(false)
+  end
+
 private
+
+  def and_the_partner_cannot_sponsor_student_visas
+    provider.accredited_partners.first.update!(can_sponsor_student_visa: false)
+  end
+
+  def and_i_continue_until_the_student_visa_question
+    %i[study_pattern schools study_sites].each do |step|
+      then_i_am_on_step_without_return_to_review(step)
+      and_i_click_continue
+    end
+
+    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
+  end
 
   def tda_changeable_steps
     %i[
