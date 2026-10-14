@@ -37,6 +37,22 @@ RSpec.describe "solid_queue:start_when_ready" do
     expect(Rake::Task["solid_queue:start"]).to have_received(:invoke)
   end
 
+  it "exits cleanly without starting when SIGTERM arrives while waiting" do
+    trap_handlers = {}
+    allow(Signal).to receive(:trap) do |signal, *_args, &block|
+      trap_handlers[signal] = block if block
+      "DEFAULT"
+    end
+    allow(Settings.environment).to receive(:name).and_return("qa")
+    allow(SolidQueueBoot).to receive(:schema_ready?).and_return(false)
+    allow(Kernel).to receive(:sleep) { trap_handlers.fetch("TERM").call }
+
+    expect { Rake::Task["solid_queue:start_when_ready"].invoke }.to raise_error(SystemExit) { |e| expect(e.status).to eq(0) }
+
+    expect(Rake::Task["solid_queue:start"]).not_to have_received(:invoke)
+    expect(Signal).to have_received(:trap).with("TERM", "DEFAULT")
+  end
+
   describe "SolidQueueBoot.schema_ready?" do
     it "is false in review until sanitised statistic rows exist" do
       allow(Settings.environment).to receive(:name).and_return("review")
