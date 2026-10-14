@@ -1,6 +1,6 @@
 <li class="app-search-results__item">
   <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
-    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0"><%= course_link %></p>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-0"><%= course_link %></h3>
     <% if application_status_tag %>
       <div class="app-saved-course__status-tag govuk-!-margin-bottom-1"><%= application_status_tag %></div>
     <% end %>
