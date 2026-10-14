@@ -2,23 +2,24 @@
 
 module Find
   class ProcessWeeklyEmailAlertsService
-    def self.call(since: 1.week.ago, delivery_date: EmailAlertMailerJob.delivery_date_for(Time.current))
-      new(since, delivery_date).call
+    def self.call(since: 1.week.ago, before: nil, delivery_date: EmailAlertMailerJob.delivery_date_for(Time.current))
+      new(since, before, delivery_date).call
     end
 
-    def initialize(since, delivery_date)
+    def initialize(since, before, delivery_date)
       @since = since
+      @before = before
       @delivery_date = delivery_date
     end
 
     def call
-      recently_published_ids = CourseEnrichment
+      recently_published = CourseEnrichment
         .joins(course: :provider)
         .merge(Provider.in_current_cycle)
         .where(status: :published)
         .where("last_published_timestamp_utc > ?", @since)
-        .select(:course_id)
-        .distinct
+      recently_published = recently_published.where("last_published_timestamp_utc <= ?", @before) if @before
+      recently_published_ids = recently_published.select(:course_id).distinct
 
       BatchDelivery.new(relation: Candidate::EmailAlert.active, stagger_over: 1.hour, batch_size: 100).each do |deliver_at, alerts|
         alerts.each do |alert|
