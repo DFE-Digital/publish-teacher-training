@@ -192,4 +192,33 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text(Date.new(2027, 3, 1).to_fs(:govuk_date))
     expect(rendered_component).to have_no_link("Change skilled worker visas")
   end
+
+  it "renders a prompt for a blank row that is always shown" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+
+    row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
+    expect(row.css(".govuk-summary-list__value .app-inset-text--important a").text.strip).to eq("Select if there is a visa sponsorship deadline")
+    expect(row.css(".govuk-summary-list__actions")).to be_empty
+  end
+
+  # A required question on the path can be blank when the user skips ahead to
+  # check answers. Its row prompts the user to answer it rather than
+  # disappearing.
+  {
+    age_range: ["Age range", "Select an age range"],
+    qualifications: ["Qualification", "Select a qualification"],
+    visa_sponsorship: ["Student visas", "Select if Student visas can be sponsored"],
+    visa_sponsorship_application_deadline_at: ["Visa sponsorship deadline", "Enter a visa sponsorship deadline"],
+    start_date: ["Course start date", "Select a course start date"],
+  }.each do |step_id, (label, prompt)|
+    it "renders a prompt for an unanswered #{step_id} step on the path" do
+      allow(wizard).to receive(:flow_steps).and_return([wizard.step(step_id)])
+
+      row = rendered_component.css(".govuk-summary-list__row").find { |node| node.css(".govuk-summary-list__key").text.strip == label }
+      link = row&.at_css(".govuk-summary-list__value a")
+      expect(link&.text&.strip).to eq(prompt)
+      expect(link&.[]("href")).to include("return_to_review=#{step_id}")
+    end
+  end
 end
