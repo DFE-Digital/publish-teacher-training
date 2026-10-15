@@ -47,7 +47,8 @@ describe SiteSetting do
     it "stores the setting and mirrors it to Redis" do
       described_class.set(name: "cycle_schedule", value: :apply_open)
 
-      expect(described_class.find_by(name: "cycle_schedule").value).to eq("apply_open")
+      setting = described_class.find_by(name: "cycle_schedule")
+      expect(setting).to have_attributes(value: "apply_open", legacy_redis_synced_at: setting.updated_at)
       expect(RedisClient.current.get("cycle_schedule")).to eq("apply_open")
     end
 
@@ -64,10 +65,32 @@ describe SiteSetting do
       expect(RedisClient.current.get("unknown")).to be_nil
     end
 
-    it "keeps the database unchanged if Redis cannot be written" do
+    it "keeps the committed database change pending if Redis cannot be written" do
       allow(RedisClient.current).to receive(:set).and_raise(Redis::CannotConnectError)
+      allow(Rails.error).to receive(:report)
 
-      expect { described_class.set(name: "cycle_schedule", value: "apply_open") }.to raise_error(Redis::CannotConnectError)
+      expect { described_class.set(name: "cycle_schedule", value: "apply_open") }.not_to raise_error
+
+      setting = described_class.find_by(name: "cycle_schedule")
+      expect(setting).to have_attributes(value: "apply_open", legacy_redis_synced_at: nil)
+      expect(Rails.error).to have_received(:report).with(
+        instance_of(Redis::CannotConnectError),
+        handled: true,
+        context: hash_including(source: "legacy_redis_state_mirror"),
+      )
+    end
+
+    it "does not write Redis when the database transaction fails" do
+      allow(described_class).to receive(:transaction) do |&block|
+        ActiveRecord::Base.transaction do
+          block.call
+          raise ActiveRecord::StatementInvalid, "commit failed"
+        end
+      end
+      expect(RedisClient.current).not_to receive(:set)
+
+      expect { described_class.set(name: "cycle_schedule", value: "apply_open") }
+        .to raise_error(ActiveRecord::StatementInvalid, "commit failed")
       expect(described_class.exists?(name: "cycle_schedule")).to be(false)
     end
   end

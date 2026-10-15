@@ -30,6 +30,9 @@ Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.
 
 ## Feature Flags
 
-Feature flags are stored in Redis. The `FeatureFlag` class is a wrapper around the `Redis` class that provides a simple interface for setting and checking feature flags.
+Feature flags are stored in the `feature_flag_state` Postgres table and accessed
+through `FeatureFlag`. Reads are memoised on `Current` for the request.
 
-We want to move away from Redis and into a [Solid Cache](https://github.com/rails/solid_cache) backed approach.
+While an older release remains deployable, changes are also mirrored to the
+worker Redis for rollback. See
+[Application state off Redis](../redis-application-state.md).
