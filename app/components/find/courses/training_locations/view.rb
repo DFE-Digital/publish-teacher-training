@@ -6,6 +6,7 @@ module Find
       class View < ViewComponent::Base
         include MarkdownHelper
         include PreviewHelper
+        include Find::DistanceHelper
 
         attr_reader :course, :address, :distance_from_location, :preview
 
@@ -67,7 +68,7 @@ module Find
         def distance_text
           I18n.t(
             ".find.courses.training_locations.view.distance",
-            distance: content_tag(:span, pluralize(distance_from_location, "mile"), class: "govuk-!-font-weight-bold"),
+            distance: content_tag(:span, distance_in_miles(distance_from_location), class: "govuk-!-font-weight-bold"),
             location: content_tag(:span, sanitize(address.formatted_address), class: "govuk-!-font-weight-bold"),
           ).html_safe
         end

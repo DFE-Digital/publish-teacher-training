@@ -134,7 +134,7 @@ module Find
 
           expect(published_course.site_statuses).to be_empty
           expect(response).to have_http_status(:ok)
-          expect(controller.view_assigns["distance_from_location"]).to eq(5)
+          expect(controller.view_assigns["distance_from_location"]).to be_within(0.1).of(4.46)
         end
 
         it "renders without a distance when the course has no geocoded school" do

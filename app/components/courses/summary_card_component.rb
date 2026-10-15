@@ -2,6 +2,7 @@
 
 module Courses
   class SummaryCardComponent < ViewComponent::Base
+    include Find::DistanceHelper
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil)
@@ -62,7 +63,7 @@ module Courses
       t(
         ".location_value.nearest_school_html",
         school_term:,
-        distance: content_tag(:strong, pluralize(course.minimum_distance_to_search_location.ceil, "mile")),
+        distance: content_tag(:strong, distance_in_miles(course.minimum_distance_to_search_location)),
       )
     end
 

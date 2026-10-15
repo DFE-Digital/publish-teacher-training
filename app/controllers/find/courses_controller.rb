@@ -49,7 +49,7 @@ module Find
         courses: [@course],
         latitude: @address.latitude,
         longitude: @address.longitude,
-      ).call.first&.distance_to_search_location&.ceil
+      ).call.first&.distance_to_search_location
     end
 
   private

@@ -57,7 +57,7 @@ module SavedCourses
 
       t(
         ".distance_html",
-        distance: content_tag(:strong, pluralize(saved_course.minimum_distance_to_search_location.ceil, "mile")),
+        distance: content_tag(:strong, distance_in_miles(saved_course.minimum_distance_to_search_location)),
         location: content_tag(:strong, sanitize(@short_address.presence || @location)),
       ).html_safe
     end

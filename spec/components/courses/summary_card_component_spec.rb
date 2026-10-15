@@ -225,16 +225,16 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         course.define_singleton_method(:minimum_distance_to_search_location) { 0.2 }
       end
 
-      it_behaves_like "school location row", :fee, "Nearest placement school 1 mile from London"
-      it_behaves_like "school location row", :salary, "Nearest employing school 1 mile from London"
-      it_behaves_like "school location row", :apprenticeship, "Nearest employing school 1 mile from London"
+      it_behaves_like "school location row", :fee, "Nearest placement school less than 1 mile from London"
+      it_behaves_like "school location row", :salary, "Nearest employing school less than 1 mile from London"
+      it_behaves_like "school location row", :apprenticeship, "Nearest employing school less than 1 mile from London"
 
       context "when funding is 'fee'" do
         let(:funding) { :fee }
 
         it "renders the distance in bold and the search location as a hint underneath" do
-          expect(summary_card).to have_css("p", text: "Nearest placement school 1 mile")
-          expect(summary_card).to have_css("strong", text: "1 mile")
+          expect(summary_card).to have_css("p", text: "Nearest placement school less than 1 mile")
+          expect(summary_card).to have_css("strong", text: "less than 1 mile")
           expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16.govuk-\\!-margin-top-0", text: "from London")
         end
 
@@ -282,7 +282,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
         it "sanitizes user input by striping html tags" do
           expect(summary_card_content).to include(
-            'Nearest placement school 1 mile from alert("XSS")',
+            'Nearest placement school less than 1 mile from alert("XSS")',
           )
         end
       end

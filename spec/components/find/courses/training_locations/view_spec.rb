@@ -123,6 +123,15 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       it "returns the correct text for one potential placement location" do
         expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from <span class="govuk-!-font-weight-bold">Some Address</span>')
       end
+
+      context "when the school is less than a mile away" do
+        let(:distance_from_location) { 0.2 }
+
+        it "says less than 1 mile" do
+          expect(component.potential_placements_text).to include("less than 1 mile")
+          expect(component.potential_placements_text).not_to include("0 miles")
+        end
+      end
     end
 
     context "for salaried courses" do
