@@ -23,23 +23,8 @@ class SiteSetting < ApplicationRecord
   end
 
   def self.set(name:, value:)
-    name = name.to_s
-    value = value.to_s
-
-    setting = LegacyRedisState.with_state_lock do
-      record = transaction do
-        stored_setting = find_or_create_by!(name:) { |new_record| new_record.value = value }
-        unless stored_setting.previously_new_record?
-          stored_setting.update!(value:, legacy_redis_synced_at: nil)
-        end
-        stored_setting
-      end
-
-      LegacyRedisState.mirror_site_setting(record)
-      record
-    end
-
-    Current.site_settings&.store(name, setting.value)
+    setting = LegacyRedisState.save(self, name: name.to_s, value: value.to_s)
+    Current.site_settings&.store(setting.name, setting.value)
   end
 
   def self.cached_values

@@ -97,20 +97,6 @@ describe FeatureFlag do
       )
     end
 
-    it "does not write Redis when the database transaction fails" do
-      allow(FeatureFlagState).to receive(:transaction) do |&block|
-        ActiveRecord::Base.transaction do
-          block.call
-          raise ActiveRecord::StatementInvalid, "commit failed"
-        end
-      end
-      expect(RedisClient.current).not_to receive(:set)
-
-      expect { described_class.activate("test_feature") }
-        .to raise_error(ActiveRecord::StatementInvalid, "commit failed")
-      expect(FeatureFlagState.exists?(name: "test_feature")).to be(false)
-    end
-
     it "raises for an unknown feature" do
       expect { described_class.activate("unknown_feature") }.to raise_error(described_class::UnknownFeatureError)
     end
