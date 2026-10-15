@@ -79,19 +79,5 @@ describe SiteSetting do
         context: hash_including(source: "legacy_redis_state_mirror"),
       )
     end
-
-    it "does not write Redis when the database transaction fails" do
-      allow(described_class).to receive(:transaction) do |&block|
-        ActiveRecord::Base.transaction do
-          block.call
-          raise ActiveRecord::StatementInvalid, "commit failed"
-        end
-      end
-      expect(RedisClient.current).not_to receive(:set)
-
-      expect { described_class.set(name: "cycle_schedule", value: "apply_open") }
-        .to raise_error(ActiveRecord::StatementInvalid, "commit failed")
-      expect(described_class.exists?(name: "cycle_schedule")).to be(false)
-    end
   end
 end

@@ -37,22 +37,8 @@ class FeatureFlag
   private
 
     def update_state(feature_name, active)
-      changed_at = Time.zone.now
-      state = LegacyRedisState.with_state_lock do
-        record = FeatureFlagState.transaction do
-          stored_state = FeatureFlagState.find_or_create_by!(name: feature_name.to_s) do |new_record|
-            new_record.assign_attributes(active:, updated_at: changed_at)
-          end
-          unless stored_state.previously_new_record?
-            stored_state.update!(active:, updated_at: changed_at, legacy_redis_synced_at: nil)
-          end
-          stored_state
-        end
-
-        LegacyRedisState.mirror_feature_flag(record)
-        record
-      end
-
+      # updated_at is set explicitly so it changes even when the state does not.
+      state = LegacyRedisState.save(FeatureFlagState, name: feature_name.to_s, active:, updated_at: Time.zone.now)
       Current.feature_flags&.store(state.name, state)
     end
 
