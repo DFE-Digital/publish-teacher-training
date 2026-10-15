@@ -43,15 +43,47 @@ describe LegacyRedisState do
     end
 
     it "overwrites the database so it can be rerun after a rollback" do
-      FeatureFlagState.create!(name: "test_feature", active: true)
-      SiteSetting.create!(name: "cycle_schedule", value: "find_closed")
+      records = [
+        FeatureFlagState.create!(name: "test_feature", active: true),
+        FeatureFlagState.create!(name: "other_feature", active: true),
+        SiteSetting.create!(name: "cycle_schedule", value: "find_closed"),
+        SiteSetting.create!(name: "deadline_banner", value: "true"),
+      ]
+      records.each { |record| record.update_column(:legacy_redis_synced_at, record.updated_at) }
       redis.set("feature_flags_test_feature", { state: false, updated_at: Time.zone.now }.to_json)
       redis.set("cycle_schedule", "real")
 
       described_class.backfill_database
 
       expect(FeatureFlagState.find_by(name: "test_feature").active).to be(false)
+      expect(FeatureFlagState.exists?(name: "other_feature")).to be(false)
       expect(SiteSetting.find_by(name: "cycle_schedule").value).to eq("real")
+      expect(SiteSetting.exists?(name: "deadline_banner")).to be(false)
+    end
+
+    it "keeps the timestamp of an unchanged setting during web boot" do
+      updated_at = 2.days.ago
+      setting = SiteSetting.create!(name: "cycle_schedule", value: "apply_open", updated_at:)
+      setting.update_column(:legacy_redis_synced_at, setting.updated_at)
+      redis.set("cycle_schedule", "apply_open")
+
+      described_class.backfill_database
+
+      expect(setting.reload.updated_at).to be_within(0.001).of(updated_at)
+    end
+
+    it "pushes a pending database change before importing Redis" do
+      state = FeatureFlagState.create!(name: "test_feature", active: true)
+      setting = SiteSetting.create!(name: "cycle_schedule", value: "apply_open")
+      redis.set("feature_flags_test_feature", { state: false, updated_at: 1.day.ago }.to_json)
+      redis.set("cycle_schedule", "find_closed")
+
+      described_class.backfill_database
+
+      expect(state.reload).to have_attributes(active: true, legacy_redis_synced_at: state.updated_at)
+      expect(setting.reload).to have_attributes(value: "apply_open", legacy_redis_synced_at: setting.updated_at)
+      expect(JSON.parse(redis.get("feature_flags_test_feature"))["state"]).to be(true)
+      expect(redis.get("cycle_schedule")).to eq("apply_open")
     end
   end
 
@@ -60,6 +92,8 @@ describe LegacyRedisState do
       updated_at = Time.zone.local(2026, 9, 1, 10, 30)
       FeatureFlagState.create!(name: "test_feature", active: true, updated_at:)
       SiteSetting.create!(name: "cycle_schedule", value: "apply_open")
+      redis.set("feature_flags_other_feature", { state: true, updated_at: }.to_json)
+      redis.set("deadline_banner", "true")
 
       expect(described_class.sync_to_redis).to eq(feature_flags: 1, site_settings: 1)
 
@@ -68,6 +102,8 @@ describe LegacyRedisState do
         "updated_at" => updated_at.as_json,
       )
       expect(redis.get("cycle_schedule")).to eq("apply_open")
+      expect(redis.get("feature_flags_other_feature")).to be_nil
+      expect(redis.get("deadline_banner")).to be_nil
     end
 
     it "round-trips through a backfill" do
@@ -83,6 +119,22 @@ describe LegacyRedisState do
 
       expect(FeatureFlagState.pluck(:name, :active, :updated_at)).to eq(before_values)
       expect(SiteSetting.pluck(:name, :value)).to eq([%w[cycle_schedule apply_open]])
+    end
+  end
+
+  describe ".with_state_lock" do
+    it "excludes another database session" do
+      lock_key = described_class::ADVISORY_LOCK_KEY.join(", ")
+      stub_const("OtherDatabaseConnection", Class.new(ApplicationRecord) { self.abstract_class = true })
+      other_database = OtherDatabaseConnection
+      other_database.establish_connection(ActiveRecord::Base.connection_db_config.configuration_hash)
+
+      described_class.with_state_lock do
+        acquired = other_database.connection.select_value("SELECT pg_try_advisory_lock(#{lock_key})")
+        expect(acquired).to be(false)
+      end
+    ensure
+      other_database&.connection_pool&.disconnect!
     end
   end
 

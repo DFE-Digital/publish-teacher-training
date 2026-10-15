@@ -5,12 +5,16 @@ module Stores
     class InvalidKeyError < StandardError; end
 
     KEY_NAMESPACE = "form_stores"
+    # Logical expiry. Unread rows are physically removed by Solid Cache's
+    # global max-age cleanup, currently configured at 30 days.
     EXPIRES_IN = 24.hours
 
     attr_accessor :identifier_model
 
     def self.cache
-      @cache ||= SolidCache::Store.new
+      @cache ||= SolidCache::Store.new(
+        error_handler: ->(exception:, **) { raise exception },
+      )
     end
 
     def initialize(identifier_model)
