@@ -494,7 +494,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
           ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
           text: "Ages 3 to 7, accredited by Manchester Metropolitan University",
         )
-        expect(summary_card_content).to include("Primary (37HL) Ages 3 to 7, accredited by Manchester Metropolitan University")
+        expect(summary_card_content).to include("Primary (37HL) at Oakwood Academy Ages 3 to 7, accredited by Manchester Metropolitan University")
       end
 
       it "does not render the accredited provider under the provider name" do
