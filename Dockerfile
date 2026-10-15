@@ -78,4 +78,4 @@ RUN chown appuser:appgroup /app/tmp
 # Switch to non-root user
 USER 10001
 
-CMD bundle exec rails db:migrate:with_data_migrations && bundle exec rails server -b 0.0.0.0
+CMD ["/app/bin/start-web"]
