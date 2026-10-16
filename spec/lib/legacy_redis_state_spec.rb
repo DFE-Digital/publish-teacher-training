@@ -85,6 +85,40 @@ describe LegacyRedisState do
       expect(JSON.parse(redis.get("feature_flags_test_feature"))["state"]).to be(true)
       expect(redis.get("cycle_schedule")).to eq("apply_open")
     end
+
+    it "keeps database rows when Redis is empty instead of wiping them" do
+      records = [
+        FeatureFlagState.create!(name: "test_feature", active: true),
+        SiteSetting.create!(name: "cycle_schedule", value: "apply_open"),
+      ]
+      records.each { |record| record.update_column(:legacy_redis_synced_at, record.updated_at) }
+      allow(Rails.error).to receive(:report)
+
+      expect(described_class.backfill_database).to eq(feature_flags: 0, site_settings: 0)
+
+      expect(FeatureFlagState.pluck(:name, :active)).to eq([["test_feature", true]])
+      expect(SiteSetting.pluck(:name, :value)).to eq([%w[cycle_schedule apply_open]])
+      expect(Rails.error).to have_received(:report).twice
+    end
+
+    it "continues with database state when Redis is unavailable" do
+      state = FeatureFlagState.create!(name: "test_feature", active: true)
+      state.update_column(:legacy_redis_synced_at, state.updated_at)
+      allow(RedisClient).to receive(:current).and_raise(Redis::CannotConnectError, "down")
+      allow(Rails.error).to receive(:report)
+
+      expect(described_class.backfill_database).to eq(
+        feature_flags: 0,
+        site_settings: 0,
+        skipped: :redis_unavailable,
+      )
+
+      expect(FeatureFlagState.pluck(:name, :active)).to eq([["test_feature", true]])
+      expect(Rails.error).to have_received(:report).with(
+        an_instance_of(Redis::CannotConnectError),
+        hash_including(handled: true, context: hash_including(source: "legacy_redis_state_reconcile")),
+      )
+    end
   end
 
   describe ".sync_to_redis" do

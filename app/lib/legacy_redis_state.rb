@@ -30,7 +30,9 @@ class LegacyRedisState
 
     # Runs before every web boot. Pushes any unsynced database changes, then
     # copies Redis into the database to pick up changes the previous release
-    # made while it was running. A missing Redis key means the default state.
+    # made while it was running. A missing Redis key means the default state,
+    # but an empty Redis must not wipe the database (that looks the same as a
+    # flush). Redis errors are reported and the boot continues on database state.
     def backfill_database
       with_state_lock do
         push_unsynced_to_redis
@@ -39,12 +41,15 @@ class LegacyRedisState
         settings = settings_from_redis
 
         ActiveRecord::Base.transaction do
-          replace_rows(FeatureFlagState, flags, changed_columns: %i[active])
-          replace_rows(SiteSetting, settings, changed_columns: %i[value])
+          apply_redis_rows(FeatureFlagState, flags, changed_columns: %i[active])
+          apply_redis_rows(SiteSetting, settings, changed_columns: %i[value])
         end
 
         { feature_flags: flags.size, site_settings: settings.size }
       end
+    rescue Redis::BaseError => e
+      report_reconcile_error(e)
+      { feature_flags: 0, site_settings: 0, skipped: :redis_unavailable }
     end
 
     # Run before redeploying a release that reads Redis.
@@ -140,6 +145,18 @@ class LegacyRedisState
       end
     end
 
+    # An empty Redis import with existing database rows is treated as a flush
+    # or misconfiguration, not "everything is default". Partial Redis state
+    # still deletes names that are absent (missing key = default).
+    def apply_redis_rows(model, rows, changed_columns:)
+      if rows.empty? && model.exists?
+        report_empty_redis_skip(model)
+        return
+      end
+
+      replace_rows(model, rows, changed_columns:)
+    end
+
     def replace_rows(model, rows, changed_columns:)
       model.where.not(name: rows.pluck(:name)).delete_all
       return if rows.empty?
@@ -157,6 +174,22 @@ class LegacyRedisState
         error,
         handled: true,
         context: { source: "legacy_redis_state_mirror", record_type: record.class.name, name: record.name },
+      )
+    end
+
+    def report_reconcile_error(error)
+      Rails.error.report(
+        error,
+        handled: true,
+        context: { source: "legacy_redis_state_reconcile" },
+      )
+    end
+
+    def report_empty_redis_skip(model)
+      Rails.error.report(
+        StandardError.new("Skipped Redis→#{model.table_name} replace: Redis had no keys but the database has rows"),
+        handled: true,
+        context: { source: "legacy_redis_state_reconcile", table: model.table_name },
       )
     end
 
