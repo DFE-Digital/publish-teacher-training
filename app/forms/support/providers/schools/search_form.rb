@@ -11,13 +11,13 @@ module Support
           school
         ].freeze
 
-        attr_accessor(*FIELDS)
+        attr_accessor(*FIELDS, :provider)
 
         validates :query, presence: true, length: { minimum: 2 }, on: :query
         validate :valid_school, on: :school
 
         def valid_school
-          errors.add(:school, :school_already_exists) unless school.valid?
+          errors.add(:school, :school_already_exists) if provider.schools.exists?(gias_school: school)
         end
       end
     end

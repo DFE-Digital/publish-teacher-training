@@ -222,7 +222,7 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_i_have_one_existing_school
-    provider.sites.school.create(@gias_schools.first.school_attributes)
+    create(:provider_school, provider:, gias_school: @gias_schools.first)
   end
 
   def and_i_enter_only_an_existing_urn

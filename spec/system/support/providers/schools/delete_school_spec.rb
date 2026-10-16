@@ -153,8 +153,8 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def and_the_school_is_deleted
-    expect(@provider.sites.count).to eq 0
     expect(Provider::School.where(id: @provider_school.id)).to be_empty
+    expect(@provider.sites).to contain_exactly(@site)
   end
 
   def and_the_school_is_not_deleted

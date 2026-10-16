@@ -57,7 +57,7 @@ module Support
       end
 
       def school_removal
-        @school_removal ||= ProviderSchools::Removal.new(provider:, uuid: params[:uuid])
+        @school_removal ||= ProviderSchools::Removal.new(provider:, uuid: params[:uuid], legacy_site: false)
       end
 
       def school_delete_return_path
