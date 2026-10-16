@@ -303,4 +303,57 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
   end
+
+  describe "#accredited_provider_names" do
+    subject(:names) do
+      query = described_class.new(params:)
+      query.call
+      query.accredited_provider_names
+    end
+
+    let(:mmu) { create(:provider, :accredited_provider, provider_name: "Manchester Metropolitan University") }
+    let(:edge_hill) { create(:provider, :accredited_provider, provider_name: "Edge Hill University") }
+    let(:oakwood) { create(:provider, provider_name: "Oakwood Academy") }
+
+    before do
+      create(:course, :with_full_time_sites, :published, provider: mmu)
+      create(:course, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code)
+      create(:course, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code)
+      create(:course, :with_full_time_sites, :published, accredited_provider_code: edge_hill.provider_code)
+    end
+
+    context "when searching by provider" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      it "returns the names of the accredited providers in the results, keyed by provider code" do
+        expect(names).to eq(
+          mmu.provider_code => "Manchester Metropolitan University",
+          edge_hill.provider_code => "Edge Hill University",
+        )
+      end
+
+      it "loads them in a single query" do
+        query = described_class.new(params:)
+        query.call
+
+        expect(count_queries { query.accredited_provider_names }).to eq(1)
+      end
+    end
+
+    context "when searching by provider and ordering by fee" do
+      let(:params) { { provider_name: "Oakwood Academy", order: "fee_uk_ascending" } }
+
+      it "returns the names of the accredited providers in the results" do
+        expect(names.keys).to contain_exactly(mmu.provider_code, edge_hill.provider_code)
+      end
+    end
+
+    context "when not searching by provider" do
+      let(:params) { {} }
+
+      it "returns nothing" do
+        expect(names).to eq({})
+      end
+    end
+  end
 end
