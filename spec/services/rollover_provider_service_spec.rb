@@ -10,7 +10,7 @@ describe RolloverProviderService do
 
   before do
     allow(Courses::CopyToProviderService).to receive(:new).with(
-      schools_copy_to_course: instance_of(Rollover::Schools::DualCourseCopier),
+      schools_copy_to_course: instance_of(Rollover::Schools::CourseCopier),
       sites_copy_to_course: Sites::CopyToCourseService,
       enrichments_copy_to_course: instance_of(Enrichments::CopyToCourseService),
       force:,
@@ -18,7 +18,7 @@ describe RolloverProviderService do
 
     allow(Providers::CopyToRecruitmentCycleService).to receive(:new).with(
       copy_course_to_provider_service:,
-      copy_schools_to_provider_service: instance_of(Rollover::Schools::DualProviderCopier),
+      copy_schools_to_provider_service: instance_of(Rollover::Schools::ProviderCopier),
       copy_site_to_provider_service: instance_of(Sites::CopyToProviderService),
       copy_partnership_to_provider_service: instance_of(Partnerships::CopyToProviderService),
       force:,

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-# Rolling a provider over twice must not duplicate its sites. The per-course
+# Rolling a provider over twice must not duplicate its schools or study sites. The per-course
 # rollover in Publish (Publish::Courses::DraftRolloverController) runs the whole
 # provider pipeline once per course, so a provider with three draft courses is
 # rolled over three times in a row by design.
@@ -24,20 +24,31 @@ RSpec.describe RolloverProviderService do
     described_class.call(provider_code: provider.provider_code, course_codes: [course.course_code], force: true)
   end
 
-  it "copies the sites once when a single course is rolled over" do
+  it "copies the schools and study sites once when a single course is rolled over" do
     roll_over(courses.first)
 
-    expect(new_provider.sites.count).to eq(2)
+    expect(new_provider.schools.count).to eq(2)
     expect(new_provider.study_sites.count).to eq(2)
+  end
+
+  it "does not copy the legacy school sites" do
+    roll_over(courses.first)
+
+    expect(new_provider.sites.school).to be_empty
+  end
+
+  context "when a provider school has no legacy site" do
+    let!(:school_without_site) { create(:provider_school, provider:) }
+
+    it "rolls it over" do
+      roll_over(courses.first)
+
+      expect(new_provider.schools.pluck(:gias_school_id)).to include(school_without_site.gias_school_id)
+    end
   end
 
   context "when each course is rolled over separately" do
     before { courses.each { roll_over(it) } }
-
-    it "does not duplicate the school sites" do
-      expect(new_provider.sites.count).to eq(2)
-      expect(new_provider.sites.pluck(:urn)).to match_array(school_sites.map(&:urn))
-    end
 
     it "does not duplicate the study sites" do
       expect(new_provider.study_sites.count).to eq(2)

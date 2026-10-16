@@ -36,9 +36,7 @@ describe Providers::CopyToRecruitmentCycleService do
     end
     let(:mocked_copy_course_service) { double(execute: nil) }
     let(:mocked_copy_site_service) { double }
-    let(:copy_schools_to_provider_service) do
-      Rollover::Schools::LegacyProviderCopier.new(site_copier: mocked_copy_site_service)
-    end
+    let(:copy_schools_to_provider_service) { Rollover::Schools::ProviderCopier.new }
     let(:mocked_copy_partnership_service) { double(execute: 1) }
     let(:service) do
       described_class.new(
@@ -114,10 +112,10 @@ describe Providers::CopyToRecruitmentCycleService do
           .not_to(change { new_recruitment_cycle.reload.providers.count })
       end
 
-      it "copies over the sites" do
+      it "does not copy the legacy school sites" do
         service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
-        expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
+        expect(mocked_copy_site_service).not_to have_received(:execute).with(site:, new_provider:)
       end
 
       it "copies over the courses" do
@@ -171,14 +169,7 @@ describe Providers::CopyToRecruitmentCycleService do
         .to eq(provider.contacts.map { |c| c.attributes.slice(*compare_attrs) })
     end
 
-    it "copies over the sites" do
-      service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
-
-      expect(mocked_copy_site_service).to have_received(:execute).with(site: site, new_provider: new_provider)
-    end
-
-    context "with the new school relationship copier" do
-      let(:copy_schools_to_provider_service) { Rollover::Schools::ProviderCopier.new }
+    context "when the provider has schools" do
       let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
 
       it "copies provider-school relationships instead of legacy school sites" do
@@ -226,6 +217,8 @@ describe Providers::CopyToRecruitmentCycleService do
     end
 
     it "returns a hash of the counts of copied objects" do
+      create(:provider_school, provider:)
+
       output = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
       expect(output).to include(
@@ -295,6 +288,7 @@ describe Providers::CopyToRecruitmentCycleService do
     # real one.
     context "when the provider has already been rolled over" do
       let(:mocked_copy_site_service) { Sites::CopyToProviderService.new }
+      let!(:provider_school) { create(:provider_school, provider:) }
 
       before do
         allow(mocked_copy_site_service).to receive(:execute).and_call_original
@@ -302,9 +296,9 @@ describe Providers::CopyToRecruitmentCycleService do
         service.execute(provider:, new_recruitment_cycle:)
       end
 
-      it "does not copy the school sites again" do
+      it "does not copy the schools again" do
         expect { service.execute(provider:, new_recruitment_cycle:) }
-          .not_to change(new_provider.sites, :count).from(1)
+          .not_to change(new_provider.schools, :count).from(1)
       end
 
       it "does not copy the study sites again" do
@@ -351,15 +345,11 @@ describe Providers::CopyToRecruitmentCycleService do
         allow(mocked_copy_site_service).to receive(:execute).and_return(failed_site_result)
       end
 
-      it "tracks failed sites and study sites separately" do
+      it "tracks the failed study sites" do
         result = service.execute(provider: provider, new_recruitment_cycle: new_recruitment_cycle)
 
-        expect(result[:sites]).to eq(0)
         expect(result[:study_sites]).to eq(0)
-
-        expect(result[:sites_skipped]).to contain_exactly(
-          { site_code: site.code,       reason: "Site creation failed" },
-        )
+        expect(result[:sites_skipped]).to be_empty
 
         expect(result[:study_sites_skipped]).to contain_exactly(
           { site_code: study_site.code, reason: "Site creation failed" },
