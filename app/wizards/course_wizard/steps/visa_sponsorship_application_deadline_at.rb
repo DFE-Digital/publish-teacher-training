@@ -18,6 +18,7 @@ class CourseWizard
           label: :visa_sponsorship_application_deadline_date,
           value: ->(draft) { draft.visa_deadline },
           format: Publish::CheckAnswers::Formatters::VisaDeadline.new,
+          show_when_blank: true,
         )
       end
 
@@ -99,7 +100,7 @@ class CourseWizard
       end
 
       def last_valid_datetime
-        @last_valid_datetime ||= Find::CycleTimetable.date(:apply_deadline, wizard.recruitment_cycle.year.to_i)
+        @last_valid_datetime ||= Find::CycleTimetable.date(:apply_deadline, wizard.state_store.recruitment_cycle.year.to_i)
       end
 
       def first_valid_datetime
@@ -115,7 +116,7 @@ class CourseWizard
       end
 
       def start_of_cycle
-        @start_of_cycle ||= wizard.recruitment_cycle.application_start_date.change(hour: 9)
+        @start_of_cycle ||= wizard.state_store.recruitment_cycle.application_start_date.change(hour: 9)
       end
 
       def compose_deadline_parts

@@ -237,6 +237,13 @@ namespace :publish, as: :publish, defaults: { host: URI.parse(Settings.publish_u
         get "/funding-type", on: :member, to: "courses/funding_type#edit"
         put "/funding-type", on: :member, to: "courses/funding_type#update"
 
+        # Edits of a saved course through CourseWizard. :unit is a unit id,
+        # or the id of the step the edit opens on.
+        get "/edit/:unit", on: :member, to: "courses/edit_wizards#new", as: :new_edit_wizard,
+                           constraints: { unit: /funding_type|visa|visa_sponsorship|skilled_worker_visa|visa_sponsorship_application_deadline_required|visa_sponsorship_application_deadline_at/ }
+        get "/edit/:state_key/:step", on: :member, to: "courses/edit_wizards#show", as: :edit_wizard
+        patch "/edit/:state_key/:step", on: :member, to: "courses/edit_wizards#update"
+
         get "/apprenticeship", on: :member, to: "courses/apprenticeship#edit"
         put "/apprenticeship", on: :member, to: "courses/apprenticeship#update"
 

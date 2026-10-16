@@ -1,7 +1,7 @@
 <% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.visa_sponsorship.heading"), current_step.errors.any?) %>
 
 <h1 class="govuk-heading-l">
-  <%= render CaptionText.new(text: t("course_wizard.steps.visa_sponsorship.caption")) %>
+  <%= render CaptionText.new(text: local_assigns.fetch(:caption) { t("course_wizard.steps.visa_sponsorship.caption") }) %>
   <%= t("course_wizard.steps.visa_sponsorship.heading") %>
 </h1>
 
@@ -29,7 +29,7 @@
 
 <%= form.govuk_radio_buttons_fieldset :can_sponsor_student_visa, legend: { hidden: true } do %>
   <%= form.govuk_radio_button :can_sponsor_student_visa, true, label: { text: t("course_wizard.steps.visa_sponsorship.options.can_sponsor_student_visa.label") }, link_errors: true %>
-  <%= form.govuk_radio_button :can_sponsor_student_visa, false, label: { text: t("course_wizard.steps.visa_sponsorship.options.cannot_sponsor_student_visa.label") } %>
+  <%= form.govuk_radio_button :can_sponsor_student_visa, false, label: { text: t("course_wizard.steps.visa_sponsorship.options.cannot_sponsor_student_visa.label") }, checked: current_step.cannot_sponsor_checked? %>
 <% end %>
 
 <%= form.govuk_submit t("course_wizard.steps.visa_sponsorship.submit") %>

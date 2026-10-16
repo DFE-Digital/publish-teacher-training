@@ -18,17 +18,19 @@ class CourseWizard
             yes_key: "course_wizard.steps.check_answers.answers.can_sponsor",
             no_key: "course_wizard.steps.check_answers.answers.cannot_sponsor",
           ),
+          show_when_blank: true,
         )
       end
 
-      def can_sponsor_student_visa
-        return super unless super.nil? && default_to_no_from_accrediting_provider?
-
-        false
+      # Pre-selects "No" when the accrediting provider cannot sponsor Student
+      # visas. The answer stays blank until the user submits the step, so a
+      # skipped step is still invalid.
+      def cannot_sponsor_checked?
+        can_sponsor_student_visa == false || (can_sponsor_student_visa.nil? && default_to_no_from_accrediting_provider?)
       end
 
       def question
-        if wizard.provider.accredited?
+        if wizard.state_store.provider.accredited?
           I18n.t("course_wizard.steps.visa_sponsorship.questions.organisation")
         else
           I18n.t("course_wizard.steps.visa_sponsorship.questions.availability")
@@ -36,11 +38,11 @@ class CourseWizard
       end
 
       def show_recruiting_from_overseas_guidance?
-        wizard.provider.accredited? && !wizard.provider.can_sponsor_student_visa
+        wizard.state_store.provider.accredited? && !wizard.state_store.provider.can_sponsor_student_visa
       end
 
       def show_accrediting_provider_inset_text?
-        !wizard.provider.accredited? && accrediting_provider.present?
+        !wizard.state_store.provider.accredited? && accrediting_provider.present?
       end
 
       def accrediting_provider_name
@@ -62,7 +64,7 @@ class CourseWizard
       end
 
       def accrediting_provider
-        wizard.accreditation.accrediting_provider
+        wizard.state_store.accrediting_provider
       end
     end
   end
