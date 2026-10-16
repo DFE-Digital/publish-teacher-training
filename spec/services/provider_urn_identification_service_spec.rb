@@ -35,7 +35,7 @@ describe ProviderURNIdentificationService do
     let(:urns) { new_urns + %w[unfound] + [existing_school.urn] }
 
     it "returns correct hash" do
-      provider.sites.create(existing_school.school_attributes)
+      create(:provider_school, provider:, gias_school: existing_school)
 
       expect(subject[:unfound_urns]).to eq(%w[unfound])
       expect(subject[:duplicate_urns]).to eq([existing_school.urn])
@@ -50,7 +50,7 @@ describe ProviderURNIdentificationService do
     let(:urns) { new_urns + [closed_school.urn] + [existing_school.urn] }
 
     it "returns correct hash" do
-      provider.sites.create(existing_school.school_attributes)
+      create(:provider_school, provider:, gias_school: existing_school)
 
       expect(subject[:unfound_urns]).to eq([closed_school.urn])
       expect(subject[:duplicate_urns]).to eq([existing_school.urn])

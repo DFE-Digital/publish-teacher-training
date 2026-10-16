@@ -17,6 +17,8 @@ module ProviderSchools
 
       TouchSuppression.suppress do
         gias_schools.each do |gias_school|
+          next unsaved << gias_school unless gias_school.complete_address?
+
           ActiveRecord::Base.transaction do
             saved << create(gias_school)
           end
@@ -35,19 +37,8 @@ module ProviderSchools
 
     attr_reader :provider, :gias_schools
 
-    # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-    # TODO School data remodel removal - remove this legacy Site write when provider schools are created directly.
     def create(gias_school)
-      legacy_site = provider.sites.build(gias_school.school_attributes)
-      ::ProviderSchools::LegacySiteCreator.call(site: legacy_site)
-      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-
-      ::ProviderSchools::Creator.call(
-        provider:,
-        gias_school_id: gias_school.id,
-        site_code: legacy_site.code,
-        uuid: legacy_site.uuid,
-      )
+      ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
     end
   end
 end

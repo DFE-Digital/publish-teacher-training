@@ -4,50 +4,29 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        helper_method :school_id
-        before_action :site
+        before_action :check_form
 
         def show; end
 
         def update
-          provider_school = ActiveRecord::Base.transaction do
-            create_provider_school_and_legacy_site
-          end
+          if @check_form.valid?
+            ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
 
-          redirect_to publish_provider_recruitment_cycle_schools_path,
-                      flash: { success_with_body: { title: t(".added"), body: provider_school.gias_school.name } }
-        rescue ActiveRecord::RecordInvalid
-          render :show
+            redirect_to publish_provider_recruitment_cycle_schools_path,
+                        flash: { success_with_body: { title: t(".added"), body: gias_school.name } }
+          else
+            render :show, status: :unprocessable_entity
+          end
         end
 
       private
 
-        # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-        # TODO School data remodel removal - remove this legacy Site write when publish creates Provider::School directly.
-        def create_provider_school_and_legacy_site
-          ::ProviderSchools::LegacySiteCreator.call(site: @site)
-          # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-
-          ::ProviderSchools::Creator.call(
-            provider: @provider,
-            gias_school_id: school_id,
-            site_code: @site.code,
-            uuid: @site.uuid,
-          )
-        end
-
-        def site
-          @site ||= @provider.sites.school.build(gias_school.school_attributes)
+        def check_form
+          @check_form = ::ProviderSchools::CheckForm.new(provider:, gias_school:)
         end
 
         def gias_school
-          @gias_school ||= GiasSchool.find(school_id)
-        end
-
-        def school_id
-          # params[:school_id] comes from the school search
-          # site: school_id comes from the checks#show form
-          params[:school_id] || params.expect(site: [:school_id])[:school_id]
+          @gias_school ||= GiasSchool.find(params[:school_id])
         end
       end
     end
