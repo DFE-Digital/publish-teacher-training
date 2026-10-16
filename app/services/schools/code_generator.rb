@@ -6,8 +6,8 @@ module Schools
   # users and tests. Excludes "-" because it is reserved for the provider
   # main site under the partial unique index on provider_school
   # (site_code = '-'). Reads used codes from both the legacy site table
-  # and the new provider_school table so codes don't collide on either
-  # side during the dual-write period. Race safety is the caller's
+  # and the provider_school table so a new code never collides with one
+  # already handed out to a legacy site. Race safety is the caller's
   # responsibility (see ProviderSchools::Creator).
   class CodeGenerator
     include ServicePattern
