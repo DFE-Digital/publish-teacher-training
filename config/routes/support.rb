@@ -124,6 +124,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       post :confirm_rollover
     end
   end
+  resources :automated_banners, path: "banners/automated", only: %i[show]
   resources :banners, only: %i[show new create edit update destroy] do
     member do
       get :delete

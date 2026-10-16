@@ -14,6 +14,7 @@ module Support
       }
       @scope_status = params[:status]&.to_sym || :active
       @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: PER_PAGE)
+      @automated_banners = @pagy.page == 1 ? automated_banners : []
     end
 
     def show; end
@@ -56,6 +57,14 @@ module Support
     end
 
   private
+
+    def automated_banners
+      case @scope_status
+      when :scheduled then AutomatedBanner.scheduled
+      when :active then AutomatedBanner.active
+      else []
+      end
+    end
 
     def set_banner
       @banner = Banner.find(params[:id])
