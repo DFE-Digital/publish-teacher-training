@@ -124,13 +124,13 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_text("No - cannot sponsor")
   end
 
-  scenario "shows add a study site call to action when provider has no study sites" do
+  scenario "shows the select a study site call to action when provider has no study sites" do
     given_the_provider_has_no_study_sites
     given_i_have_completed_fee_wizard_state_without_study_sites
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect(page).to have_link("Add a study site")
+    expect(page).to have_link("Select a study site")
   end
 
   scenario "creates a course from secondary fee branch with mapped attributes" do
