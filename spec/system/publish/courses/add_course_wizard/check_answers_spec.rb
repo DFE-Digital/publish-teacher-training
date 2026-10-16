@@ -263,11 +263,9 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_click_change_link_for(:funding_type)
     choose "Fee - no salary"
     and_i_click_continue
-    and_i_continue_until_the_student_visa_question
+    then_i_am_on_step(:visa_sponsorship)
 
     expect(page).to have_checked_field("No")
-    and_i_click_continue
-    then_i_am_on_step_without_return_to_review(:start_date)
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
 
@@ -310,15 +308,6 @@ private
 
   def and_the_partner_cannot_sponsor_student_visas
     provider.accredited_partners.first.update!(can_sponsor_student_visa: false)
-  end
-
-  def and_i_continue_until_the_student_visa_question
-    %i[study_pattern schools study_sites].each do |step|
-      then_i_am_on_step_without_return_to_review(step)
-      and_i_click_continue
-    end
-
-    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
   end
 
   def tda_changeable_steps
