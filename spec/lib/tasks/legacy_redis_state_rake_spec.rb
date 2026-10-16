@@ -30,4 +30,16 @@ RSpec.describe "legacy_redis_state:reconcile_before_web_boot" do
       .to output(/Skipped Redis reconciliation/).to_stdout
     expect(LegacyRedisState).not_to have_received(:backfill_database)
   end
+
+  it "still returns successfully when Redis reconcile is skipped" do
+    allow(ENV).to receive(:[]).with("REDIS_WORKER_URL").and_return("redis://worker")
+    allow(LegacyRedisState).to receive(:backfill_database).and_return(
+      feature_flags: 0,
+      site_settings: 0,
+      skipped: :redis_unavailable,
+    )
+
+    expect { Rake::Task["legacy_redis_state:reconcile_before_web_boot"].invoke }
+      .to output(/skipped.*redis_unavailable/).to_stdout
+  end
 end

@@ -6,10 +6,12 @@ After a database change commits, it is also written to the worker Redis in the
 old format so a release that still reads Redis can be redeployed. A failed
 mirror remains marked as pending. Before a web process starts, it retries
 pending database-to-Redis writes and then reconciles Redis into the database.
-These operations use one database advisory lock so they cannot overwrite a
-concurrent change. Requests only read the database: one query loads every
-flag, another every setting, and both are memoised on `Current` for the
-request.
+If Redis is unreachable the boot continues on the database state and reports
+the error. If Redis is empty but the database still has rows, the replace is
+skipped so a flush cannot wipe flags or cycle settings. These operations use
+one database advisory lock so they cannot overwrite a concurrent change.
+Requests only read the database: one query loads every flag, another every
+setting, and both are memoised on `Current` for the request.
 
 Form stores (`Stores::BaseStore`) write to Solid Cache under `form_stores/`
 keys with a 24-hour logical expiry. Unread rows can remain in Postgres until
