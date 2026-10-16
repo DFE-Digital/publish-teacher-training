@@ -68,16 +68,35 @@ module Courses
     end
 
     def optimisation_scope
-      @scope.preload(
+      associations = [
         :schools,
         :latest_published_enrichment,
-        provider: :recruitment_cycle,
-        subjects: [:financial_incentive],
-      )
+        { provider: :recruitment_cycle, subjects: [:financial_incentive] },
+      ]
+      # Result cards only show the accredited provider on provider searches
+      associations << :accrediting_provider if @applied_scopes.key?(:provider)
+
+      @scope.preload(*associations)
     end
 
     def count
       @scope.unscope(:order, :group).distinct.count(:id)
+    end
+
+    # Pairs of [provider_id, master_subject_id] where the provider offers the
+    # same subject through more than one accredited provider in these results.
+    # Find shows the accredited provider under the course name on those cards.
+    def provider_subjects_with_multiple_accredited_providers
+      return Set.new unless @applied_scopes.key?(:provider)
+
+      @scope
+        .unscope(:order, :select, :group)
+        .where.not(accredited_provider_code: nil)
+        .where("course.accredited_provider_code <> provider.provider_code")
+        .group("course.provider_id", "course.master_subject_id")
+        .having("COUNT(DISTINCT course.accredited_provider_code) > 1")
+        .pluck("course.provider_id", "course.master_subject_id")
+        .to_set
     end
 
     def visa_sponsorship_scope

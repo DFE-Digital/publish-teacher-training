@@ -320,6 +320,8 @@ en:
         FourYears: 4 years
       course_link_provider: " at %{provider_name}"
       age_range: Ages %{range}
+      accredited_by: Accredited by %{provider}
+      age_range_and_accredited_by: Ages %{range}, accredited by %{provider}
       school_experience: School experience is required or strongly recommended
       qualification_value:
         qts_html: <abbr title='Qualified teacher status'>QTS</abbr>

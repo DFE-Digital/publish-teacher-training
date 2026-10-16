@@ -188,4 +188,119 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       )
     end
   end
+
+  describe "#provider_subjects_with_multiple_accredited_providers" do
+    subject(:pairs) do
+      query = described_class.new(params:)
+      query.call
+      query.provider_subjects_with_multiple_accredited_providers
+    end
+
+    let(:biology) { find_or_create(:secondary_subject, :biology) }
+    let(:physics) { find_or_create(:secondary_subject, :physics) }
+    let(:mmu) { create(:provider, :accredited_provider, provider_name: "Manchester Metropolitan University") }
+    let(:edge_hill) { create(:provider, :accredited_provider, provider_name: "Edge Hill University") }
+    let(:oakwood) { create(:provider, provider_name: "Oakwood Academy") }
+
+    context "when the training partner offers the same subject with different accredited providers" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [physics], master_subject_id: physics.id)
+      end
+
+      it "returns the provider and subject pair" do
+        expect(pairs).to eq(Set[[oakwood.id, biology.id]])
+      end
+    end
+
+    # The method builds on the scope after every filter and ordering has been
+    # applied, and those add joins, selects and GROUP BYs of their own.
+    context "when combined with other filters and orderings" do
+      let(:london) { build(:location, :london) }
+
+      before do
+        [mmu, edge_hill].each do |accredited_provider|
+          course = create(
+            :course, :secondary, :published, :fee,
+            provider: oakwood,
+            accredited_provider_code: accredited_provider.provider_code,
+            subjects: [biology],
+            master_subject_id: biology.id,
+            enrichments: [build(:course_enrichment, :published, fee_uk_eu: 9000, fee_international: 18_000)]
+          )
+          create(:site_status, :findable, course:)
+          create(:course_school, course:, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
+        end
+      end
+
+      {
+        "a subject filter" => -> { { subjects: [biology.subject_code] } },
+        "a location filter" => -> { { latitude: london.latitude, longitude: london.longitude, radius: 10 } },
+        "UK fee ordering" => -> { { order: "fee_uk_ascending" } },
+        "international fee ordering" => -> { { order: "fee_intl_ascending" } },
+        "newest course ordering" => -> { { order: "newest_course" } },
+        "a location filter and UK fee ordering" => -> { { latitude: london.latitude, longitude: london.longitude, radius: 10, order: "fee_uk_ascending" } },
+        "a subject filter, a location filter and international fee ordering" => -> { { subjects: [biology.subject_code], latitude: london.latitude, longitude: london.longitude, radius: 10, order: "fee_intl_ascending" } },
+      }.each do |description, extra_params|
+        context "with #{description}" do
+          let(:params) { { provider_name: "Oakwood Academy" }.merge(instance_exec(&extra_params)) }
+
+          it "returns the provider and subject pair" do
+            expect(pairs).to eq(Set[[oakwood.id, biology.id]])
+          end
+        end
+      end
+
+      context "with a subject filter for a different subject" do
+        let(:params) { { provider_name: "Oakwood Academy", subjects: [physics.subject_code] } }
+
+        it "returns nothing" do
+          expect(pairs).to be_empty
+        end
+      end
+    end
+
+    context "when the training partner offers different subjects with different accredited providers" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [physics], master_subject_id: physics.id)
+      end
+
+      it "returns nothing" do
+        expect(pairs).to be_empty
+      end
+    end
+
+    context "when searching by the accredited provider" do
+      let(:params) { { provider_name: "Manchester Metropolitan University" } }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: mmu, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+      end
+
+      it "returns nothing because each training partner only has that accredited provider in the results" do
+        expect(pairs).to be_empty
+      end
+    end
+
+    context "when not searching by provider" do
+      let(:params) { {} }
+
+      before do
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: mmu.provider_code, subjects: [biology], master_subject_id: biology.id)
+        create(:course, :secondary, :with_full_time_sites, :published, provider: oakwood, accredited_provider_code: edge_hill.provider_code, subjects: [biology], master_subject_id: biology.id)
+      end
+
+      it "returns nothing" do
+        expect(pairs).to be_empty
+      end
+    end
+  end
 end
