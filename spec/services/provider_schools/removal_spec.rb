@@ -7,8 +7,8 @@ RSpec.describe ProviderSchools::Removal do
 
   let(:provider) { create(:provider) }
 
-  # The pair written together when a school is added: the provider school and
-  # the legacy site it shares a uuid, site code and urn with.
+  # A school added before dual writing stopped, with the legacy site it shares
+  # a uuid, site code and urn with. Removal leaves the legacy site alone.
   let!(:site) { create(:site, provider:) }
   let!(:provider_school) { create(:provider_school, :for_site, site:) }
 
@@ -17,11 +17,11 @@ RSpec.describe ProviderSchools::Removal do
   let!(:other_provider_school) { create(:provider_school, provider:) }
 
   describe "#call" do
-    it "removes both the legacy site and provider school" do
+    it "removes the provider school and leaves the legacy site alone" do
       expect(removal.call).to be(true)
 
-      expect(Site.where(id: site.id)).to be_empty
       expect(Provider::School.where(id: provider_school.id)).to be_empty
+      expect(Site.where(id: site.id)).to contain_exactly(site)
     end
 
     it "does not remove either record when the school is the only school on a course" do
@@ -45,7 +45,6 @@ RSpec.describe ProviderSchools::Removal do
 
       expect(removal.call).to be(true)
 
-      expect(Site.where(id: site.id)).to be_empty
       expect(Provider::School.where(id: provider_school.id)).to be_empty
       expect(course.schools.reload).to contain_exactly(remaining_course_school)
     end
@@ -146,19 +145,6 @@ RSpec.describe ProviderSchools::Removal do
 
         expect(Site.where(id: site.id)).to contain_exactly(site)
         expect(Provider::School.where(id: provider_school.id)).to contain_exactly(provider_school)
-      end
-    end
-
-    # Removal deliberately does not branch on the recruitment cycle: the same
-    # records are deleted in every cycle.
-    context "when the provider is in a later recruitment cycle" do
-      let(:provider) { create(:provider, :next_recruitment_cycle) }
-
-      it "removes both the legacy site and provider school" do
-        expect(removal.call).to be(true)
-
-        expect(Site.where(id: site.id)).to be_empty
-        expect(Provider::School.where(id: provider_school.id)).to be_empty
       end
     end
   end
