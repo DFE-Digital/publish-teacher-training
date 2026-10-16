@@ -88,7 +88,7 @@ module Publish
         end
       end
 
-      # No study site picked returns nil, so the row shows the prompt to pick
+      # No study site picked returns nil, so the row shows the prompt to select
       # one. A provider with no study sites on their organisation at all has to
       # add one there first, so their prompt links to the study sites page.
       class StudySites
@@ -96,7 +96,7 @@ module Publish
           return value.join(", ") if value.present?
           return if draft.wizard.provider.study_sites.any?
 
-          view.add_a_study_site_link
+          view.select_a_study_site_link
         end
       end
 

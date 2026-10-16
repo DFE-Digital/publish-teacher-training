@@ -259,7 +259,7 @@ en:
           cannot_sponsor: "No - cannot sponsor"
           salary_apprenticeship: "Salary (apprenticeship)"
           full_time_or_part_time: "Full time or part time"
-          add_a_study_site: "Add a study site"
+          select_a_study_site: "Select a study site"
         prompts:
           subjects: Select a subject
           engineers: Select if this course is part of Engineers Teach Physics
@@ -273,7 +273,7 @@ en:
           is_there_a_visa_sponsorship_deadline: Select if there is a visa sponsorship deadline
           visa_sponsorship_application_deadline_date: Enter a visa sponsorship deadline
           start_date: Select a course start date
-          study_site: Add a study site
+          study_site: Select a study site
         labels:
           level: Subject level
           send: Special educational needs and disability (SEND)
