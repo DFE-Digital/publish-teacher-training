@@ -21,6 +21,18 @@ describe Sites::CodeGenerator do
     end
   end
 
+  # Schools added since dual writing stopped have no legacy Site, so their
+  # codes only live on Provider::School.
+  context "when provider schools hold the codes" do
+    before do
+      (Site::DESIRABLE_CODES - %w[A]).each { |site_code| create(:provider_school, site_code:, provider:) }
+    end
+
+    it "does not reuse them" do
+      expect(subject).to eq("A")
+    end
+  end
+
   context "when all of UCAS style POSSIBLE_CODES are assigned" do
     before do
       Site::POSSIBLE_CODES.each { |code| create(:site, code:, provider:) }
