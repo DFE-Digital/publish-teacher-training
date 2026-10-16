@@ -263,9 +263,10 @@ RSpec.describe "Delete a provider's schools" do
   end
   alias_method :when_i_click_remove_school_button, :and_i_click_remove_school_button
 
+  # The legacy site written before dual writing stopped is left in place.
   def and_the_school_is_deleted
-    expect(provider.sites.reload).to be_empty
     expect(provider.schools.reload).to contain_exactly(second_school)
+    expect(provider.sites.reload.count).to eq 1
   end
 
   def and_the_school_is_not_deleted
