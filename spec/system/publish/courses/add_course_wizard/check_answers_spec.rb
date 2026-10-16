@@ -29,7 +29,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     fee_branch_changeable_steps.each do |step|
       when_i_click_change_link_for(step)
-      then_i_am_on_step(first_step_of_change(step, visa_step: :visa_sponsorship))
+      then_i_am_on_step(step)
       when_i_visit_check_answers_page
       then_i_am_taken_to_the_check_answers_page
     end
@@ -43,7 +43,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     salary_branch_changeable_steps.each do |step|
       when_i_click_change_link_for(step)
-      then_i_am_on_step(first_step_of_change(step, visa_step: :skilled_worker_visa))
+      then_i_am_on_step(step)
       when_i_visit_check_answers_page
       then_i_am_taken_to_the_check_answers_page
     end
@@ -461,13 +461,6 @@ private
       ),
       ignore_query: false,
     )
-  end
-
-  # The deadline rows belong to the visa sub-wizard, so their change
-  # journey starts at the sub-wizard's first step on the path.
-  def first_step_of_change(step, visa_step:)
-    deadline_steps = %i[visa_sponsorship_application_deadline_required visa_sponsorship_application_deadline_at]
-    deadline_steps.include?(step) ? visa_step : step
   end
 
   def and_i_complete_step_for_return(step)
