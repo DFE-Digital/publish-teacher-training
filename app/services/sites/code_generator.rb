@@ -26,8 +26,10 @@ module Sites
       (existing_site_codes - Site::POSSIBLE_CODES).compact
     end
 
+    # Schools added since dual writing stopped have no legacy Site, so their
+    # codes are read from Provider::School as well.
     def existing_site_codes
-      @existing_site_codes ||= provider.sites.pluck(:code)
+      @existing_site_codes ||= provider.sites.pluck(:code) | provider.schools.pluck(:site_code)
     end
 
     def unassigned_ucas_style_site_codes

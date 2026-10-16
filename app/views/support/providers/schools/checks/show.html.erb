@@ -6,7 +6,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @school_form, url: support_recruitment_cycle_provider_schools_check_path(@provider.recruitment_cycle_year, @provider, school_id: @school_form.gias_school_id), method: :put, local: true) do |f| %>
+    <%= form_with(model: @check_form, url: support_recruitment_cycle_provider_schools_check_path(@provider.recruitment_cycle_year, @provider, school_id: @gias_school.id), method: :put, local: true) do |f| %>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <%= f.govuk_error_summary %>
@@ -22,12 +22,12 @@
         <%= render GovukComponent::SummaryListComponent.new do |component|
               component.with_row do |row|
                 row.with_key { t(".urn") }
-                row.with_value(text: @school_form.urn)
+                row.with_value(text: @gias_school.urn)
               end
 
               component.with_row do |row|
                 row.with_key { t(".address") }
-                row.with_value(text: @school_form.full_address)
+                row.with_value(text: safe_join(@gias_school.address.compact_blank, tag.br))
               end
             end %>
       <% end %>
