@@ -21,6 +21,14 @@ describe ViewHelper do
     it "returns the course applications open date url for the error" do
       expect(enrichment_error_url(provider_code: provider.provider_code, course:, field: "applications_open_from")).to eq("/publish/organisations/#{provider.provider_code}/#{Find::CycleTimetable.current_year}/courses/#{course.course_code}/applications-open")
     end
+
+    it "returns the course schools url for a schools error" do
+      expect(
+        enrichment_error_url(provider_code: provider.provider_code, course:, field: "schools"),
+      ).to eq(
+        "/publish/organisations/#{provider.provider_code}/#{course.recruitment_cycle_year}/courses/#{course.course_code}/schools?display_errors=true",
+      )
+    end
   end
 
   describe "#ordered_enrichment_errors" do
@@ -57,9 +65,9 @@ describe ViewHelper do
     end
 
     it "puts fields it does not know about last, in the order they arrived" do
-      errors = { sites: ["Select at least one school"], subjects: ["Select a subject"], course_length: ["Enter course length"] }
+      errors = { schools: ["Select at least one school"], subjects: ["Select a subject"], course_length: ["Enter course length"] }
 
-      expect(ordered_enrichment_errors(errors).map(&:first)).to eq(%i[course_length sites subjects])
+      expect(ordered_enrichment_errors(errors).map(&:first)).to eq(%i[course_length schools subjects])
     end
 
     it "orders the base messages it does not know about after the ones it does" do

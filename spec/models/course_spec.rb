@@ -431,7 +431,7 @@ describe Course do
     it { is_expected.to validate_presence_of(:qualification) }
     it { is_expected.to validate_presence_of(:start_date) }
     it { is_expected.to validate_presence_of(:study_mode) }
-    it { is_expected.to validate_presence_of(:sites).on(:publish) }
+    it { is_expected.to validate_presence_of(:schools).on(:publish) }
     it { is_expected.to validate_presence_of(:subjects).on(:publish) }
     it { is_expected.to validate_presence_of(:level).on(:create) }
 
@@ -586,8 +586,8 @@ describe Course do
           end
         end
 
-        it "Requires at least one location" do
-          error = errors[:sites]
+        it "Requires at least one school" do
+          error = errors[:schools]
           expect(error).not_to be_empty
           expect(error.first).to include("Select at least one school")
         end

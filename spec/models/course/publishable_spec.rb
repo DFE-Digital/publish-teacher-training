@@ -16,7 +16,7 @@ describe "#publishable?" do
   it "adds all unpublishable error messages" do
     expect(course).not_to be_publishable
     expect(course.errors.messages).to eq(
-      { sites: ["^Select at least one school"],
+      { schools: ["^Select at least one school"],
         accrediting_provider: ["Select an accredited provider"],
         placement_selection_criteria: ["^Enter how you decide which schools to place trainees in"],
         duration_per_school: ["^Enter how much time trainees will spend in each school"],
@@ -70,7 +70,7 @@ describe "#publishable?" do
     end
   end
 
-  context "with no sites" do
+  context "with no schools" do
     let(:enrichment) { build(:course_enrichment, :subsequent_draft, created_at: 1.day.ago) }
     let(:course) do
       create(:course, site_statuses: [], enrichments: [enrichment])
@@ -105,9 +105,9 @@ describe "#publishable?" do
         )
       end
 
-      it "ignores legacy sites and reports the sites :blank error" do
+      it "ignores legacy sites and reports the schools :blank error" do
         expect(course).not_to be_publishable
-        expect(course.errors.details[:sites]).to include(error: :blank)
+        expect(course.errors.details[:schools]).to include(error: :blank)
       end
     end
 
