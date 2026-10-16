@@ -117,7 +117,7 @@ features:
     can_edit_current_and_next_cycles: false
   # Change links on the course page that edit a saved course through
   # CourseWizard (the funding type and visa links so far)
-  course_edit_wizard: false
+  course_edit_wizard: true
 
 cookies:
   session:
