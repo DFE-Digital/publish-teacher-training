@@ -8,10 +8,6 @@ class CourseDecorator < ApplicationDecorator
 
   LANGUAGE_SUBJECT_CODES = %w[Q3 A0 15 16 17 18 19 20 21 22].freeze
 
-  def sites_ids
-    object.site_ids.compact_blank
-  end
-
   def study_sites_ids
     object.study_site_ids.compact_blank
   end
@@ -153,10 +149,6 @@ class CourseDecorator < ApplicationDecorator
     options.exclude?(course.age_range_in_years)
   end
 
-  def alphabetically_sorted_sites
-    object.sites.sort_by(&:location_name)
-  end
-
   def sorted_school_names
     names = if object.new_record?
               object.schools.map { |school| school.gias_school.name }
@@ -192,10 +184,6 @@ class CourseDecorator < ApplicationDecorator
       .map(&:provider_school)
       .uniq(&:gias_school_id)
       .sort_by { |school| school.gias_school.name.downcase }
-  end
-
-  def has_site?(site)
-    !course.sites.nil? && object.sites.any? { |s| s.id == site.id }
   end
 
   def current_cycle?
@@ -505,12 +493,6 @@ class CourseDecorator < ApplicationDecorator
 
   def no_fee?
     !object.fee?
-  end
-
-  def training_locations?
-    published_how_school_placements_work.present? ||
-      study_sites.any? ||
-      site_statuses.map(&:site).uniq.many?
   end
 
 private
