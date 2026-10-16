@@ -61,7 +61,7 @@
     "stylelint-order": "^8.1.2",
     "stylelint-selector-bem-pattern": "^5.0.0",
     "vite": "^8.3.4",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.4"
   },
   "packageManager": "yarn@4.18.0"
 }
