@@ -17,11 +17,8 @@ RSpec.describe "Support copies courses between providers", service: :publish do
   let(:user) { create(:user, :admin) }
   let(:shared_school) { create(:gias_school, :open, name: "Shared Placement School") }
 
-  # A provider school and the legacy site it was dual-written with, joined by
-  # the uuid the two share.
   def link_school(provider, gias_school, site_code)
-    site = create(:site, provider:, urn: gias_school.urn, code: site_code)
-    create(:provider_school, provider:, gias_school:, site_code:, uuid: site.uuid)
+    create(:provider_school, provider:, gias_school:, site_code:)
   end
 
   before do
