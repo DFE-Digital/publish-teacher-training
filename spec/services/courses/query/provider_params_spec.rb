@@ -216,6 +216,53 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
       end
     end
 
+    # The method builds on the scope after every filter and ordering has been
+    # applied, and those add joins, selects and GROUP BYs of their own.
+    context "when combined with other filters and orderings" do
+      let(:london) { build(:location, :london) }
+
+      before do
+        [mmu, edge_hill].each do |accredited_provider|
+          course = create(
+            :course, :secondary, :published, :fee,
+            provider: oakwood,
+            accredited_provider_code: accredited_provider.provider_code,
+            subjects: [biology],
+            master_subject_id: biology.id,
+            enrichments: [build(:course_enrichment, :published, fee_uk_eu: 9000, fee_international: 18_000)]
+          )
+          create(:site_status, :findable, course:)
+          create(:course_school, course:, gias_school: create(:gias_school, latitude: london.latitude, longitude: london.longitude))
+        end
+      end
+
+      {
+        "a subject filter" => -> { { subjects: [biology.subject_code] } },
+        "a location filter" => -> { { latitude: london.latitude, longitude: london.longitude, radius: 10 } },
+        "UK fee ordering" => -> { { order: "fee_uk_ascending" } },
+        "international fee ordering" => -> { { order: "fee_intl_ascending" } },
+        "newest course ordering" => -> { { order: "newest_course" } },
+        "a location filter and UK fee ordering" => -> { { latitude: london.latitude, longitude: london.longitude, radius: 10, order: "fee_uk_ascending" } },
+        "a subject filter, a location filter and international fee ordering" => -> { { subjects: [biology.subject_code], latitude: london.latitude, longitude: london.longitude, radius: 10, order: "fee_intl_ascending" } },
+      }.each do |description, extra_params|
+        context "with #{description}" do
+          let(:params) { { provider_name: "Oakwood Academy" }.merge(instance_exec(&extra_params)) }
+
+          it "returns the provider and subject pair" do
+            expect(pairs).to eq(Set[[oakwood.id, biology.id]])
+          end
+        end
+      end
+
+      context "with a subject filter for a different subject" do
+        let(:params) { { provider_name: "Oakwood Academy", subjects: [physics.subject_code] } }
+
+        it "returns nothing" do
+          expect(pairs).to be_empty
+        end
+      end
+    end
+
     context "when the training partner offers different subjects with different accredited providers" do
       let(:params) { { provider_name: "Oakwood Academy" } }
 
