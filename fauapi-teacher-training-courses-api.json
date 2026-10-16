@@ -1,4 +1,5 @@
 {
+  "name": "teacher-training-courses-api",
   "displayName": "Teacher Training Courses API",
   "description": "This API provides access to teacher training course data, allowing consumers to search and retrieve information about teacher training courses across England.",
   "overview": "The Teacher Training Courses API enables external systems to access and integrate teacher training course information. It supports querying courses by various criteria including location, subject, and provider.\r\n[API documentation](https://api.publish-teacher-training-courses.service.gov.uk/docs/)",
@@ -6,6 +7,7 @@
   "schemaType": "openapi",
   "backendType": "http",
   "majorVersion": "v1",
+  "isHosted": false,
   "visibility": "Public",
   "tags": "teacher;training;education;courses;",
   "classification": "Public facing",
@@ -15,21 +17,27 @@
   "environments": [
     {
       "name": "dev",
-      "baseUrl": "https://qa.publish-teacher-training-courses.service.gov.uk/api",
+      "baseUrl": "https://qa.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "visibility": "Internal",
-      "enabled": true
+      "enabled": true,
+      "backendUrl": "https://qa.api.publish-teacher-training-courses.service.gov.uk",
+      "backendMode": "None"
     },
     {
       "name": "staging",
-      "baseUrl": "https://staging.publish-teacher-training-courses.service.gov.uk/api",
+      "baseUrl": "https://staging.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "visibility": "Internal",
-      "enabled": true
+      "enabled": true,
+      "backendUrl": "https://staging.api.publish-teacher-training-courses.service.gov.uk",
+      "backendMode": "None"
     },
     {
       "name": "live",
-      "baseUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api/public",
+      "baseUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "visibility": "Public",
-      "enabled": true
+      "enabled": true,
+      "backendUrl": "https://api.publish-teacher-training-courses.service.gov.uk",
+      "backendMode": "None"
     }
   ],
   "releases": [
@@ -43,4 +51,3 @@
     }
   ]
 }
-

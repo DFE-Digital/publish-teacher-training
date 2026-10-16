@@ -5,6 +5,7 @@ module API
     module V1
       class ApplicationController < PublicAPIController
         include PagyPagination
+        include API::GatewayAuthenticable
 
         def current_namespace
           "publish_api"

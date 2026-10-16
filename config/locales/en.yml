@@ -1241,6 +1241,9 @@ en:
     "400":
       title: BAD REQUEST
       detail: "%{message}"
+    "401":
+      title: UNAUTHORIZED
+      detail: "Requests must come through the API gateway"
     "404":
       title: NOT_FOUND
       detail: "The requested resource could not be found"
