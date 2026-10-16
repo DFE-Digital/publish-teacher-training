@@ -71,7 +71,6 @@ module Courses
       @scope.preload(
         :schools,
         :latest_published_enrichment,
-        :accrediting_provider,
         provider: :recruitment_cycle,
         subjects: [:financial_incentive],
       )
@@ -95,6 +94,19 @@ module Courses
         .having("COUNT(DISTINCT course.accredited_provider_code) > 1")
         .pluck("course.provider_id", "course.master_subject_id")
         .to_set
+    end
+
+    # Names of the accredited providers of the courses in these results, keyed
+    # by provider code. Find only shows them on provider searches. Loaded in one
+    # query rather than through Course#accrediting_provider, whose
+    # instance-dependent scope has to load each course's provider and cycle.
+    def accredited_provider_names
+      return {} unless @applied_scopes.key?(:provider)
+
+      @current_recruitment_cycle.providers
+        .where(provider_code: @scope.unscope(:order, :select, :group).select(:accredited_provider_code))
+        .pluck(:provider_code, :provider_name)
+        .to_h
     end
 
     def visa_sponsorship_scope
