@@ -54,25 +54,26 @@ result does not tell you how the service behaves at the busy moment.
 
 ### Set the cycle phase
 
-A Redis key named `cycle_schedule` holds the phase. Set it to
-`today_is_after_find_opens`. In that phase Find is open, applications are open
-and Find serves the next cycle.
+Use the cycle switcher at `/cycles`, or a Rails console, to set
+`cycle_schedule` to `apply_reopened`. In that phase Find is open, applications
+are open and Find serves the next cycle.
 
-```
-redis-cli set cycle_schedule today_is_after_find_opens
-redis-cli get cycle_schedule
+```ruby
+previous_schedule = SiteSetting.cycle_schedule
+SiteSetting.set(name: "cycle_schedule", value: "apply_reopened")
 ```
 
 These are the values the switcher accepts:
 
 - `real`, which uses the true dates
-- `today_is_after_find_opens`, where Find and apply are both open
-- `today_is_mid_cycle`
-- `today_is_between_find_opening_and_apply_opening`, where apply is not yet open
-- `today_is_after_apply_deadline_passed`, where the cycle is closed
+- `apply_open`, where Find and apply are open for the current cycle
+- `apply_closed`, where Find is open and apply is closed for the current cycle
+- `find_closed`, where both services are closed before the next cycle
+- `apply_not_open_yet`, where Find is open for the next cycle but apply is not
+- `apply_reopened`, where Find and apply are open for the next cycle
 
-**The key is shared.** One value applies to everything on that environment.
-Write down the old value before you change it, and put it back when you finish.
+**The setting is shared.** One value applies to everything on that environment.
+Restore `previous_schedule` when you finish.
 
 ### Publish enough courses
 

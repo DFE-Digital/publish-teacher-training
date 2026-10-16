@@ -10,9 +10,7 @@ RSpec.describe "Redis and Sidekiq dependencies" do
   known_call_sites = %w[
     app/controllers/heartbeat_controller.rb
     app/jobs/application_job.rb
-    app/lib/feature_flag.rb
-    app/lib/site_setting.rb
-    app/services/stores/base_store.rb
+    app/lib/legacy_redis_state.rb
     config/initializers/redis.rb
     config/initializers/sidekiq.rb
     config/routes/publish.rb

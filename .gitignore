@@ -61,6 +61,7 @@ terraform/custom_domains/environment_domains/vendor/
 *.sql.tar.gz
 *.sql.gz
 *.sql
+!db/scripts/*.sql
 
 # Exclude api doc application node modules
 docs/node_modules

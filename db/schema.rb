@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_145834) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_15_150347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -353,6 +353,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_145834) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "feature_flag_state", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "legacy_redis_synced_at"
+    t.index ["name"], name: "index_feature_flag_state_on_name", unique: true
+  end
+
   create_table "feedback", force: :cascade do |t|
     t.string "ease_of_use"
     t.text "experience"
@@ -604,6 +613,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_145834) do
     t.index ["latitude", "longitude"], name: "index_site_on_latitude_and_longitude"
     t.index ["site_type"], name: "index_site_on_site_type"
     t.index ["uuid"], name: "index_sites_unique_uuid", unique: true
+  end
+
+  create_table "site_setting", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "legacy_redis_synced_at"
+    t.index ["name"], name: "index_site_setting_on_name", unique: true
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|

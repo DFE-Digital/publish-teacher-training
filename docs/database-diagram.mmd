@@ -198,6 +198,12 @@ erDiagram
 		string status
 		string type
 	}
+	FeatureFlagState {
+		boolean active
+		integer id PK
+		datetime legacy_redis_synced_at
+		string name
+	}
 	Feedback {
 		string ease_of_use
 		text experience
@@ -386,6 +392,12 @@ erDiagram
 		text town
 		string urn
 		uuid uuid
+	}
+	SiteSetting {
+		integer id PK
+		datetime legacy_redis_synced_at
+		string name
+		string value
 	}
 	SiteStatus {
 		integer course_id FK

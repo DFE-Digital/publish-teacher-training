@@ -48,6 +48,22 @@ RSpec.describe "db/scripts" do
     expect(SolidQueue::FailedExecution.count).to eq(0)
   end
 
+  it "preserves environment-specific state around a production restore" do
+    FeatureFlagState.create!(name: "environment_flag", active: true)
+    SiteSetting.create!(name: "cycle_schedule", value: "apply_reopened")
+    run_script("preserve_environment_state_before_restore")
+
+    FeatureFlagState.delete_all
+    SiteSetting.delete_all
+    FeatureFlagState.create!(name: "production_flag", active: true)
+    SiteSetting.create!(name: "cycle_schedule", value: "real")
+
+    run_script("restore_environment_state_after_restore")
+
+    expect(FeatureFlagState.pluck(:name, :active)).to eq([["environment_flag", true]])
+    expect(SiteSetting.pluck(:name, :value)).to eq([%w[cycle_schedule apply_reopened]])
+  end
+
   it "integration_setup.sql runs cleanly against the current schema" do
     # The provider insert requires a recruitment cycle (recruitment_cycle_id is NOT NULL).
     create(:recruitment_cycle)

@@ -5,23 +5,19 @@ class FeatureFlag
 
   class << self
     def active?(feature_name)
-      feature = feature_data(feature_name)
-
-      return false unless feature
-
-      feature["state"]
+      feature_state(feature_name)&.active || false
     end
 
     def activate(feature_name)
       raise UnknownFeatureError unless feature_name.in?(features)
 
-      sync_with_redis(feature_name, true)
+      update_state(feature_name, true)
     end
 
     def deactivate(feature_name)
       raise UnknownFeatureError unless feature_name.in?(features)
 
-      sync_with_redis(feature_name, false)
+      update_state(feature_name, false)
     end
 
     def features
@@ -35,33 +31,21 @@ class FeatureFlag
     end
 
     def last_updated(feature_name)
-      feature = feature_data(feature_name)
-
-      return unless feature
-
-      feature["updated_at"]
+      feature_state(feature_name)&.updated_at
     end
 
   private
 
-    def sync_with_redis(feature_name, feature_state)
-      feature = { state: feature_state, updated_at: Time.zone.now }.to_json
-
-      RedisClient.current.set("feature_flags_#{feature_name}", feature)
-
-      Current.feature_flags ||= {}
-      Current.feature_flags[feature_name.to_s] = JSON.parse(feature)
+    def update_state(feature_name, active)
+      # updated_at is set explicitly so it changes even when the state does not.
+      state = LegacyRedisState.save(FeatureFlagState, name: feature_name.to_s, active:, updated_at: Time.zone.now)
+      Current.feature_flags&.store(state.name, state)
     end
 
-    def feature_data(feature_name)
-      cache_key = feature_name.to_s
-      Current.feature_flags ||= {}
-
-      Current.feature_flags.fetch(cache_key) do
-        feature = RedisClient.current.get("feature_flags_#{feature_name}")
-
-        Current.feature_flags[cache_key] = feature && JSON.parse(feature)
-      end
+    # Pages check many flags, so load them all in one query per request.
+    def feature_state(feature_name)
+      Current.feature_flags ||= FeatureFlagState.all.index_by(&:name)
+      Current.feature_flags[feature_name.to_s]
     end
   end
 
