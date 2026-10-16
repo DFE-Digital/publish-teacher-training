@@ -100,7 +100,7 @@ module Providers
     # branch it takes depends on the list it is given, so passing sites we are
     # about to skip would burn codes and shift the codes it assigns to the rest.
     def copy_study_sites(provider, new_provider, result)
-      existing_sites = Sites::ExistingSiteIndex.for(provider: new_provider, site_type: :study_site)
+      existing_sites = Sites::ExistingSiteIndex.for(provider: new_provider)
       sites_to_copy, already_present = provider.study_sites.partition { !existing_sites.already_copied?(it) }
       result[:study_sites_already_present] += already_present.size
 
