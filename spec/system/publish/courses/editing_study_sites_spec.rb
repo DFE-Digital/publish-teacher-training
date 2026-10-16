@@ -7,7 +7,7 @@ RSpec.describe "updating study sites on a course" do
     and_i_am_authenticated_as_a_provider_user
     and_there_is_a_course_i_want_to_edit
     when_i_visit_the_course_details_page
-    then_the_study_site_row_prompts_me_to_select_one
+    then_the_study_site_row_prompts_me_to_add_one
     and_the_prompt_takes_me_to_the_organisation_study_sites
   end
 
@@ -29,18 +29,18 @@ RSpec.describe "updating study sites on a course" do
     expect(page).to have_text("Study sites updated")
   end
 
-  def then_the_study_site_row_prompts_me_to_select_one
+  def then_the_study_site_row_prompts_me_to_add_one
     row = page.find(".govuk-summary-list__row", text: "Study site (optional)")
 
     expect(row).to have_css(".app-inset-text--important")
-    expect(row).to have_link("Select a study site (optional)")
+    expect(row).to have_link("Add a study site")
     expect(row).to have_no_link("Add study sites")
   end
 
   # The organisation has no study sites to pick from yet, so the prompt sends
   # the user to add one there first.
   def and_the_prompt_takes_me_to_the_organisation_study_sites
-    click_link_or_button "Select a study site (optional)"
+    click_link_or_button "Add a study site"
 
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_study_sites_path(@course.provider.provider_code, @course.recruitment_cycle_year),
@@ -91,7 +91,7 @@ RSpec.describe "updating study sites on a course" do
   end
 
   def and_i_click_add_study_site
-    click_link_or_button "Select a study site (optional)"
+    click_link_or_button "Add a study site"
   end
 
   def and_i_check_the_first_study_site_and_submit
