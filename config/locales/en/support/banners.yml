@@ -71,6 +71,7 @@ en:
             published_at: "Published"
             expired_at: "Expired"
         missing_expired_at: "No expiry"
+        automated: "Automated"
         displayed_on:
           find: "Find"
           publish: "Publish"

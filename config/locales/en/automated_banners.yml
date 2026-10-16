@@ -1,0 +1,13 @@
+en:
+  automated_banners:
+    rollover_started:
+      name: "Rollover has started"
+      heading: "You can now update your courses starting in the %{cycle_year_range} academic year"
+      body: "Courses will be shown to candidates when Find opens on %{find_opens}."
+    apply_opens_soon:
+      name: "Apply opens soon"
+      heading: "Apply for courses from %{apply_opens}"
+      body:
+        zero: "You can search for courses starting in the %{cycle_year_range} academic year and prepare your applications. You can submit them from 9am today."
+        one: "You can search for courses starting in the %{cycle_year_range} academic year and prepare your applications. You can submit them in 1 day."
+        other: "You can search for courses starting in the %{cycle_year_range} academic year and prepare your applications. You can submit them in %{count} days."
