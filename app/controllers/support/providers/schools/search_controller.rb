@@ -14,7 +14,7 @@ module Support
 
         def create
           if school_id.present?
-            @school_search_form = Schools::SearchForm.new(school:)
+            @school_search_form = Schools::SearchForm.new(school:, provider:)
 
             if @school_search_form.valid?(:school)
               redirect_to_next_step
@@ -39,10 +39,7 @@ module Support
         end
 
         def school
-          @school ||= begin
-            gias_school = GiasSchool.available.find(params[:school_id])
-            @provider.sites.school.build(gias_school.school_attributes)
-          end
+          @school ||= GiasSchool.available.find(params[:school_id])
         end
 
         def update
