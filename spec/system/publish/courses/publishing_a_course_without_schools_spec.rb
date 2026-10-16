@@ -82,7 +82,6 @@ RSpec.describe "Publishing a course that is allowed to have no schools", travel:
   end
 
   def and_the_course_has_no_schools
-    expect(course.reload.sites).to be_empty
     expect(course.reload.schools).to be_empty
   end
 

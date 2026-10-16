@@ -11,10 +11,10 @@ describe Courses::CreationService do
 
   let(:provider) { create(:provider, study_sites: [study_site]) }
 
-  let!(:site) { create(:site, :with_provider_school, provider:) }
+  # No legacy Site: course creation only writes Course::School.
+  let!(:provider_school) { create(:provider_school, provider:) }
   let(:study_site) { build(:site, :study_site) }
 
-  let(:provider_school) { provider.schools.find_by(uuid: site.uuid) }
   let(:gias_school) { provider_school.gias_school }
 
   let(:recruitment_cycle) { provider.recruitment_cycle }
@@ -107,7 +107,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -138,7 +138,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -161,7 +161,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -202,7 +202,7 @@ describe Courses::CreationService do
         "level" => "primary",
         "qualification" => "qts",
         "funding" => "fee",
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -233,7 +233,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -248,7 +248,7 @@ describe Courses::CreationService do
 
       expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(true)
-      expect(subject.sites.map(&:id)).to eq([site.id])
+      expect(subject.schools.map(&:provider_school)).to eq([provider_school])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([primary_subject.id])
       expect(subject.course_code).not_to be_nil
@@ -271,7 +271,7 @@ describe Courses::CreationService do
         "qualification" => "pgce_with_qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[part_time],
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
         "subjects_ids" => [secondary_subject.id],
         "master_subject_id" => secondary_subject.id,
@@ -286,7 +286,7 @@ describe Courses::CreationService do
 
       expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(false)
-      expect(subject.sites.map(&:id)).to eq([site.id])
+      expect(subject.schools.map(&:provider_school)).to eq([provider_school])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
       expect(subject.course_code).not_to be_nil
@@ -307,7 +307,7 @@ describe Courses::CreationService do
           "qualification" => "pgce_with_qts",
           "start_date" => "September #{recruitment_cycle.year}",
           "study_mode" => "part_time",
-          "school_uuids" => [site.uuid],
+          "school_uuids" => [provider_school.uuid],
           "study_sites_ids" => [study_site.id],
           "subjects_ids" => [secondary_subject.id],
           "master_subject_id" => secondary_subject.id,
@@ -318,7 +318,7 @@ describe Courses::CreationService do
       it "creates a course" do
         expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
         expect(subject.is_send).to be(false)
-        expect(subject.sites.map(&:id)).to eq([site.id])
+        expect(subject.schools.map(&:provider_school)).to eq([provider_school])
         expect(subject.study_sites.map(&:id)).to eq([study_site.id])
         expect(subject.course_subjects.map { it.subject.id }).to eq([secondary_subject.id])
         expect(subject.course_code).not_to be_nil
@@ -341,7 +341,7 @@ describe Courses::CreationService do
         "qualification" => "pgde",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time part_time],
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
       }
     end
@@ -353,7 +353,7 @@ describe Courses::CreationService do
 
       expect(subject.start_date).to eq(Time.zone.local(recruitment_cycle.year, 9, 1))
       expect(subject.is_send).to be(true)
-      expect(subject.sites.map(&:id)).to eq([site.id])
+      expect(subject.schools.map(&:provider_school)).to eq([provider_school])
       expect(subject.study_sites.map(&:id)).to eq([study_site.id])
       expect(subject.course_subjects.map { it.subject.id }).to eq([further_education_subject.id])
       expect(subject.course_code).not_to be_nil
@@ -418,7 +418,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],
@@ -426,55 +426,39 @@ describe Courses::CreationService do
     end
 
     context "when a matching provider school exists" do
-      it "builds both the legacy site_status and the Course::School" do
-        expect(created_course.sites.map(&:id)).to eq([site.id])
+      it "builds the Course::School and no legacy site status" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.schools.first.site_code).to eq(site.code)
+        expect(created_course.schools.first.site_code).to eq(provider_school.site_code)
         expect(created_course.schools.first.provider_school).to eq(provider_school)
+        expect(created_course.site_statuses).to be_empty
         expect(created_course.errors).to be_empty
       end
 
-      it "persists both models on save" do
-        created_course.save!
+      it "persists only the Course::School on save" do
+        expect { created_course.save! }.not_to change(SiteStatus, :count)
 
-        expect(created_course.reload.sites.map(&:id)).to eq([site.id])
         expect(Course::School.where(course: created_course).pluck(:gias_school_id, :provider_school_id))
           .to eq([[gias_school.id, provider_school.id]])
       end
     end
 
-    context "when there is no matching provider_school (not backfilled)" do
-      # GIAS school exists (matched by URN) but the provider has not been
-      # backfilled, so no Provider::School exists for the pair. Resolution is
-      # keyed on Provider::School, so the UUID comes back unrecognised even
-      # though the legacy site is sitting right there.
-      let!(:site) { create(:site, :with_gias_school, provider:) }
+    # Schools added before dual writing stopped still have a legacy Site
+    # sharing their uuid. Creation must not attach it.
+    context "when the selected school also has a legacy site" do
+      let!(:provider_school) { create(:provider_school, :for_site, site: create(:site, provider:)) }
 
-      it "writes the legacy site, skips the new-model write, and logs a warning" do
-        expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site.uuid}/)
-
-        expect(created_course.sites.map(&:id)).to eq([site.id])
-        expect(created_course.schools).to be_empty
-      end
-
-      it "leaves the course invalid on :new so the divergence cannot be saved" do
-        allow(Rails.logger).to receive(:warn)
-
-        expect(created_course.valid?(:new)).to be(false)
-        expect(created_course.errors.full_messages_for(:schools))
-          .to include(/Some of the schools you selected were not recognised/)
+      it "does not write a legacy site status" do
+        expect(created_course.site_statuses).to be_empty
       end
     end
 
     context "when several schools are selected" do
-      let!(:site_two) { create(:site, :with_provider_school, provider:) }
-      let(:provider_school_two) { provider.schools.find_by(uuid: site_two.uuid) }
+      let!(:provider_school_two) { create(:provider_school, provider:) }
       let(:gias_school_two) { provider_school_two.gias_school }
 
-      let(:valid_course_params) { super().merge("school_uuids" => [site_two.uuid, site.uuid]) }
+      let(:valid_course_params) { super().merge("school_uuids" => [provider_school_two.uuid, provider_school.uuid]) }
 
       it "assigns every selected school, in the order they were submitted" do
-        expect(created_course.sites.map(&:id)).to eq([site_two.id, site.id])
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school_two.id, gias_school.id])
         expect(created_course.errors).to be_empty
       end
@@ -484,49 +468,6 @@ describe Courses::CreationService do
 
         expect(Course::School.where(course: created_course).pluck(:provider_school_id))
           .to contain_exactly(provider_school.id, provider_school_two.id)
-      end
-    end
-
-    # Existing data has pairs of kept school sites sharing a URN, which fails
-    # the site's own uniqueness validation. The course only links to the site,
-    # so it must not refuse to save because of it.
-    context "when the selected site shares its URN with another of the provider's sites" do
-      let!(:site_two) { create(:site, :with_provider_school, provider:) }
-      let(:valid_course_params) { super().merge("school_uuids" => [site_two.uuid]) }
-
-      before { site_two.update_columns(urn: site.urn) }
-
-      it "saves the course on the selected site" do
-        created_course.valid?(:new)
-
-        expect(created_course.errors.full_messages).to be_empty
-        expect(created_course.save).to be(true)
-        expect(created_course.reload.sites.map(&:id)).to eq([site_two.id])
-      end
-    end
-
-    # The two writes must not be allowed to disagree: a school with no
-    # Provider::School would otherwise be attached as a site while producing no
-    # Course::School, leaving the course running at fewer schools than were
-    # selected.
-    context "when only some of the selected schools have been backfilled" do
-      let(:site_two) { create(:site, provider:) }
-
-      let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, site_two.uuid]) }
-
-      it "keeps both sites but builds a Course::School only for the backfilled school" do
-        expect(Rails.logger).to receive(:warn).with(/unrecognised school UUIDs for provider=#{provider.id}: #{site_two.uuid}/)
-
-        expect(created_course.sites.map(&:id)).to eq([site.id, site_two.id])
-        expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-      end
-
-      it "leaves the course invalid on :new so the divergence cannot be saved" do
-        allow(Rails.logger).to receive(:warn)
-
-        expect(created_course.valid?(:new)).to be(false)
-        expect(created_course.errors.full_messages_for(:schools))
-          .to include(/Some of the schools you selected were not recognised/)
       end
     end
 
@@ -554,7 +495,7 @@ describe Courses::CreationService do
     end
 
     context "when only some of the submitted school UUIDs can be resolved" do
-      let(:valid_course_params) { super().merge("school_uuids" => [site.uuid, SecureRandom.uuid]) }
+      let(:valid_course_params) { super().merge("school_uuids" => [provider_school.uuid, SecureRandom.uuid]) }
 
       it "writes what resolved but reports the shortfall rather than creating quietly" do
         allow(Rails.logger).to receive(:warn)
@@ -562,14 +503,14 @@ describe Courses::CreationService do
         expect(created_course.errors[:schools]).to include(
           "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
         )
-        expect(created_course.sites.map(&:id)).to eq([site.id])
+        expect(created_course.schools.map(&:provider_school)).to eq([provider_school])
       end
     end
 
     context "when a submitted school UUID belongs to another provider" do
-      let(:other_provider_site) { create(:site, provider: create(:provider)) }
+      let(:other_provider_school) { create(:provider_school) }
 
-      let(:valid_course_params) { super().merge("school_uuids" => [other_provider_site.uuid]) }
+      let(:valid_course_params) { super().merge("school_uuids" => [other_provider_school.uuid]) }
 
       it "treats it as unrecognised rather than attaching another provider's school" do
         allow(Rails.logger).to receive(:warn)
@@ -577,21 +518,17 @@ describe Courses::CreationService do
         expect(created_course.errors[:schools]).to include(
           "Some of the schools you selected were not recognised. Try again or get in touch with support at becomingateacher@digital.education.gov.uk",
         )
-        expect(created_course.sites).to be_empty
         expect(created_course.schools).to be_empty
       end
     end
 
-    context "when the selected site's GIAS school is closed" do
-      # A site can still point at a school the GIAS import later flipped to
-      # closed. Both models have to record it, or the course would lose the
-      # school when publish-side reads use Course::School.
-      let(:gias_school) { create(:gias_school, :closed) }
-      let!(:site) { create(:site, :with_provider_school, provider:, urn: gias_school.urn) }
+    context "when the selected school's GIAS record is closed" do
+      # A provider school can still point at a school the GIAS import later
+      # flipped to closed. The course must keep it.
+      let!(:provider_school) { create(:provider_school, provider:, gias_school: create(:gias_school, :closed)) }
 
-      it "builds the Course::School alongside the legacy site" do
+      it "builds the Course::School" do
         expect(created_course.schools.map(&:gias_school_id)).to eq([gias_school.id])
-        expect(created_course.sites.map(&:id)).to eq([site.id])
       end
     end
 
@@ -618,7 +555,6 @@ describe Courses::CreationService do
 
       it "reports the empty checkbox selection on :schools and builds no Course::School" do
         expect(created_course.errors[:schools]).to include("Select at least one school")
-        expect(created_course.sites).to be_empty
         expect(created_course.schools).to be_empty
       end
     end
@@ -653,7 +589,7 @@ describe Courses::CreationService do
         "qualification" => "qts",
         "start_date" => "September #{recruitment_cycle.year}",
         "study_mode" => %w[full_time],
-        "school_uuids" => [site.uuid],
+        "school_uuids" => [provider_school.uuid],
         "study_sites_ids" => [study_site.id],
         "master_subject_id" => primary_subject.id,
         "subjects_ids" => [primary_subject.id],

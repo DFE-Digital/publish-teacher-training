@@ -3,7 +3,7 @@
 module Publish
   module Schools
     # Coordinates course school updates from Publish by writing Course::School
-    # and legacy SiteStatus rows from the same Provider::School UUIDs.
+    # rows from the submitted Provider::School UUIDs.
     # This service also updates the course and provider so that Apply syncs course changes.
     class UpdateCourseSchoolsService
       include ServicePattern
@@ -52,7 +52,6 @@ module Publish
           # course (e.g. master_subject_id), and Rails refuses lock! then.
           Course.where(id: course.id).lock.load
 
-          update_site_statuses(provider_schools)
           sync_course_schools(provider_schools)
 
           # TouchCourse uses update_columns, which bypasses TouchProvider. Saving
@@ -78,7 +77,7 @@ module Publish
 
       def resolve_provider_schools
         # Prevent a concurrent removal from deleting a school after resolution
-        # but before both relationship writers have completed.
+        # but before the course schools are written.
         provider_schools_by_uuid = course.provider.schools
           .includes(:gias_school)
           .where(uuid: submitted_school_uuids)
@@ -111,16 +110,6 @@ module Publish
         UpdateCourseProviderSchoolsService.call(
           course:,
           provider_schools:,
-        )
-      end
-
-      # rubocop:disable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-      # TODO School data remodel removal - remove this legacy write once all school reads use Course::School.
-      # rubocop:enable Style/CommentAnnotation, Lint/RedundantCopDisableDirective
-      def update_site_statuses(provider_schools)
-        UpdateCourseSiteStatusesService.call(
-          course:,
-          school_uuids: provider_schools.map(&:uuid),
         )
       end
 

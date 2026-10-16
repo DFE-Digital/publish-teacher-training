@@ -12,10 +12,6 @@ module Schools
       @schools ||= ordered(schools_by_uuid)
     end
 
-    def sites
-      @sites ||= ordered(sites_by_uuid)
-    end
-
     def unrecognised_uuids
       log_unrecognised
       unrecognised
@@ -36,10 +32,6 @@ module Schools
 
     def unrecognised
       @unrecognised ||= uuids - schools_by_uuid.keys
-    end
-
-    def sites_by_uuid
-      @sites_by_uuid ||= provider.sites.where(uuid: uuids).index_by { |site| site.uuid.to_s }
     end
 
     def schools_by_uuid
