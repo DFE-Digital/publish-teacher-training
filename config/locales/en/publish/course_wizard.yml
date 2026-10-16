@@ -208,7 +208,7 @@ en:
             label: "No"
         errors:
           can_sponsor_student_visa:
-            blank: Select if student visas can be sponsored for this course
+            blank: Select if Student visas can be sponsored for this course
       skilled_worker_visa:
         caption: Add course
         heading: Skilled Worker visas
