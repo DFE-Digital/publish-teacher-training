@@ -33,6 +33,17 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
     expect(response).to have_http_status(:forbidden)
   end
 
+  # A Change link names the step it opens on. The funding type policy
+  # follows the unit that holds that step.
+  it "opens a visa edit on the named step when the course cannot change its funding type" do
+    course.update!(can_sponsor_student_visa: true)
+    create(:course_enrichment, :published, course:)
+
+    get "#{course_path}/edit/visa_sponsorship_application_deadline_required"
+
+    expect(URI.parse(response.location).path).to end_with("/visa_sponsorship_application_deadline_required")
+  end
+
 private
 
   def remove_the_stored_unit(state_key)
