@@ -27,22 +27,10 @@ module Courses
     def publish_course
       Course.transaction do
         course.undiscard
-        publish_sites
         course.publish_enrichment(user)
         course.set_first_published_at!
         course.application_status_open!
       end
-    end
-
-    def publish_sites
-      course.site_statuses
-        .status_new_status
-        .update_all(status: SiteStatus.statuses[:running])
-
-      course.site_statuses
-        .status_running
-        .unpublished_on_ucas
-        .update_all(publish: SiteStatus.publishes[:published])
     end
 
     def send_notification
