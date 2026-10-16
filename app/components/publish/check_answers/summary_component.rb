@@ -98,9 +98,9 @@ module Publish
 
     public
 
-      def add_a_study_site_link
+      def select_a_study_site_link
         helpers.value_prompt(
-          t("course_wizard.steps.check_answers.answers.add_a_study_site"),
+          t("course_wizard.steps.check_answers.answers.select_a_study_site"),
           helpers.publish_provider_recruitment_cycle_study_sites_path(
             wizard.provider_code,
             wizard.recruitment_cycle_year,
