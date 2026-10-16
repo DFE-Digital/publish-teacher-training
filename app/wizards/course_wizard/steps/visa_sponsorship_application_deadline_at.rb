@@ -18,6 +18,7 @@ class CourseWizard
           label: :visa_sponsorship_application_deadline_date,
           value: ->(draft) { draft.visa_deadline },
           format: Publish::CheckAnswers::Formatters::VisaDeadline.new,
+          show_when_blank: true,
         )
       end
 

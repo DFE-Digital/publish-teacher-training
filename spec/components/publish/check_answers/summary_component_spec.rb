@@ -51,6 +51,15 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_link("Change", href: /return_to_review=physics_specialisms/)
   end
 
+  it "renders No on the engineers row when the course is not part of the programme" do
+    state_store.write(campaign_name: "no_campaign")
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:physics_specialisms)])
+    allow(wizard).to receive(:saved?).with(:physics_specialisms).and_return(true)
+
+    row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Engineers Teach Physics") }
+    expect(row.css(".govuk-summary-list__value").text.strip).to eq("No")
+  end
+
   it "renders TDA defaults for funding, study pattern and skilled worker visa without change links" do
     primary_subject = find_or_create(:primary_subject, :primary)
 
@@ -191,5 +200,57 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Visa sponsorship deadline")
     expect(rendered_component).to have_text(Date.new(2027, 3, 1).to_fs(:govuk_date))
     expect(rendered_component).to have_no_link("Change skilled worker visas")
+  end
+
+  it "renders a prompt for a blank row that is always shown" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+
+    row = rendered_component.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
+    expect(row.css(".govuk-summary-list__value .app-inset-text--important a").text.strip).to eq("Select if there is a visa sponsorship deadline")
+    expect(row.css(".govuk-summary-list__actions")).to be_empty
+  end
+
+  it "renders a red prompt for a blank row whose question has an error" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+    errors = ActiveModel::Errors.new(nil)
+    errors.add(:visa_sponsorship_application_deadline_required, "Select if there is a deadline for applications that require visa sponsorship")
+
+    rendered = render_inline(described_class.new(wizard:, errors:))
+    row = rendered.css(".govuk-summary-list__row").find { |node| node.text.include?("Is there a visa sponsorship deadline?") }
+    expect(row.css(".app-inset-text--error a").text.strip).to eq("Select if there is a visa sponsorship deadline")
+    expect(row.css(".app-inset-text--important")).to be_empty
+  end
+
+  it "gives a blank row the id the error summary links to" do
+    state_store.write(level: "secondary", qualification: "qts", funding_type: "fee", can_sponsor_student_visa: true)
+    allow(wizard).to receive(:flow_steps).and_return([wizard.step(:visa_sponsorship_application_deadline_required)])
+
+    row = rendered_component.at_css("#check-answers-visa-sponsorship-application-deadline-required-field-error")
+    expect(row&.text).to include("Is there a visa sponsorship deadline?")
+  end
+
+  # A required question on the path can be blank when the user skips ahead to
+  # check answers. Its row prompts the user to answer it rather than
+  # disappearing.
+  {
+    primary_subjects: ["Subjects", "Select a subject"],
+    secondary_subjects: ["Subjects", "Select a subject"],
+    physics_specialisms: ["Engineers Teach Physics", "Select if this course is part of Engineers Teach Physics"],
+    age_range: ["Age range", "Select an age range"],
+    qualifications: ["Qualification", "Select a qualification"],
+    visa_sponsorship: ["Student visas", "Select if Student visas can be sponsored"],
+    visa_sponsorship_application_deadline_at: ["Visa sponsorship deadline", "Enter a visa sponsorship deadline"],
+    start_date: ["Course start date", "Select a course start date"],
+  }.each do |step_id, (label, prompt)|
+    it "renders a prompt for an unanswered #{step_id} step on the path" do
+      allow(wizard).to receive(:flow_steps).and_return([wizard.step(step_id)])
+
+      row = rendered_component.css(".govuk-summary-list__row").find { |node| node.css(".govuk-summary-list__key").text.strip == label }
+      link = row&.at_css(".govuk-summary-list__value a")
+      expect(link&.text&.strip).to eq(prompt)
+      expect(link&.[]("href")).to include("return_to_review=#{step_id}")
+    end
   end
 end

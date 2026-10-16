@@ -260,6 +260,19 @@ en:
           salary_apprenticeship: "Salary (apprenticeship)"
           full_time_or_part_time: "Full time or part time"
           add_a_study_site: "Add a study site"
+        prompts:
+          subjects: Select a subject
+          engineers: Select if this course is part of Engineers Teach Physics
+          age_range: Select an age range
+          qualification: Select a qualification
+          funding_type: Select a funding type
+          study_pattern: Select a study pattern
+          schools: Select a school
+          student_visas: Select if Student visas can be sponsored
+          skilled_worker_visas: Select if Skilled Worker visas can be sponsored
+          is_there_a_visa_sponsorship_deadline: Select if there is a visa sponsorship deadline
+          visa_sponsorship_application_deadline_date: Enter a visa sponsorship deadline
+          start_date: Select a course start date
         labels:
           level: Subject level
           send: Special educational needs and disability (SEND)

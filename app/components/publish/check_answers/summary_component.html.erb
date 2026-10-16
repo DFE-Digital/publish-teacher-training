@@ -1,6 +1,6 @@
 <%= govuk_summary_list do |summary_list| %>
   <% rows.each do |row| %>
-    <% summary_list.with_row do |item| %>
+    <% summary_list.with_row(html_attributes: { id: row.id }.compact) do |item| %>
       <% item.with_key { row.label } %>
       <% item.with_value { row.value } %>
       <% if row.change_path.present? %>

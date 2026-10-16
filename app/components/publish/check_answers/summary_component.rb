@@ -3,12 +3,13 @@
 module Publish
   module CheckAnswers
     class SummaryComponent < ViewComponent::Base
-      Row = Struct.new(:label, :value, :change_path, keyword_init: true)
+      Row = Struct.new(:label, :value, :change_path, :id, keyword_init: true)
 
-      attr_reader :wizard, :draft
+      attr_reader :wizard, :draft, :errors
 
-      def initialize(wizard:)
+      def initialize(wizard:, errors: ActiveModel::Errors.new(nil))
         @wizard = wizard
+        @errors = errors
         @draft = CourseWizard::Draft.new(wizard:)
         super()
       end
@@ -31,15 +32,38 @@ module Publish
         return unless wizard.saved?(spec.step_id) || spec.show_when_blank
 
         value = format_value(spec)
-        row = Row.new(
-          label: t_label(spec.label_key, **resolved_label_options(spec)),
-          value:,
-          change_path: spec.changeable? ? change_path_for(spec.step_id) : nil,
-        )
+        change_path = spec.changeable? ? change_path_for(spec.step_id) : nil
+        label = t_label(spec.label_key, **resolved_label_options(spec))
+        return blank_row(spec, label, change_path) if spec.show_when_blank && !present_value?(value)
+
+        row = Row.new(label:, value:, change_path:)
         return row if spec.show_when_blank
         return if !present_value?(spec.value) && !present_value?(value)
 
         row
+      end
+
+      # A required question left blank. The row is the prompt to answer it, so
+      # the link takes the place of the Change action. The id is where the
+      # error summary links to when the user tries to add the course, and the
+      # prompt turns red when that question has an error.
+      def blank_row(spec, label, change_path)
+        Row.new(
+          label:,
+          id: error_id(spec.step_id),
+          value: helpers.value_prompt(
+            t("course_wizard.steps.check_answers.prompts.#{spec.label_key}"),
+            change_path,
+            error: errors.include?(spec.step_id),
+          ),
+          change_path: nil,
+        )
+      end
+
+      # Matches the anchor govuk_error_summary builds from the form scope (the
+      # current step) and the error's attribute (the unanswered step).
+      def error_id(step_id)
+        [wizard.current_step_name, step_id, "field-error"].join("-").dasherize
       end
 
       def format_value(spec)

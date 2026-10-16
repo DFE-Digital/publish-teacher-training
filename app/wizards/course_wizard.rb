@@ -138,7 +138,7 @@ class CourseWizard
 
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
-      builder.on_step(:check_answers, use: [Operations::CreateCourse])
+      builder.on_step(:check_answers, use: [DfE::Wizard::Operations::Validate, Operations::CreateCourse])
       builder.on_commit(use: [Operations::UpdateCourse])
     end
   end
@@ -205,6 +205,16 @@ class CourseWizard
 
   def final_step?
     current_step_name == :check_answers
+  end
+
+  # The steps on the path to check answers that have no valid answer, in path
+  # order, each holding its validation errors. A step can be left unanswered
+  # when an earlier answer changes the path, for example "yes" to visa
+  # sponsorship after the deadline steps were skipped.
+  def invalid_steps
+    flow_path(:check_answers).filter_map do |step_id|
+      step(step_id) unless step_id == :check_answers || valid?(step_id)
+    end
   end
 
   def review_steps(draft:)

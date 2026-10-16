@@ -23,6 +23,54 @@ RSpec.describe CourseWizard, type: :wizard do
     end
   end
 
+  describe "#invalid_steps" do
+    let(:current_step) { :check_answers }
+
+    before do
+      state_store.write(
+        level: "secondary",
+        is_send: "false",
+        secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
+        age_range_in_years: "11_to_16",
+        qualification: "qts",
+        funding_type: "fee",
+        study_pattern: %w[full_time],
+        school_uuids: [create(:provider_school, provider:).uuid],
+        study_sites_ids: [],
+        can_sponsor_student_visa: false,
+        start_date: "September 2026",
+      )
+    end
+
+    it "returns no steps when every step on the path is valid" do
+      expect(wizard.invalid_steps).to be_empty
+    end
+
+    it "returns a step the path now needs that was never answered" do
+      state_store.write(can_sponsor_student_visa: true)
+
+      expect(wizard.invalid_steps.map(&:step_id)).to eq(%i[visa_sponsorship_application_deadline_required])
+    end
+
+    it "returns every invalid step on the path in path order" do
+      state_store.write(age_range_in_years: nil, can_sponsor_student_visa: true)
+
+      expect(wizard.invalid_steps.map(&:step_id)).to eq(%i[age_range visa_sponsorship_application_deadline_required])
+    end
+
+    it "returns each invalid step holding its validation errors" do
+      state_store.write(age_range_in_years: nil)
+
+      expect(wizard.invalid_steps.first.errors.messages_for(:age_range_in_years)).to be_present
+    end
+
+    it "ignores an invalid answer on a step that is off the path" do
+      state_store.write(primary_master_subject_id: nil, can_sponsor_skilled_worker_visa: nil)
+
+      expect(wizard.invalid_steps).to be_empty
+    end
+  end
+
   describe "#clear_stale_specialism_answers" do
     let(:current_step) { :secondary_subjects }
 

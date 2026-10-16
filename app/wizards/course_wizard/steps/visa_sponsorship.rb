@@ -18,13 +18,15 @@ class CourseWizard
             yes_key: "course_wizard.steps.check_answers.answers.can_sponsor",
             no_key: "course_wizard.steps.check_answers.answers.cannot_sponsor",
           ),
+          show_when_blank: true,
         )
       end
 
-      def can_sponsor_student_visa
-        return super unless super.nil? && default_to_no_from_accrediting_provider?
-
-        false
+      # Pre-selects "No" when the accrediting provider cannot sponsor Student
+      # visas. The answer stays blank until the user submits the step, so a
+      # skipped step is still invalid.
+      def cannot_sponsor_checked?
+        can_sponsor_student_visa == false || (can_sponsor_student_visa.nil? && default_to_no_from_accrediting_provider?)
       end
 
       def question
