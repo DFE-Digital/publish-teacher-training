@@ -20,16 +20,6 @@ module Publish
         @school_courses = Publish::Courses::Query.call(provider:, school:).map(&:decorate)
       end
 
-      def create
-        @site = provider.sites.build
-        @school_form = ::Support::SchoolForm.new(provider, @site, params: site_params(:support_school_form))
-        if @school_form.stash
-          redirect_to publish_provider_recruitment_cycle_schools_check_path
-        else
-          render :new
-        end
-      end
-
       def delete
         template = school_delete_template
         @school_name = school.location_name
@@ -112,20 +102,6 @@ module Publish
 
       def schools_index_return_params
         school_delete_return_params.except(:from)
-      end
-
-      def site_params(param_form_key)
-        params.expect(param_form_key => SchoolForm::FIELDS)
-      end
-
-      def gias_school_params
-        return {} unless params[:school_id]
-
-        gias_school.school_attributes
-      end
-
-      def gias_school
-        @gias_school ||= GiasSchool.find(params[:school_id])
       end
 
       def reset_urn_form
