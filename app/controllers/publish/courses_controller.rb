@@ -90,7 +90,6 @@ module Publish
       @course = provider.courses.includes(
         :latest_draft_enrichment,
         subjects: [:financial_incentive],
-        site_statuses: [:site],
       ).find_by!(course_code: params[:code])
     end
 
@@ -98,7 +97,6 @@ module Publish
       @course = provider.courses.includes(
         :enrichments,
         subjects: [:financial_incentive],
-        site_statuses: [:site],
       ).find_by!(course_code: params[:code])
     end
 
