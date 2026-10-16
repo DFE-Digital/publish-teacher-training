@@ -3,6 +3,16 @@
 require "rails_helper"
 
 RSpec.describe "The visa Change links with the course edit wizard off", type: :system do
+  # The Change link under test is the old one, which the course edit
+  # wizard replaces
+  around do |example|
+    previous = Settings.features.course_edit_wizard
+    Settings.features.course_edit_wizard = false
+    example.run
+  ensure
+    Settings.features.course_edit_wizard = previous
+  end
+
   before do
     given_i_am_authenticated(user: create(:user, providers: [create(:provider)]))
   end

@@ -4,10 +4,11 @@ require "rails_helper"
 
 RSpec.describe "Saving a course edit with no change", type: :system do
   around do |example|
+    previous = Settings.features.course_edit_wizard
     Settings.features.course_edit_wizard = true
     example.run
   ensure
-    Settings.features.course_edit_wizard = false
+    Settings.features.course_edit_wizard = previous
   end
 
   before do
