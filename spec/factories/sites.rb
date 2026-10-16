@@ -32,10 +32,8 @@ FactoryBot.define do
       end
     end
 
-    # The Provider::School half of the dual-write that accompanies a real site
-    # creation, joined to the legacy site by the uuid the two share. Course
-    # creation rejects any selected school whose paired row is missing, so
-    # anything that creates a course from school_uuids needs this.
+    # A Provider::School paired with this legacy site by the uuid the two
+    # share - the state of every school added before dual writing stopped.
     #
     # after(:create), not after(:build): a site handed to `create(:provider,
     # sites: [...])` is built against the factory's own throwaway provider and

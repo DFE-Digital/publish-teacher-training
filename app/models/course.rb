@@ -537,14 +537,6 @@ class Course < ApplicationRecord
     end
   end
 
-  def has_multiple_running_sites_or_study_modes?
-    running_site_statuses.count > 1 || full_time_or_part_time?
-  end
-
-  def running_site_statuses
-    site_statuses.where(status: :running)
-  end
-
   def update_changed_at(time: Time.zone.now)
     # Changed_at represents changes to related records as well as course
     # itself, so we don't want to alter the semantics of updated_at which

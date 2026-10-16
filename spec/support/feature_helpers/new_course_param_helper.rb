@@ -78,7 +78,6 @@ module FeatureHelpers
         "course[start_date]" => "October #{provider.recruitment_cycle_year.to_i + 1}",
         "course[study_mode][]" => "full_time_or_part_time",
         "course[subjects_ids][]" => "30",
-        "course[sites_ids][]" => provider.sites.first.id,
       }
     end
 
