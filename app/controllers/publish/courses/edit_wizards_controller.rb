@@ -15,7 +15,7 @@ module Publish
       CACHE_EXPIRY = 24.hours
 
       before_action :require_course_edit_wizard
-      before_action :set_wizard, except: :new
+      before_action :set_wizard
       before_action :authorize_edit
 
       rescue_from DfE::Wizard::ChangesetExpired, DfE::Wizard::ChangesetMismatch, with: :edit_ended
@@ -29,10 +29,9 @@ module Publish
       end
 
       def new
-        wizard = build_wizard(state_key: SecureRandom.uuid)
-        step = wizard.start_edit(unit: params[:unit].to_sym, caller: course_page_path)
+        step = @wizard.start_edit(unit: params[:unit].to_sym, caller: course_page_path)
 
-        redirect_to wizard.resolve_step_path(step)
+        redirect_to @wizard.resolve_step_path(step)
       rescue DfE::Wizard::NotCallable
         redirect_to course_page_path
       end
@@ -66,18 +65,26 @@ module Publish
         authorize(course, :can_update_funding_type?) unless edit_unit == :visa
       end
 
-      # The unit the edit started with: the entry point's unit param, then
-      # the one the changeset keeps
+      # The unit the edit started with: the unit that holds the entry
+      # point's unit param (a unit id, or the id of the step to open on),
+      # then the one the changeset keeps
       def edit_unit
-        action_name == "new" ? params[:unit].to_sym : @wizard.changeset.edit_unit
+        return @wizard.changeset.edit_unit unless action_name == "new"
+
+        @wizard.steps_processor.unit(params[:unit].to_sym)&.id
       end
 
       def course
         @course ||= provider.courses.find_by!(course_code: params[:code])
       end
 
+      # The entry point (new) starts under a new state_key
       def set_wizard
-        @wizard = build_wizard(state_key: params[:state_key], step: current_step_name, step_params: params)
+        @wizard = if action_name == "new"
+                    build_wizard(state_key: SecureRandom.uuid)
+                  else
+                    build_wizard(state_key: params[:state_key], step: current_step_name, step_params: params)
+                  end
       end
 
       def build_wizard(state_key:, step: nil, step_params: {})
