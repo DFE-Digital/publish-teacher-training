@@ -12,29 +12,26 @@ require "rails_helper"
 # because Find::CycleTimetable::CYCLE_DATES is a hardcoded hash with a finite
 # last year, so an unpinned cycle eventually asks it for a year it does not hold.
 RSpec.describe "Rolling over draft courses one at a time", travel: mid_cycle(2025) do
-  scenario "the provider's sites are not duplicated" do
+  scenario "the provider's schools and study sites are not duplicated" do
     given_i_am_authenticated_as_a_provider_user
     and_there_is_a_rollable_next_recruitment_cycle
     when_i_roll_over(@courses.first)
     and_i_roll_over(@courses.second)
     then_each_study_site_is_listed_once
-    and_each_school_site_is_listed_once
+    and_each_school_is_copied_once
   end
 
   def given_i_am_authenticated_as_a_provider_user
     @courses = build_list(:course, 2, enrichments: [build(:course_enrichment)], funding_type: "salary")
     @provider = create(
       :provider,
-      sites: [
-        build(:site, :with_gias_school, :with_provider_school, location_name: "School One"),
-        build(:site, :with_gias_school, :with_provider_school, location_name: "School Two"),
-      ],
       study_sites: [
         build(:site, :study_site, location_name: "Study Site One"),
         build(:site, :study_site, location_name: "Study Site Two"),
       ],
       courses: @courses,
     )
+    create_list(:provider_school, 2, provider: @provider)
     given_i_am_authenticated(user: create(:user, providers: [@provider]))
   end
 
@@ -65,8 +62,8 @@ RSpec.describe "Rolling over draft courses one at a time", travel: mid_cycle(202
     expect(next_cycle_provider.study_sites.count).to eq(2)
   end
 
-  def and_each_school_site_is_listed_once
-    expect(next_cycle_provider.sites.count).to eq(2)
+  def and_each_school_is_copied_once
+    expect(next_cycle_provider.schools.count).to eq(2)
   end
 
   def next_cycle_provider

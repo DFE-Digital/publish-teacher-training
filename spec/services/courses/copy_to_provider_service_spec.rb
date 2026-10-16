@@ -26,9 +26,7 @@ RSpec.describe Courses::CopyToProviderService do
 
   let(:mocked_sites_copy_to_course_service) { double(call: nil) }
   let(:mocked_enrichments_copy_to_course_service) { double(execute: nil) }
-  let(:schools_copy_to_course_service) do
-    Rollover::Schools::LegacyCourseCopier.new(site_copier: mocked_sites_copy_to_course_service)
-  end
+  let(:schools_copy_to_course_service) { Rollover::Schools::CourseCopier.new }
   let(:service) do
     described_class.new(
       schools_copy_to_course: schools_copy_to_course_service,
@@ -227,7 +225,7 @@ RSpec.describe Courses::CopyToProviderService do
   it "saves without doing validations" do
     course_dup = instance_spy(Course, recruitment_cycle:)
     course_subjects_double = instance_spy(ActiveRecord::Associations::CollectionProxy)
-    allow(course_dup).to receive(:course_subjects).and_return(course_subjects_double)
+    allow(course_dup).to receive_messages(course_subjects: course_subjects_double, schools: Course::School.none)
     allow(course).to receive(:dup).and_return(course_dup)
 
     service.execute(course:, new_provider:)
@@ -323,31 +321,6 @@ RSpec.describe Courses::CopyToProviderService do
   end
 
   context "the original course has schools" do
-    let(:site) { create(:site, :school, :with_gias_school, provider:) }
-    let!(:new_site) { create(:site, :school, provider: new_provider, code: site.code) }
-    let!(:site_status) do
-      create(:site_status,
-             :no_vacancies,
-             course:,
-             site:)
-    end
-
-    before do
-      described_class.new(
-        schools_copy_to_course: schools_copy_to_course_service,
-        sites_copy_to_course: mocked_sites_copy_to_course_service,
-        enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
-        force:,
-      ).execute(course:, new_provider:)
-    end
-
-    it "copies over the course's sites" do
-      expect(mocked_sites_copy_to_course_service).to have_received(:call).with(new_site:, new_course:)
-    end
-  end
-
-  context "the original course has new school relationships" do
-    let(:schools_copy_to_course_service) { Rollover::Schools::CourseCopier.new }
     let!(:provider_school) { create(:provider_school, provider:, site_code: "S") }
     let!(:course_school) do
       create(
