@@ -13,18 +13,36 @@ RSpec.describe "Publish provider schools check", service: :publish do
   before { login_user(user) }
 
   def add_school
-    put publish_provider_recruitment_cycle_schools_check_path(provider.provider_code, recruitment_cycle.year),
-        params: { site: { school_id: gias_school.id } }
+    put publish_provider_recruitment_cycle_schools_check_path(provider.provider_code, recruitment_cycle.year, school_id: gias_school.id)
   end
 
   describe "PUT /publish/organisations/:provider_code/:recruitment_cycle_year/schools/check" do
     let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
 
-    it "adds the school to the provider" do
-      expect { add_school }.to change { provider.schools.count }.by(1)
+    it "adds only the provider school, without a legacy site" do
+      expect { add_school }
+        .to change { provider.schools.where(gias_school:).count }.by(1)
+        .and(not_change { provider.sites.count })
 
       expect(response).to redirect_to(publish_provider_recruitment_cycle_schools_path(provider.provider_code, recruitment_cycle.year))
-      expect(provider.schools.last.gias_school).to eq(gias_school)
+    end
+
+    it "does not add a school the provider already has" do
+      create(:provider_school, provider:, gias_school:)
+
+      expect { add_school }.not_to(change { provider.schools.count })
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("This school has already been added")
+    end
+
+    it "does not add a school with an incomplete address" do
+      gias_school.update!(address1: "", address2: "", address3: "", town: "")
+
+      expect { add_school }.not_to(change { provider.schools.count })
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("The address we hold for this school is incomplete")
     end
 
     # The API serves every one of the provider's schools as the locations of a

@@ -40,7 +40,7 @@ module Publish
       private
 
         def set_urns_and_schools
-          load_schools
+          gias_schools
           unfound_urns
           duplicate_urns
         end
@@ -60,11 +60,6 @@ module Publish
         def gias_schools
           @gias_schools ||= GiasSchool.where(urn: urn_service[:new_urns])
         end
-
-        def schools
-          @schools ||= gias_schools.map { |gias_school| provider.sites.build(gias_school.school_attributes) }
-        end
-        alias_method :load_schools, :schools
 
         def unfound_urns
           @unfound_urns = urn_service[:unfound_urns]
