@@ -30,16 +30,6 @@ GIT
       view_component
 
 GIT
-  remote: https://github.com/DFE-Digital/dfe-wizard.git
-  revision: 58533f9ba6cd4ed6c70e86ebe32e87af1cc6411f
-  tag: v1.0.0
-  specs:
-    dfe-wizard (1.0.0)
-      activemodel (>= 7.1, < 9)
-      activesupport (>= 7.1, < 9)
-      ruby-graphviz (~> 1.2)
-
-GIT
   remote: https://github.com/DFE-Digital/jsonapi-rails.git
   revision: 359d794d916caebc2ea2cf907477227279b4fac3
   specs:
@@ -56,6 +46,16 @@ GIT
       faraday (~> 2.13)
       jwt (~> 2.10)
       omniauth (~> 2.1)
+
+GIT
+  remote: https://github.com/inulty-dfe/dfe-wizard.git
+  revision: 1d89ccfa45e4da04358679bee540656b7ede0dbf
+  branch: im/pr-5-tooling
+  specs:
+    dfe-wizard (1.0.0)
+      activemodel (>= 7.1, < 9)
+      activesupport (>= 7.1, < 9)
+      ruby-graphviz (~> 1.2)
 
 GEM
   remote: https://rubygems.org/
