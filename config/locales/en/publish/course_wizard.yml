@@ -273,6 +273,7 @@ en:
           is_there_a_visa_sponsorship_deadline: Select if there is a visa sponsorship deadline
           visa_sponsorship_application_deadline_date: Enter a visa sponsorship deadline
           start_date: Select a course start date
+          study_site: Add a study site
         labels:
           level: Subject level
           send: Special educational needs and disability (SEND)

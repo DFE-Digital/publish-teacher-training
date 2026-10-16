@@ -8,11 +8,9 @@ class CourseWizard
 
       attribute :study_sites_ids
 
-      # A study site is optional, so picking none leaves an ordinary empty row
-      # with a Change link rather than a call to action demanding an answer.
-      # The exception is a provider with no study sites at all: the step is
-      # skipped for them, so there is nowhere for Change to go and the prompt
-      # to set one up on the organisation is the useful thing to show.
+      # Picking none shows the prompt to add a study site, like any other
+      # blank row. A provider with no study sites at all skips the step, so
+      # their prompt links to the study sites page on the organisation instead.
       review do |r|
         r.row(
           label: :study_site,

@@ -124,9 +124,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_link("Change", href: /return_to_review=study_sites/)
   end
 
-  # Picking no study site is a valid answer, so the row stays empty and keeps an
-  # ordinary Change link rather than demanding one.
-  it "renders an empty study site row with a change link when none is selected" do
+  it "prompts to add a study site when none is selected" do
     placement_school = create(:provider_school, provider:)
     provider.study_sites.first || create(:site, :study_site, provider:)
 
@@ -138,9 +136,8 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
 
     expect(rendered_component).to have_text("Study sites (optional)")
-    expect(rendered_component).to have_text("None")
-    expect(rendered_component).to have_no_link("Select a study site")
-    expect(rendered_component).to have_selector("a[href*='return_to_review=study_sites']", text: "Change")
+    expect(rendered_component).to have_css(".app-inset-text--important a[href*='return_to_review=study_sites']", text: "Add a study site")
+    expect(rendered_component).to have_no_link("Change", href: /return_to_review=study_sites/)
   end
 
   it "renders add study site CTA when provider has no study sites" do
@@ -155,7 +152,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     allow(wizard).to receive(:saved?).with(:schools).and_return(true)
     allow(wizard).to receive(:flow_steps).and_return([wizard.step(:study_sites)])
 
-    expect(rendered_component).to have_link("Add a study site")
+    expect(rendered_component).to have_css(".app-inset-text--important a", text: "Add a study site")
     expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_sites']", text: "Change")
   end
 
