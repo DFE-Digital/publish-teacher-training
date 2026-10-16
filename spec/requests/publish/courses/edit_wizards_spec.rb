@@ -6,10 +6,11 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
   include DfESignInUserHelper
 
   around do |example|
+    previous = Settings.features.course_edit_wizard
     Settings.features.course_edit_wizard = true
     example.run
   ensure
-    Settings.features.course_edit_wizard = false
+    Settings.features.course_edit_wizard = previous
   end
 
   let(:user) { create(:user, :with_provider) }
