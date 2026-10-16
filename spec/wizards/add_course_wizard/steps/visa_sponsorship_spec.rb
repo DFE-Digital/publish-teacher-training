@@ -36,7 +36,7 @@ RSpec.describe CourseWizard::Steps::VisaSponsorship do
       wizard_step.can_sponsor_student_visa = nil
 
       expect(wizard_step).not_to be_valid
-      expect(wizard_step.errors.messages_for(:can_sponsor_student_visa)).to contain_exactly("Select if student visas can be sponsored for this course")
+      expect(wizard_step.errors.messages_for(:can_sponsor_student_visa)).to contain_exactly("Select if Student visas can be sponsored for this course")
     end
   end
 

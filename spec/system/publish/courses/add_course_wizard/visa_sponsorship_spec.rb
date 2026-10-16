@@ -223,7 +223,7 @@ private
 
   def then_i_have_errors_on_the_visa_sponsorship_step
     expect(page).to have_content("There is a problem")
-    expect(page).to have_content("Select if student visas can be sponsored for this course")
+    expect(page).to have_content("Select if Student visas can be sponsored for this course")
   end
 
   def then_i_see_the_common_visa_sponsorship_page_content
