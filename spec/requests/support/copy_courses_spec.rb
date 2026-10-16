@@ -10,8 +10,7 @@ RSpec.describe "Support::CopyCourses" do
   let!(:year) { find_or_create(:recruitment_cycle).year }
 
   def link_school(provider, gias_school, site_code)
-    site = create(:site, provider:, urn: gias_school.urn, code: site_code)
-    create(:provider_school, provider:, gias_school:, site_code:, uuid: site.uuid)
+    create(:provider_school, provider:, gias_school:, site_code:)
   end
 
   before { host! URI(Settings.base_url).host }
@@ -57,7 +56,7 @@ RSpec.describe "Support::CopyCourses" do
 
         copied_course = target_provider.courses.find_by!(course_code: source_course.course_code)
         expect(copied_course.schools.pluck(:provider_school_id)).to eq([target_school.id])
-        expect(copied_course.sites.pluck(:uuid)).to eq([target_school.uuid])
+        expect(copied_course.site_statuses).to be_empty
 
         expect(response).to redirect_to(support_recruitment_cycle_provider_courses_path(year, target_provider.id))
         follow_redirect!
@@ -69,7 +68,7 @@ RSpec.describe "Support::CopyCourses" do
         post "/support/#{year}/providers/#{target_provider.id}/copy_courses", params: { "course[autocompleted_provider_code]" => source_provider.provider_code, "support_copy_courses_form" => { "schools" => "true" } }
 
         expect(target_provider.reload.schools.pluck(:gias_school_id)).to eq([shared_gias_school.id])
-        expect(target_provider.sites.pluck(:uuid)).to eq([target_school.uuid])
+        expect(target_provider.sites).to be_empty
       end
 
       it "copies no placement schools when the box is left unticked" do
