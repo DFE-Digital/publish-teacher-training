@@ -22,12 +22,6 @@ module ProviderSchools
       @school ||= provider.schools.find_by!(uuid:)
     end
 
-    # The legacy site dual-written alongside the provider school, destroyed as
-    # a by-product of removing it. Absent for schools added after the remodel.
-    def site
-      @site ||= provider.sites.find_by(uuid:)
-    end
-
     # A provider is never left without any schools, so its last one cannot be
     # removed. Surfaced so the delete page can explain which reason applies.
     def only_school?
@@ -71,7 +65,6 @@ module ProviderSchools
 
     def destroy_records!
       school.destroy!
-      site&.destroy!
     end
 
     # Lock kept courses this school is on, in id order, before the sole-school
