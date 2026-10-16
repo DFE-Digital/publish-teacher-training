@@ -23,13 +23,10 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
 
   describe "#execute" do
     context "when the created course is valid" do
-      # Sites and their Course::Schools have to line up, or
-      # CourseSchoolsMatchSitesValidator rejects the course on :new.
       let(:course) do
-        site = create(:site, :with_provider_school, provider:)
-        provider_school = provider.schools.find_by(uuid: site.uuid)
+        provider_school = create(:provider_school, provider:)
 
-        build(:course, provider:, sites: [site]).tap do |course|
+        build(:course, provider:, sites: []).tap do |course|
           course.schools.build(gias_school: provider_school.gias_school, provider_school:)
         end
       end

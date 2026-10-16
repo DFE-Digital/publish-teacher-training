@@ -29,7 +29,6 @@ class Course < ApplicationRecord
   # Virtual attribute that allows us to maintain the UUIDs submitted through
   # the creation service and use #valid? while revalidating
   # specifically for CourseSchoolSelectionValidator
-  # TODO School data remodel removal - delete alongside CourseSchoolSelectionValidator.
   attr_accessor :submitted_school_uuids
 
   validates :course_code,
@@ -679,22 +678,6 @@ class Course < ApplicationRecord
     course_subjects.any? { |cs| cs.subject == SecondarySubject.modern_languages }
   end
 
-  def sites=(desired_sites)
-    existing_sites = sites
-
-    if persisted?
-      to_add = desired_sites - existing_sites
-      to_add.each { |site| add_site!(site:) }
-
-      to_remove = existing_sites - desired_sites
-      to_remove.each { |site| remove_site!(site:) }
-
-      sites.reload
-    else
-      super
-    end
-  end
-
   def is_further_education?
     further_education_course?
   end
@@ -973,24 +956,6 @@ private
     else
       raise "Unexpected study mode #{study_mode}"
     end
-  end
-
-  def add_site!(site:)
-    site_status = site_statuses.find_or_initialize_by(site:)
-    site_status.start! if is_published?
-    site_status.save!
-    # A found row is a separate instance from the one in the loaded
-    # collection, so the next read of site_statuses must not trust the cache.
-    site_statuses.reset
-  end
-
-  def remove_site!(site:)
-    # Destroy every site_status for this (course, site) pair. The legacy
-    # suspend-then-reuse approach broke when stale duplicate rows existed
-    # (find_by! could return an already-suspended row, AASM raised
-    # InvalidTransition). Audit history is still preserved by the audited
-    # gem on the destroy event.
-    site_statuses.where(site:).destroy_all
   end
 
   def withdraw_latest_enrichment

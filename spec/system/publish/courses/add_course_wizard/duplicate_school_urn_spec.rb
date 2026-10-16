@@ -76,7 +76,8 @@ RSpec.describe "Add course wizard with a school whose URN is duplicated", type: 
 
   def and_the_course_is_created_on_the_duplicated_school
     expect(provider.courses.count).to eq(1)
-    expect(provider.courses.order(:created_at).last.sites).to eq([@duplicated_site])
+    expect(provider.courses.order(:created_at).last.schools.map(&:provider_school))
+      .to eq([provider.schools.find_by!(uuid: @duplicated_site.uuid)])
   end
 
   def provider

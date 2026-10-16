@@ -128,16 +128,12 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def and_all_schools_should_be_assigned_to_the_course
-    expect(course.reload.sites.map(&:location_name))
-      .to contain_exactly("Site 1", "Site 2", "Site 3")
-    expect(course.schools.map { |course_school| course_school.provider_school.location_name })
+    expect(course.reload.schools.map { |course_school| course_school.provider_school.location_name })
       .to contain_exactly("Site 1", "Site 2", "Site 3")
   end
 
   def and_many_schools_should_be_attached_to_courses
-    expect(course.reload.sites.map(&:location_name))
-      .to match_array(["Site 1", "Site 2", "Site 3", @schools.map(&:location_name)].flatten)
-    expect(course.schools.map { |course_school| course_school.provider_school.location_name })
+    expect(course.reload.schools.map { |course_school| course_school.provider_school.location_name })
       .to match_array(["Site 1", "Site 2", "Site 3", @schools.map(&:location_name)].flatten)
   end
 
@@ -176,8 +172,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def and_all_25_schools_should_be_attached
-    expect(course.reload.sites.count).to eq(25)
-    expect(course.schools.count).to eq(25)
+    expect(course.reload.schools.count).to eq(25)
   end
 
   # "Site 3" sorts last of the 25 (the other 22 are "Main Site..."), so it renders
@@ -206,8 +201,7 @@ RSpec.describe "Publish - Select all schools", :js, type: :system do
   end
 
   def and_the_last_school_is_still_attached
-    expect(course.reload.sites).to include(last_school)
-    expect(course.schools.map(&:provider_school)).to include(provider.schools.find_by!(uuid: last_school.uuid))
+    expect(course.reload.schools.map(&:provider_school)).to include(provider.schools.find_by!(uuid: last_school.uuid))
   end
 
   def given_a_course_exists(sites: [])

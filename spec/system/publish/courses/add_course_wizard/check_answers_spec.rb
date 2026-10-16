@@ -182,7 +182,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     then_a_course_is_created
 
     then_the_created_course_has_the_new_course_school
-    and_the_created_course_still_has_the_legacy_site
+    and_no_legacy_site_status_is_written
   end
 
   scenario "further education flow renders expected rows and creates successfully" do
@@ -605,9 +605,9 @@ private
     expect(created_course.schools.first.site_code).to eq(@selected_site.code)
   end
 
-  def and_the_created_course_still_has_the_legacy_site
+  def and_no_legacy_site_status_is_written
     created_course = provider.courses.order(:created_at).last
-    expect(created_course.sites.map(&:id)).to include(@selected_site.id)
+    expect(created_course.site_statuses).to be_empty
   end
 
   def current_cycle_current_month_label(cycle_year:)
