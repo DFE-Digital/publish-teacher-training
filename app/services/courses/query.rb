@@ -68,13 +68,15 @@ module Courses
     end
 
     def optimisation_scope
-      @scope.preload(
+      associations = [
         :schools,
         :latest_published_enrichment,
-        :accrediting_provider,
-        provider: :recruitment_cycle,
-        subjects: [:financial_incentive],
-      )
+        { provider: :recruitment_cycle, subjects: [:financial_incentive] },
+      ]
+      # Result cards only show the accredited provider on provider searches
+      associations << :accrediting_provider if @applied_scopes.key?(:provider)
+
+      @scope.preload(*associations)
     end
 
     def count
