@@ -25,6 +25,14 @@ module Publish
         expect(html).to have_css(".govuk-inset-text.app-inset-text--narrow-border.app-inset-text--important")
         expect(html).to have_link("Enter course length", href: "/publish/length")
       end
+
+      it "renders a red-bordered inset link when the field has an error" do
+        html = Capybara.string(value_prompt("Enter course length", "/publish/length", error: true))
+
+        expect(html).to have_css(".govuk-inset-text.app-inset-text--narrow-border.app-inset-text--error")
+        expect(html).to have_no_css(".app-inset-text--important")
+        expect(html).to have_link("Enter course length", href: "/publish/length")
+      end
     end
 
     describe "#value_none" do

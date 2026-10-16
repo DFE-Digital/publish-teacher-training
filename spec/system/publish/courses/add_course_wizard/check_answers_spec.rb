@@ -124,13 +124,13 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_text("No - cannot sponsor")
   end
 
-  scenario "shows add a study site call to action when provider has no study sites" do
+  scenario "shows the select a study site call to action when provider has no study sites" do
     given_the_provider_has_no_study_sites
     given_i_have_completed_fee_wizard_state_without_study_sites
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
 
-    expect(page).to have_link("Add a study site")
+    expect(page).to have_link("Select a study site")
   end
 
   scenario "creates a course from secondary fee branch with mapped attributes" do
@@ -243,7 +243,92 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(page).to have_no_text("Visa sponsorship deadline")
   end
 
+  scenario "shows an error instead of adding the course when a question is not answered" do
+    given_i_am_authenticated_as_school_provider_with_partners(cycle_year: Find::CycleTimetable.current_year)
+    given_i_have_completed_secondary_fee_wizard_state
+    and_the_visa_deadline_questions_are_unanswered
+    when_i_visit_check_answers_page
+    then_i_see_a_prompt_to_answer_the_visa_deadline_question
+
+    and_i_click_add_course
+    then_i_see_an_error_for_the_visa_deadline_question
+    expect(provider.courses.count).to eq(0)
+
+    click_on "Select if there is a visa sponsorship deadline"
+    then_i_am_on_step(:visa_sponsorship_application_deadline_required)
+    choose "No"
+    and_i_click_continue
+    then_i_am_taken_to_the_check_answers_page
+
+    and_i_click_add_course
+    then_a_course_is_created
+  end
+
+  scenario "changing salary to fee asks the Student visa question before adding the course" do
+    given_i_am_authenticated_as_school_provider_with_single_partner(cycle_year: Find::CycleTimetable.current_year)
+    and_the_partner_cannot_sponsor_student_visas
+    given_i_have_completed_secondary_salary_wizard_state
+    when_i_visit_check_answers_page
+    when_i_click_change_link_for(:funding_type)
+    choose "Fee - no salary"
+    and_i_click_continue
+    and_i_continue_until_the_student_visa_question
+
+    expect(page).to have_checked_field("No")
+    and_i_click_continue
+    then_i_am_on_step_without_return_to_review(:start_date)
+    and_i_click_continue
+    then_i_am_taken_to_the_check_answers_page
+
+    and_i_click_add_course
+    then_a_course_is_created
+    expect(provider.courses.order(:created_at).last.can_sponsor_student_visa).to be(false)
+  end
+
 private
+
+  def wizard_state_store
+    repository = CourseWizard::Repositories::Course.new(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      state_key: wizard_state_key,
+      expires_in: 24.hours,
+    )
+    CourseWizard::StateStores::CourseWizardStore.new(repository:)
+  end
+
+  def and_the_visa_deadline_questions_are_unanswered
+    wizard_state_store.write(
+      visa_sponsorship_application_deadline_required: nil,
+      visa_sponsorship_application_deadline_at: nil,
+    )
+  end
+
+  def then_i_see_a_prompt_to_answer_the_visa_deadline_question
+    within_summary_row("Is there a visa sponsorship deadline?") do
+      expect(page).to have_link("Select if there is a visa sponsorship deadline")
+      expect(page).to have_no_link("Change")
+    end
+  end
+
+  def then_i_see_an_error_for_the_visa_deadline_question
+    expect(page).to have_title("Error: Check your answers")
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_link("Select if there is a deadline for applications that require visa sponsorship")
+  end
+
+  def and_the_partner_cannot_sponsor_student_visas
+    provider.accredited_partners.first.update!(can_sponsor_student_visa: false)
+  end
+
+  def and_i_continue_until_the_student_visa_question
+    %i[study_pattern schools study_sites].each do |step|
+      then_i_am_on_step_without_return_to_review(step)
+      and_i_click_continue
+    end
+
+    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
+  end
 
   def tda_changeable_steps
     %i[

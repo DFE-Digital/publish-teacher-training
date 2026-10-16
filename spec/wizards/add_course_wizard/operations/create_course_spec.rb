@@ -77,6 +77,8 @@ RSpec.describe CourseWizard::Operations::CreateCourse, type: :wizard do
     let(:course) { build(:course, provider:, sites: []) }
 
     it "causes save_current_step to return false when the created course is invalid" do
+      allow(wizard).to receive(:invalid_steps).and_return([])
+
       expect(wizard.save_current_step).to be(false)
       expect(wizard.current_step.errors[:base]).to include("Select at least one school")
     end

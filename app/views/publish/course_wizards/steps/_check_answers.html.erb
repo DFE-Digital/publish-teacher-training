@@ -1,10 +1,10 @@
-<% content_for :page_title, t("course_wizard.steps.check_answers.heading") %>
+<% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.check_answers.heading"), current_step.errors.any?) %>
 
 <h1 class="govuk-heading-l">
   <%= render CaptionText.new(text: t("course_wizard.steps.check_answers.caption")) %>
   <%= t("course_wizard.steps.check_answers.heading") %>
 </h1>
 
-<%= render Publish::CheckAnswers::SummaryComponent.new(wizard: @wizard) %>
+<%= render Publish::CheckAnswers::SummaryComponent.new(wizard: @wizard, errors: current_step.errors) %>
 
 <%= form.govuk_submit t("course_wizard.steps.check_answers.submit") %>

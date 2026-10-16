@@ -29,6 +29,8 @@ module Publish
         end
 
         def call(value, _draft, _view)
+          return if value.nil?
+
           key = ActiveModel::Type::Boolean.new.cast(value) ? @yes_key : @no_key
           I18n.t(key)
         end
@@ -86,16 +88,15 @@ module Publish
         end
       end
 
-      # Blank is a legitimate answer, so it renders as an empty row. The one
-      # prompt kept is for a provider with no study sites on their
-      # organisation at all, who has to add one there before they could pick it
-      # here.
+      # No study site picked returns nil, so the row shows the prompt to select
+      # one. A provider with no study sites on their organisation at all has to
+      # add one there first, so their prompt links to the study sites page.
       class StudySites
         def call(value, draft, view)
           return value.join(", ") if value.present?
-          return view.helpers.value_none if draft.wizard.provider.study_sites.any?
+          return if draft.wizard.provider.study_sites.any?
 
-          view.add_a_study_site_link
+          view.select_a_study_site_link
         end
       end
 
