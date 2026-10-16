@@ -8,7 +8,7 @@ class CourseWizard
 
       attribute :study_sites_ids
 
-      # Picking none shows the prompt to add a study site, like any other
+      # Picking none shows the prompt to select a study site, like any other
       # blank row. A provider with no study sites at all skips the step, so
       # their prompt links to the study sites page on the organisation instead.
       review do |r|
