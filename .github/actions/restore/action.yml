@@ -116,19 +116,29 @@ runs:
       run: |
         # Konduit does not forward psql flags, so wrap the dump in an error-stopping
         # transaction. gzip -d reads concatenated members, so the dump is not recompressed.
-        # Review apps run the postgis/postgis image, which also installs postgis_topology and
-        # postgis_tiger_geocoder. They depend on postgis, so the dump's DROP EXTENSION postgis
-        # fails unless they are dropped first. Only emit those drops for review: on Azure QA
-        # and staging, DROP EXTENSION postgis_tiger_geocoder errors with "not allow-listed
-        # for azure_pg_admin", which aborts the whole restore under ON_ERROR_STOP.
+        #
+        # Review apps use the postgis/postgis image, which also installs
+        # postgis_topology and postgis_tiger_geocoder. Drop those first so the
+        # dump's DROP EXTENSION postgis can succeed. Skip that preamble on Azure
+        # QA/staging: those DROPs are not allow-listed for azure_pg_admin and
+        # abort the restore under ON_ERROR_STOP.
         ATOMIC_RESTORE_FILE="${SANITISED_FILE_NAME}_atomic.sql.gz"
         gzip --test "${SANITISED_FILE_NAME}.sql.gz"
+
+        if [ "${{ env.app_environment }}" = "review" ]; then
+          preamble=$(printf '%s\n' \
+            '\set ON_ERROR_STOP on' \
+            'BEGIN;' \
+            'DROP EXTENSION IF EXISTS postgis_tiger_geocoder;' \
+            'DROP EXTENSION IF EXISTS postgis_topology;')
+        else
+          preamble=$(printf '%s\n' \
+            '\set ON_ERROR_STOP on' \
+            'BEGIN;')
+        fi
+
         {
-          if [ "${{ env.app_environment }}" = "review" ]; then
-            printf '\\set ON_ERROR_STOP on\nBEGIN;\nDROP EXTENSION IF EXISTS postgis_tiger_geocoder;\nDROP EXTENSION IF EXISTS postgis_topology;\n' | gzip
-          else
-            printf '\\set ON_ERROR_STOP on\nBEGIN;\n' | gzip
-          fi
+          printf '%s\n' "${preamble}" | gzip
           cat "${SANITISED_FILE_NAME}.sql.gz"
           printf '\nCOMMIT;\n' | gzip
         } > "${ATOMIC_RESTORE_FILE}"
