@@ -32,6 +32,14 @@ module Support
     def provider_search(records, search)
       return records if search.blank?
 
+      # Autocomplete confirms a suggestion as "Name (CODE)". Search by that
+      # code so the filter finds the chosen provider.
+      code = search[/\(([A-Za-z0-9]+)\)$/, 1]
+      if code.present?
+        matched = records.where(provider_code: code.upcase)
+        return matched if matched.exists?
+      end
+
       records.provider_search(search)
     end
 

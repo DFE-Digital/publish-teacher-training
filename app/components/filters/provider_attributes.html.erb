@@ -1,7 +1,13 @@
-<div class="govuk-form-group">
+<%= tag.div(
+  class: "govuk-form-group suggestions",
+  data: helpers.remote_autocomplete_data(
+    path: helpers.suggest_support_recruitment_cycle_providers_path(helpers.params[:recruitment_cycle_year]),
+    format: "provider",
+  ),
+) do %>
   <%= label_tag "provider_search", t("components.filter.providers.provider_search"), class: "govuk-label govuk-label--s" %>
   <%= text_field_tag "provider_search", (filters[:provider_search] if filters), spellcheck: false, class: "govuk-input", autocomplete: "off" %>
-</div>
+<% end %>
 <div class="govuk-form-group">
   <%= label_tag "course_search", t("components.filter.providers.course_search"), class: "govuk-label govuk-label--s" %>
   <%= text_field_tag "course_search", (filters[:course_search] if filters), spellcheck: false, class: "govuk-input", autocomplete: "off" %>
