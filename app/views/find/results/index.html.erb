@@ -89,7 +89,7 @@
               location: @search_params[:formatted_address] || @search_params[:location],
               short_address: @address.short_address,
               visa_sponsorship: @search_params[:can_sponsor_visa],
-              provider_search: @courses_query.applied_scopes.key?(:provider),
+              accredited_provider_names: @accredited_provider_names,
               accredited_provider_conflicts: @accredited_provider_conflicts,
             ) %>
 

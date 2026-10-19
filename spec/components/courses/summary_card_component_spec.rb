@@ -446,9 +446,9 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
 
   describe "when displaying the accredited provider" do
     let(:summary_card) do
-      render_inline(described_class.new(course:, provider_search:))
+      render_inline(described_class.new(course:, accredited_provider_names:))
     end
-    let(:provider_search) { true }
+    let(:accredited_provider_names) { { accredited_provider.provider_code => "Manchester Metropolitan University" } }
     let(:accredited_provider) { create(:provider, :accredited_provider, provider_name: "Manchester Metropolitan University") }
     let(:provider) { create(:provider, provider_name: "Oakwood Academy") }
     let(:course) do
@@ -463,7 +463,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
     end
 
     context "when the user has not searched by provider" do
-      let(:provider_search) { false }
+      let(:accredited_provider_names) { {} }
 
       it "does not render the accredited provider" do
         expect(summary_card).not_to have_content("Accredited by")
@@ -483,7 +483,7 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         render_inline(
           described_class.new(
             course:,
-            provider_search:,
+            accredited_provider_names:,
             accredited_provider_conflicts: Set[[course.provider_id, course.master_subject_id]],
           ),
         )
