@@ -16,6 +16,7 @@ module Find
       @courses = @courses_query.call
       @courses_count = @courses_query.count
       @accredited_provider_conflicts = @courses_query.provider_subjects_with_multiple_accredited_providers
+      @accredited_provider_names = @courses_query.accredited_provider_names
       @filter_counts = @search_courses_form.filter_counts
 
       @pagy, @results = pagy(@courses, count: @courses_count, page:)

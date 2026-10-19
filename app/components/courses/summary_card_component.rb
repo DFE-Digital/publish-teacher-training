@@ -4,13 +4,13 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, provider_search: false, accredited_provider_conflicts: Set.new)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, accredited_provider_names: {}, accredited_provider_conflicts: Set.new)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
-      @provider_search = provider_search
+      @accredited_provider_names = accredited_provider_names
       @accredited_provider_conflicts = accredited_provider_conflicts
 
       super()
@@ -28,11 +28,11 @@ module Courses
 
     # Only shown when the user has searched by provider, so they can see why a
     # training partner's course matched their search for its accredited provider.
+    # The results page only passes names on provider searches.
     def accredited_provider_name
-      return unless @provider_search
       return if course.accredited_provider_code.blank? || course.accredited_provider_code == course.provider_code
 
-      course.accrediting_provider&.provider_name
+      @accredited_provider_names[course.accredited_provider_code]
     end
 
     # When a provider offers the same subject through more than one accredited
