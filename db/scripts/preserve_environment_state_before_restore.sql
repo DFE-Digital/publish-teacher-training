@@ -3,6 +3,9 @@
 -- tables for the duration of the restore transaction.
 -- The advisory lock matches LegacyRedisState::ADVISORY_LOCK_KEY. The table
 -- locks also exclude writes from releases that predate that coordination.
+-- Only undefined_table is swallowed (tables may not exist yet). A dropped or
+-- renamed column must raise so the restore fails loudly instead of quietly
+-- keeping production flags.
 SELECT pg_advisory_xact_lock(20261015, 6581);
 
 DO $$
@@ -35,7 +38,7 @@ BEGIN
     SELECT name, active, created_at, updated_at, legacy_redis_synced_at
     FROM public.feature_flag_state;
 EXCEPTION
-  WHEN undefined_table OR undefined_column THEN NULL;
+  WHEN undefined_table THEN NULL;
 END $$;
 
 DO $$
@@ -44,5 +47,5 @@ BEGIN
     SELECT name, value, created_at, updated_at, legacy_redis_synced_at
     FROM public.site_setting;
 EXCEPTION
-  WHEN undefined_table OR undefined_column THEN NULL;
+  WHEN undefined_table THEN NULL;
 END $$;

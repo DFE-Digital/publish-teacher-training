@@ -74,7 +74,9 @@ RSpec.describe "db/scripts" do
   it "surfaces a reference to a dropped column as a raised error" do
     # Guards the guard: proves the clean-run assertions above would fail on
     # schema drift rather than passing vacuously. A script referencing a
-    # column that no longer exists must raise, not fail silently.
+    # column that no longer exists must raise, not fail silently — including
+    # the environment-state preserve/restore scripts, which only swallow
+    # undefined_table.
     dropped_column_sql = %(INSERT INTO "provider" (provider_code, scheme_member) VALUES ('B1T', 'N'))
 
     expect { ActiveRecord::Base.connection.execute(dropped_column_sql) }
