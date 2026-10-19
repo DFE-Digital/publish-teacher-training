@@ -31,6 +31,10 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       resource :onboarding, only: %i[new create]
     end
     resources :providers, except: %i[new create destroy] do
+      collection do
+        get :suggest
+      end
+
       member do
         get :manual_rollover, to: "providers/manual_rollover#new"
         post :manual_rollover_confirm, to: "providers/manual_rollover#confirm"

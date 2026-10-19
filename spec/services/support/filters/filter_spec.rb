@@ -58,6 +58,18 @@ describe "Filter" do
         end
       end
 
+      context "filtering with an autocomplete suggestion" do
+        let(:params) do
+          {
+            provider_search: "#{provider.provider_name} (#{provider.provider_code})",
+          }
+        end
+
+        it "filters to the provider named in the suggestion" do
+          expect(subject).to contain_exactly(provider)
+        end
+      end
+
       context "filtering with a known provider only" do
         let(:params) do
           {

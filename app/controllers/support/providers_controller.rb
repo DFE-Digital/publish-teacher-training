@@ -7,6 +7,20 @@ module Support
       @pagy, @providers = pagy(filtered_providers)
     end
 
+    def suggest
+      query = params[:query].to_s
+      providers = if query.length < 3
+                    []
+                  else
+                    recruitment_cycle.providers
+                                     .provider_search(query)
+                                     .limit(10)
+                                     .map { |provider| { code: provider.provider_code, name: provider.provider_name } }
+                  end
+
+      render json: providers
+    end
+
     def show
       provider
     end
