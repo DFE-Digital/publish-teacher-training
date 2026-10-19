@@ -8,8 +8,10 @@ mirror remains marked as pending. Before a web process starts, it retries
 pending database-to-Redis writes and then reconciles Redis into the database.
 If Redis is unreachable the boot continues on the database state and reports
 the error. If Redis is empty but the database still has rows, the replace is
-skipped so a flush cannot wipe flags or cycle settings. These operations use
-one database advisory lock so they cannot overwrite a concurrent change.
+skipped so a flush cannot wipe flags or cycle settings, and Redis is refilled
+from the database so a later single write cannot leave it partial. These
+operations use one database advisory lock so they cannot overwrite a concurrent
+change.
 Requests only read the database: one query loads every flag, another every
 setting, and both are memoised on `Current` for the request.
 

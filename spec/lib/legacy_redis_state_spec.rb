@@ -98,7 +98,27 @@ describe LegacyRedisState do
 
       expect(FeatureFlagState.pluck(:name, :active)).to eq([["test_feature", true]])
       expect(SiteSetting.pluck(:name, :value)).to eq([%w[cycle_schedule apply_open]])
+      expect(JSON.parse(redis.get("feature_flags_test_feature"))["state"]).to be(true)
+      expect(redis.get("cycle_schedule")).to eq("apply_open")
       expect(Rails.error).to have_received(:report).twice
+    end
+
+    it "refills Redis when empty so a later single write cannot wipe other rows" do
+      records = [
+        FeatureFlagState.create!(name: "test_feature", active: true),
+        FeatureFlagState.create!(name: "other_feature", active: true),
+      ]
+      records.each { |record| record.update_column(:legacy_redis_synced_at, record.updated_at) }
+      allow(Rails.error).to receive(:report)
+
+      described_class.backfill_database
+      described_class.save(FeatureFlagState, name: "test_feature", active: false)
+      described_class.backfill_database
+
+      expect(FeatureFlagState.pluck(:name, :active)).to contain_exactly(
+        ["test_feature", false],
+        ["other_feature", true],
+      )
     end
 
     it "continues with database state when Redis is unavailable" do
