@@ -118,6 +118,9 @@ RSpec.describe "Banner management support" do
 
     when_i_preview_the_automated_banner
     then_i_see_the_automated_banner
+
+    when_i_go_back
+    then_i_am_on_the_scheduled_banners_page
   end
 
 private
@@ -373,6 +376,14 @@ private
 
   def then_i_see_the_automated_banner
     expect(page).to have_text(AutomatedBanner.find("apply_opens_soon").heading)
+  end
+
+  def when_i_go_back
+    click_link_or_button "Back"
+  end
+
+  def then_i_am_on_the_scheduled_banners_page
+    expect(page).to have_current_path(scheduled_support_banners_path)
   end
 
   def when_i_clear_the_banner_name

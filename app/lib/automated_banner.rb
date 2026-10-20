@@ -67,6 +67,8 @@ class AutomatedBanner
     @expired_at = expired_at
   end
 
+  def status = published_at > now ? :scheduled : :active
+
   def name = I18n.t("automated_banners.#{id}.name")
 
   def heading = I18n.t("automated_banners.#{id}.heading", **interpolations, default: nil)

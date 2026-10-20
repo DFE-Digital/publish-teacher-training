@@ -1,7 +1,7 @@
 <% content_for :page_title, @banner.name %>
 
 <%= content_for(:before_content) do %>
-  <%= govuk_back_link(href: active_support_banners_path) %>
+  <%= govuk_back_link(href: banner_status_path(@banner)) %>
 <% end %>
 
 <div class="govuk-grid-row">

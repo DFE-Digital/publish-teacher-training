@@ -48,9 +48,9 @@
 
     <% @automated_banners.each do |banner| %>
       <% body.with_row do |row| %>
-        <% row.with_cell do %>
-          <span class="govuk-!-display-block govuk-!-margin-bottom-1"><%= banner.name %></span>
-          <%= govuk_tag(text: t(".automated")) %>
+        <% row.with_cell(classes: "app-table--banners__automated-name") do %>
+          <%= banner.name %>
+          <%= govuk_tag(text: t(".automated"), classes: "govuk-!-margin-left-1") %>
         <% end %>
         <% row.with_cell text: banner.published_at.to_fs(:govuk_date_and_time) %>
         <% row.with_cell text: banner.expired_at.to_fs(:govuk_date_and_time) %>
