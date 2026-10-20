@@ -7,10 +7,10 @@
 <h2 class="govuk-heading-m">Anne</h2>
 <p class="govuk-body"><%= govuk_tag(text: "School Direct", colour: "blue") %></p>
 <p class="govuk-body">
-  Anne is a course administrator who belongs to one school direct.
+  Anne is a course administrator who belongs to one school direct, <strong>Teach… Beyond</strong>.
 </p>
 <%= render Persona.new(
-  email_address: "anonimized-user-12248@example.org",
+  email_address: "persona-anne@example.org",
   first_name: "Course administrator",
   last_name: "Anne",
 ) %>
@@ -20,10 +20,10 @@
 <h2 class="govuk-heading-m">Susy</h2>
 <p class="govuk-body"><%= govuk_tag(text: "Accredited provider", colour: "blue", classes: "govuk-tag-no-max-width") %></p>
 <p class="govuk-body">
-  Susy is a SCITT service manager who belongs to one accredited provider.
+  Susy is a SCITT service manager who belongs to one accredited provider, <strong>Kent and Medway Training</strong>.
 </p>
 <%= render Persona.new(
-  email_address: "anonimized-user-12532@example.org",
+  email_address: "persona-susy@example.org",
   first_name: "ITT partnership manager",
   last_name: "Susy",
 ) %>
@@ -40,13 +40,13 @@
   Mary is a SCITT Business Support Coordinator who belongs to:
 </p>
 <ul class="govuk-list govuk-list--bullet">
-  <li>multiple accredited bodies, <strong>Suffolk and Norfolk Primary SCITT</strong> and <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
-  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses accredited by <strong>Suffolk and Norfolk Secondary SCITT</strong></li>
-  <li>a school direct <strong>Thorpe St Andrew School and Sixth Form</strong> with courses also accredited by an organisation not associated with Mary</li>
+  <li>an accredited provider, <strong>Norfolk, Essex and Suffolk Teacher Training (NESTT)</strong></li>
+  <li>school directs <strong>Exning Primary School</strong>, <strong>White Woman Lane Junior School</strong> and <strong>Fairfield Infant School</strong> with courses accredited by <strong>NESTT</strong></li>
+  <li>a school direct <strong>Notre Dame High School, Norwich</strong> with courses accredited by <strong>NESTT</strong> and by an organisation not associated with Mary</li>
 </ul>
 
 <%= render Persona.new(
-  email_address: "anonimized-user-7839@example.org",
+  email_address: "persona-mary@example.org",
   first_name: "Multi-org administrator",
   last_name: "Mary",
 ) %>
