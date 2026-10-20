@@ -526,15 +526,6 @@ class Course < ApplicationRecord
     valid? :update
   end
 
-  # TODO School data remodel removal - delete once the API stops reading running from SiteStatus. # rubocop:disable Style/CommentAnnotation
-  def legacy_running?
-    if site_statuses.loaded?
-      site_statuses.any?(&:findable?)
-    else
-      site_statuses.findable.exists?
-    end
-  end
-
   def syncable_subjects
     if subjects.loaded?
       subjects
@@ -544,18 +535,6 @@ class Course < ApplicationRecord
       subjects
         .where.not(type: "DiscontinuedSubject")
         .where.not(subject_code: nil)
-    end
-  end
-
-  def open_for_applications?
-    applications_open_from.present? && applications_open_from <= Time.zone.now && legacy_running? && application_status_open?
-  end
-
-  def has_vacancies?
-    if site_statuses.loaded?
-      site_statuses.select(&:findable?).any?(&:with_vacancies?)
-    else
-      site_statuses.findable.with_vacancies.any?
     end
   end
 

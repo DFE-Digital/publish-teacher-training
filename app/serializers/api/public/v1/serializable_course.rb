@@ -115,7 +115,7 @@ module API
         end
 
         attribute :has_vacancies do
-          @object.has_vacancies?
+          true
         end
 
         attribute :is_send do
@@ -127,7 +127,7 @@ module API
         end
 
         attribute :open_for_applications do
-          @object.open_for_applications?
+          true
         end
 
         attribute :required_qualifications_english do
@@ -143,7 +143,7 @@ module API
         end
 
         attribute :running do
-          @object.legacy_running?
+          true
         end
 
         attribute :start_date do

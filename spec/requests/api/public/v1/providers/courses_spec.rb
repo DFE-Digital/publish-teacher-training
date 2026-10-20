@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :api do
-  # The serialiser reads every course's status, site statuses, enrichment
-  # fields and ratifying provider, so the search service has to preload them.
+  # The serialiser reads every course's status, enrichment fields and
+  # ratifying provider, so the search service has to preload them.
   # The controller picks a different search service either side of the
   # schools remodel, so both are covered whichever cycle is current.
   {
@@ -38,12 +38,17 @@ RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :
         expect(many).to eq(few)
       end
 
-      it "reports an unpublished course with a running published site as running and open" do
-        create(:course, :draft_enrichment, :open, provider:, applications_open_from: 1.day.ago, site_statuses: [build(:site_status, :findable)])
+      it "always reports a course as running, open and having vacancies" do
+        create(:course, :draft_enrichment, provider:, site_statuses: [])
 
         get "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses"
 
-        expect(response.parsed_body["data"].sole["attributes"]).to include("findable" => false, "running" => true, "open_for_applications" => true)
+        expect(response.parsed_body["data"].sole["attributes"]).to include(
+          "findable" => false,
+          "running" => true,
+          "open_for_applications" => true,
+          "has_vacancies" => true,
+        )
       end
     end
   end

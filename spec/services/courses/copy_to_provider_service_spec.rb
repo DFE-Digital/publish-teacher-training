@@ -51,8 +51,6 @@ RSpec.describe Courses::CopyToProviderService do
     expect(new_course.subjects.first.subject_code).to eq course.subjects.first.subject_code
     expect(new_course.subjects.first.subject_name).to eq course.subjects.first.subject_name
     expect(new_course.content_status).to eq :draft
-    expect(new_course.legacy_running?).to be(false)
-    expect(new_course.open_for_applications?).to be_falsey
     expect(new_course.can_sponsor_skilled_worker_visa).to eq course.can_sponsor_skilled_worker_visa
     expect(new_course.can_sponsor_student_visa).to eq course.can_sponsor_student_visa
   end
@@ -343,13 +341,6 @@ RSpec.describe Courses::CopyToProviderService do
       ).execute(course:, new_provider:)
     end
 
-    describe "the new course" do
-      subject { new_course }
-
-      its(:legacy_running?) { is_expected.to be false }
-      its(:open_for_applications?) { is_expected.to be_falsey }
-    end
-
     it "copies over the course's sites" do
       expect(mocked_sites_copy_to_course_service).to have_received(:call).with(new_site:, new_course:)
     end
@@ -399,12 +390,6 @@ RSpec.describe Courses::CopyToProviderService do
         enrichments_copy_to_course: mocked_enrichments_copy_to_course_service,
         force:,
       ).execute(course:, new_provider:)
-    end
-
-    describe "the new course" do
-      subject { new_course }
-
-      its(:open_for_applications?) { is_expected.to be_falsey }
     end
 
     it "copies over the course's study sites" do

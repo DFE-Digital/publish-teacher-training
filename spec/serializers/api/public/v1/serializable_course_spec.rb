@@ -122,8 +122,6 @@ RSpec.describe API::Public::V1::SerializableCourse do
       end
 
       it "returns findable true without inspecting SiteStatus" do
-        allow(course).to receive(:legacy_running?).and_return(false)
-
         expect(course.site_statuses).to be_empty
         expect(subject).to have_attribute(:findable).with_value(true)
       end
@@ -173,7 +171,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:has_early_career_payments).with_value(false) }
   it { is_expected.to have_attribute(:financial_support).with_value(course.latest_published_enrichment.financial_support) }
   it { is_expected.to have_attribute(:has_scholarship).with_value(CourseIncentive.new(course).has_scholarship?) }
-  it { is_expected.to have_attribute(:has_vacancies).with_value(course.has_vacancies?) }
+  it { is_expected.to have_attribute(:has_vacancies).with_value(true) }
   it { is_expected.to have_attribute(:how_school_placements_work).with_value(course.latest_published_enrichment.how_school_placements_work) }
   it { is_expected.to have_attribute(:interview_process).with_value(course.latest_published_enrichment.interview_process) }
   it { is_expected.to have_attribute(:interview_location).with_value(course.latest_published_enrichment.interview_location) }
@@ -181,7 +179,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:last_published_at).with_value(course.last_published_at.iso8601) }
   it { is_expected.to have_attribute(:level).with_value(course.level) }
   it { is_expected.to have_attribute(:name).with_value(course.name) }
-  it { is_expected.to have_attribute(:open_for_applications).with_value(course.open_for_applications?) }
+  it { is_expected.to have_attribute(:open_for_applications).with_value(true) }
   it { is_expected.to have_attribute(:other_requirements).with_value(course.latest_published_enrichment.other_requirements) }
   it { is_expected.to have_attribute(:personal_qualities).with_value(course.latest_published_enrichment.personal_qualities) }
   it { is_expected.to have_attribute(:placement_school_activities).with_value(course.latest_published_enrichment.placement_school_activities) }
@@ -192,7 +190,7 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:required_qualifications_english).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_maths).with_value("must_have_qualification_at_application_time") }
   it { is_expected.to have_attribute(:required_qualifications_science).with_value("must_have_qualification_at_application_time") }
-  it { is_expected.to have_attribute(:running).with_value(course.legacy_running?) }
+  it { is_expected.to have_attribute(:running).with_value(true) }
   it { is_expected.to have_attribute(:salary_details).with_value(course.latest_published_enrichment.salary_details) }
   it { is_expected.to have_attribute(:salary_fee_details).with_value(course.latest_published_enrichment.salary_fee_details) }
   it { is_expected.to have_attribute(:scholarship_amount).with_value(nil) }
