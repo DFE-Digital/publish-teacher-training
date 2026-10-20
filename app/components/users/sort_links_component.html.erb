@@ -1,0 +1,14 @@
+<p class="govuk-body">
+  <%= t(".sort_by") %>
+  <% if name_selected? %>
+    <strong><%= t(".sort_name") %></strong>
+  <% else %>
+    <%= govuk_link_to t(".sort_name"), @name_path %>
+  <% end %>
+  |
+  <% if last_signed_in_selected? %>
+    <strong><%= t(".sort_last_signed_in") %></strong>
+  <% else %>
+    <%= govuk_link_to t(".sort_last_signed_in"), @last_signed_in_path %>
+  <% end %>
+</p>

@@ -52,6 +52,7 @@ class User < ApplicationRecord
   }
 
   scope :in_name_order, -> { order("LOWER(first_name), LOWER(last_name)") }
+  scope :by_most_recent_sign_in, -> { order(Arel.sql("last_login_date_utc DESC NULLS LAST, LOWER(last_name), LOWER(first_name)")) }
 
   pg_search_scope :search, against: %i[first_name last_name email], using: { tsearch: { prefix: true } }
 

@@ -15,5 +15,10 @@
 <%= render "support/providers/navigation" %>
 
 <%= govuk_button_link_to t("components.page_titles.support.providers.users.new"), new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider) %>
+<%= render Users::SortLinksComponent.new(
+  sort: @sort,
+  name_path: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider),
+  last_signed_in_path: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider, sort: "last_signed_in"),
+) %>
 <%= render "provider_user_list", users: @users, provider: @provider %>
 <%= govuk_pagination(pagy: @pagy) %>
