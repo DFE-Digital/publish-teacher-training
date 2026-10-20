@@ -24,7 +24,6 @@ RSpec.describe "Viewing feature flags" do
   def then_i_see_the_list_of_available_feature_flags
     [
       "Puts Find into maintenance mode",
-      "Displays the maintenance mode banner",
       "Display scholarship and bursary information",
       "Group courses of the same subject from the same provider into one card on Find search results",
     ].each do |feature_flag_text|
