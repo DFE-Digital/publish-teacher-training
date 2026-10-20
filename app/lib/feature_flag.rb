@@ -38,7 +38,8 @@ class FeatureFlag
 
     def update_state(feature_name, active)
       # updated_at is set explicitly so it changes even when the state does not.
-      state = LegacyRedisState.save(FeatureFlagState, name: feature_name.to_s, active:, updated_at: Time.zone.now)
+      state = FeatureFlagState.find_or_initialize_by(name: feature_name.to_s)
+      state.update!(active:, updated_at: Time.zone.now)
       Current.feature_flags&.store(state.name, state)
     end
 

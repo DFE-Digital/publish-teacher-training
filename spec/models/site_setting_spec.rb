@@ -26,12 +26,6 @@ describe SiteSetting do
       end
     end
 
-    it "does not read Redis" do
-      expect(RedisClient.current).not_to receive(:get)
-
-      described_class.cycle_schedule
-    end
-
     it "invalidates the request cache when the cycle schedule changes" do
       described_class.create!(name: "cycle_schedule", value: "apply_open")
 
@@ -44,12 +38,11 @@ describe SiteSetting do
   end
 
   describe ".set" do
-    it "stores the setting and mirrors it to Redis" do
+    it "stores the setting in the database" do
       described_class.set(name: "cycle_schedule", value: :apply_open)
 
       setting = described_class.find_by(name: "cycle_schedule")
-      expect(setting).to have_attributes(value: "apply_open", legacy_redis_synced_at: setting.updated_at)
-      expect(RedisClient.current.get("cycle_schedule")).to eq("apply_open")
+      expect(setting).to have_attributes(value: "apply_open")
     end
 
     it "updates an existing setting" do
@@ -62,22 +55,6 @@ describe SiteSetting do
 
     it "rejects unknown settings" do
       expect { described_class.set(name: "unknown", value: "x") }.to raise_error(ActiveRecord::RecordInvalid)
-      expect(RedisClient.current.get("unknown")).to be_nil
-    end
-
-    it "keeps the committed database change pending if Redis cannot be written" do
-      allow(RedisClient.current).to receive(:set).and_raise(Redis::CannotConnectError)
-      allow(Rails.error).to receive(:report)
-
-      expect { described_class.set(name: "cycle_schedule", value: "apply_open") }.not_to raise_error
-
-      setting = described_class.find_by(name: "cycle_schedule")
-      expect(setting).to have_attributes(value: "apply_open", legacy_redis_synced_at: nil)
-      expect(Rails.error).to have_received(:report).with(
-        instance_of(Redis::CannotConnectError),
-        handled: true,
-        context: hash_including(source: "legacy_redis_state_mirror"),
-      )
     end
   end
 end

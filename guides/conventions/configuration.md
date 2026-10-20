@@ -31,8 +31,5 @@ Any `Machine based env variables settings` that is not prefixed with `SETTINGS`.
 ## Feature Flags
 
 Feature flags are stored in the `feature_flag_state` Postgres table and accessed
-through `FeatureFlag`. Reads are memoised on `Current` for the request.
-
-While an older release remains deployable, changes are also mirrored to the
-worker Redis for rollback. See
-[Application state off Redis](../redis-application-state.md).
+through `FeatureFlag`. Reads are memoised on `Current` for the request. See
+[ADR 22](../adr/0022-solid-queue-and-redis-independence.md).

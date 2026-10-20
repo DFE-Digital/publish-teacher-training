@@ -77,9 +77,6 @@ govuk_notify:
   user_added_as_organisation_to_training_partner_id: 47d3509f-eeac-49a5-a455-e4a911c93496
   email_alert_weekly_digest_template_id: cbd7302c-5a51-435b-a093-2ca684290077
 
-mcbg:
-  redis_password: <%= SecureRandom.base64 %>
-
 log_level: info
 magic_link:
   max_token_age: <%= 1.hour %>

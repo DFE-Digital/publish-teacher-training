@@ -4,5 +4,4 @@ set -eu
 database_task="${1:-db:migrate:with_data_migrations}"
 
 bundle exec rails "${database_task}"
-bundle exec rake legacy_redis_state:reconcile_before_web_boot
 exec bundle exec rails server -b 0.0.0.0

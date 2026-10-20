@@ -75,8 +75,7 @@ module ManageCoursesBackend
     config.active_job.queue_adapter = :solid_queue
     config.solid_queue.clear_finished_jobs_after = 1.hour
 
-    # Mission Control observes Solid Queue only; Sidekiq Web stays at /sidekiq
-    # while legacy Sidekiq payloads drain.
+    # Mission Control observes Solid Queue at /jobs.
     # filter_arguments is set in config/initializers/mission_control.rb from filter_parameters.
     config.mission_control.jobs.adapters = [:solid_queue]
     config.mission_control.jobs.http_basic_auth_enabled = false

@@ -23,7 +23,8 @@ class SiteSetting < ApplicationRecord
   end
 
   def self.set(name:, value:)
-    setting = LegacyRedisState.save(self, name: name.to_s, value: value.to_s)
+    setting = find_or_initialize_by(name: name.to_s)
+    setting.update!(value: value.to_s)
     Current.site_settings&.store(setting.name, setting.value)
   end
 

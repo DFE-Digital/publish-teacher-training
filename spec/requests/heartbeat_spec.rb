@@ -27,7 +27,6 @@ describe "heartbeat requests" do
       register_solid_queue_process("Dispatcher")
 
       allow(ActiveRecord::Base.connection).to receive(:active?).and_return(true)
-      allow(Sidekiq).to receive(:redis_info).and_return({})
     end
 
     context "when everything is ok" do
@@ -47,7 +46,6 @@ describe "heartbeat requests" do
 
         expect(response.body).to eq({ checks: {
           database: true,
-          redis: true,
           solid_queue_processes: true,
         } }.to_json)
       end
@@ -98,26 +96,6 @@ describe "heartbeat requests" do
       end
     end
 
-    context "there's no Redis connection" do
-      before do
-        allow(Sidekiq).to receive(:redis_info).and_raise(Errno::ECONNREFUSED)
-      end
-
-      it("returns 503") do
-        get "/healthcheck"
-
-        expect(response).to have_http_status(:service_unavailable)
-      end
-
-      it "sets the sidekiq queue to false" do
-        get "/healthcheck"
-
-        json_response = response.parsed_body
-
-        expect(json_response["checks"]).to include("redis" => false)
-      end
-    end
-
     context "there's no db connection" do
       before do
         allow(ActiveRecord::Base.connection)
@@ -130,7 +108,7 @@ describe "heartbeat requests" do
         expect(response).to have_http_status(:service_unavailable)
       end
 
-      it "sets the sidekiq queue to false" do
+      it "sets the database check to false" do
         get "/healthcheck"
 
         json_response = response.parsed_body
