@@ -68,7 +68,6 @@ shared_examples "store" do |identifier_model_type, form_store_keys|
         expect(store.clear_stash(store_key)).to be(true)
         expect(store.get(store_key)).to be_nil
       end
-
     end
   end
 end
