@@ -127,7 +127,10 @@ module API
         end
 
         attribute :open_for_applications do
-          true
+          @object.is_published? &&
+            @object.applications_open_from.present? &&
+            @object.applications_open_from <= Time.zone.now &&
+            @object.application_status_open?
         end
 
         attribute :required_qualifications_english do
