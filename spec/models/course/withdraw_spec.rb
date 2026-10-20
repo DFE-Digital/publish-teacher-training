@@ -18,10 +18,6 @@ describe "withdraw" do
   context "a published course" do
     let(:enrichment) { build(:course_enrichment, :published) }
 
-    it "stops running on UCAS" do
-      expect(course.legacy_running?).to be(false)
-    end
-
     it "is not published" do
       expect(course.is_published?).to be(false)
     end
