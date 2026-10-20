@@ -71,6 +71,29 @@ RSpec.describe "db/scripts" do
     expect { run_script("integration_setup") }.not_to raise_error
   end
 
+  it "integration_setup.sql gives persona users their providers in the two latest cycles" do
+    previous_cycle = find_or_create(:recruitment_cycle, year: Find::CycleTimetable.previous_year)
+    current_cycle = find_or_create(:recruitment_cycle, year: Find::CycleTimetable.current_year)
+    next_cycle = find_or_create(:recruitment_cycle, year: Find::CycleTimetable.next_year)
+    create(:provider, provider_code: "K30", recruitment_cycle: previous_cycle)
+    current_provider = create(:provider, provider_code: "K30", recruitment_cycle: current_cycle)
+    next_provider = create(:provider, provider_code: "K30", recruitment_cycle: next_cycle)
+
+    run_script("integration_setup")
+
+    susy = User.find_by!(email: "persona-susy@example.org")
+    expect(susy.providers).to contain_exactly(current_provider, next_provider)
+  end
+
+  it "integration_setup.sql runs twice without duplicating persona users" do
+    find_or_create(:recruitment_cycle, year: Find::CycleTimetable.current_year)
+
+    run_script("integration_setup")
+
+    expect { run_script("integration_setup") }.not_to raise_error
+    expect(User.where("email LIKE 'persona-%'").count).to eq(3)
+  end
+
   it "surfaces a reference to a dropped column as a raised error" do
     # Guards the guard: proves the clean-run assertions above would fail on
     # schema drift rather than passing vacuously. A script referencing a
