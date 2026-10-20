@@ -179,7 +179,48 @@ RSpec.describe API::Public::V1::SerializableCourse do
   it { is_expected.to have_attribute(:last_published_at).with_value(course.last_published_at.iso8601) }
   it { is_expected.to have_attribute(:level).with_value(course.level) }
   it { is_expected.to have_attribute(:name).with_value(course.name) }
-  it { is_expected.to have_attribute(:open_for_applications).with_value(true) }
+
+  describe "open_for_applications" do
+    let(:course) do
+      create(
+        :course,
+        publication_state,
+        :with_accrediting_provider,
+        application_status:,
+        applications_open_from:,
+      )
+    end
+    let(:publication_state) { :published }
+    let(:application_status) { :open }
+    let(:applications_open_from) { 1.day.ago }
+
+    it { is_expected.to have_attribute(:open_for_applications).with_value(true) }
+
+    context "when the provider has closed applications" do
+      let(:application_status) { :closed }
+
+      it { is_expected.to have_attribute(:open_for_applications).with_value(false) }
+    end
+
+    context "when applications open in the future" do
+      let(:applications_open_from) { 1.day.from_now }
+
+      it { is_expected.to have_attribute(:open_for_applications).with_value(false) }
+    end
+
+    context "when the course is a draft" do
+      let(:publication_state) { :draft_enrichment }
+
+      it { is_expected.to have_attribute(:open_for_applications).with_value(false) }
+    end
+
+    context "when the course is withdrawn" do
+      let(:publication_state) { :withdrawn }
+
+      it { is_expected.to have_attribute(:open_for_applications).with_value(false) }
+    end
+  end
+
   it { is_expected.to have_attribute(:other_requirements).with_value(course.latest_published_enrichment.other_requirements) }
   it { is_expected.to have_attribute(:personal_qualities).with_value(course.latest_published_enrichment.personal_qualities) }
   it { is_expected.to have_attribute(:placement_school_activities).with_value(course.latest_published_enrichment.placement_school_activities) }

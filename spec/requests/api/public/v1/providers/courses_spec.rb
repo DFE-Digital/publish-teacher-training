@@ -38,7 +38,7 @@ RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :
         expect(many).to eq(few)
       end
 
-      it "always reports a course as running, open and having vacancies" do
+      it "fakes legacy status fields without reporting a draft course as open" do
         create(:course, :draft_enrichment, provider:, site_statuses: [])
 
         get "/api/public/v1/recruitment_cycles/#{recruitment_cycle.year}/providers/#{provider.provider_code}/courses"
@@ -46,7 +46,7 @@ RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :
         expect(response.parsed_body["data"].sole["attributes"]).to include(
           "findable" => false,
           "running" => true,
-          "open_for_applications" => true,
+          "open_for_applications" => false,
           "has_vacancies" => true,
         )
       end
