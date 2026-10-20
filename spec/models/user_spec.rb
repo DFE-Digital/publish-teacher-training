@@ -326,4 +326,14 @@ describe User do
       expect(described_class.in_name_order).to eq([user1, user4, user2, user3])
     end
   end
+
+  describe ".by_most_recent_sign_in" do
+    it "puts the most recent sign in first and people who have never signed in last" do
+      never = create(:user, last_login_date_utc: nil)
+      older = create(:user, last_login_date_utc: 2.days.ago)
+      newer = create(:user, last_login_date_utc: 1.hour.ago)
+
+      expect(described_class.where(id: [never.id, older.id, newer.id]).by_most_recent_sign_in).to eq([newer, older, never])
+    end
+  end
 end

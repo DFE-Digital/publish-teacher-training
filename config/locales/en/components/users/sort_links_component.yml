@@ -1,0 +1,6 @@
+en:
+  users:
+    sort_links_component:
+      sort_by: "Sort by:"
+      sort_name: "Name A to Z"
+      sort_last_signed_in: "Most recently signed in"

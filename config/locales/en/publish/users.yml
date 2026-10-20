@@ -8,3 +8,5 @@ en:
         remove_user: "Remove user"
         remove_user_for: "for %{name}"
         never_signed_in: "Never signed in"
+        managing_users_heading: "Managing users"
+        managing_users_body: "You can click 'Remove user' to remove those who no longer work at your organisation, or need access to Publish."

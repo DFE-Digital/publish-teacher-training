@@ -6,6 +6,11 @@
   <div class="govuk-grid-column-full">
     <h1 class="govuk-heading-l"><%= t("page_titles.users.index") %></h1>
       <%= govuk_button_link_to "Add user", new_publish_provider_user_path(provider_code: @provider.provider_code) %>
+      <%= render Users::SortLinksComponent.new(
+        sort: @sort,
+        name_path: publish_provider_users_path(@provider.provider_code),
+        last_signed_in_path: publish_provider_users_path(@provider.provider_code, sort: "last_signed_in"),
+      ) %>
       <table class="govuk-table app-table--vertical-align-middle">
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -39,6 +44,10 @@
         <% end %>
         </tbody>
       </table>
+      <%= govuk_inset_text(classes: "app-callout app-callout--purple") do %>
+        <h2 class="govuk-heading-s"><%= t(".managing_users_heading") %></h2>
+        <p class="govuk-body"><%= t(".managing_users_body") %></p>
+      <% end %>
       <%= govuk_pagination(pagy: @pagy) %>
   </div>
 </div>

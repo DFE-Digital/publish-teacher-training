@@ -3,8 +3,12 @@
 module Support
   module Providers
     class UsersController < ApplicationController
+      USERS_PER_PAGE = 20
+
       def index
-        @pagy, @users = pagy(provider.users.order(:last_name))
+        @sort = params[:sort] == "last_signed_in" ? "last_signed_in" : "name"
+        users = @sort == "last_signed_in" ? provider.users.by_most_recent_sign_in : provider.users.order(:last_name)
+        @pagy, @users = pagy(users, limit: USERS_PER_PAGE)
       end
 
       def show
