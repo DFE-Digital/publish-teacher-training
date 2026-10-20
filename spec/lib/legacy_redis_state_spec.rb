@@ -42,7 +42,7 @@ describe LegacyRedisState do
       expect(FeatureFlagState.count).to eq(0)
     end
 
-    it "overwrites the database so it can be rerun after a rollback" do
+    it "upserts Redis values into the database without deleting other rows" do
       records = [
         FeatureFlagState.create!(name: "test_feature", active: true),
         FeatureFlagState.create!(name: "other_feature", active: true),
@@ -56,9 +56,9 @@ describe LegacyRedisState do
       described_class.backfill_database
 
       expect(FeatureFlagState.find_by(name: "test_feature").active).to be(false)
-      expect(FeatureFlagState.exists?(name: "other_feature")).to be(false)
+      expect(FeatureFlagState.find_by(name: "other_feature").active).to be(true)
       expect(SiteSetting.find_by(name: "cycle_schedule").value).to eq("real")
-      expect(SiteSetting.exists?(name: "deadline_banner")).to be(false)
+      expect(SiteSetting.find_by(name: "deadline_banner").value).to eq("true")
     end
 
     it "keeps the timestamp of an unchanged setting during web boot" do
@@ -92,26 +92,24 @@ describe LegacyRedisState do
         SiteSetting.create!(name: "cycle_schedule", value: "apply_open"),
       ]
       records.each { |record| record.update_column(:legacy_redis_synced_at, record.updated_at) }
-      allow(Rails.error).to receive(:report)
 
       expect(described_class.backfill_database).to eq(feature_flags: 0, site_settings: 0)
 
       expect(FeatureFlagState.pluck(:name, :active)).to eq([["test_feature", true]])
       expect(SiteSetting.pluck(:name, :value)).to eq([%w[cycle_schedule apply_open]])
-      expect(JSON.parse(redis.get("feature_flags_test_feature"))["state"]).to be(true)
-      expect(redis.get("cycle_schedule")).to eq("apply_open")
-      expect(Rails.error).to have_received(:report).twice
+      expect(redis.get("feature_flags_test_feature")).to be_nil
+      expect(redis.get("cycle_schedule")).to be_nil
     end
 
-    it "refills Redis when empty so a later single write cannot wipe other rows" do
+    it "keeps other database rows after a Redis flush and a single save" do
       records = [
         FeatureFlagState.create!(name: "test_feature", active: true),
         FeatureFlagState.create!(name: "other_feature", active: true),
       ]
       records.each { |record| record.update_column(:legacy_redis_synced_at, record.updated_at) }
-      allow(Rails.error).to receive(:report)
+      described_class.sync_to_redis
+      redis.flushdb
 
-      described_class.backfill_database
       described_class.save(FeatureFlagState, name: "test_feature", active: false)
       described_class.backfill_database
 
