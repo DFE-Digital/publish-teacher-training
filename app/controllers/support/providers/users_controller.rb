@@ -7,7 +7,7 @@ module Support
 
       def index
         @sort = params[:sort] == "last_signed_in" ? "last_signed_in" : "name"
-        users = @sort == "last_signed_in" ? provider.users.by_most_recent_sign_in : provider.users.order(:last_name)
+        users = @sort == "last_signed_in" ? provider.users.by_most_recent_sign_in : provider.users.in_name_order
         @pagy, @users = pagy(users, limit: USERS_PER_PAGE)
       end
 

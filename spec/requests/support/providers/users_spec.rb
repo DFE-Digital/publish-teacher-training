@@ -15,8 +15,8 @@ RSpec.describe "Support provider users" do
 
   describe "GET /support/:year/providers/:id/users" do
     it "sorts by name and does not show the Publish managing users callout" do
-      create(:user, first_name: "Zoe", last_name: "Zebra", providers: [provider])
-      create(:user, first_name: "Ada", last_name: "Aardvark", providers: [provider])
+      create(:user, first_name: "Anon", last_name: "Anon", providers: [provider])
+      create(:user, first_name: "Abigal", last_name: "Governor", providers: [provider])
 
       get support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
 
@@ -24,7 +24,7 @@ RSpec.describe "Support provider users" do
       expect(response.body).to include("<strong>Name A to Z</strong>")
       expect(response.body).to include("Most recently signed in")
       expect(response.body).not_to include("Managing users")
-      expect(response.body.index("Ada Aardvark")).to be < response.body.index("Zoe Zebra")
+      expect(user_names).to eq(["Abigal Governor", "Anon Anon"])
     end
 
     it "sorts by most recently signed in, with people who have never signed in last" do
@@ -34,7 +34,7 @@ RSpec.describe "Support provider users" do
       get support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider, sort: "last_signed_in")
 
       expect(response.body).to include("<strong>Most recently signed in</strong>")
-      expect(response.body.index(recent.full_name)).to be < response.body.index(never.full_name)
+      expect(user_names).to eq([recent.full_name, never.full_name])
     end
 
     it "shows 20 users on the first page" do
@@ -44,5 +44,9 @@ RSpec.describe "Support provider users" do
 
       expect(response.body.scan('class="govuk-table__row user-row"').size).to eq(20)
     end
+  end
+
+  def user_names
+    Nokogiri::HTML(response.body).css(".user-row .govuk-heading-s").map { |link| link.text.strip }
   end
 end
