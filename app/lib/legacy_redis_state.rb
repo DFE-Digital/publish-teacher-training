@@ -29,13 +29,11 @@ class LegacyRedisState
     end
 
     # Runs before every web boot. Pushes any unsynced database changes, then
-    # copies Redis into the database to pick up changes the previous release
-    # made while it was running. A missing Redis key means the default state,
-    # but an empty Redis must not wipe the database (that looks the same as a
-    # flush). When we skip that empty import we also refill Redis from the
-    # database, otherwise the next single flag toggle leaves Redis partial and
-    # the following boot deletes every other row. Redis errors are reported and
-    # the boot continues on database state.
+    # upserts whatever Redis still has into the database so changes the previous
+    # release made while it was running are picked up. Keys missing from Redis
+    # are left alone in the database: the older release only ever SETs these
+    # keys, so absence is not a delete. Redis errors are reported and the boot
+    # continues on database state.
     def backfill_database
       with_state_lock do
         push_unsynced_to_redis
@@ -44,8 +42,8 @@ class LegacyRedisState
         settings = settings_from_redis
 
         ActiveRecord::Base.transaction do
-          apply_redis_rows(FeatureFlagState, flags, changed_columns: %i[active])
-          apply_redis_rows(SiteSetting, settings, changed_columns: %i[value])
+          upsert_redis_rows(FeatureFlagState, flags, changed_columns: %i[active])
+          upsert_redis_rows(SiteSetting, settings, changed_columns: %i[value])
         end
 
         { feature_flags: flags.size, site_settings: settings.size }
@@ -148,34 +146,10 @@ class LegacyRedisState
       end
     end
 
-    # An empty Redis import with existing database rows is treated as a flush
-    # or misconfiguration, not "everything is default". Refill Redis from the
-    # database so a later single write cannot leave Redis partial. Partial Redis
-    # from a real older release still deletes names that are absent
-    # (missing key = default).
-    def apply_redis_rows(model, rows, changed_columns:)
-      if rows.empty? && model.exists?
-        report_empty_redis_skip(model)
-        rehydrate_redis_from_database(model)
-        return
-      end
-
-      replace_rows(model, rows, changed_columns:)
-    end
-
-    def rehydrate_redis_from_database(model)
-      case model.name
-      when "FeatureFlagState"
-        flags = FeatureFlagState.where(name: feature_names).index_by(&:name)
-        feature_names.each { |name| export(flags[name], key: feature_flag_key(name)) }
-      when "SiteSetting"
-        settings = SiteSetting.where(name: SiteSetting::NAMES).index_by(&:name)
-        SiteSetting::NAMES.each { |name| export(settings[name], key: name) }
-      end
-    end
-
-    def replace_rows(model, rows, changed_columns:)
-      model.where.not(name: rows.pluck(:name)).delete_all
+    # Upsert only. The older release never deletes these keys to mean "use the
+    # default", and sync_to_redis already removes Redis keys that are absent
+    # from the database before a rollback.
+    def upsert_redis_rows(model, rows, changed_columns:)
       return if rows.empty?
 
       model.upsert_all(
@@ -199,14 +173,6 @@ class LegacyRedisState
         error,
         handled: true,
         context: { source: "legacy_redis_state_reconcile" },
-      )
-    end
-
-    def report_empty_redis_skip(model)
-      Rails.error.report(
-        StandardError.new("Skipped Redis→#{model.table_name} replace: Redis had no keys but the database has rows"),
-        handled: true,
-        context: { source: "legacy_redis_state_reconcile", table: model.table_name },
       )
     end
 
