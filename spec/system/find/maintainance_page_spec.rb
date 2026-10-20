@@ -10,7 +10,6 @@ RSpec.describe "Maintenance mode" do
   context "given the maintenance_mode feature flag is active and i arrive at the site" do
     scenario "sends me to the maintenance page" do
       FeatureFlag.activate(:maintenance_mode)
-      FeatureFlag.activate(:maintenance_banner)
 
       visit find_root_path
 
