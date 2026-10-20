@@ -18,13 +18,11 @@ RSpec.describe "Find switcher", service: :find, type: :request do
       expect(Find::CycleTimetable.current_cycle_schedule).to eq(:apply_open)
     end
 
-    it "switches the cycle and deadline banner in the database and mirrors them to Redis" do
+    it "switches the cycle and deadline banner in the database" do
       post find_switch_cycle_schedule_path,
            params: { find_change_cycle_form: { cycle_schedule_name: "apply_open", deadline_banner: "1" } }
 
       expect(SiteSetting.pluck(:name, :value)).to contain_exactly(%w[cycle_schedule apply_open], %w[deadline_banner true])
-      expect(RedisClient.current.get("cycle_schedule")).to eq("apply_open")
-      expect(RedisClient.current.get("deadline_banner")).to eq("true")
 
       post find_switch_cycle_schedule_path,
            params: { find_change_cycle_form: { cycle_schedule_name: "real" } }

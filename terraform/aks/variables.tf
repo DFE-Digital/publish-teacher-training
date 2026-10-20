@@ -91,18 +91,6 @@ variable "additional_hostnames" {
   type    = list(any)
 }
 
-variable "worker_apps" {
-  type = map(
-    object({
-      startup_command = optional(list(string), [])
-      probe_command   = optional(list(string), [])
-      replicas        = optional(number, 1)
-      max_memory      = optional(string, "512Mi")
-    })
-  )
-  default = {}
-}
-
 variable "solid_queue_worker_replicas" {
   type    = number
   default = 1

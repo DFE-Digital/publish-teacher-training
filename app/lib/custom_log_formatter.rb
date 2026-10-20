@@ -8,7 +8,6 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
 
     format_job_data
     format_exception
-    format_json_message_context
     format_backtrace
     remove_post_params
     redact_solid_queue_arguments
@@ -36,16 +35,6 @@ private
     return if exception_message.nil?
 
     hash[:message] = "Exception occured: #{exception_message}"
-  end
-
-  def format_json_message_context
-    if hash[:message].present?
-      context = JSON.parse(hash[:message])["context"]
-      hash[:sidekiq_job_context] = hash[:message]
-      hash[:message] = context
-    end
-  rescue JSON::ParserError
-    nil
   end
 
   def format_backtrace

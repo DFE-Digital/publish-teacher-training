@@ -69,12 +69,6 @@ shared_examples "store" do |identifier_model_type, form_store_keys|
         expect(store.get(store_key)).to be_nil
       end
 
-      it "does not use Redis" do
-        expect(RedisClient).not_to receive(:current)
-
-        store.stash(store_key, "bob")
-        store.get(store_key)
-      end
     end
   end
 end

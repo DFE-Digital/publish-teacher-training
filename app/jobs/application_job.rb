@@ -5,9 +5,7 @@ class ApplicationJob < ActiveJob::Base
 
   retry_on ActiveRecord::Deadlocked
 
-  # Opt-in: discard StandardError with no Active Job / Sidekiq auto-retries.
-  # A bare `retry_on ..., attempts: 0` re-raises into Sidekiq's JobWrapper
-  # (retry: true) for legacy payloads still draining from Sidekiq.
+  # Opt-in: discard StandardError with no Active Job auto-retries.
   #
   # `report: true` sends failures through ActiveSupport::ErrorReporter (Sentry
   # when `config.rails.register_error_subscriber` is enabled).
@@ -21,15 +19,9 @@ class ApplicationJob < ActiveJob::Base
 
   # Override a retry/discard handler inherited from ApplicationJob or declared
   # earlier in a subclass. Solid Queue records the raised error for an operator.
-  # A legacy payload already in Sidekiq must instead be reported and consumed,
-  # because Sidekiq's Active Job wrapper would otherwise retry it automatically.
   def self.fail_without_retry_on(*exceptions)
     rescue_from(*exceptions) do |error|
-      if Sidekiq.server?
-        Rails.error.report(error, handled: true, source: "application.active_job")
-      else
-        raise error
-      end
+      raise error
     end
   end
 

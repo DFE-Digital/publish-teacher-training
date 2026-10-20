@@ -1,6 +1,0 @@
----
-:queues:
-  - default
-  - mailers
-  - geocoding
-  - low_priority

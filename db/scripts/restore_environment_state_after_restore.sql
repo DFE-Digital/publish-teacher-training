@@ -9,10 +9,9 @@ BEGIN
     name,
     active,
     created_at,
-    updated_at,
-    legacy_redis_synced_at
+    updated_at
   )
-    SELECT name, active, created_at, updated_at, legacy_redis_synced_at
+    SELECT name, active, created_at, updated_at
     FROM pg_temp.preserved_feature_flag_state;
 EXCEPTION
   WHEN undefined_table THEN NULL;
@@ -25,10 +24,9 @@ BEGIN
     name,
     value,
     created_at,
-    updated_at,
-    legacy_redis_synced_at
+    updated_at
   )
-    SELECT name, value, created_at, updated_at, legacy_redis_synced_at
+    SELECT name, value, created_at, updated_at
     FROM pg_temp.preserved_site_setting;
 EXCEPTION
   WHEN undefined_table THEN NULL;

@@ -20,7 +20,6 @@ results. For example:
 {
   "checks": {
     "database": true,
-    "redis": true,
     "solid_queue_processes": true
   }
 }
@@ -31,12 +30,6 @@ The available checks:
 ### `database`
 
 Check that 'ActiveRecord' connection to the database is active.
-
-### `redis`
-
-Checks that the app can connect to the worker Redis server. It temporarily
-holds feature flag and site setting mirrors for rollback, and Sidekiq state
-while the previous release remains deployable.
 
 ### `solid_queue_processes`
 

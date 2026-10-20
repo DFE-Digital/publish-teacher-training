@@ -50,7 +50,6 @@ gem "jsonb_accessor"
 
 # Sending exceptions to sentry
 gem "sentry-rails"
-gem "sentry-sidekiq"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
@@ -82,10 +81,6 @@ gem "discard"
 
 # Gov Notify
 gem "govuk_notify_rails"
-
-# Run jobs in the background.
-gem "sidekiq", "~> 6.5"
-gem "sidekiq-cron"
 
 # Semantic Logger makes logs pretty
 gem "rails_semantic_logger", "~> 4.20.0"
@@ -240,7 +235,6 @@ end
 group :test do
   gem "database_cleaner"
   gem "jsonapi-rspec"
-  gem "mock_redis", "0.46.0"
   gem "rspec_junit_formatter"
   gem "shoulda-matchers", "~> 8.0"
   gem "simplecov", "< 1.4", require: false

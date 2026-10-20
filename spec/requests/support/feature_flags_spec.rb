@@ -19,7 +19,6 @@ RSpec.describe "Support::FeatureFlagsController" do
     put activate_support_feature_flag_path(:maintenance_banner)
 
     expect(FeatureFlagState.find_by(name: "maintenance_banner").active).to be(true)
-    expect(JSON.parse(RedisClient.current.get("feature_flags_maintenance_banner"))["state"]).to be(true)
 
     get support_feature_flags_path
     expect(response.body).to include("at #{Time.zone.now.to_fs(:govuk_date_and_time)}")
@@ -27,7 +26,6 @@ RSpec.describe "Support::FeatureFlagsController" do
     put deactivate_support_feature_flag_path(:maintenance_banner)
 
     expect(FeatureFlagState.find_by(name: "maintenance_banner").active).to be(false)
-    expect(JSON.parse(RedisClient.current.get("feature_flags_maintenance_banner"))["state"]).to be(false)
   end
 
   it "rejects an unknown feature without storing it" do

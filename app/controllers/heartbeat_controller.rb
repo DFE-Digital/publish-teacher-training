@@ -8,7 +8,6 @@ class HeartbeatController < ActionController::API
   def healthcheck
     checks = {
       database: database_alive?,
-      redis: redis_alive?,
       solid_queue_processes: solid_queue_processes_checks,
     }
 
@@ -29,13 +28,6 @@ private
   def database_alive?
     ActiveRecord::Base.connection.execute("SELECT 1") &&
       ActiveRecord::Base.connection.active?
-  rescue StandardError
-    false
-  end
-
-  def redis_alive?
-    Sidekiq.redis_info
-    true
   rescue StandardError
     false
   end

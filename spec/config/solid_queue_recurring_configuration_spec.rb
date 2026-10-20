@@ -27,15 +27,13 @@ RSpec.describe "Solid Queue recurring configuration" do
     expect(terraform).not_to include("SOLID_QUEUE_SKIP_RECURRING=true")
   end
 
-  it "leaves Sidekiq Cron with no schedules to load and clears persisted entries" do
-    initializer = Rails.root.join("config/initializers/sidekiq.rb").read
-
+  it "does not keep Sidekiq or bg_jobs schedule configuration" do
     expect(Settings.bg_jobs).to be_nil
-    expect(initializer).to include("Sidekiq::Cron::Job.destroy_all!")
-    expect(initializer).not_to include("load_from_hash")
+    expect(Rails.root.join("config/initializers/sidekiq.rb")).not_to exist
+    expect(Rails.root.join("config/sidekiq.yml")).not_to exist
   end
 
-  it "documents the cutover and rollback steps" do
+  it "documents the Solid Queue recurring cutover" do
     expect(Rails.root.join("guides/solid-queue-recurring-cutover.md")).to exist
   end
 
