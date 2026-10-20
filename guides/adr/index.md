@@ -21,3 +21,4 @@
 * [19. Use new school relationships in API, search, publishing and operations](0019-use-new-school-relationships-in-api-search-publishing-and-operations.md)
 * [20. Find non-location course search](0020-find-non-location-course-search.md)
 * [21. Find location course search](0021-find-location-course-search.md)
+* [22. Store course publication state and search fields on Course](0022-store-course-publication-state-and-search-fields-on-course.md)
