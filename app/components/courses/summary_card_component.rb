@@ -4,12 +4,13 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, accredited_provider_names: {}, accredited_provider_conflicts: Set.new)
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new)
       @course = course
       @candidate = candidate
       @location = location
       @visa_sponsorship = visa_sponsorship
       @short_address = short_address
+      @centre_of_location = centre_of_location
       @accredited_provider_names = accredited_provider_names
       @accredited_provider_conflicts = accredited_provider_conflicts
 
@@ -89,8 +90,11 @@ module Courses
       )
     end
 
+    # Cities and regions are measured from their centre, not their boundary.
     def nearest_school_from
-      t(".location_value.from_location_html", location: sanitize(@short_address.presence || @location))
+      key = @centre_of_location ? ".location_value.from_centre_of_location_html" : ".location_value.from_location_html"
+
+      t(key, location: sanitize(@short_address.presence || @location))
     end
 
     def funding_text
