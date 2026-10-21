@@ -42,6 +42,10 @@ updates:
       docs:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: govuk_tech_docs
+        versions:
+          - ">= 6.5"
   - package-ecosystem: github-actions
     directories:
       - "/"
