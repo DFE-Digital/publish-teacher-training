@@ -45,9 +45,9 @@ RSpec.describe "API::Public::V1::Providers::CoursesController#index", service: :
 
         expect(response.parsed_body["data"].sole["attributes"]).to include(
           "findable" => false,
-          "running" => true,
+          "running" => false,
           "open_for_applications" => false,
-          "has_vacancies" => true,
+          "has_vacancies" => false,
         )
       end
     end

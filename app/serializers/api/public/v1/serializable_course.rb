@@ -114,10 +114,6 @@ module API
           course_incentive.has_scholarship?
         end
 
-        attribute :has_vacancies do
-          true
-        end
-
         attribute :is_send do
           @object.is_send?
         end
@@ -126,11 +122,13 @@ module API
           @object.last_published_at&.iso8601
         end
 
-        attribute :open_for_applications do
-          @object.is_published? &&
-            @object.applications_open_from.present? &&
-            @object.applications_open_from <= Time.zone.now &&
-            @object.application_status_open?
+        %i[open_for_applications has_vacancies running].each do |attribute_name|
+          attribute attribute_name do
+            @object.is_published? &&
+              @object.applications_open_from.present? &&
+              @object.applications_open_from <= Time.zone.now &&
+              @object.application_status_open?
+          end
         end
 
         attribute :required_qualifications_english do
@@ -143,10 +141,6 @@ module API
 
         attribute :required_qualifications_science do
           @object.science
-        end
-
-        attribute :running do
-          true
         end
 
         attribute :start_date do
