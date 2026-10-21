@@ -11,13 +11,13 @@ gem "rails", "8.1.4"
 # Use PostgreSQL as the database for Active Record
 gem "pg"
 
-# Database-backed Rails cache (schema prepared on deploy; Redis remains the live store)
+# Rails cache on the primary Postgres database
 gem "solid_cache", "~> 1.0"
 
-# Database-backed Active Job backend (schema first; Sidekiq remains the live adapter)
+# Active Job backend on the primary Postgres database
 gem "solid_queue", "~> 1.7"
 
-# Operational UI for Solid Queue (system-admin auth; Sidekiq Web remains)
+# Operational UI for Solid Queue at /jobs (system-admin auth)
 gem "mission_control-jobs", "~> 1.3"
 
 # Authorisation

@@ -79,7 +79,7 @@ describe FeatureFlag do
 
   describe ".last_updated" do
     it "returns nil if the flag has never been set" do
-      expect(described_class.last_updated("never_set_feature")).to be_nil
+      expect(described_class.last_updated("test_feature")).to be_nil
     end
 
     it "returns when the flag was last changed, even if the state is unchanged" do

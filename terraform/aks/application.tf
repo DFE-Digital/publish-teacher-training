@@ -60,8 +60,9 @@ module "solid_queue_worker" {
   # Keep this >= sum of (threads × processes) across workers in config/queue.yml
   # (DEFAULT_QUEUE_THREADS etc.) or Solid Queue will warn and contend on the pool.
   #
-  # This process runs the recurring scheduler. To stop it (rollback), set
-  # SOLID_QUEUE_SKIP_RECURRING: true in app_config — see guides/solid-queue-recurring-cutover.md.
+  # This process runs the recurring scheduler. SOLID_QUEUE_SKIP_RECURRING: true
+  # in app_config pauses recurring schedules. For the rollback boundary, see
+  # guides/adr/0022-solid-queue-and-redis-independence.md.
   command = [
     "/bin/sh",
     "-c",
