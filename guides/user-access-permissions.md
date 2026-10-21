@@ -61,7 +61,7 @@ A support user can:
 - Control feature flags and recruitment cycle rollover
 - Revert course withdrawals
 - Delete candidates
-- Access the Sidekiq dashboard
+- Access Mission Control at `/jobs`
 - Access Blazer analytics (requires the additional `blazer_access` flag on the `User` record)
 
 ## Permission matrix
@@ -80,7 +80,7 @@ A support user can:
 | Feature flags and rollover               | —         | No                   | Yes                        |
 | Revert course withdrawals                | —         | No                   | Yes                        |
 | Delete candidates                        | —         | No                   | Yes                        |
-| Sidekiq dashboard                        | —         | No                   | Yes                        |
+| Mission Control (`/jobs`)                | —         | No                   | Yes                        |
 | Blazer analytics                         | —         | No                   | Yes (with `blazer_access`) |
 
 ## Authentication methods

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_15_150347) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_21_152353) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -358,7 +358,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_150347) do
     t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "legacy_redis_synced_at"
     t.index ["name"], name: "index_feature_flag_state_on_name", unique: true
   end
 
@@ -620,7 +619,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_15_150347) do
     t.string "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "legacy_redis_synced_at"
     t.index ["name"], name: "index_site_setting_on_name", unique: true
   end
 
