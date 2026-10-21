@@ -44,11 +44,17 @@ when the app no longer writes or reconciles Redis.
    removed. `/healthcheck` checks the database and Solid Queue process
    heartbeats only.
 
-4. **Where rollback stops.** After this change, redeploying a release that
-   reads feature flags or cycle settings from Redis is not a supported
-   rollback. Redis instances and `REDIS_*` URL injection may remain in
-   Terraform only for a soak and verification window, then a follow-up removes
-   the infrastructure.
+4. **Redis retention and rollback boundary.** Redis instances and `REDIS_*`
+   URL injection are retained temporarily to verify zero application usage
+   before deletion. Check for unexpected application connections, reads and
+   writes, then remove the infrastructure in a follow-up change.
+
+   Retaining Redis does not provide a rollback path. Once the app stops
+   mirroring changes, Redis state becomes stale. Redeploying a release that
+   reads or reconciles feature flags or cycle settings from Redis is not
+   supported: it can use stale values or overwrite newer Postgres state.
+   Recovery requires a forward fix or a deliberately prepared release
+   compatible with the current Postgres state.
 
 5. **Column removal is staged across releases.** Keep `legacy_redis_synced_at`
    on `feature_flag_state` and `site_setting` while older pods still use it
@@ -64,4 +70,4 @@ when the app no longer writes or reconciles Redis.
 - Nightly database restores continue to preserve each environment's feature
   flags and site settings
 - A later change deletes `redis_worker`, `redis_cache`, endpoints, alerts, and
-  URL injection once soak confirms Redis reads and writes stay at zero
+  URL injection once verification confirms zero application usage

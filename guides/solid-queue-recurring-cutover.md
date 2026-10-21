@@ -5,6 +5,10 @@ Solid Queue is the Active Job adapter (`config.active_job.queue_adapter`) and
 the application; see
 [ADR 22](adr/0022-solid-queue-and-redis-independence.md).
 
+Redis infrastructure is retained temporarily to verify zero application usage
+before deletion. Retaining Redis does not provide a rollback path: its state
+becomes stale once mirroring stops. See ADR 22 for the recovery boundary.
+
 ## How the cutover happened
 
 The release that switched the adapter did it per environment as it deployed:

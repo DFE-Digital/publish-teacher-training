@@ -3,8 +3,8 @@ locals {
   review_additional_hostnames = var.app_environment == "review" ? ["find-${local.app_name_suffix}.${var.cluster}.teacherservices.cloud", "publish-${local.app_name_suffix}-api.${var.cluster}.teacherservices.cloud"] : ["find-${local.app_name_suffix}.${var.cluster}.development.teacherservices.cloud"]
   db_setup_command    = ["/app/bin/start-web", "db:setup"]
   postgres_extensions = ["PG_BUFFERCACHE", "PG_STAT_STATEMENTS", "BTREE_GIN", "BTREE_GIST", "CITEXT", "UUID-OSSP", "POSTGIS"]
-  # Redis URLs stay injected while instances remain for a soak/verification
-  # window. The app no longer reads or writes them.
+  # Redis instances and URLs are retained temporarily to verify zero application
+  # usage before deletion. Retaining Redis does not provide a rollback path.
   app_secrets = merge(
     {
       DATABASE_URL     = module.postgres.url

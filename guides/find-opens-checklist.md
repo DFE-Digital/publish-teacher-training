@@ -38,8 +38,8 @@ Use this checklist on the morning Find opens. This checklist is for the 2026/202
   - [ ] Connections
   - [ ] CPU and memory
   - [ ] Slow or problematic queries
-- [ ] Worker Redis (instance still in Azure for soak only; the app no longer uses it — expect idle metrics):
-  - [ ] Connections stay near zero from the app
+- [ ] Redis instances (retained temporarily to verify zero application usage before deletion; retaining Redis does not provide a rollback path):
+  - [ ] Application connections, reads and writes stay at zero
 - [ ] [Sentry exceptions](https://dfe-teacher-services.sentry.io/issues/?environment=production&project=1377944&statsPeriod=7d)
 - [ ] [Teams and application alerts](https://teams.cloud.microsoft/l/channel/19%3Ad4ee3fa641fb4146961d2d727d92e77b%40thread.tacv2/REC%20Publish%20and%20Find%20System%20Notifications?groupId=5e035efe-5b2b-491b-9e3e-d832445e4ad1&tenantId=fad277c9-c60a-4da1-b5f3-b3b8b34a82f9)
 - [ ] Candidate and support-reported issues
