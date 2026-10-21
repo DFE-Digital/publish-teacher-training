@@ -15,17 +15,15 @@ subgraph Azure_AKS["Azure AKS — Production Cluster<br/>s189p01-tsc-production-
     Publish_App["Publish Service<br/>Rails 8.1 / Ruby 3.4"]
     API_App["Public API<br/>REST / JSON:API"]
   end
-  subgraph Worker_Pods["Sidekiq Worker Pods (x2, 1.5Gi each)"]
-    Sidekiq["Sidekiq Workers<br/>+ sidekiq-cron"]
+  subgraph Worker_Pods["Solid Queue Worker Pods (x2, 2Gi each)"]
+    SolidQueue["Solid Queue Workers<br/>config/recurring.yml"]
   end
   Health["/ping + /healthcheck"]
 end
 
 subgraph Azure_Data["Azure Managed Data"]
   direction TB
-  Postgres["PostgreSQL Flexible<br/>GP_Standard_D4ds_v5<br/>+ PostGIS | HA enabled"]
-  Redis_Worker["Redis (Worker)<br/>noeviction"]
-  Redis_Cache["Redis (Cache)"]
+  Postgres["PostgreSQL Flexible<br/>GP_Standard_D4ds_v5<br/>+ PostGIS | HA enabled<br/>app, Solid Cache, Solid Queue"]
   KeyVault["Key Vault<br/>s189p01-ptt-pd-kv"]
   Blob["Blob Storage<br/>DB Backups (7-day)<br/>UK South, LRS"]
 end
@@ -71,10 +69,7 @@ DfE_Admins -->|HTTPS| Publish_App
 Find_App --> Postgres
 Publish_App --> Postgres
 API_App --> Postgres
-Sidekiq --> Postgres
-Sidekiq --> Redis_Worker
-Find_App --> Redis_Cache
-Publish_App --> Redis_Cache
+SolidQueue --> Postgres
 
 %% Authentication
 Find_App --> OneLogin
@@ -82,8 +77,8 @@ Publish_App --> DfESignIn
 
 %% External services
 Publish_App --> Notify
-Sidekiq --> Notify
-Sidekiq --> GIAS
+SolidQueue --> Notify
+SolidQueue --> GIAS
 Find_App --> Google_Geo
 Find_App --> BigQuery
 Publish_App --> BigQuery
