@@ -166,6 +166,12 @@ module Geolocation
       latitude.present? && longitude.present?
     end
 
+    # A search for a named place (city, town, county or region) rather than a
+    # point. Distances are measured from its centre, so we tell the candidate.
+    def area_search?
+      city_only? || has_type?("administrative_area_level_1", "administrative_area_level_2")
+    end
+
   private
 
     def full_postcode?
