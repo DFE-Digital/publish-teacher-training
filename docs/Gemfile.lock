@@ -319,7 +319,7 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  govuk_tech_docs (~> 6.4)
+  govuk_tech_docs (~> 6.4.1)
   rspec
 
 RUBY VERSION
