@@ -515,7 +515,7 @@ RSpec.describe "Viewing my saved courses", service: :find do
 
   def and_i_see_distance_information
     expect(page).to have_content("Nearest placement school")
-    expect(page).to have_content("from London")
+    expect(page).to have_content("from the centre of London")
   end
 
   def then_i_see_placement_hint

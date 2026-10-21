@@ -112,6 +112,7 @@ module Find
         @pagy, @saved_courses = pagy(saved_courses, count: saved_courses_query.count)
         @current_cycle_courses_by_key = current_cycle_courses_by_key(@saved_courses)
         @short_address = @address&.short_address
+        @centre_of_location = @address&.area_search?
         @order = query_params[:order]
       end
 
