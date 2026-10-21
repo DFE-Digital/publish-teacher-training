@@ -50,6 +50,14 @@ when the app no longer writes or reconciles Redis.
    Terraform only for a soak and verification window, then a follow-up removes
    the infrastructure.
 
+5. **Column removal is staged across releases.** Keep `legacy_redis_synced_at`
+   on `feature_flag_state` and `site_setting` while older pods still use it
+   during rolling deployment. The new models ignore the columns, and they
+   remain on the analytics blocklist. Drop them in a later release, once all
+   environments run this code and no supported rollback needs them. Keeping
+   the columns does not make a release that reconciles from Redis safe to
+   redeploy: that reconciliation can overwrite newer Postgres state.
+
 ## Consequences
 
 - Ops use Mission Control and Solid Queue tables, not Sidekiq Web or Redis keys

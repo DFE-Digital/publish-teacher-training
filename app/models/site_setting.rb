@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class SiteSetting < ApplicationRecord
+  # Keep the column for old pods during this rollout; drop it in a later release.
+  self.ignored_columns += %w[legacy_redis_synced_at]
+
   NAMES = %w[cycle_schedule deadline_banner].freeze
 
   validates :name, inclusion: { in: NAMES }

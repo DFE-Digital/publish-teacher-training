@@ -350,7 +350,7 @@ module Find
       schedule = SiteSetting.cycle_schedule
 
       # An option the switcher does not offer, such as one an earlier deploy
-      # left in Redis, would match no phase and leave every predicate false.
+      # stored, would match no phase and leave every predicate false.
       # Read it as the real cycle instead.
       return :real unless SWITCHER_OPTIONS.key?(schedule)
 

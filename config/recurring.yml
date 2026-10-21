@@ -6,9 +6,10 @@
 # The solid-queue-worker runs the scheduler. Every replica runs one, and the unique
 # (task_key, run_at) index on solid_queue_recurring_executions enqueues each run once.
 #
-# Rollback steps: guides/solid-queue-recurring-cutover.md
+# Deployment checks: guides/solid-queue-recurring-cutover.md
+# Rollback boundary: guides/adr/0022-solid-queue-and-redis-independence.md
 
-# Finished-job / batch cleanup for environments that will run the scheduler after cutover.
+# Finished-job / batch cleanup for environments that run the scheduler.
 # Routed to low_priority so command jobs land on a consumed queue.
 cleanup: &cleanup
   clear_solid_queue_finished_jobs:
