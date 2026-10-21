@@ -224,4 +224,58 @@ RSpec.describe Geolocation::Address do
       end
     end
   end
+
+  describe "#area_search?" do
+    it "is true for a city or town" do
+      address = described_class.new(query: "Manchester", locality: "Manchester", address_types: %w[locality political])
+
+      expect(address.area_search?).to be(true)
+    end
+
+    it "is true for a county" do
+      address = described_class.new(query: "Cornwall", administrative_area_level_2: "Cornwall", address_types: %w[administrative_area_level_2 political])
+
+      expect(address.area_search?).to be(true)
+    end
+
+    it "is true for a region" do
+      address = described_class.new(query: "Wales", administrative_area_level_1: "Wales", address_types: %w[administrative_area_level_1 political])
+
+      expect(address.area_search?).to be(true)
+    end
+
+    it "is false for a full postcode" do
+      address = described_class.new(query: "SW1H 9AJ", postal_code: "SW1H 9AJ", postal_town: "London", locality: "London", address_types: %w[postal_code])
+
+      expect(address.area_search?).to be(false)
+    end
+
+    it "is false for a postcode area" do
+      address = described_class.new(query: "M1", postal_code: "M1", postal_town: "Manchester", locality: "Manchester", address_types: %w[postal_code])
+
+      expect(address.area_search?).to be(false)
+    end
+
+    it "is false for a street" do
+      address = described_class.new(query: "Oxford Street, London", route: "Oxford Street", postal_town: "London", locality: "London", address_types: %w[route])
+
+      expect(address.area_search?).to be(false)
+    end
+
+    it "is false for a train station" do
+      address = described_class.new(query: "King's Cross Station", route: "King's Cross St Pancras", postal_code: "WC1H 7PL", postal_town: "London", address_types: %w[train_station transit_station])
+
+      expect(address.area_search?).to be(false)
+    end
+
+    it "is false for a district" do
+      address = described_class.new(query: "Shoreditch, London", administrative_area_level_4: "Shoreditch", locality: "London", address_types: %w[neighborhood political])
+
+      expect(address.area_search?).to be(false)
+    end
+
+    it "is false when there is no location" do
+      expect(described_class.new.area_search?).to be(false)
+    end
+  end
 end
