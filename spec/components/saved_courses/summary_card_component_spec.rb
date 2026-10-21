@@ -206,4 +206,28 @@ RSpec.describe SavedCourses::SummaryCardComponent, type: :component do
       end
     end
   end
+
+  context "when searching by location" do
+    let(:rendered) do
+      render_inline(described_class.new(saved_course:, location: "Cornwall, UK", short_address: "Cornwall", centre_of_location:))
+    end
+
+    before { saved_course.define_singleton_method(:minimum_distance_to_search_location) { 3.2 } }
+
+    context "when searching by city or region" do
+      let(:centre_of_location) { true }
+
+      it "says the distance is from the centre of the location" do
+        expect(summary_card_content).to include("Nearest placement school 4 miles from the centre of Cornwall")
+      end
+    end
+
+    context "when searching by postcode or address" do
+      let(:centre_of_location) { false }
+
+      it "says the distance is from the location" do
+        expect(summary_card_content).to include("Nearest placement school 4 miles from Cornwall")
+      end
+    end
+  end
 end

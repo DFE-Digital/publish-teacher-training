@@ -4,11 +4,11 @@ module SavedCourses
   class SummaryCardComponent < Courses::SummaryCardComponent
     attr_reader :saved_course, :order, :current_cycle_course
 
-    def initialize(saved_course:, current_cycle_course: nil, location: nil, short_address: nil, order: nil)
+    def initialize(saved_course:, current_cycle_course: nil, location: nil, short_address: nil, centre_of_location: false, order: nil)
       @saved_course = saved_course
       @current_cycle_course = current_cycle_course
       @order = order
-      super(course: saved_course.course, location: location, short_address: short_address)
+      super(course: saved_course.course, location: location, short_address: short_address, centre_of_location: centre_of_location)
     end
 
     def nearest_placement_school_key
@@ -56,7 +56,7 @@ module SavedCourses
       return unless search_by_location?
 
       t(
-        ".distance_html",
+        @centre_of_location ? ".distance_from_centre_html" : ".distance_html",
         distance: content_tag(:strong, pluralize(saved_course.minimum_distance_to_search_location.ceil, "mile")),
         location: content_tag(:strong, sanitize(@short_address.presence || @location)),
       ).html_safe

@@ -4,6 +4,7 @@ en:
       nearest_placement_school: Nearest placement school
       no_employing_schools: No employing schools listed
       distance_html: "%{distance} from %{location}"
+      distance_from_centre_html: "%{distance} from the centre of %{location}"
       placement_hint: Add a location to see the nearest potential placement school
       delete: Delete
       fee_key: Fee or salary
