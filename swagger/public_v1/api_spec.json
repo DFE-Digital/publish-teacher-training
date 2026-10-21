@@ -307,7 +307,8 @@
           },
           "has_vacancies": {
             "type": "boolean",
-            "description": "Do any of the locations for this course have vacancies?",
+            "deprecated": true,
+            "description": "Deprecated. This field no longer indicates whether a course has vacancies. It returns the same value as `open_for_applications` and `running`: true only when the course is published and currently open for applications. This field may be removed in a future version of the API.",
             "example": true
           },
           "how_school_placements_work": {
@@ -364,7 +365,8 @@
           },
           "open_for_applications": {
             "type": "boolean",
-            "description": "Is the course currently open for applications?",
+            "deprecated": true,
+            "description": "Deprecated. This field returns the same value as `has_vacancies` and `running`: true only when the course is published and currently open for applications. This field may be removed in a future version of the API.",
             "example": true
           },
           "other_requirements": {
@@ -487,7 +489,8 @@
           },
           "running": {
             "type": "boolean",
-            "description": "Is the course currently running.",
+            "deprecated": true,
+            "description": "Deprecated. This field no longer indicates whether a course is running at any of its locations. It returns the same value as `has_vacancies` and `open_for_applications`: true only when the course is published and currently open for applications. This field may be removed in a future version of the API.",
             "example": true
           },
           "salary_details": {
