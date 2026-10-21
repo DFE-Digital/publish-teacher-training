@@ -141,6 +141,21 @@ describe Find::Courses::TrainingLocations::View, type: :component do
       end
     end
 
+    context "when searching by city or region" do
+      let(:course) { create(:course, :with_full_time_sites, funding: "fee", study_sites: [build(:site, :study_site)]) }
+      let(:address) do
+        Geolocation::Address.new(
+          query: "Cornwall",
+          latitude: 50.5, longitude: -4.9, formatted_address: "Cornwall, UK",
+          administrative_area_level_2: "Cornwall", address_types: %w[administrative_area_level_2 political]
+        )
+      end
+
+      it "says the distance is from the centre of the location" do
+        expect(component.potential_placements_text).to eq('<span class="govuk-!-font-weight-bold">10 miles</span> from the centre of <span class="govuk-!-font-weight-bold">Cornwall</span>')
+      end
+    end
+
     # A located search can resolve an address but still find no school to measure
     # from - a course with no schools attached, or none of them geocoded.
     context "when there is no distance to report" do
