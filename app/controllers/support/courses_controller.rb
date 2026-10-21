@@ -3,7 +3,11 @@
 module Support
   class CoursesController < ApplicationController
     def index
-      @pagy, @courses = pagy(courses_with_row_associations.order(:name))
+      rows = course_list_rows
+      @course_count = rows.size
+      @course_information_fields = Publish::CourseList.visible_course_information_fields(rows)
+      @show_accredited_provider = rows.any? { |course| course.accredited_provider_code.present? }
+      @pagy, @courses = pagy(courses_with_row_associations.order(:name), count: @course_count)
     rescue ActiveRecord::RecordNotFound
       flash[:warning] = "Provider not found"
       redirect_to support_recruitment_cycle_providers_path
@@ -37,6 +41,12 @@ module Support
     # accrediting_provider scope depends on the course's recruitment cycle, so
     # it must come after provider: :recruitment_cycle - preloaded the other way
     # round, evaluating that scope loads the provider and cycle per course.
+    # The columns that decide the count, the course-information lines and the
+    # accredited-provider column. Narrower than loading each course in full.
+    def course_list_rows
+      provider.courses.select(:id, :funding, :qualification, :study_mode, :start_date, :accredited_provider_code).to_a
+    end
+
     def courses_with_row_associations
       provider.courses.preload(:site_statuses, :latest_enrichment, :enrichments, { provider: :recruitment_cycle }, :accrediting_provider)
     end
