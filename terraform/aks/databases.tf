@@ -1,3 +1,5 @@
+# Redis instances remain temporarily to verify zero application usage before
+# deletion. Their URLs are no longer injected, and they provide no rollback path.
 module "redis_worker" {
   source = "./vendor/modules/aks//aks/redis"
 

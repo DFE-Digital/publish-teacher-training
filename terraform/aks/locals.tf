@@ -1,15 +1,11 @@
 locals {
   app_name_suffix             = var.app_name == null ? var.app_environment : "${var.app_environment}-${var.app_name}"
   review_additional_hostnames = var.app_environment == "review" ? ["find-${local.app_name_suffix}.${var.cluster}.teacherservices.cloud", "publish-${local.app_name_suffix}-api.${var.cluster}.teacherservices.cloud"] : ["find-${local.app_name_suffix}.${var.cluster}.development.teacherservices.cloud"]
-  db_setup_command    = ["/app/bin/start-web", "db:setup"]
-  postgres_extensions = ["PG_BUFFERCACHE", "PG_STAT_STATEMENTS", "BTREE_GIN", "BTREE_GIST", "CITEXT", "UUID-OSSP", "POSTGIS"]
-  # Redis instances and URLs are retained temporarily to verify zero application
-  # usage before deletion. Retaining Redis does not provide a rollback path.
+  db_setup_command            = ["/app/bin/start-web", "db:setup"]
+  postgres_extensions         = ["PG_BUFFERCACHE", "PG_STAT_STATEMENTS", "BTREE_GIN", "BTREE_GIST", "CITEXT", "UUID-OSSP", "POSTGIS"]
   app_secrets = merge(
     {
-      DATABASE_URL     = module.postgres.url
-      REDIS_CACHE_URL  = module.redis_cache.url
-      REDIS_WORKER_URL = module.redis_worker.url
+      DATABASE_URL = module.postgres.url
     },
 
     {

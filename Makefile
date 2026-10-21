@@ -154,7 +154,7 @@ logs-tail: get-cluster-credentials ## Tail logs filtering out pings and healthch
 
 worker-logs: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
-	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID}-worker --tail=-1 --timestamps=true
+	kubectl -n ${NAMESPACE} logs -l app=publish-${APP_ID}-solid-queue-worker --tail=-1 --timestamps=true
 
 shell: get-cluster-credentials ## Start an ssh shell on the web pod
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
@@ -162,7 +162,7 @@ shell: get-cluster-credentials ## Start an ssh shell on the web pod
 
 worker-shell: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export APP_ID=review-$(PR_NUMBER)) , $(eval export APP_ID=$(CONFIG_LONG)))
-	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID}-worker -- /bin/sh
+	kubectl -n ${NAMESPACE} exec -ti --tty deployment/publish-${APP_ID}-solid-queue-worker -- /bin/sh
 
 .PHONY: vendor-modules
 vendor-modules:
@@ -364,7 +364,7 @@ show-service: get-cluster-credentials
 	$(eval NAMESPACE=$(shell jq -r '.namespace' terraform/aks/workspace_variables/$(CONFIG).tfvars.json))
 	echo "Show service deployments"
 	kubectl -n ${NAMESPACE} get deployment/${SERVICE_NAME}${DSUFFIX}
-	kubectl -n ${NAMESPACE} get deployment/${SERVICE_NAME}${DSUFFIX}-worker
+	kubectl -n ${NAMESPACE} get deployment/${SERVICE_NAME}${DSUFFIX}-solid-queue-worker
 
 scale-app: get-cluster-credentials
 	$(if $(PR_NUMBER), $(eval export DSUFFIX="-review-${PR_NUMBER}"), $(eval export DSUFFIX="-${CONFIG}") )
@@ -378,4 +378,4 @@ scale-worker: get-cluster-credentials
 	$(if $(REPLICAS),,$(error Missing REPLICAS))
 	$(eval NAMESPACE=$(shell jq -r '.namespace' terraform/aks/workspace_variables/$(CONFIG).tfvars.json))
 	echo "Scaling worker to ${REPLICAS}"
-	kubectl -n ${NAMESPACE} scale deployment/${SERVICE_NAME}${DSUFFIX}-worker --replicas ${REPLICAS}
+	kubectl -n ${NAMESPACE} scale deployment/${SERVICE_NAME}${DSUFFIX}-solid-queue-worker --replicas ${REPLICAS}
