@@ -43,6 +43,7 @@ This repo is home to three services:
 - [API](guides/api.md)
 - [Monitoring](guides/monitoring.md)
 - [Healthchecks](guides/healthchecks.md)
+- [Sidekiq and Redis migration history](guides/adr/0023-complete-sidekiq-and-redis-retirement.md)
 - [Find Opens](guides/find-opens/README.md)
 - [Rollover](guides/rollover.md)
 - [Cycle period testing](guides/cycle-period-testing.md)

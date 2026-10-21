@@ -22,3 +22,4 @@
 * [20. Find non-location course search](0020-find-non-location-course-search.md)
 * [21. Find location course search](0021-find-location-course-search.md)
 * [22. Solid Queue on the primary database and Redis independence](0022-solid-queue-and-redis-independence.md)
+* [23. Complete the Sidekiq and Redis retirement](0023-complete-sidekiq-and-redis-retirement.md)
