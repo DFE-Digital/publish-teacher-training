@@ -286,7 +286,7 @@ RSpec.describe "Search results by subject and location", :js, service: :find do
   end
 
   def and_i_can_see_the_distance_from_london
-    expect(page).to have_content("1 mile from London")
+    expect(page).to have_content("1 mile from the centre of London")
   end
 
   def and_the_result_headers_are_visible

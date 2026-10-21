@@ -64,11 +64,19 @@ module Find
           content_tag(:span, I18n.t(".find.courses.training_locations.view.potential_study_sites_hint_text"), class: "govuk-hint govuk-!-font-size-16") if course.study_sites.none?
         end
 
+        # Cities and regions are measured from their centre, not their boundary,
+        # and are named as on the results card ("Cornwall", not "Cornwall, UK").
         def distance_text
+          key, location = if address.area_search?
+                            ["distance_from_centre", address.short_address]
+                          else
+                            ["distance", address.formatted_address]
+                          end
+
           I18n.t(
-            ".find.courses.training_locations.view.distance",
+            ".find.courses.training_locations.view.#{key}",
             distance: content_tag(:span, pluralize(distance_from_location, "mile"), class: "govuk-!-font-weight-bold"),
-            location: content_tag(:span, sanitize(address.formatted_address), class: "govuk-!-font-weight-bold"),
+            location: content_tag(:span, sanitize(location), class: "govuk-!-font-weight-bold"),
           ).html_safe
         end
 
