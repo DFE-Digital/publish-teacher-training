@@ -44,10 +44,11 @@ when the app no longer writes or reconciles Redis.
    removed. `/healthcheck` checks the database and Solid Queue process
    heartbeats only.
 
-4. **Redis retention and rollback boundary.** Redis instances and `REDIS_*`
-   URL injection are retained temporarily to verify zero application usage
-   before deletion. Check for unexpected application connections, reads and
-   writes, then remove the infrastructure in a follow-up change.
+4. **Redis retention and rollback boundary.** Redis instances are retained
+   temporarily to verify zero application usage before deletion. `REDIS_*`
+   URLs are no longer injected into application pods. Check for unexpected
+   application connections, reads and writes, then remove the infrastructure
+   in a follow-up change.
 
    Retaining Redis does not provide a rollback path. Once the app stops
    mirroring changes, Redis state becomes stale. Redeploying a release that
@@ -69,5 +70,5 @@ when the app no longer writes or reconciles Redis.
 - Ops use Mission Control and Solid Queue tables, not Sidekiq Web or Redis keys
 - Nightly database restores continue to preserve each environment's feature
   flags and site settings
-- A later change deletes `redis_worker`, `redis_cache`, endpoints, alerts, and
-  URL injection once verification confirms zero application usage
+- A later change deletes `redis_worker`, `redis_cache`, endpoints and alerts
+  once verification confirms zero application usage
