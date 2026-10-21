@@ -75,8 +75,10 @@ RSpec.describe "Support::CoursesController#index", travel: mid_cycle do
     expect(headers).to eq(["Course", "Course information", "Status", ""])
 
     primary = response.parsed_body.css(".course-row").find { |row| row.text.include?("Primary") }
+    expect(primary.at_css(".name a")[:class]).to include("govuk-!-font-weight-bold")
     expect(primary.at_css(".govuk-hint").text.strip).to eq("Ages 5 to 11")
     expect(primary.at_css(".course-information").text).to include("Fee-paying", "QTS with PGCE", "Full time", "September #{cycle_year}")
+    expect(primary.at_css(".course-information span")[:class]).to include("govuk-!-margin-bottom-0")
 
     physics = response.parsed_body.css(".course-row").find { |row| row.text.include?("Physics") }
     expect(physics.at_css(".govuk-hint")).to be_nil
@@ -128,23 +130,28 @@ RSpec.describe "Support::CoursesController#index", travel: mid_cycle do
 
     get_courses(provider)
 
-    expect(headers).to include("Accredited provider")
-    expect(headers).not_to include("Ratifying Provider")
+    expect(headers).to eq(["Course", "Accredited provider", "Status", ""])
+    accredited_provider_header = response.parsed_body.css("th").find { |header| header.text.strip == "Accredited provider" }
+    expect(accredited_provider_header[:class]).to include("govuk-!-width-one-quarter")
     expect(response.body).to include("University of Chester")
   end
 
   it "shows only the course information fields that vary" do
     provider = create(:provider)
+    accredited_provider = create(:accredited_provider, recruitment_cycle: provider.recruitment_cycle)
     shared = {
       provider:,
       funding: "fee",
       qualification: :qts,
       start_date: Time.zone.local(provider.recruitment_cycle.year.to_i, 9, 1),
+      accredited_provider_code: accredited_provider.provider_code,
     }
     create(:course, **shared, name: "Biology", study_mode: :full_time)
     create(:course, **shared, name: "Chemistry", study_mode: :part_time)
 
     get_courses(provider)
+
+    expect(headers).to eq(["Course", "Accredited provider", "Course information", "Status", ""])
 
     biology = response.parsed_body.css(".course-row").find { |row| row.text.include?("Biology") }
     information = biology.at_css(".course-information").text
