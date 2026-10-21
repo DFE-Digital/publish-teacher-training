@@ -2,6 +2,13 @@ en:
   support:
     courses:
       index:
+        course_count:
+          one: 1 course
+          other: "%{count} courses"
+        course: Course
+        course_information: Course information
+        status: Status
+        accredited_provider: Accredited provider
         downloads:
           heading: Download course information
           course_information: Download basic course information (CSV)
