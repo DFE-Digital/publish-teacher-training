@@ -306,6 +306,7 @@ en:
           default: "employing"
         nearest_school_html: Nearest %{school_term} school %{distance}
         from_location_html: from %{location}
+        from_centre_of_location_html: from the centre of %{location}
       funding:
         salary: Salary
         apprenticeship: Apprenticeship (salary)

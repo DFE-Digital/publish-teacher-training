@@ -264,6 +264,18 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         end
       end
 
+      context "when searching by city or region" do
+        let(:funding) { :fee }
+        let(:summary_card) do
+          render_inline(described_class.new(course:, location: "Cornwall, UK", short_address: "Cornwall", centre_of_location: true))
+        end
+
+        it "says the distance is from the centre of the location" do
+          expect(summary_card).to have_css("p", text: "Nearest placement school 1 mile")
+          expect(summary_card).to have_css(".govuk-hint.govuk-\\!-font-size-16", text: /\Afrom the centre of Cornwall\z/)
+        end
+      end
+
       context "when the search location contains an ampersand" do
         let(:funding) { :fee }
         let(:search_params) { { location: "Hammersmith & City, London", latitude: 1, longitude: 1 } }
