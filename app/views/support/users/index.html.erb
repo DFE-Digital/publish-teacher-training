@@ -4,7 +4,7 @@
 
 <div class="govuk-button-group">
   <%= link_to "Add a user", new_support_recruitment_cycle_user_path, class: "govuk-button govuk-button--primary" %>
-  <%= link_to "Download users (CSV)", support_recruitment_cycle_data_exports_path(anchor: "users"), class: "govuk-button govuk-button--secondary" %>
+  <%= link_to "Download Publish users (CSV)", support_recruitment_cycle_data_exports_path(anchor: "users"), class: "govuk-button govuk-button--secondary" %>
 </div>
 
 <%= render PaginatedFilter.new(filter_params: @filter_params, collection: @users, pagy: @pagy) do %>
