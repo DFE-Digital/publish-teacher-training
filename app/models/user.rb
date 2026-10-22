@@ -56,9 +56,9 @@ class User < ApplicationRecord
 
   pg_search_scope :search, against: %i[first_name last_name email], using: { tsearch: { prefix: true } }
 
-  validates :first_name, presence: { message: "Enter a first name" }
-  validates :last_name, presence: { message: "Enter a last name" }
-  validates :email, presence: { message: "Enter an email address in the correct format, like name@example.com" }, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }, uniqueness: true
 
   validates :email, if: :admin?, format: {
     with: /\A.*@(digital\.){0,1}education\.gov\.uk\z/,
