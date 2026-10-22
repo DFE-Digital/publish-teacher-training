@@ -1,0 +1,12 @@
+<% if show?(:funding) %>
+  <span class="govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0"><%= labels.funding %></span>
+<% end %>
+<% if show?(:qualification) %>
+  <span class="govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0"><%= labels.qualification %></span>
+<% end %>
+<% if show?(:study_mode) %>
+  <span class="govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0"><%= labels.study_mode %></span>
+<% end %>
+<% if show?(:start_date) && labels.start_date %>
+  <span class="govuk-body-s govuk-!-display-block govuk-!-margin-bottom-0 govuk-!-font-size-16"><%= labels.start_date %></span>
+<% end %>

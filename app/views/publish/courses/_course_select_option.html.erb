@@ -6,16 +6,11 @@
          age_range: other_course.age_range,
        )
      end %>
-<% funding_label = I18n.t("publish.courses.course_table.funding.#{other_course.funding}") %>
-<% qualification_label = other_course.qualifications_summary %>
-<% study_mode_label = other_course.study_mode_description.capitalize %>
-<% start_date_label =
-     if other_course.start_date.present?
-       I18n.l(
-         other_course.start_date.to_date,
-         format: :short,
-       )
-     end %>
+<% labels = Courses::InformationLabels.new(other_course) %>
+<% funding_label = labels.funding %>
+<% qualification_label = labels.qualification %>
+<% study_mode_label = labels.study_mode %>
+<% start_date_label = labels.start_date %>
 <%# Option attributes used by the Stimulus controller %>
 <option
   value="<%= other_course.course_code %>"

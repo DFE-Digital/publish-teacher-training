@@ -34,6 +34,12 @@ module Support
       @provider ||= recruitment_cycle.providers.find(params[:provider_id])
     end
 
+    # The columns that decide the count, the course-information lines and the
+    # accredited-provider column. Narrower than loading each course in full.
+    def course_list_rows
+      provider.courses.select(:id, :funding, :qualification, :study_mode, :start_date, :accredited_provider_code).to_a
+    end
+
     # Everything a row of the list reads: the status tag (site statuses, the
     # enrichments, the provider's cycle) and the ratifying provider. A course
     # that has never been published reads the enrichments as well as the
@@ -41,12 +47,6 @@ module Support
     # accrediting_provider scope depends on the course's recruitment cycle, so
     # it must come after provider: :recruitment_cycle - preloaded the other way
     # round, evaluating that scope loads the provider and cycle per course.
-    # The columns that decide the count, the course-information lines and the
-    # accredited-provider column. Narrower than loading each course in full.
-    def course_list_rows
-      provider.courses.select(:id, :funding, :qualification, :study_mode, :start_date, :accredited_provider_code).to_a
-    end
-
     def courses_with_row_associations
       provider.courses.preload(:site_statuses, :latest_enrichment, :enrichments, { provider: :recruitment_cycle }, :accrediting_provider)
     end

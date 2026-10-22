@@ -24,12 +24,9 @@ module Publish
         end
 
         def course_information(course)
-          [
-            I18n.t("publish.courses.course_table.funding.#{course.funding}"),
-            course.qualifications_summary,
-            course.study_mode_description.capitalize,
-            start_date(course),
-          ].compact_blank.join(", ")
+          labels = ::Courses::InformationLabels.new(course)
+
+          [labels.funding, labels.qualification, labels.study_mode, labels.start_date].compact_blank.join(", ")
         end
 
         def link_to_course?
@@ -39,12 +36,6 @@ module Publish
       private
 
         attr_reader :courses, :provider
-
-        def start_date(course)
-          return if course.start_date.blank?
-
-          I18n.l(course.start_date.to_date, format: :short)
-        end
       end
     end
   end
