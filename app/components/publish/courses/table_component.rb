@@ -100,18 +100,8 @@ module Publish
         "Ages #{course.age_range}"
       end
 
-      def funding_label(course)
-        I18n.t("publish.courses.course_table.funding.#{course.funding}")
-      end
-
-      def study_type_label(course)
-        course.study_mode_description.capitalize
-      end
-
       def start_date(course)
-        return if course.start_date.blank?
-
-        I18n.l(course.start_date.to_date, format: :short)
+        ::Courses::InformationLabels.new(course).start_date
       end
 
       def recruitment_cycle_year(course)
