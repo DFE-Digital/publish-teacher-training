@@ -4,10 +4,7 @@ Date: 21 October 2026
 
 ## Status
 
-Proposed
-
-This draft describes the completed retirement. Accept it once the teardown has
-been verified in every environment; the wording below is not deployment evidence.
+Accepted
 
 ## Context
 
