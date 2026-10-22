@@ -1,7 +1,7 @@
 locals {
   app_name_suffix             = var.app_name == null ? var.app_environment : "${var.app_environment}-${var.app_name}"
   review_additional_hostnames = var.app_environment == "review" ? ["find-${local.app_name_suffix}.${var.cluster}.teacherservices.cloud", "publish-${local.app_name_suffix}-api.${var.cluster}.teacherservices.cloud"] : ["find-${local.app_name_suffix}.${var.cluster}.development.teacherservices.cloud"]
-  db_setup_command            = ["/app/bin/start-web", "db:setup"]
+  db_setup_command            = ["/app/bin/start-web", "db:prepare"]
   postgres_extensions         = ["PG_BUFFERCACHE", "PG_STAT_STATEMENTS", "BTREE_GIN", "BTREE_GIST", "CITEXT", "UUID-OSSP", "POSTGIS"]
   app_secrets = merge(
     {
