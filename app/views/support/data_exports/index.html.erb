@@ -1,15 +1,27 @@
 <%= render PageTitle.new(title: "support.data_exports.index") %>
 
-<h1 class="govuk-heading-l">Data Exports</h1>
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year]),
+  ) %>
+<% end %>
+
+<h1 class="govuk-heading-l">Download Publish users</h1>
 
 <% @data_exports.each do |data_export| %>
   <section class="app-section app-section--with-top-border" id="<%= data_export.type %>">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m"><%= t(".#{data_export.type}.name") %></h2>
         <p class="govuk-body"><%= t(".#{data_export.type}.description") %></p>
+        <p class="govuk-body"><%= t(".#{data_export.type}.ul_header") %></p>
+        <ul class="govuk-list govuk-list--bullet">
+          <% t(".#{data_export.type}.columns").each do |column| %>
+           <li><%= column %></li>
+          <% end %>
+        </ul>
 
-        <%= govuk_button_to "Download CSV", download_support_recruitment_cycle_data_export_path(params[:recruitment_cycle_year], data_export.type), class: "govuk-button--secondary" %>
+        <%= govuk_button_to "Download Publish users (CSV)", download_support_recruitment_cycle_data_export_path(params[:recruitment_cycle_year], data_export.type), class: "govuk-button" %>
       </div>
     </div>
   </section>
