@@ -36,11 +36,11 @@ RSpec.describe "Course show", travel: mid_cycle(2025) do
     scenario "blank training with disabilities and other needs" do
       given_i_am_authenticated(user: user_with_no_course_enrichments)
       when_i_visit_the_publish_course_preview_page
-      and_i_click_link_or_button("Find out about training with disabilities and other needs at #{@course.provider_name}")
+      and_i_click_link_or_button("Find out about adjustments to help you train to teach at #{@course.provider_name}")
       and_i_click_link_or_button("Enter details about training with disabilities and other needs")
       then_i_should_be_on_the_training_with_disabilities_page
       and_i_submit_a_valid_about_training_with_disabilities
-      then_i_should_be_on_the_training_with_disabilities_page
+      then_i_should_see_the_adjustments_heading
       then_i_should_see_the_updated_content("test training with disabilities")
       and_i_click_link_or_button("Back to #{@course.name} (#{course.course_code})")
       then_i_should_be_back_on_the_preview_page
@@ -223,7 +223,10 @@ private
     expect(publish_course_preview_page).not_to have_salary_details
 
     expect(publish_course_preview_page).to have_content(
-      "Training with disabilities",
+      "Adjustments to help you train to teach",
+    )
+    expect(publish_course_preview_page).to have_content(
+      "Teacher training providers can make adjustments if you need support to become a teacher. This includes support for neurodiversity, long-term physical or mental health conditions, or other accessibility needs.",
     )
 
     expect(publish_course_preview_page).to have_content "2:1 bachelor’s degree or above or equivalent qualification"
@@ -390,7 +393,7 @@ private
   def and_i_submit_a_valid_about_training_with_disabilities
     page.find("#publish-disability-support-form-train-with-disability-field").set("test training with disabilities")
 
-    click_link_or_button "Update training with disabilities"
+    click_link_or_button "Update adjustments to help you train to teach"
   end
 
   def and_i_submit_a_valid_about_your_organisation
@@ -510,7 +513,11 @@ private
   end
 
   def then_i_should_be_on_the_training_with_disabilities_page
-    expect(page).to have_content("Training with disabilities and other needs")
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
+  end
+
+  def then_i_should_see_the_adjustments_heading
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach at #{@course.provider_name}")
   end
 
   def then_i_see_no_school_placements_link

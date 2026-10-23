@@ -34,7 +34,7 @@ en:
         get_a_teacher_training_adviser_link_text: get a teacher training adviser
         contact_get_into_teaching_link_text: contact Get Into Teaching
       train_with_disabilities:
-        heading: Training with disabilities and other needs at %{provider_name}
+        heading: Adjustments to help you train to teach at %{provider_name}
       international_students_component:
         view:
           student_visas_can_be_sponsored: Student visas can be sponsored
@@ -107,7 +107,7 @@ en:
           address: Address
       training_with_disabilities:
         show:
-          heading: Training with disabilities and other needs at %{provider_name}
+          heading: Adjustments to help you train to teach at %{provider_name}
           back: Back to %{course_name} (%{course_code})
           contact: Contact %{provider_name}
       about_schools_component:
@@ -145,8 +145,9 @@ en:
         back_to_search: Back to search results
         back_to_saved_courses: Back to saved courses
         contents_header: Contents
-        training_with_disabilities: Training with disabilities
-        training_with_disabilities_link: Find out about training with disabilities and other needs at %{provider_name}.
+        training_with_disabilities: Adjustments to help you train to teach
+        training_with_disabilities_body: Teacher training providers can make adjustments if you need support to become a teacher. This includes support for neurodiversity, long-term physical or mental health conditions, or other accessibility needs.
+        training_with_disabilities_link: Find out about adjustments to help you train to teach at %{provider_name}.
         why_train_with_us: Why train with us
         where_you_will_train: Where you will train
         where_you_will_train_fee_based_text: You will spend a minimum of 24 weeks on school placements. This time is spread across at least 2 schools. You will also spend time in a location to study.

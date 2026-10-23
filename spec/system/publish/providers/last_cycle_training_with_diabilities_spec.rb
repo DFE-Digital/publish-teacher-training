@@ -17,7 +17,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
 
     when_i_visit_the_organisation_page
     then_i_visit_the_disability_support_page
-    expect(page).to have_content("Training with disabilities and other needs")
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
     expect(page).to have_content(@previous_cycle_provider.train_with_disability)
   end
 
@@ -33,7 +33,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
     and_the_same_provider_existed_this_cycle_with_disability_filled_in
 
     when_i_visit_the_next_cycle_disability_support_page
-    expect(page).to have_content("Training with disabilities and other needs")
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
     expect(page).to have_content("See what you wrote last cycle")
     expect(page).to have_content(@current_cycle_provider.train_with_disability)
   end
@@ -46,7 +46,7 @@ RSpec.describe "Editing a courses interview process with long form content", ser
   def then_i_visit_the_disability_support_page
     click_link "Change details about training with disabilities and other needs"
     expect(page).to have_current_path("/publish/organisations/#{@provider.provider_code}/#{RecruitmentCycle.current.year}/training-with-disabilities/edit")
-    expect(page).to have_content("Training with disabilities and other needs")
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
   end
 
   def given_there_is_a_provider
