@@ -83,7 +83,7 @@ RSpec.describe Courses::PublishService do
     end
   end
 
-  describe "site publishing behavior" do
+  describe "legacy site statuses" do
     context "on an old course with a site" do
       let(:course) { create(:course, :publishable, site_statuses: [published_new_site], age: 5.days.ago) }
 
@@ -116,30 +116,12 @@ RSpec.describe Courses::PublishService do
         subject.call
       end
 
-      it "sets all the sites to the right published/status states" do
-        expect(published_new_site.reload).to be_published_on_ucas
-        expect(published_new_site).to be_status_running
+      it "leaves legacy site statuses as they were" do
+        expect(unpublished_new_site.reload).to be_unpublished_on_ucas
+        expect(unpublished_new_site).to be_status_new_status
 
-        expect(published_running_site.reload).to be_published_on_ucas
-        expect(published_running_site).to be_status_running
-
-        expect(published_discontinued_site.reload).to be_published_on_ucas
-        expect(published_discontinued_site).to be_status_discontinued
-
-        expect(published_suspended_site.reload).to be_published_on_ucas
-        expect(published_suspended_site).to be_status_suspended
-
-        expect(unpublished_new_site.reload).to be_published_on_ucas
-        expect(unpublished_new_site).to be_status_running
-
-        expect(unpublished_running_site.reload).to be_published_on_ucas
-        expect(unpublished_running_site).to be_status_running
-
-        expect(unpublished_discontinued_site.reload).to be_unpublished_on_ucas
-        expect(unpublished_discontinued_site).to be_status_discontinued
-
-        expect(unpublished_suspended_site.reload).to be_unpublished_on_ucas
-        expect(unpublished_suspended_site).to be_status_suspended
+        expect(published_new_site.reload).to be_status_new_status
+        expect(unpublished_running_site.reload).to be_unpublished_on_ucas
       end
     end
   end
@@ -166,10 +148,10 @@ RSpec.describe Courses::PublishService do
 
   describe "publishing failure" do
     it "keeps the course unpublished" do
-      allow(Course).to receive(:find_by).with({ uuid: uuid }).and_return(course)
-      allow(subject).to receive(:publish_sites).and_raise(AASM::UnknownStateMachineError)
-      subject.call
-    rescue AASM::UnknownStateMachineError
+      attach_course_school(course)
+      allow(course).to receive(:set_first_published_at!).and_raise(ActiveRecord::RecordInvalid)
+
+      expect { subject.call }.to raise_error(ActiveRecord::RecordInvalid)
       expect(course.reload).not_to be_published
     end
   end

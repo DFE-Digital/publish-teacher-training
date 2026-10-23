@@ -1068,6 +1068,11 @@ en:
           attributes:
             school_id:
               blank: "Select the school to continue. If this school is not correct you can change your search."
+        provider_schools/check_form:
+          attributes:
+            gias_school:
+              already_added: "This school has already been added"
+              incomplete_address: "The address we hold for this school is incomplete. Ask the school to update its details on Get Information About Schools (GIAS)."
         support/providers/schools/search_form:
           attributes:
             school:
@@ -1080,39 +1085,11 @@ en:
             values:
               blank: "Enter URNs"
               too_long: "You have entered too many URNs. You can enter a maximum of 50 URNs."
-        support/school_form:
-          attributes:
-            location_name:
-              blank: "Enter a name"
-              taken: "Name is taken"
-            address1:
-              blank: "Enter address line 1"
-            town:
-              blank: "Enter a town or city"
-            postcode:
-              blank: "Enter a postcode"
-              invalid: "Enter a real postcode"
-            urn:
-              format: "URN must be 5 or 6 numbers"
         publish/authentication/magic_link_form:
           attributes:
             email:
               blank: "Enter an email adddress"
               invalid: "Enter a valid email address"
-        publish/school_form:
-          attributes:
-            location_name:
-              blank: "Enter a name"
-              taken: "Name is taken"
-            address1:
-              blank: "Enter address line 1"
-            town:
-              blank: "Enter a town or city"
-            postcode:
-              blank: "Enter a postcode"
-              invalid: "Enter a real postcode"
-            urn:
-              format: "URN must be 5 or 6 numbers"
         publish/fields/interview_process_form:
           attributes:
             interview_process:

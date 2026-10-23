@@ -70,17 +70,11 @@ private
   end
 
   def schools_copy_to_provider_service
-    @schools_copy_to_provider_service ||= Rollover::Schools::DualProviderCopier.new(
-      legacy_copier: Rollover::Schools::LegacyProviderCopier.new(site_copier: site_copy_to_provider_service),
-      new_copier: Rollover::Schools::ProviderCopier.new,
-    )
+    @schools_copy_to_provider_service ||= Rollover::Schools::ProviderCopier.new
   end
 
   def schools_copy_to_course
-    @schools_copy_to_course ||= Rollover::Schools::DualCourseCopier.new(
-      legacy_copier: Rollover::Schools::LegacyCourseCopier.new(site_copier: Sites::CopyToCourseService),
-      new_copier: Rollover::Schools::CourseCopier.new,
-    )
+    @schools_copy_to_course ||= Rollover::Schools::CourseCopier.new
   end
 
   def site_copy_to_provider_service

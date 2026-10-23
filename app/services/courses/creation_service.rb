@@ -121,10 +121,6 @@ module Courses
       # done without wiping the errors
       course.submitted_school_uuids = school_uuids
 
-      # TODO School data remodel removal - remove the site writes # rubocop:disable Style/CommentAnnotation
-      # once add-course creation only writes Course::School.
-      course.sites = selected_sites
-
       selected_schools.each do |provider_school|
         course.schools.build(gias_school: provider_school.gias_school, provider_school:)
       end
@@ -132,10 +128,6 @@ module Courses
 
     def school_selection_submitted?
       course_params.key?("school_uuids")
-    end
-
-    def selected_sites
-      schools_resolver.sites
     end
 
     def selected_schools

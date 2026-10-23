@@ -38,7 +38,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached
-    and_site_one_site_status_is_destroyed
+    and_site_one_site_status_is_left_in_place
     and_the_basic_details_page_no_longer_lists_site_one
   end
 
@@ -51,18 +51,17 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
     and_only_site_two_is_attached_among_the_three
-    and_site_one_and_three_site_statuses_are_destroyed
+    and_site_one_and_three_site_statuses_are_left_in_place
   end
 
-  scenario "duplicate stale site_status rows do not break the untick (AASM regression)" do
-    given_the_course_is_published_with_both_sites_running
-    given_site_one_has_an_extra_stale_suspended_site_status
+  scenario "i can attach a school that has no legacy site" do
+    given_the_provider_has_a_school_without_a_legacy_site
     when_i_visit_the_publish_course_school_edit_page
-    when_i_untick_site_one
+    when_i_tick_the_school_without_a_legacy_site
     and_i_submit
     and_i_apply_the_change_to_this_course_only
     then_i_should_see_a_success_message
-    and_only_site_two_is_attached
+    and_the_school_without_a_legacy_site_is_attached
   end
 
   scenario "updating with invalid data" do
@@ -81,15 +80,6 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
 
   scenario "i see an error when a selected school is removed after validation" do
     given_the_course_school_update_fails_after_validation
-    when_i_update_the_course_schools
-    and_i_submit
-    and_i_apply_the_change_to_this_course_only
-    then_i_should_see_the_school_selection_error
-    and_the_error_is_reported_to_sentry
-  end
-
-  scenario "i see an error when the legacy Site mapping is missing after validation" do
-    given_the_legacy_site_update_fails_after_validation
     when_i_update_the_course_schools
     and_i_submit
     and_i_apply_the_change_to_this_course_only
@@ -145,7 +135,26 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def and_the_course_schools_are_updated
-    expect(course.reload.sites.map(&:location_name)).to contain_exactly("Site 1")
+    expect(attached_school_names).to contain_exactly("Site 1")
+  end
+
+  def attached_school_names
+    course.reload.schools.map { |course_school| course_school.provider_school.location_name }
+  end
+
+  def given_the_provider_has_a_school_without_a_legacy_site
+    create(:provider_school, provider:, gias_school: create(:gias_school, name: "Site 4"))
+  end
+
+  def when_i_tick_the_school_without_a_legacy_site
+    publish_course_school_edit_page.vacancies.find { |el|
+      el.find(".govuk-label").text == "Site 4"
+    }.check
+  end
+
+  def and_the_school_without_a_legacy_site_is_attached
+    expect(attached_school_names).to contain_exactly("Site 4")
+    expect(course.site_statuses).to be_empty
   end
 
   def then_i_should_see_an_error_message
@@ -188,12 +197,6 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     stub_course_school_update_failure
   end
 
-  def given_the_legacy_site_update_fails_after_validation
-    @course_school_update_error =
-      Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError.new("no legacy site")
-    stub_course_school_update_failure
-  end
-
   def and_the_error_is_reported_to_sentry
     expect(Sentry).to have_received(:capture_exception).with(@course_school_update_error)
   end
@@ -204,8 +207,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def and_no_school_is_attached_to_the_course
-    expect(course.reload.sites).to be_empty
-    expect(course.schools).to be_empty
+    expect(course.reload.schools).to be_empty
   end
 
   def given_the_course_already_has_both_sites
@@ -223,7 +225,7 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def and_only_site_two_is_attached
-    expect(course.reload.sites.map(&:location_name)).to contain_exactly("Site 2")
+    expect(attached_school_names).to contain_exactly("Site 2")
   end
 
   def and_no_course_school_row_exists_for_site_one
@@ -240,18 +242,11 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
     course.update!(first_published_at: 1.day.ago) if course.respond_to?(:first_published_at)
   end
 
-  def and_site_one_site_status_is_destroyed
+  # Legacy site statuses written before dual writing stopped are no longer
+  # touched by school changes.
+  def and_site_one_site_status_is_left_in_place
     site_one = provider.sites.find_by(location_name: "Site 1")
-    expect(course.reload.site_statuses.where(site: site_one)).to be_empty
-  end
-
-  def given_site_one_has_an_extra_stale_suspended_site_status
-    # Mirrors the production data state that triggered AASM::InvalidTransition
-    # for the QA-reported untick: a duplicate suspended row from an earlier
-    # remove sat alongside the running one. find_by!(site:) used to grab the
-    # suspended one and suspend! blew up.
-    site_one = provider.sites.find_by(location_name: "Site 1")
-    SiteStatus.create!(course:, site: site_one, status: :suspended, publish: :unpublished)
+    expect(course.reload.site_statuses.where(site: site_one)).to exist
   end
 
   def and_the_basic_details_page_no_longer_lists_site_one
@@ -285,13 +280,13 @@ RSpec.describe "Editing course schools", travel: mid_cycle(2026) do
   end
 
   def and_only_site_two_is_attached_among_the_three
-    expect(course.reload.sites.map(&:location_name)).to contain_exactly("Site 2")
+    expect(attached_school_names).to contain_exactly("Site 2")
   end
 
-  def and_site_one_and_three_site_statuses_are_destroyed
+  def and_site_one_and_three_site_statuses_are_left_in_place
     ["Site 1", "Site 3"].each do |name|
       site = provider.sites.find_by(location_name: name)
-      expect(course.reload.site_statuses.where(site: site)).to be_empty
+      expect(course.reload.site_statuses.where(site: site)).to exist
     end
   end
 

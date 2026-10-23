@@ -29,8 +29,7 @@ module Publish
           @draft.update(scope: @form.scope)
 
           apply(@form.chosen_scope)
-        rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError,
-               Publish::Schools::UpdateCourseSiteStatusesService::UnresolvedSitesError => e
+        rescue Publish::Schools::UpdateCourseSchoolsService::UnresolvedProviderSchoolsError => e
           Sentry.capture_exception(e)
           render_unresolved_schools
         end

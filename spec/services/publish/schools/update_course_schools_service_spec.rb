@@ -87,23 +87,21 @@ module Publish
           service_call
         end
 
-        it "creates both Course::School and legacy SiteStatus relationships" do
+        it "creates only the Course::School" do
           expect { service_call }
             .to change { course.schools.count }.by(1)
-            .and change { course.site_statuses.count }.by(1)
+            .and(not_change { course.site_statuses.count })
 
           expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
-          expect(course.sites).to contain_exactly(site_two)
         end
 
         context "when the Provider::School GIAS school is closed" do
           let(:gias_school_two) { create(:gias_school, :closed, name: "Site 2", urn: site_two.urn) }
 
-          it "still creates both school relationships" do
+          it "still creates the Course::School" do
             service_call
 
             expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
-            expect(course.sites).to contain_exactly(site_two)
           end
         end
 
@@ -116,19 +114,18 @@ module Publish
           expect(provider.reload.changed_at).to be > previous_provider_changed_at
         end
 
-        context "when both school relationships already exist" do
+        context "when the course already has both schools" do
           before do
             attach_school(site_one, provider_school_one)
             attach_school(site_two, provider_school_two)
           end
 
-          it "removes the unselected school from both models" do
+          it "removes the unselected Course::School and leaves legacy site statuses alone" do
             expect { service_call }
               .to change { course.schools.reload.count }.by(-1)
-              .and change { course.site_statuses.reload.count }.by(-1)
+              .and(not_change { course.site_statuses.reload.count })
 
             expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
-            expect(course.sites).to contain_exactly(site_two)
           end
         end
 
@@ -139,10 +136,10 @@ module Publish
             attach_school(site_one, provider_school_one)
           end
 
-          it "removes every school from both models" do
+          it "removes every Course::School and leaves legacy site statuses alone" do
             expect { service_call }
               .to change { course.schools.reload.count }.from(1).to(0)
-              .and change { course.site_statuses.reload.count }.from(1).to(0)
+              .and(not_change { course.site_statuses.reload.count })
           end
         end
 
@@ -269,7 +266,6 @@ module Publish
 
             expect { service_call }.not_to raise_error
             expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
-            expect(course.sites).to contain_exactly(site_two)
           end
 
           it "notifies using only the schools that still exist" do
@@ -314,13 +310,12 @@ module Publish
             provider_school_three.destroy!
           end
 
-          it "removes the stale legacy relationship and applies the remaining selection" do
+          it "applies the remaining selection" do
             allow(Rails.logger).to receive(:warn)
 
             service_call
 
             expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_two.id])
-            expect(course.sites).to contain_exactly(site_two)
           end
         end
 
@@ -339,15 +334,14 @@ module Publish
               .and_raise(ActiveRecord::RecordInvalid)
           end
 
-          it "still rolls back the dual write" do
+          it "rolls back the write" do
             expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
 
             expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_one.id])
-            expect(course.sites).to contain_exactly(site_one)
           end
         end
 
-        context "when the course save fails after both relationship writes" do
+        context "when the course save fails after the course schools are written" do
           subject(:service_call) do
             described_class.call(
               course:,
@@ -360,11 +354,10 @@ module Publish
             allow(course).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
           end
 
-          it "rolls back both queued relationship writes" do
+          it "rolls back the queued write" do
             expect { service_call }.to raise_error(ActiveRecord::RecordInvalid)
 
             expect(course.reload.schools).to be_empty
-            expect(course.sites).to be_empty
           end
         end
 
@@ -382,11 +375,10 @@ module Publish
           end
           let(:school_uuids) { [provider_school_without_site.uuid] }
 
-          it "raises from a queued update and writes neither relationship" do
-            expect { service_call }
-              .to raise_error(UpdateCourseSiteStatusesService::UnresolvedSitesError)
+          it "adds the school without a legacy site status" do
+            service_call
 
-            expect(course.reload.schools).to be_empty
+            expect(course.reload.schools.pluck(:provider_school_id)).to eq([provider_school_without_site.id])
             expect(course.site_statuses).to be_empty
           end
         end
@@ -397,15 +389,16 @@ module Publish
           end
           let(:provider) { create(:provider, recruitment_cycle:, sites: [site_one, site_two]) }
 
-          it "continues to write both school models" do
+          it "writes the Course::School" do
             service_call
 
             expect(course.reload.schools.find_by(provider_school: provider_school_two)).to be_present
-            expect(course.sites).to contain_exactly(site_two)
           end
         end
       end
 
+      # Courses set up before dual writing stopped carry a legacy site status
+      # alongside each Course::School.
       def attach_school(site, provider_school, status: :new_status, publish: :unpublished)
         course.site_statuses.create!(site:, status:, publish:)
         create(

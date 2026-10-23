@@ -24,29 +24,6 @@ describe ProviderSchools::Creator do
     expect(result.site_code).to eq("Q")
   end
 
-  it "uses the supplied site_code when a legacy site was created first" do
-    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "Z")
-
-    expect(result.site_code).to eq("Z")
-  end
-
-  it "uses the supplied uuid when a legacy site was created first" do
-    uuid = SecureRandom.uuid
-
-    result = described_class.call(provider:, gias_school_id: gias_school.id, uuid:)
-
-    expect(result.uuid).to eq(uuid)
-  end
-
-  it "uses the supplied site_code and uuid together when a legacy site was created first" do
-    uuid = SecureRandom.uuid
-
-    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "Z", uuid:)
-
-    expect(result.site_code).to eq("Z")
-    expect(result.uuid).to eq(uuid)
-  end
-
   it "returns the created row" do
     result = described_class.call(provider:, gias_school_id: gias_school.id)
 
@@ -54,15 +31,7 @@ describe ProviderSchools::Creator do
     expect(result).to be_persisted
   end
 
-  it "is idempotent when called twice with the same provider, gias_school and site_code" do
-    described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
-
-    expect {
-      described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
-    }.not_to change(Provider::School, :count)
-  end
-
-  it "is idempotent when called twice without a site_code" do
+  it "is idempotent when called twice" do
     existing = described_class.call(provider:, gias_school_id: gias_school.id)
 
     expect {
@@ -71,16 +40,7 @@ describe ProviderSchools::Creator do
     }.not_to change(Provider::School, :count)
   end
 
-  it "returns the existing row when one already exists for this provider, gias_school and site_code" do
-    existing = create(:provider_school, provider:, gias_school:, site_code: "A")
-
-    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
-
-    expect(result).to eq(existing)
-    expect(result.site_code).to eq("A")
-  end
-
-  it "returns the existing normal row when no site_code is supplied" do
+  it "returns the existing row for the GIAS school" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "A")
 
     result = described_class.call(provider:, gias_school_id: gias_school.id)
@@ -88,17 +48,7 @@ describe ProviderSchools::Creator do
     expect(result).to eq(existing)
   end
 
-  it "does not reuse a main-site row when creating a normal school row for the same GIAS school" do
-    main_site = create(:provider_school, :main_site, provider:, gias_school:)
-
-    expect {
-      result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A")
-      expect(result).not_to eq(main_site)
-      expect(result.site_code).to eq("A")
-    }.to change(Provider::School, :count).by(1)
-  end
-
-  it "does not reuse a main-site row when no site_code is supplied" do
+  it "does not reuse a main-site row" do
     main_site = create(:provider_school, :main_site, provider:, gias_school:)
 
     expect {
@@ -108,27 +58,7 @@ describe ProviderSchools::Creator do
     }.to change(Provider::School, :count).by(1)
   end
 
-  it "updates the uuid on an existing row when one is supplied" do
-    existing = create(:provider_school, provider:, gias_school:, site_code: "A", uuid: SecureRandom.uuid)
-    uuid = SecureRandom.uuid
-
-    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "A", uuid:)
-
-    expect(result).to eq(existing)
-    expect(result.uuid).to eq(uuid)
-  end
-
   it "returns the existing row when a RecordNotUnique race fires" do
-    existing = create(:provider_school, provider:, gias_school:, site_code: "B")
-
-    allow(provider).to receive(:with_lock).and_raise(ActiveRecord::RecordNotUnique)
-
-    result = described_class.call(provider:, gias_school_id: gias_school.id, site_code: "B")
-
-    expect(result).to eq(existing)
-  end
-
-  it "returns the existing normal row when a RecordNotUnique race fires without a site_code" do
     existing = create(:provider_school, provider:, gias_school:, site_code: "B")
 
     allow(provider).to receive(:with_lock).and_raise(ActiveRecord::RecordNotUnique)
