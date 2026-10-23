@@ -24,6 +24,14 @@ en:
         subject_knowledge_enhancement_course_available: SKE
     errors:
       models:
+        user:
+          attributes:
+            first_name:
+              blank: "Enter a first name"
+            last_name:
+              blank: "Enter a last name"
+            email:
+              blank: "Enter an email address in the correct format, like name@example.com"
         site:
           attributes:
             urn:

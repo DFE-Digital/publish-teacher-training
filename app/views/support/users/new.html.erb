@@ -2,7 +2,7 @@
 
 <%= content_for(:breadcrumbs) do %>
     <%= render GovukComponent::BackLinkComponent.new(
-      text: "All User records",
+      text: "Back",
       href: support_recruitment_cycle_users_path,
     ) %>
 <% end %>
@@ -10,16 +10,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: [:support_recruitment_cycle, @user], local: true do |f| %>
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-          <h1 class="govuk-fieldset__heading">Add a new user</h1>
-        </legend>
 
         <%= f.govuk_error_summary %>
 
-        <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, width: 20 %>
-        <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, width: 20 %>
-        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" }, width: 20 %>
+        <h1 class="govuk-heading-l">
+          Add a user
+        </h1>
+
+        <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, class: "govuk-input govuk-!-width-two-thirds" %>
+        <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, class: "govuk-input govuk-!-width-two-thirds" %>
+        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" } %>
 
         <%= f.govuk_submit %>
       </fieldset>
