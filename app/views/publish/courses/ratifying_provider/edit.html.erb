@@ -36,7 +36,7 @@
       <% end %>
 
       <p class="govuk-body">
-        <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+        <%= govuk_link_to(t("cancel"), details_publish_provider_recruitment_cycle_course_path(course.provider_code, course.recruitment_cycle_year, course.course_code)) %>
       </p>
     </div>
   </div>
