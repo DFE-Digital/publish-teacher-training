@@ -42,7 +42,7 @@ RSpec.describe "Publishing a course with validation errors", type: :system do
   scenario "Provider train with disability Reduce the word count for provider train with disability error link navigates to the disability support field" do
     click_link_in_error_summary("Enter details about training with a disability")
     expect(page).to have_current_path("/publish/organisations/#{provider.provider_code}/#{provider.recruitment_cycle_year}/training-with-disabilities/edit", ignore_query: true)
-    expect(page).to have_content("Training with disabilities")
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
   end
 
   scenario "Tell candidates about your organisation error link navigates to the about your organisation field" do
