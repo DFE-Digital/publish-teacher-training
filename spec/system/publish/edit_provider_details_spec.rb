@@ -58,13 +58,15 @@ RSpec.describe "About Your Organisation section" do
       provider_code: @provider.provider_code,
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     )
-    expect(page).to have_content "Training with disabilities and other needs"
+    expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
 
     page.find("#publish-disability-support-form-train-with-disability-field").set("Updated: training with disabilities")
-    click_on "Update training with disabilities"
+    click_on "Update adjustments to help you train to teach"
 
     expect(page).to have_content "Your changes have been published"
-    expect(page).to have_content "Updated: training with disabilities"
+    within_summary_row "Adjustments to help you train to teach" do
+      expect(page).to have_content "Updated: training with disabilities"
+    end
   end
 
   def then_i_can_edit_school_placements

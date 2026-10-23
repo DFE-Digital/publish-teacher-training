@@ -47,13 +47,7 @@
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
       <h2 class="govuk-heading-m">Training with disabilities and other needs</h2>
-      <p class="govuk-body">Say how you support candidates with disabilities and other needs. This could include candidates with:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>dyslexia</li>
-        <li>physical, hearing and visual impairments</li>
-        <li>mental health conditions</li>
-      </ul>
-      <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific access needs in the past.</p>
+      <%= t("publish.providers.course_fields.disability_support.edit.instructions_html") %>
 
       <%= f.govuk_text_area(:train_with_disability,
         form_group: { id: "train-with-disability" },

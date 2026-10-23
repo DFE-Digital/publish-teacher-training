@@ -73,7 +73,7 @@ RSpec.describe "Viewing a findable course" do
   scenario "user views the training with disabilities page" do
     given_there_is_a_findable_course
     when_i_visit_the_course_page
-    when_i_click("Find out about training with disabilities and other needs at #{@course.provider_name}")
+    when_i_click("Find out about adjustments to help you train to teach at #{@course.provider_name}")
     then_i_should_be_on_the_training_with_disabilities_page
     when_i_click("Back to #{@course.name} (#{course.course_code})")
     then_i_should_be_on_the_course_page
@@ -234,7 +234,10 @@ private
     )
 
     expect(find_course_show_page).to have_content(
-      "Training with disabilities",
+      "Adjustments to help you train to teach",
+    )
+    expect(find_course_show_page).to have_content(
+      "Teacher training providers can make adjustments if you need support to become a teacher. This includes support for neurodiversity, long-term physical or mental health conditions, or other accessibility needs.",
     )
 
     expect(find_course_show_page).to have_link("View list of school placements")
@@ -380,6 +383,10 @@ private
   end
 
   def then_i_should_be_on_the_training_with_disabilities_page
+    expect(page).to have_css(
+      "h1",
+      text: "Adjustments to help you train to teach at #{course.provider_name}",
+    )
     expect(find_course_show_page.train_with_disability).to have_content(
       provider.train_with_disability,
     )
