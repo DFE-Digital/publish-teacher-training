@@ -46,5 +46,6 @@ Sentry.init do |config|
 
   config.excluded_exceptions += %w[
     ActiveRecord::RecordNotFound
+    Pundit::NotAuthorizedError
   ]
 end
