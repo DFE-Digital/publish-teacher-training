@@ -3,8 +3,15 @@ en:
     data_exports:
       index:
         users:
-          name: "Only users affiliated with a provider"
-          description: "The list of all users affiliated with a provider from current recruitment cycle with columns: provider_code, provider_name, provider_type, first_name, last_name, email_address"
+          description: Download a CSV of all Publish users affiliated with a provider from the current recruitment cycle.
+          ul_header: "The columns will be:"
+          columns:
+          - provider name
+          - provider code
+          - provider type
+          - first name
+          - last name
+          - email address
     providers:
       add: "Add organisation"
       schools: # file
