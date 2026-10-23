@@ -37,6 +37,25 @@ RSpec.describe AutomatedBanner do
 
       expect(apply_opens_soon.body).to include("in #{days} days")
     end
+
+    context "when the cycle switcher is on" do
+      before do
+        allow(ENV).to receive(:[]).and_call_original
+        allow(ENV).to receive(:[]).with("ENABLE_SWITCHER").and_return("1")
+      end
+
+      it "is active on Find when the cycle switcher says Apply has not opened", travel: 1.hour.after(apply_opens) do
+        SiteSetting.set(name: "cycle_schedule", value: "apply_not_open_yet")
+
+        expect(described_class.active(interface: :find).map(&:id)).to eq(%w[apply_opens_soon])
+      end
+
+      it "is inactive when the cycle switcher says Apply is open", travel: 1.hour.after(find_opens) do
+        SiteSetting.set(name: "cycle_schedule", value: "apply_open")
+
+        expect(described_class.active(interface: :find)).to be_empty
+      end
+    end
   end
 
   describe "rollover has started" do

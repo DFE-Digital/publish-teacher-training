@@ -23,7 +23,7 @@ class AutomatedBanner
   end
 
   def self.active(now = Time.current, interface: nil)
-    all(now, interface:).select { |banner| banner.published_at <= now && banner.expired_at >= now }
+    all(now, interface:).select { |banner| banner.active?(now) }
   end
 
   def self.rollover_started(now)
@@ -68,6 +68,12 @@ class AutomatedBanner
   end
 
   def status = published_at > now ? :scheduled : :active
+
+  def active?(at = now)
+    return Find::CycleTimetable.show_apply_opens_soon_banner? if id == "apply_opens_soon"
+
+    published_at <= at && expired_at >= at
+  end
 
   def name = I18n.t("automated_banners.#{id}.name")
 
