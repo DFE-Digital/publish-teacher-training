@@ -83,7 +83,7 @@ gem "discard"
 gem "govuk_notify_rails"
 
 # Semantic Logger makes logs pretty
-gem "rails_semantic_logger", "~> 4.20.0"
+gem "rails_semantic_logger", "~> 5.2.0"
 
 # Render nice markdown
 gem "redcarpet"
