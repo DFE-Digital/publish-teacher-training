@@ -43,6 +43,18 @@ describe "Provider authorization spec" do
         get publish_provider_recruitment_cycle_courses_path(provider_code: another_provider.provider_code, recruitment_cycle_year: another_provider.recruitment_cycle.year)
         expect(response).to have_http_status(:forbidden)
       end
+
+      it "renders the forbidden page and does not report the denial" do
+        get "/auth/dfe/callback", headers: { "omniauth.auth" => user_exists_in_dfe_sign_in(user:) }
+        allow(Rails.env).to receive(:test?).and_return(false)
+        allow(Sentry).to receive(:capture_exception)
+
+        get publish_provider_recruitment_cycle_courses_path(provider_code: another_provider.provider_code, recruitment_cycle_year: another_provider.recruitment_cycle.year)
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).to include("You are not permitted to see this page")
+        expect(Sentry).not_to have_received(:capture_exception).with(an_instance_of(Pundit::NotAuthorizedError))
+      end
     end
   end
 end

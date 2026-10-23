@@ -22,6 +22,10 @@ RSpec.describe "Sentry" do
     MESSAGE
   end
 
+  it "does not report authorization denials" do
+    expect(Sentry.configuration.excluded_exceptions).to include("Pundit::NotAuthorizedError")
+  end
+
   it "redacts PG DETAIL from an unwrapped RecordNotUnique and still sends the event" do
     event = before_send(ActiveRecord::RecordNotUnique.new(unique_violation_message))
 

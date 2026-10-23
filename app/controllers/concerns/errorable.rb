@@ -7,6 +7,7 @@ module Errorable
     rescue_from StandardError, with: :internal_server_error
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     rescue_from ActionController::UnknownFormat, with: :not_acceptable
+    rescue_from Pundit::NotAuthorizedError, with: :forbidden
   end
 
   def not_found
