@@ -49,6 +49,17 @@ RSpec.describe "Editing course ratifying provider" do
     and_i_see_the_ratifying_provider_is_updated
   end
 
+  scenario "cancelling a change" do
+    given_i_am_authenticated_as_a_training_provider_user
+    and_there_is_a_unpublished_course_i_want_to_edit
+    and_there_is_a_second_provider_partnership
+
+    when_i_visit_the_course_details_page
+    and_i_click_to_change_the_ratifying_provider
+    and_i_click_cancel
+    then_i_am_back_on_the_course_details_page
+  end
+
 private
 
   def given_i_am_authenticated_as_a_training_provider_user
@@ -87,6 +98,16 @@ private
 
   def and_i_click_to_change_the_ratifying_provider
     click_on "Change accredited provider"
+  end
+
+  def and_i_click_cancel
+    click_link_or_button "Cancel"
+  end
+
+  def then_i_am_back_on_the_course_details_page
+    expect(page).to have_current_path(
+      details_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, @course.course_code),
+    )
   end
 
   def then_i_do_not_see_a_change_link_for_ratifying_provider
