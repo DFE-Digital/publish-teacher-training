@@ -24,7 +24,7 @@ en:
         subject_knowledge_enhancement_course_available: SKE
     errors:
       models:
-        user_form:
+        user:
           attributes:
             first_name:
               blank: "Enter a first name"
