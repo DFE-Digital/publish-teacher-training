@@ -9,7 +9,7 @@ en:
       show:
         title: Feedback details
         heading: Feedback details
-        back_link_text: All feedback responses
+        back_link_text: Back
       delete_multiple:
         title:
           one: Are you sure you want to delete %{count} entries?
