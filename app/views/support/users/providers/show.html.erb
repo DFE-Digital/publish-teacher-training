@@ -2,7 +2,7 @@
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
-    text: "All user records",
+    text: "Back",
     href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year]),
   ) %>
 <% end %>

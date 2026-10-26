@@ -56,7 +56,7 @@ RSpec.describe "Support console feedback view", service: :support do
       then_i_see_the_feedback_details_page_for(long_feedback)
 
       then_i_see_backlink_to_feedback_list
-      click_link "All feedback responses"
+      click_link "Back"
       then_i_am_on_the_feedback_list_page
     end
   end
@@ -186,7 +186,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_backlink_to_feedback_list
-    expect(page).to have_link("All feedback responses", href: support_feedback_index_path)
+    expect(page).to have_link("Back", href: support_feedback_index_path)
   end
 
   def then_i_am_on_the_feedback_list_page
