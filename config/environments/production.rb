@@ -48,15 +48,16 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Logging
-  config.rails_semantic_logger.add_file_appender = false
-  config.rails_semantic_logger.format = CustomLogFormatter.new
-  config.rails_semantic_logger.filter = proc { |log| log.name != "DfE::Analytics::SendEvents" }
-  config.semantic_logger.add_appender(
-    io: $stdout,
-    level: config.log_level,
-    formatter: CustomLogFormatter.new,
-    filter: config.rails_semantic_logger.filter,
-  )
+  # v5 drops the default file appender once any appender is declared here.
+  # JSON on stdout is the only destination, which is what the container platform collects.
+  config.rails_semantic_logger.appenders do |appenders|
+    appenders.add(
+      io: $stdout,
+      level: config.log_level,
+      formatter: CustomLogFormatter.new,
+      filter: proc { |log| log.name != "DfE::Analytics::SendEvents" },
+    )
+  end
 
   config.active_record.logger = nil # Don't log SQL in production
 
