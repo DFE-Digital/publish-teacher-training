@@ -68,8 +68,7 @@ It is the responsibility of the Support developer to manage open dependabot PRs
 - [Docker](https://www.docker.com) - We use Docker to containerise our services.
 - [Azure](https://azure.microsoft.com) - We use Azure to host our services.
   - [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/products/kubernetes-service) - We use Kubernetes via AKS to manage our containerised applications.
-  - [Azure Database of PostgreSQL](https://azure.microsoft.com/products/postgresql) - Our main database, also used by Solid Cache and Solid Queue.
-  - [Azure Cache for Redis](https://azure.microsoft.com/products/cache) - Instances are retained temporarily to verify zero application usage before deletion. Retaining Redis does not provide a rollback path; the app uses Solid Queue and Solid Cache on Postgres. See [ADR 22](adr/0022-solid-queue-and-redis-independence.md).
+  - [Azure Database of PostgreSQL](https://azure.microsoft.com/products/postgresql) - Our main database, also used by Solid Cache and Solid Queue. See [ADR 22](adr/0022-solid-queue-and-redis-independence.md).
   - [Azure Key Vault](https://azure.microsoft.com/products/key-vault) - All of our secrets and credentials are stored in Azure Key Vault per deployed environment.
 - [Sentry](https://sentry.io) - We use Sentry to monitor production errors.
 - [Skylight](https://skylight.io) - We use Skylight as our application performance monitoring (APM) tool. Skylight helps us identify slow endpoints.
