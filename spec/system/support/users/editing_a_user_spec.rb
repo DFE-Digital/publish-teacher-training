@@ -54,7 +54,9 @@ private
   end
 
   def i_am_met_with_error_messages
-    expect(support_user_edit_page).to have_content("can't be blank")
+    expect(support_user_edit_page).to have_content("Enter a first name")
+    expect(support_user_edit_page).to have_content("Enter a last name")
+    expect(support_user_edit_page).to have_content("Enter an email address in the correct format, like name@example.com")
   end
 
   def i_am_taken_to_the_user_show_page
