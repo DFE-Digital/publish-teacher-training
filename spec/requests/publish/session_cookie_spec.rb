@@ -6,11 +6,9 @@ RSpec.describe "Publish session cookie", service: :publish, type: :request do
   it "lasts only for the browser session" do
     get "/sign-in"
 
-    expect(session_cookie_header).to start_with("#{Settings.cookies.session.name}=")
-    expect(session_cookie_header).not_to match(/expires=/i)
-  end
+    session_cookie = cookies.get_cookie(Settings.cookies.session.name)
 
-  def session_cookie_header
-    response.headers["Set-Cookie"].to_s.split("\n").find { it.start_with?("#{Settings.cookies.session.name}=") }.to_s
+    expect(session_cookie).to be_present
+    expect(session_cookie.expires).to be_nil
   end
 end
