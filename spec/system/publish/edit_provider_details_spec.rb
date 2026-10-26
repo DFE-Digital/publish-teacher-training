@@ -59,6 +59,7 @@ RSpec.describe "About Your Organisation section" do
       recruitment_cycle_year: @provider.recruitment_cycle_year,
     )
     expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
+    expect(page).to have_css(".app-preview-container .govuk-heading-m", text: "Adjustments to help you train to teach")
 
     page.find("#publish-disability-support-form-train-with-disability-field").set("Updated: training with disabilities")
     click_on "Update adjustments to help you train to teach"

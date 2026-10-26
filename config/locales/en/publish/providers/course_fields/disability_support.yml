@@ -14,7 +14,7 @@ en:
               </ul>
               <p class="govuk-body">You should include any adjustments you can make during the interview process and during training.</p>
               <p class="govuk-body">If accessibility varies between schools, give details. It’s also useful for candidates to know how you’ve accommodated others with specific needs in the past.</p>
-            preview_heading: Training with disabilities and other needs
+            preview_heading: Adjustments to help you train to teach
             submit: Update adjustments to help you train to teach
   activemodel:
     errors:
@@ -23,5 +23,5 @@ en:
           attributes:
             train_with_disability:
               blank: Enter how you support candidates with disabilities and other needs
-              too_many_words: "Training with disabilities and other needs must be 100 words or less"
+              too_many_words: "Training with disabilities and other needs must be 250 words or less"
 

@@ -38,7 +38,7 @@ RSpec.describe "Course show", travel: mid_cycle(2025) do
       when_i_visit_the_publish_course_preview_page
       and_i_click_link_or_button("Find out about adjustments to help you train to teach at #{@course.provider_name}")
       and_i_click_link_or_button("Enter details about training with disabilities and other needs")
-      then_i_should_be_on_the_training_with_disabilities_page
+      then_i_should_be_on_the_edit_adjustments_page
       and_i_submit_a_valid_about_training_with_disabilities
       then_i_should_see_the_adjustments_heading
       then_i_should_see_the_updated_content("test training with disabilities")
@@ -512,7 +512,7 @@ private
     )
   end
 
-  def then_i_should_be_on_the_training_with_disabilities_page
+  def then_i_should_be_on_the_edit_adjustments_page
     expect(page).to have_css("h1", text: "Adjustments to help you train to teach")
   end
 
