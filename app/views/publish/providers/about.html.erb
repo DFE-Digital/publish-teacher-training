@@ -46,12 +46,12 @@
 
       <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
 
-      <h2 class="govuk-heading-m">Training with disabilities and other needs</h2>
+      <h2 class="govuk-heading-m"><%= t("publish.providers.course_fields.disability_support.edit.page_title") %></h2>
       <%= t("publish.providers.course_fields.disability_support.edit.instructions_html") %>
 
       <%= f.govuk_text_area(:train_with_disability,
         form_group: { id: "train-with-disability" },
-        label: { text: "Training with disabilities and other needs", size: "m" },
+        label: { text: t("publish.providers.course_fields.disability_support.edit.page_title"), size: "m" },
         hint: -> { render partial: "publish/courses/markdown_formatting" },
         max_words: 250,
         rows: 15) %>
