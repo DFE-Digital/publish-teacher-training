@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
+# rails_semantic_logger 5 logs this event itself and leaves Postgres DETAIL lines
+# in the message. Drop that subscriber and log the redacted line here instead.
 Rails.application.config.after_initialize do
-  already_logged = ActiveSupport::LogSubscriber.log_subscribers.any? do |subscriber|
-    subscriber.is_a?(ActiveSupport::LogSubscriber) && subscriber.respond_to?(:rescue_from_callback)
-  end
-  next if already_logged
+  ActiveSupport::Notifications.unsubscribe("rescue_from_callback.action_controller")
 
   ActiveSupport::Notifications.subscribe("rescue_from_callback.action_controller") do |event|
     exception = event.payload[:exception]
