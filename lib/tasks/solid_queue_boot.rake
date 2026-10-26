@@ -21,12 +21,19 @@ module_function
 
   def schema_ready?
     connection = ActiveRecord::Base.connection
+    # A missing table is cached for the life of this process. db:setup creates
+    # the Solid Queue tables after the first poll, so forget that miss or the
+    # worker waits out the deadline and restarts even though the schema is ready.
+    REQUIRED_TABLES.each do |table|
+      connection.schema_cache.clear_data_source_cache!(table)
+    end
+
     tables_ready = REQUIRED_TABLES.all? do |table|
       connection.table_exists?(table) && connection.primary_key(table).present?
     end
     return false unless tables_ready
 
-    if review_environment? && Statistic.count < REVIEW_MIN_STATISTIC_ROWS
+    if review_environment? && !review_data_present?
       return false
     end
 
@@ -34,6 +41,11 @@ module_function
   rescue StandardError => e
     Rails.logger.warn("[solid_queue] waiting for solid_queue schema: #{e.class}: #{e.message}")
     false
+  end
+
+  def review_data_present?
+    Statistic.reset_column_information
+    Statistic.count >= REVIEW_MIN_STATISTIC_ROWS
   end
 
   def review_environment?
@@ -62,7 +74,17 @@ namespace :solid_queue do
         break if SolidQueueBoot.schema_ready?
 
         if Time.zone.now >= deadline
-          raise "[solid_queue] timed out waiting for Solid Queue schema to be ready"
+          # Review workers start during terraform, before db:setup and the
+          # sanitised restore. This pod exits so Kubernetes starts another one;
+          # an exception here is an expected wait showing up as an unhandled
+          # rake error.
+          message = "[solid_queue] timed out waiting for Solid Queue schema to be ready"
+          if SolidQueueBoot.review_environment?
+            Rails.logger.error(message)
+            exit 1
+          else
+            raise message
+          end
         end
 
         Rails.logger.warn("[solid_queue] waiting for Solid Queue schema to be ready")
