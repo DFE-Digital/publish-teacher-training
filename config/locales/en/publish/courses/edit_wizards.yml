@@ -11,5 +11,4 @@ en:
           committed:
             funding_type: Funding type updated
             visa: Visa sponsorship updated
-          stale: This course was changed by someone else. Your changes were not saved.
           failed: Your changes were not saved

@@ -20,12 +20,12 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 
   before { login_user(user) }
 
-  # An edit is a funding type edit or a visa edit, and the funding type
-  # policy depends on which. One whose stored unit is missing has ended.
-  it "ends an edit with no stored unit" do
+  # The step an edit opened on decides whether the funding type policy
+  # applies. An edit that lost it has ended.
+  it "ends an edit with no stored entry step" do
     get "#{course_path}/edit/funding_type"
     step_path = URI.parse(response.location).path
-    remove_the_stored_unit(step_path.split("/")[-2])
+    remove_the_stored_entry(step_path.split("/")[-2])
 
     get step_path
 
@@ -54,11 +54,11 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 
 private
 
-  def remove_the_stored_unit(state_key)
+  def remove_the_stored_entry(state_key)
     repository = CourseWizard::Repositories::CourseEdit.new(
       provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, state_key:, expires_in: 1.hour,
     )
-    repository.write(edit: repository.read.fetch(:edit).except(:unit))
-    expect(repository.read[:edit]).not_to have_key(:unit)
+    repository.write(edit: repository.read.fetch(:edit).except(:entry))
+    expect(repository.read[:edit]).not_to have_key(:entry)
   end
 end

@@ -2,26 +2,23 @@
 
 class CourseWizard
   module Operations
-    # Saves an edit of a saved course: the changed answers (the edit's diff)
-    # mapped to the course, then the funding and visa rules whatever the diff
-    # holds. The course and its draft enrichment are saved together.
+    # Saves an edit of a saved course (see EditCourseWizard): its answers
+    # mapped to the course, then the funding and visa rules. The course and
+    # its draft enrichment are saved together. Nothing is saved when the
+    # answers do not change the course.
     class UpdateCourse
-      ATTRIBUTES = {
-        funding_type: :funding,
-        can_sponsor_student_visa: :can_sponsor_student_visa,
-        can_sponsor_skilled_worker_visa: :can_sponsor_skilled_worker_visa,
-      }.freeze
-
-      def initialize(course:, diff:)
-        @course = course
-        @diff = diff
+      # repository is part of the DfE::Wizard operation interface
+      # rubocop:disable Lint/UnusedMethodArgument
+      def initialize(repository:, step:)
+        @wizard = step.wizard
       end
+      # rubocop:enable Lint/UnusedMethodArgument
 
       def execute
-        funding_changed = diff.key?(:funding_type) && diff[:funding_type] != course.funding
-        course.assign_attributes(diff.slice(*ATTRIBUTES.keys).transform_keys(ATTRIBUTES))
-        assign_deadline
+        course.assign_attributes(Mapper.new.to_attributes(@wizard.answers, course))
+        return { success: true, changed: false } unless course.changed?
 
+        funding_changed = course.funding_changed?
         rules = ::Courses::FundingAndVisaRules.new(course)
         rules.reset_opposite_visa
         rules.clear_deadline_unless_sponsoring
@@ -30,21 +27,12 @@ class CourseWizard
         save(enrichment)
       end
 
+      def rollback; end
+
     private
 
-      attr_reader :course, :diff
-
-      def assign_deadline
-        if diff.key?(:visa_sponsorship_application_deadline_required) &&
-            !ActiveModel::Type::Boolean.new.cast(diff[:visa_sponsorship_application_deadline_required])
-          course.visa_sponsorship_application_deadline_at = nil
-        elsif diff.key?(:visa_sponsorship_application_deadline_at)
-          course.visa_sponsorship_application_deadline_at = deadline_from(diff[:visa_sponsorship_application_deadline_at])
-        end
-      end
-
-      def deadline_from(value)
-        Draft::DateParts.parse(value)&.to_date&.in_time_zone&.end_of_day
+      def course
+        @wizard.record
       end
 
       def save(enrichment)
@@ -53,7 +41,7 @@ class CourseWizard
           saved = (enrichment.nil? || enrichment.save) && course.save
           raise ActiveRecord::Rollback unless saved
         end
-        return { success: true } if saved
+        return { success: true, changed: true } if saved
 
         { success: false, errors: [*enrichment&.errors&.full_messages, *course.errors.full_messages].uniq }
       end
