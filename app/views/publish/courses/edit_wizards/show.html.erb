@@ -1,5 +1,5 @@
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(@wizard.previous_step_path(fallback: @wizard.edit.caller_url)) %>
+  <%= govuk_back_link_to(@wizard.previous_step_path(fallback: @wizard.caller_url)) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -20,7 +20,7 @@
         <%= render "publish/course_wizards/steps/#{current_step_name}", form:, caption: @wizard.record.name_and_code %>
       <% end %>
       <p class="govuk-body">
-        <%= govuk_link_to(t("course_wizard.show.cancel"), @wizard.edit.caller_url) %>
+        <%= govuk_link_to(t("course_wizard.show.cancel"), @wizard.caller_url) %>
       </p>
     </div>
   <% end %>
