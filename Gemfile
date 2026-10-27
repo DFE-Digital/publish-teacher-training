@@ -155,7 +155,7 @@ gem "colorize"
 # for running SQL queries
 gem "blazer"
 
-gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", tag: "v1.0.0"
+gem "dfe-wizard", require: "dfe/wizard", github: "DFE-Digital/dfe-wizard", branch: "check-answers-review-navigation"
 
 # Used to generate seed data
 gem "faker"
