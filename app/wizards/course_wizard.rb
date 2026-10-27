@@ -9,11 +9,6 @@ class CourseWizard
 
   delegate :accrediting_provider, to: :accreditation
 
-  delegate :design_technology_specialisms?,
-           :physics_specialisms?,
-           :modern_languages_specialisms?,
-           to: :state_store
-
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
       graph.root :level
@@ -40,7 +35,7 @@ class CourseWizard
       graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
       graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
 
-      graph.add_node :check_answers, Steps::CheckAnswers
+      graph.check_answers :check_answers, Steps::CheckAnswers
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
 
       graph.add_multiple_conditional_edges(
@@ -155,8 +150,10 @@ class CourseWizard
       graph.add_edge from: :start_date, to: :check_answers
       graph.add_edge from: :check_answers, to: :courses_index
 
-      graph.before_next_step(:handle_return_to_review)
-      graph.before_previous_step(:handle_back_to_review)
+      # A change from check answers shows only the steps it affects, then
+      # goes back to check answers. Back retraces the steps it showed.
+      graph.before_next_step { next_step_in_review if return_to_review }
+      graph.before_previous_step { previous_step_in_review(return_to_review) }
     end
   end
 
@@ -222,8 +219,8 @@ class CourseWizard
   # when an earlier answer changes the path, for example "yes" to visa
   # sponsorship after the deadline steps were skipped.
   def invalid_steps
-    flow_path(:check_answers).filter_map do |step_id|
-      step(step_id) unless step_id == :check_answers || valid?(step_id)
+    flow_path(check_answers_step).filter_map do |step_id|
+      step(step_id) unless step_id == check_answers_step || valid?(step_id)
     end
   end
 
@@ -244,32 +241,16 @@ class CourseWizard
     end
   end
 
-  def clear_stale_specialism_answers
-    return unless current_step_name == :secondary_subjects
+  # Route options for a step during a change from check answers: they carry
+  # the step whose Change link was followed, except to check answers itself
+  def review_path_options(step_id)
+    return {} if return_to_review.blank? || step_id == check_answers_step
 
-    reset_attributes = {}
-    reset_attributes[:campaign_name] = nil unless physics_specialisms?
-    reset_attributes[:language_ids] = nil unless modern_languages_specialisms?
-    reset_attributes[:design_technology_ids] = nil unless design_technology_specialisms?
-    return if reset_attributes.empty?
-
-    state_store.write(**reset_attributes)
-    nil
+    { return_to_review: }
   end
 
-  def handle_return_to_review
-    return if return_to_review_param.blank?
-
-    handle_return_to_check_your_answers(:check_answers)
-  end
-
-  def handle_back_to_review
-    return if return_to_review_param.blank?
-
-    handle_back_in_check_your_answers(:check_answers, return_to_review_param)
-  end
-
-  def return_to_review_param
+  # The step whose Change link was followed on check answers
+  def return_to_review
     # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
     # so we need raw request params for return_to_review callback routing.
     @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
