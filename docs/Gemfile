@@ -9,7 +9,7 @@ ruby "~> 3.4.10"
 # 6.5.x renders the header via nunjucks, but the published gem ships neither
 # nunjucks nor govuk-frontend's .njk macros, so every page fails to build.
 # Unpin once alphagov/tech-docs-gem packages them.
-gem "govuk_tech_docs", "~> 6.5.2"
+gem "govuk_tech_docs", "~> 6.4.1"
 
 group :test do
   gem "capybara"
