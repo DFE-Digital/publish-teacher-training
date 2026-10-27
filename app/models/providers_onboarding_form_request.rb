@@ -30,9 +30,9 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     validates :address_line_1, presence: true
     validates :town_or_city, presence: true
     validates :postcode, presence: true, postcode: true
+    validates :email_address, email_address: true
     validates :first_name, presence: true
     validates :last_name, presence: true
-    validates :email_address, email_address: true
   end
 
   def form_link

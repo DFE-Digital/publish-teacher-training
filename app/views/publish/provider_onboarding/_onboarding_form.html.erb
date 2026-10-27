@@ -41,7 +41,9 @@
             ),
           ),
         }, disabled: !can_edit %>
-      <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: "Are you an accredited provider?" }, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
+      <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: t(".accredited_provider") }, hint: {
+        text: t(".accredited_provider_hint_html"),
+}, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
         <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit %>
         <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" }, disabled: !can_edit %>
       <% end %>
@@ -61,11 +63,12 @@
           ),
         }, disabled: !can_edit %>
       <!-- Contact Details -->
-      <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".contact_details") %></h2>
-      <%= f.govuk_text_field :contact_email_address, label: { text: t(".contact_email_address"), size: "s" }, hint: { text: t(".contact_email_address_hint") }, disabled: !can_edit %>
-      <%= f.govuk_text_field :telephone, width: 20, label: { text: t(".telephone"), size: "s" }, hint: { text: t(".telephone_hint") }, disabled: !can_edit %>
+      <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-0"><%= t(".contact_details") %></h2>
+      <p class="govuk-hint govuk-!-margin-top-2"><%= t(".contact_details_hint") %></p>
+      <%= f.govuk_text_field :contact_email_address, label: { text: t(".contact_email_address"), size: "s" }, disabled: !can_edit %>
+      <%= f.govuk_text_field :telephone, width: 20, label: { text: t(".telephone"), size: "s" }, disabled: !can_edit %>
       <%= f.govuk_text_field :website, label: { text: t(".website"), size: "s" }, hint: { text: t(".website_hint") }, disabled: !can_edit %>
-      <%= f.govuk_text_field :address_line_1, label: { text: t(".address_line_1"), size: "s" }, hint: { text: t(".address_line_1_hint") }, disabled: !can_edit %>
+      <%= f.govuk_text_field :address_line_1, label: { text: t(".address_line_1"), size: "s" }, disabled: !can_edit %>
       <%= f.govuk_text_field :address_line_2, label: { text: t(".address_line_2"), size: "s" }, disabled: !can_edit %>
       <%= f.govuk_text_field :address_line_3, label: { text: t(".address_line_3"), size: "s" }, disabled: !can_edit %>
       <%= f.govuk_text_field :town_or_city, width: "two-thirds", label: { text: t(".town_city"), size: "s" }, disabled: !can_edit %>
