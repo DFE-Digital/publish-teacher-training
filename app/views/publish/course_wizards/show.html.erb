@@ -5,7 +5,6 @@
             provider_code: params[:provider_code],
             recruitment_cycle_year: params[:recruitment_cycle_year],
           ),
-          **@wizard.review_path_options(@wizard.previous_step),
         ),
       ) %>
 <% end %>
@@ -14,13 +13,7 @@
   <%= form_with(
         model: current_step,
         scope: current_step_name,
-        url: publish_provider_recruitment_cycle_course_wizard_path(
-          provider_code: params[:provider_code],
-          recruitment_cycle_year: params[:recruitment_cycle_year],
-          step: current_step_name,
-          state_key: params[:state_key],
-          return_to_review: params[:return_to_review],
-        ),
+        url: @wizard.current_step_path,
         method: :patch,
       ) do |form| %>
     <div class="govuk-grid-column-full">
