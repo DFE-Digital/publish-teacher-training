@@ -7,6 +7,9 @@ class CourseWizard
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
+  # The saved course, in an edit of a saved course (see Edit)
+  attr_accessor :record
+
   delegate :accrediting_provider, to: :accreditation
 
   def steps_processor
@@ -37,6 +40,9 @@ class CourseWizard
 
       graph.check_answers :check_answers, Steps::CheckAnswers
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
+
+      # Only an edit of a published course goes here, before it is saved
+      graph.add_node :confirm_changes, Steps::ConfirmChanges
 
       graph.add_multiple_conditional_edges(
         from: :level,
@@ -151,9 +157,10 @@ class CourseWizard
       graph.add_edge from: :check_answers, to: :courses_index
 
       # A change from check answers shows only the steps it affects, then
-      # goes back to check answers. Back retraces the steps it showed.
-      graph.before_next_step { next_step_in_review if return_to_review }
-      graph.before_previous_step { previous_step_in_review(return_to_review) }
+      # goes back to check answers. Back retraces the steps it showed. An
+      # edit of a saved course does the same within its own questions.
+      graph.before_next_step { editing? ? edit.next_step : (next_step_in_review if return_to_review) }
+      graph.before_previous_step { editing? ? edit.previous_step : previous_step_in_review(return_to_review) }
     end
   end
 
@@ -167,6 +174,8 @@ class CourseWizard
     DfE::Wizard::RouteStrategy::DynamicRoutes.new(
       state_store:,
       path_builder: lambda { |step_id, _state_store, helpers, options|
+        next edit_route(helpers, step_id, options) if editing?
+
         case step_id
         when :courses_index
           helpers.publish_provider_recruitment_cycle_courses_path(
@@ -208,6 +217,14 @@ class CourseWizard
       provider:,
       selected_provider_code: state_store.accredited_provider_code,
     )
+  end
+
+  def editing?
+    record.present?
+  end
+
+  def edit
+    @edit ||= Edit.new(self)
   end
 
   def final_step?
@@ -257,6 +274,20 @@ class CourseWizard
   end
 
 private
+
+  # An edit returns to the page it started from
+  def edit_route(helpers, step_id, options)
+    return edit.caller_url if step_id == :courses_index
+
+    helpers.edit_wizard_publish_provider_recruitment_cycle_course_path(
+      provider_code:,
+      recruitment_cycle_year:,
+      code: record.course_code,
+      state_key:,
+      step: step_id,
+      **options,
+    )
+  end
 
   def ensure_review_step(steps, step_id)
     return steps if steps.any? { |step| step.step_id == step_id }
