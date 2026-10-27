@@ -482,6 +482,10 @@ en:
           show: "User overview"
           new: "Add a user"
           edit: "Edit a user"
+          check: "Check your answers"
+          delete: "Are you sure you want to delete this user?"
+          providers:
+            remove: "Are you sure you want to remove this user from the provider?"
         data_exports:
           index: "Data exports"
     filter:

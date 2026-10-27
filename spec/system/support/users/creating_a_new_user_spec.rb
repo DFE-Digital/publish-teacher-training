@@ -19,8 +19,10 @@ RSpec.describe "Creating a new user" do
         and_i_fill_in_last_name
         and_i_fill_in_email_with_some_whitespace
         when_i_save_the_form
-        and_the_users_email_is_saved_to_the_db_without_any_whitespace
+        then_i_see_the_check_answers
+        when_i_confirm_the_user
         then_i_am_taken_to_the_user_index_page
+        and_the_users_email_is_saved_to_the_db_without_any_whitespace
       end
     end
 
@@ -64,8 +66,22 @@ RSpec.describe "Creating a new user" do
     support_user_new_page.submit.click
   end
 
+  def then_i_see_the_check_answers
+    expect(page).to have_content("Check your answers")
+    expect(page).to have_content("Luke")
+    expect(page).to have_content("Skywalker")
+    expect(page).to have_content("lukeskywalker@jedi.com")
+    expect(page).to have_content("The user will be sent an email to tell them you’ve added them to the organisation.")
+    expect(User.find_by(email: "lukeskywalker@jedi.com")).to be_nil
+  end
+
+  def when_i_confirm_the_user
+    click_button "Add user"
+  end
+
   def then_i_am_taken_to_the_user_index_page
-    support_users_index_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year)
+    expect(support_users_index_page).to be_displayed
+    expect(page).to have_content("User added")
   end
 
   def then_i_should_see_the_error_summary

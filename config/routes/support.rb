@@ -99,6 +99,14 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       end
     end
     resources :users do
+      collection do
+        get :check, to: "users/checks#show"
+        put :check, to: "users/checks#update"
+      end
+      member do
+        get :delete
+        get "providers/:provider_id/remove", to: "users/providers#remove", as: :remove_provider
+      end
       scope module: :users do
         resource :providers, on: :member, only: %i[show]
       end

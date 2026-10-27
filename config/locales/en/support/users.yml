@@ -1,0 +1,33 @@
+en:
+  support:
+    users:
+      new:
+        heading: Add a user
+        continue: Continue
+      checks:
+        show:
+          caption: Add user
+          heading: Check your answers
+          first_name: First name
+          last_name: Last name
+          email: Email address
+          admin: Admin
+          "yes": "Yes"
+          "no": "No"
+          email_notice: The user will be sent an email to tell them you’ve added them to the organisation.
+          submit: Add user
+        update:
+          success: User added
+      delete:
+        heading: Are you sure you want to delete %{name}'s account on Publish?
+        consequences_intro: "%{name}:"
+        removed_from_providers: will be removed from all providers they are attached to
+        cannot_log_in: will no longer be able to log into Publish
+        no_emails: will no longer receive emails about the Publish service
+        submit: Delete %{name}'s account
+      providers:
+        remove:
+          heading: Are you sure you want to remove %{name} from %{provider}?
+          warning: "%{name} will be sent an email to tell them you removed them from %{provider}"
+          submit: Remove user
+          success: "%{name} has been removed from %{provider}"

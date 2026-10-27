@@ -2,6 +2,8 @@
 
 module Support
   class UsersController < ApplicationController
+    include NewUserDraft
+
     def index
       recruitment_cycle
       @pagy, @users = pagy(filtered_users)
@@ -12,7 +14,8 @@ module Support
     end
 
     def new
-      @user = User.new
+      clear_new_user_draft unless params[:change]
+      @user = User.new(new_user_draft)
     end
 
     def edit
@@ -20,11 +23,13 @@ module Support
     end
 
     def create
-      @user = User.new(user_params)
-      if @user.save
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year])
+      @user = User.new(new_user_params.merge(state: "new"))
+
+      if @user.valid?
+        stash_new_user(new_user_params)
+        redirect_to check_support_recruitment_cycle_users_path
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -36,16 +41,16 @@ module Support
       end
     end
 
+    def delete
+      user
+    end
+
     def destroy
       user.destroy!
       redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: t("support.flash.deleted", resource: "User") }
     end
 
   private
-
-    def user_params
-      params.expect(user: %i[first_name last_name email]).merge(state: "new")
-    end
 
     def update_user_params
       params.expect(user: %i[first_name last_name email admin])
