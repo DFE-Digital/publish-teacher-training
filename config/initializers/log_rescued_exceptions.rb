@@ -2,6 +2,8 @@
 
 # rails_semantic_logger 5 logs this event itself and leaves Postgres DETAIL lines
 # in the message. Drop that subscriber and log the redacted line here instead.
+# unsubscribe by event name clears every listener for this event, which is what we
+# want here so only the redacted handler remains.
 Rails.application.config.after_initialize do
   ActiveSupport::Notifications.unsubscribe("rescue_from_callback.action_controller")
 
