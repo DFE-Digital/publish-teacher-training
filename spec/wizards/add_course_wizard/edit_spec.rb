@@ -65,6 +65,13 @@ RSpec.describe CourseWizard::Edit, type: :wizard do
       expect(edit_request.edit).not_to be_active
     end
 
+    it "is false when a change to the course's answers leaves the edit no question to ask" do
+      start_edit_of(:funding_type)
+      edit_request.state_store.write(qualification: "undergraduate_degree_with_qts")
+
+      expect(edit_request.edit).not_to be_active
+    end
+
     it "is false for another course" do
       start_edit_of(:funding_type)
       other_course = create(:course, :fee, provider:)
@@ -124,6 +131,30 @@ RSpec.describe CourseWizard::Edit, type: :wizard do
         expect(edit_request(:confirm_changes).previous_step).to eq(:visa_sponsorship_application_deadline_required)
       end
 
+      context "when it sponsors visas with a deadline" do
+        let(:course) do
+          create(:course, :published, :fee, provider:, accrediting_provider: provider, can_sponsor_student_visa: true,
+                                            visa_sponsorship_application_deadline_at: deadline)
+        end
+
+        it "goes back from the confirm page to the last question still on the path" do
+          start_edit_of(:visa)
+          answer(:visa_sponsorship_application_deadline_required, visa_sponsorship_application_deadline_required: "true")
+          answer(:visa_sponsorship_application_deadline_at, deadline_params(deadline - 1.day))
+          answer(:visa_sponsorship_application_deadline_required, visa_sponsorship_application_deadline_required: "false")
+
+          expect(edit_request(:confirm_changes).previous_step).to eq(:visa_sponsorship_application_deadline_required)
+        end
+
+        it "does not ask to confirm the same deadline written with leading zeros" do
+          start_edit_of(:visa_sponsorship_application_deadline_at)
+          wizard = answer(:visa_sponsorship_application_deadline_at, deadline_params(deadline, padded: true))
+
+          expect(wizard.edit.diff).to eq({})
+          expect(wizard.next_step).to eq(:courses_index)
+        end
+      end
+
       it "does not open the confirm page while a question needs an answer" do
         start_edit_of(:visa)
         answer(:visa_sponsorship, can_sponsor_student_visa: "true")
@@ -137,6 +168,15 @@ RSpec.describe CourseWizard::Edit, type: :wizard do
         expect(answer(:visa_sponsorship, can_sponsor_student_visa: "false").next_step).to eq(:courses_index)
       end
     end
+  end
+
+  def deadline_params(date, padded: false)
+    pattern = padded ? "%02d" : "%d"
+    {
+      "visa_sponsorship_application_deadline_at(3i)" => sprintf(pattern, date.day),
+      "visa_sponsorship_application_deadline_at(2i)" => sprintf(pattern, date.month),
+      "visa_sponsorship_application_deadline_at(1i)" => date.year.to_s,
+    }
   end
 
   describe "#diff" do

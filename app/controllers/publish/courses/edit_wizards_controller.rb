@@ -106,7 +106,7 @@ module Publish
       # The entry point (new) starts the edit under a new state_key
       def set_wizard
         state_key = action_name == "new" ? SecureRandom.uuid : params[:state_key]
-        repository = CourseWizard::Repositories::Course.new(
+        repository = CourseWizard::Repositories::CourseEdit.new(
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
           state_key:,

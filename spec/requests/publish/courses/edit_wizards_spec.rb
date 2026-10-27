@@ -20,16 +20,23 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 
   before { login_user(user) }
 
-  # The funding type policy applies to any edit that is not a visa edit,
-  # including one whose stored unit is missing.
-  it "refuses a step of an edit with no stored unit when the course cannot change its funding type" do
+  # An edit is a funding type edit or a visa edit, and the funding type
+  # policy depends on which. One whose stored unit is missing has ended.
+  it "ends an edit with no stored unit" do
     get "#{course_path}/edit/funding_type"
     step_path = URI.parse(response.location).path
-    state_key = step_path.split("/")[-2]
-    remove_the_stored_unit(state_key)
-    create(:course_enrichment, :published, course:)
+    remove_the_stored_unit(step_path.split("/")[-2])
 
     get step_path
+
+    expect(response).to redirect_to("#{course_path}/details")
+    expect(flash[:info]).to eq("This change has already been saved or has expired. Check the course details.")
+  end
+
+  it "refuses a funding type edit of a course that cannot change its funding type" do
+    create(:course_enrichment, :published, course:)
+
+    get "#{course_path}/edit/funding_type"
 
     expect(response).to have_http_status(:forbidden)
   end
@@ -48,11 +55,10 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 private
 
   def remove_the_stored_unit(state_key)
-    key = CourseWizard::Repositories::Course.cache_key(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, state_key:,
+    repository = CourseWizard::Repositories::CourseEdit.new(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, state_key:, expires_in: 1.hour,
     )
-    data = Rails.cache.read(key).deep_stringify_keys
-    data["edit"].delete("unit")
-    Rails.cache.write(key, data)
+    repository.write(edit: repository.read.fetch(:edit).except(:unit))
+    expect(repository.read[:edit]).not_to have_key(:unit)
   end
 end
