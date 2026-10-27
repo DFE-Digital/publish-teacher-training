@@ -71,24 +71,68 @@ RSpec.describe CourseWizard, type: :wizard do
     end
   end
 
-  describe "#clear_stale_specialism_answers" do
+  describe "#clear_off_path_answers" do
     let(:current_step) { :secondary_subjects }
 
-    it "clears stale specialism values based on selected subjects" do
+    before do
       state_store.write(
         level: "secondary",
-        secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
-        subordinate_subject_id: find_or_create(:secondary_subject, :religious_education).id.to_s,
+        is_send: "false",
+        secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s,
         campaign_name: "engineers_teach_physics",
+        age_range_in_years: "11_to_16",
+        qualification: "qts",
+        funding_type: "fee",
+        study_pattern: %w[full_time],
+        school_uuids: [create(:provider_school, provider:).uuid],
+        study_sites_ids: [],
+        can_sponsor_student_visa: true,
+        visa_sponsorship_application_deadline_required: true,
+        visa_sponsorship_application_deadline_at: { "year" => "2026", "month" => "9", "day" => "1" },
+        start_date: "September 2026",
+      )
+    end
+
+    it "keeps every answer on the path" do
+      expect(wizard.clear_off_path_answers).to be_empty
+      expect(state_store.campaign_name).to eq("engineers_teach_physics")
+    end
+
+    it "clears the specialism answers of subjects no longer chosen" do
+      state_store.write(
+        secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
         language_ids: [find_or_create(:secondary_subject, :french).id.to_s],
         design_technology_ids: [find_or_create(:secondary_subject, :design_and_technology).id.to_s],
       )
 
-      wizard.clear_stale_specialism_answers
-
+      expect(wizard.clear_off_path_answers).to contain_exactly(
+        :physics_specialisms, :modern_languages_specialisms, :design_technology_specialisms
+      )
       expect(state_store.campaign_name).to be_nil
       expect(state_store.language_ids).to be_nil
       expect(state_store.design_technology_ids).to be_nil
+    end
+
+    it "clears the student visa answers when the funding becomes salary" do
+      state_store.write(funding_type: "salary")
+
+      wizard.clear_off_path_answers
+
+      expect(state_store.can_sponsor_student_visa).to be_nil
+      expect(state_store.visa_sponsorship_application_deadline_required).to be_nil
+      expect(state_store.visa_sponsorship_application_deadline_at).to be_nil
+      expect(state_store.funding_type).to eq("salary")
+    end
+
+    it "clears the funding, study pattern and visa answers when the qualification becomes TDA" do
+      state_store.write(qualification: "undergraduate_degree_with_qts")
+
+      wizard.clear_off_path_answers
+
+      expect(state_store.funding_type).to be_nil
+      expect(state_store.study_pattern).to be_nil
+      expect(state_store.can_sponsor_student_visa).to be_nil
+      expect(state_store.start_date).to eq("September 2026")
     end
   end
 end

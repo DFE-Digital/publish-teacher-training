@@ -5,6 +5,7 @@
             provider_code: params[:provider_code],
             recruitment_cycle_year: params[:recruitment_cycle_year],
           ),
+          **@wizard.review_path_options(@wizard.previous_step),
         ),
       ) %>
 <% end %>
