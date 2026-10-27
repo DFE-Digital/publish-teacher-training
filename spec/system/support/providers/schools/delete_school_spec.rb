@@ -127,7 +127,7 @@ RSpec.describe "Delete school under provider as an admin" do
   end
 
   def future_recruitment_cycle
-    @future_recruitment_cycle ||= create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
+    @future_recruitment_cycle ||= find_or_create(:recruitment_cycle, year: Settings.schools_remodel_cycle_year + 1)
   end
 
   def future_provider
