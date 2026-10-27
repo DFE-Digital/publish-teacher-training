@@ -68,9 +68,10 @@ class CourseWizard
       entry_step
     end
 
-    # The edit was started for this course, and has not been saved or expired
+    # The edit was started for this course, has not been saved or expired, and
+    # still has a question to ask
     def active?
-      metadata.present? && metadata[:course_id] == course.id
+      metadata[:course_id] == course.id && UNITS.key?(unit) && entry.present? && question_steps.any?
     end
 
     def unit
@@ -114,7 +115,7 @@ class CourseWizard
     end
 
     def previous_step
-      return wizard.review_shown.last || entry if wizard.current_step_name == :confirm_changes
+      return (question_steps & wizard.review_shown).last || entry if wizard.current_step_name == :confirm_changes
 
       wizard.previous_step_in_review(entry, finish: :courses_index)
     end
@@ -126,7 +127,7 @@ class CourseWizard
 
       (path - [wizard.check_answers_step]).flat_map { |step_id| attribute_names(step_id) }.uniq.each_with_object({}) do |attribute, changes|
         value = wizard.state_store.public_send(attribute)
-        changes[attribute] = value unless normalise(value) == normalise(seed[attribute])
+        changes[attribute] = value unless comparable(attribute, value) == comparable(attribute, seed[attribute])
       end
     end
 
@@ -176,10 +177,18 @@ class CourseWizard
       record.updated_at.utc.iso8601(6)
     end
 
-    # Answers as they are compared and kept: JSON values, so a value read
-    # back from the cache compares equal to the one written
+    # Answers as they are kept: JSON values, so a value read back from the
+    # cache compares equal to the one written
     def normalise(value)
       JSON.parse([value].to_json).first
+    end
+
+    # Answers as they are compared: a date as a date, so 09 and 9 are the
+    # same month
+    def comparable(attribute, value)
+      return Draft::DateParts.parse(normalise(value))&.to_date if attribute == :visa_sponsorship_application_deadline_at
+
+      normalise(value)
     end
   end
 end
