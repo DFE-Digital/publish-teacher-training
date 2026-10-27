@@ -1,0 +1,69 @@
+<%= render PageTitle.new(title: "support.users.check") %>
+
+<%= content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: new_support_recruitment_cycle_user_path(change: 1),
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with model: @user, url: check_support_recruitment_cycle_users_path, method: :put do |f| %>
+      <%= f.govuk_error_summary %>
+
+      <span class="govuk-caption-l"><%= t(".caption") %></span>
+      <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
+
+      <%= render GovukComponent::SummaryListComponent.new do |component|
+            component.with_row do |row|
+              row.with_key { t(".first_name") }
+              row.with_value(text: @user.first_name)
+              row.with_action(
+                text: t("change"),
+                href: new_support_recruitment_cycle_user_path(change: 1),
+                visually_hidden_text: t(".first_name").downcase,
+              )
+            end
+
+            component.with_row do |row|
+              row.with_key { t(".last_name") }
+              row.with_value(text: @user.last_name)
+              row.with_action(
+                text: t("change"),
+                href: new_support_recruitment_cycle_user_path(change: 1),
+                visually_hidden_text: t(".last_name").downcase,
+              )
+            end
+
+            component.with_row do |row|
+              row.with_key { t(".email") }
+              row.with_value(text: @user.email)
+              row.with_action(
+                text: t("change"),
+                href: new_support_recruitment_cycle_user_path(change: 1),
+                visually_hidden_text: t(".email").downcase,
+              )
+            end
+
+            component.with_row do |row|
+              row.with_key { t(".admin") }
+              row.with_value(text: @user.admin? ? t(".yes") : t(".no"))
+              row.with_action(
+                text: t("change"),
+                href: new_support_recruitment_cycle_user_path(change: 1),
+                visually_hidden_text: t(".admin").downcase,
+              )
+            end
+          end %>
+
+      <p class="govuk-body"><%= t(".email_notice") %></p>
+
+      <%= f.govuk_submit t(".submit") %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_users_path) %>
+    </p>
+  </div>
+</div>

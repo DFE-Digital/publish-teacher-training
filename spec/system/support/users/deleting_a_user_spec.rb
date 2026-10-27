@@ -11,6 +11,8 @@ RSpec.describe "Deleting a new user" do
 
   scenario "Deleting a user record" do
     when_i_click_the_delete_button
+    then_i_am_asked_to_confirm
+    when_i_confirm_deletion
     then_i_am_taken_to_the_user_index_page
     with_a_success_message
     and_the_user_is_deleted
@@ -28,6 +30,17 @@ private
 
   def when_i_click_the_delete_button
     support_user_show_page.delete_button.click
+  end
+
+  def then_i_am_asked_to_confirm
+    expect(page).to have_content("Are you sure you want to delete #{@user_to_delete.full_name}'s account on Publish?")
+    expect(page).to have_content("will be removed from all providers they are attached to")
+    expect(page).to have_content("will no longer be able to log into Publish")
+    expect(page).to have_content("will no longer receive emails about the Publish service")
+  end
+
+  def when_i_confirm_deletion
+    click_button "Delete #{@user_to_delete.full_name}'s account"
   end
 
   def then_i_am_taken_to_the_user_index_page

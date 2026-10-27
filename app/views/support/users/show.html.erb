@@ -46,7 +46,8 @@
       end
     end %>
 
-<%= govuk_button_to("Delete this user",
-      support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
-      method: :delete,
-      class: "govuk-button govuk-button--warning") %>
+<%= govuk_link_to(
+      "Delete this user",
+      delete_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
+      class: "govuk-button govuk-button--warning",
+    ) %>
