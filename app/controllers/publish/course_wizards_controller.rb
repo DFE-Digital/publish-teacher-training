@@ -40,7 +40,7 @@ module Publish
 
         @wizard.track_review_step if @wizard.return_to_review.present?
         clear_off_path_answers
-        redirect_to_next_step
+        redirect_to @wizard.next_step_path
       else
         render :show, status: :unprocessable_entity
       end
@@ -53,11 +53,6 @@ module Publish
     # off the path (from a bookmark, say) says nothing about the path.
     def clear_off_path_answers
       @wizard.clear_off_path_answers if @wizard.in_flow?(current_step_name)
-    end
-
-    def redirect_to_next_step
-      next_step = @wizard.next_step
-      redirect_to @wizard.resolve_step_path(next_step, @wizard.review_path_options(next_step))
     end
 
     def complete_course
