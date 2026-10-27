@@ -3,6 +3,16 @@
 require "rails_helper"
 
 RSpec.describe "Editing visa sponsorship deadlines", travel: mid_cycle do
+  # The visa pages this covers, which the course edit wizard replaces when
+  # course_edit_wizard is on (further education courses still use them)
+  around do |example|
+    previous = Settings.features.course_edit_wizard
+    Settings.features.course_edit_wizard = false
+    example.run
+  ensure
+    Settings.features.course_edit_wizard = previous
+  end
+
   before do
     and_i_am_authenticated_as_a_lead_school_provider_user
   end
