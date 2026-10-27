@@ -168,29 +168,38 @@ If a provider or course fails during rollover:
 
 ```ruby
 provider_code = "CHANGE-HERE"
-recruitment_cycle_id = RecruitmentCycle.next.id # or RecruitmentCycle.find_by(year: 'YEAR').id
+recruitment_cycle_id = RecruitmentCycle.current.id # the cycle the provider is in
+new_recruitment_cycle_id = RecruitmentCycle.next.id # or RecruitmentCycle.find_by(year: 'YEAR').id
 
 RolloverProviderService.call(
   provider_code:,
+  recruitment_cycle_id:,
   new_recruitment_cycle_id:,
   force: false,
 )
 ```
 
+#### A provider that missed rollover
+
+A provider is skipped when none of its own or accredited courses is rollable, for example when its only course was itself rolled over and never republished. To bring it into the next cycle, use **Support → provider → Rollover provider** on the provider in the cycle it was left in, and tick the courses to copy. Pick "No courses" to roll over the provider only.
+
+Once the provider exists in the next cycle that page no longer offers rollover, so choose the courses at the same time.
+
 #### To Rollover a Specific Course
 
 ```ruby
 copy_courses_to_provider_service = Courses::CopyToProviderService.new(
+  schools_copy_to_course: Rollover::Schools::CourseCopier.new,
   sites_copy_to_course: Sites::CopyToCourseService,
   enrichments_copy_to_course: Enrichments::CopyToCourseService.new,
   force: false,
 )
 
 # Find the course from current cycle that is raising error when rolling over
-course =  RecruitmentCycle.current.courses.where(course_code: 'COURSE-CODE')
+course = RecruitmentCycle.current.providers.find_by(provider_code: 'PROVIDER-CODE').courses.find_by(course_code: 'COURSE-CODE')
 
 # Find the provider in the new cycle
-new_provider = RecruitmentCycle.next.providers.where(provider_code: 'PROVIDER-CODE')
+new_provider = RecruitmentCycle.next.providers.find_by(provider_code: 'PROVIDER-CODE')
 
 # Rollover the course and see the error
 copy_courses_to_provider_service.execute(course:, new_provider:)
