@@ -112,6 +112,9 @@ features:
     has_current_cycle_started?: true
     # During rollover providers should be able to edit current & next recruitment cycle courses
     can_edit_current_and_next_cycles: false
+  # Change links on the course page that edit a saved course through
+  # CourseWizard (the funding type and visa links)
+  course_edit_wizard: false
 
 cookies:
   session:
