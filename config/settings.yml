@@ -101,6 +101,11 @@ google:
     api_json_key: "{}"
     table_name: events
 
+fauapi:
+  enabled: false
+  base_url: "https://pp-apimanagement.education.gov.uk"
+  api_key: replace_me
+
 features:
   send_request_data_to_bigquery: false
   rollover:
