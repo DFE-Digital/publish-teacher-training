@@ -27,7 +27,7 @@
         Provider Types
       </h1>
     </legend>
-    <div class="govuk-checkboxe govuk-checkboxes--small">
+    <div class="govuk-checkboxes govuk-checkboxes--small">
       <div class="govuk-checkboxes__item">
         <%= check_box_tag "provider_type[scitt]", nil, class: "govuk-checkboxes__input", checked: filters.dig(:provider_type, :scitt) %>
         <%= label_tag "provider_type[scitt]", t("components.filter.providers.scitt"), class: "govuk-label govuk-checkboxes__label" %>
