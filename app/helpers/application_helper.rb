@@ -74,10 +74,6 @@ module ApplicationHelper
   end
   # rubocop:enable Rails/HelperInstanceVariable
 
-  def dont_display_phase_banner_border?(user)
-    user && !user.admin? && user.providers.where(recruitment_cycle: RecruitmentCycle.current).one? && !RecruitmentCycle.upcoming_cycles_open_to_publish?
-  end
-
 private
 
   def protect_against_mistakes

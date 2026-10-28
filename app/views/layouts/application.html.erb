@@ -33,27 +33,17 @@
 
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
-    <%= render Header.new(service_name: I18n.t("service_name.publish"), current_user:) %>
+    <%= render Header.new(service_name: I18n.t("service_name.publish"), current_user:, provider: @provider) %>
 
     <div class="govuk-width-container">
-      <% if dont_display_phase_banner_border?(current_user) %>
-        <%= render PhaseBanner.new(no_border: true) %>
-      <% else %>
-        <%= render PhaseBanner.new %>
-      <% end %>
-
       <%= yield :breadcrumbs %>
-    </div>
 
-    <div class="govuk-width-container">
       <% if current_user && @provider %>
         <% if render_title_bar?(current_user: current_user, provider: @provider) && !request.path.end_with?(@provider.provider_code.to_s) %>
           <%= render TitleBar.new(title: @provider.provider_name, provider: @provider.provider_code, current_user:) %>
         <% end %>
       <% end %>
     </div>
-
-    <%= render partial: "publish/shared/navigation_bar" %>
 
     <div class="govuk-width-container">
       <%= yield :before_content %>
