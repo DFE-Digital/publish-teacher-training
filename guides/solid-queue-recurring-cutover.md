@@ -50,6 +50,7 @@ SolidQueue::Process.group(:kind).maximum(:last_heartbeat_at) # Worker, Dispatche
 | `CleanupRecentSearchesJob` | 03:00 | 03:00 | — | — |
 | `CleanupSchoolBulkUpdateDraftsJob` | 03:00 | 03:00 | — | — |
 | `SendWeeklyEmailAlertsJob` | Fri 03:00 | — | — | — |
+| `FindAndUseAnAPI::PublishCatalogueJob` | 06:00 | — | 06:00 | — |
 | Finished job / batch cleanup | hourly :12 | hourly :12 | hourly :12 | — |
 
 All cron expressions in `config/recurring.yml` use `Europe/London`.

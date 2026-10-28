@@ -27,5 +27,8 @@ dfe_signin:
 one_login:
   enabled: false
 
+fauapi:
+  enabled: true
+
 features:
   send_request_data_to_bigquery: true

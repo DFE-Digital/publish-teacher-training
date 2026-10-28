@@ -101,6 +101,11 @@ google:
     api_json_key: "{}"
     table_name: events
 
+fauapi:
+  enabled: false
+  base_url: "https://pp-apimanagement.education.gov.uk"
+  api_key: replace_me
+
 feedback:
   link: https://forms.office.com/pages/responsepage.aspx?id=yXfS-grGoU2187O4s0qC-SKECobyE75EtuJMp8rYxZtURTNaTTJaTVhBQlQzM1RESTJDVlBERk1JQS4u
 
