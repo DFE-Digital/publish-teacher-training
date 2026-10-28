@@ -9,8 +9,8 @@ en:
         support_agent_blank: Select a support agent
         zendesk_link: Zendesk link (optional)
       index:
-        title: Provider Onboarding Requests
-        heading: Provider Onboarding Requests
+        title: Onboard a provider
+        heading: Onboard a provider
       requests_table:
         form_link: Form link
         unassigned: Unassigned
@@ -18,14 +18,15 @@ en:
         view_zendesk_ticket: View Zendesk ticket
       new:
         title: New Provider Onboarding Request
-        heading: Generate a new provider onboarding request
+        heading: Create an onboarding request
+        caption: Onboard a provider
       create:
         success_message_html: "Onboarding form generated successfully for %{form_name}"
       update:
         updated_status_message_html: "Status updated to %{updated_status} for %{form_name}"
         error_message_html: "Failed to update status for %{form_name}"
       show:
-        caption: Add a provider
+        caption: Onboard a provider
         provider_details: Provider details for %{form_name}
         onboarding_details: Onboarding details
         organisation_details: Organisation details
