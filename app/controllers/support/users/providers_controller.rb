@@ -30,7 +30,7 @@ module Support
       end
 
       def provider
-        @provider ||= user.providers.find(params[:provider_id])
+        @provider ||= providers.find(params[:provider_id])
       end
 
       def providers
