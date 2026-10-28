@@ -2,6 +2,8 @@
 
 module Support
   class AddUserWizardsController < ApplicationController
+    CACHE_EXPIRY = 24.hours
+
     before_action :set_wizard, except: :new
 
     helper_method :current_step, :current_step_name
@@ -58,6 +60,7 @@ module Support
       AddUserWizard::Repositories::AddUser.new(
         recruitment_cycle_year: params[:recruitment_cycle_year],
         state_key: params[:state_key],
+        expires_in: CACHE_EXPIRY,
       )
     end
   end

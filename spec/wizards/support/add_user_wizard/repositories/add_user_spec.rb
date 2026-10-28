@@ -8,6 +8,7 @@ RSpec.describe Support::AddUserWizard::Repositories::AddUser do
     described_class.new(
       recruitment_cycle_year: 2027,
       state_key: "test-state-key",
+      expires_in: 24.hours,
       cache:,
     )
   end
