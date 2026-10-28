@@ -61,9 +61,6 @@ module Support
                                    :'start_date(3i)',
                                    :'start_date(2i)',
                                    :'start_date(1i)',
-                                   :'applications_open_from(3i)',
-                                   :'applications_open_from(2i)',
-                                   :'applications_open_from(1i)',
                                    :is_send,
                                    :can_sponsor_student_visa,
                                    :can_sponsor_skilled_worker_visa,
@@ -77,9 +74,6 @@ module Support
       when "start_date(3i)" then "start_date_day"
       when "start_date(2i)" then "start_date_month"
       when "start_date(1i)" then "start_date_year"
-      when "applications_open_from(3i)" then "applications_open_from_day"
-      when "applications_open_from(2i)" then "applications_open_from_month"
-      when "applications_open_from(1i)" then "applications_open_from_year"
       else key
       end
     end
