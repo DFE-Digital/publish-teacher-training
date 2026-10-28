@@ -53,6 +53,7 @@ RSpec.describe "Solid Queue recurring configuration" do
       "cleanup_recent_searches",
       "cleanup_school_bulk_update_drafts",
       "send_weekly_email_alerts",
+      "publish_fauapi_catalogue",
     )
 
     expect(production_tasks["save_statistic"]).to include(
@@ -85,6 +86,11 @@ RSpec.describe "Solid Queue recurring configuration" do
       "queue" => "low_priority",
       "schedule" => "0 3 * * 5 Europe/London",
     )
+    expect(production_tasks["publish_fauapi_catalogue"]).to include(
+      "class" => "FindAndUseAnAPI::PublishCatalogueJob",
+      "queue" => "low_priority",
+      "schedule" => "0 6 * * * Europe/London",
+    )
   end
 
   it "schedules the QA and staging job sets" do
@@ -98,7 +104,7 @@ RSpec.describe "Solid Queue recurring configuration" do
     expect(qa_tasks["save_statistic"]["queue"]).to eq("low_priority")
     expect(qa_tasks["cleanup_recent_searches"]["queue"]).to eq("low_priority")
     expect(qa_tasks["cleanup_school_bulk_update_drafts"]["queue"]).to eq("low_priority")
-    expect(application_job_tasks("staging").keys).to contain_exactly("save_statistic")
+    expect(application_job_tasks("staging").keys).to contain_exactly("save_statistic", "publish_fauapi_catalogue")
   end
 
   it "routes finished Solid Queue cleanup to a consumed low-priority queue" do

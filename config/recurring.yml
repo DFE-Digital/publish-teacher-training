@@ -47,6 +47,10 @@ production:
     class: SendWeeklyEmailAlertsJob
     queue: low_priority
     schedule: "0 3 * * 5 Europe/London"
+  publish_fauapi_catalogue:
+    class: FindAndUseAnAPI::PublishCatalogueJob
+    queue: low_priority
+    schedule: "0 6 * * * Europe/London"
 
 qa:
   <<: *cleanup
@@ -69,6 +73,10 @@ staging:
     class: SaveStatisticJob
     queue: low_priority
     schedule: "0 0 * * * Europe/London"
+  publish_fauapi_catalogue:
+    class: FindAndUseAnAPI::PublishCatalogueJob
+    queue: low_priority
+    schedule: "0 6 * * * Europe/London"
 
 # No schedules in these environments — keep empty so the scheduler does not
 # invent production-like recurrence.

@@ -42,5 +42,8 @@ skylight:
 
 render_json_errors: true
 
+fauapi:
+  base_url: "https://apimanagement.education.gov.uk"
+
 features:
   send_request_data_to_bigquery: true
