@@ -14,12 +14,13 @@ RSpec.describe "Find session cookie", service: :find, type: :request do
   it "persists for 2 weeks" do
     get find_results_path
 
-    expires = cookies.get_cookie(Settings.cookies.session.name).expires
+    session_cookie = cookies.get_cookie(Settings.cookies.session.name)
 
-    expect(expires).to be_within(1.minute).of(2.weeks.from_now)
+    expect(session_cookie).to be_present
+    expect(session_cookie.expires).to be_within(1.minute).of(2.weeks.from_now)
   end
 
-  it "is not sent with the publicly cacheable sitemap" do
+  it "sends no cookies with the publicly cacheable sitemap" do
     get find_results_path
     get find_sitemap_path(format: :xml)
 
