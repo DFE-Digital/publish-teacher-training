@@ -107,10 +107,9 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
         patch "wizard/:state_key/:step", to: "add_user_wizards#update"
       end
       member do
-        get :delete, to: "delete_user_wizards#show"
-        patch :delete, to: "delete_user_wizards#update"
-        get "providers/:provider_id/remove", to: "remove_user_provider_wizards#show", as: :remove_provider
-        patch "providers/:provider_id/remove", to: "remove_user_provider_wizards#update"
+        get :delete
+        get "providers/:provider_id/remove", to: "users/providers#remove", as: :remove_provider
+        delete "providers/:provider_id/remove", to: "users/providers#destroy"
       end
       scope module: :users do
         resource :providers, on: :member, only: %i[show]

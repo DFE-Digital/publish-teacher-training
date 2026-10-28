@@ -21,7 +21,7 @@
     <%= govuk_button_to(
           t(".submit"),
           remove_provider_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user, provider_id: @provider.id),
-          method: :patch,
+          method: :delete,
           class: "govuk-button--warning",
         ) %>
 
