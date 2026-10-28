@@ -1,0 +1,37 @@
+<%= render PageTitle.new(title: "support.users.check", has_errors: current_step.errors.any?) %>
+
+<% change_path = @wizard.route_strategy.resolve(step_id: :details, options: { return_to_review: :details }) %>
+<% admin = ActiveModel::Type::Boolean.new.cast(@wizard.state_store.admin) %>
+
+<span class="govuk-caption-l"><%= t("support.users.checks.show.caption") %></span>
+<h1 class="govuk-heading-l"><%= t("support.users.checks.show.heading") %></h1>
+
+<%= render GovukComponent::SummaryListComponent.new do |component|
+      component.with_row do |row|
+        row.with_key { t("support.users.checks.show.first_name") }
+        row.with_value(text: @wizard.state_store.first_name)
+        row.with_action(text: t("change"), href: change_path, visually_hidden_text: t("support.users.checks.show.first_name").downcase)
+      end
+
+      component.with_row do |row|
+        row.with_key { t("support.users.checks.show.last_name") }
+        row.with_value(text: @wizard.state_store.last_name)
+        row.with_action(text: t("change"), href: change_path, visually_hidden_text: t("support.users.checks.show.last_name").downcase)
+      end
+
+      component.with_row do |row|
+        row.with_key { t("support.users.checks.show.email") }
+        row.with_value(text: @wizard.state_store.email)
+        row.with_action(text: t("change"), href: change_path, visually_hidden_text: t("support.users.checks.show.email").downcase)
+      end
+
+      component.with_row do |row|
+        row.with_key { t("support.users.checks.show.admin") }
+        row.with_value(text: t(admin ? "support.users.checks.show.yes" : "support.users.checks.show.no"))
+        row.with_action(text: t("change"), href: change_path, visually_hidden_text: t("support.users.checks.show.admin").downcase)
+      end
+    end %>
+
+<p class="govuk-body"><%= t("support.users.checks.show.email_notice") %></p>
+
+<%= form.govuk_submit t("support.users.checks.show.submit") %>

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Support user check answers", travel: mid_cycle do
+RSpec.describe "Support add user wizard", travel: mid_cycle do
   include DfESignInUserHelper
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
@@ -13,16 +13,24 @@ RSpec.describe "Support user check answers", travel: mid_cycle do
   end
 
   it "shows the entered details and only creates the user when confirmed" do
-    post "/support/#{recruitment_cycle.year}/users", params: {
-      user: {
+    get new_support_recruitment_cycle_user_path(recruitment_cycle.year)
+    expect(response).to redirect_to(%r{/support/#{recruitment_cycle.year}/users/wizard/.+/details})
+    follow_redirect!
+
+    state_key = response.request.fullpath[%r{wizard/([^/]+)/details}, 1]
+
+    patch wizard_support_recruitment_cycle_users_path(recruitment_cycle.year, state_key:, step: :details), params: {
+      details: {
         first_name: "ysysy",
         last_name: "ssgs",
-        email: "sgs@sdgsg.com",
+        email: "  sgs@sdgsg.com  ",
         admin: "false",
       },
     }
 
-    expect(response).to redirect_to("/support/#{recruitment_cycle.year}/users/check")
+    expect(response).to redirect_to(
+      wizard_support_recruitment_cycle_users_path(recruitment_cycle.year, state_key:, step: :check_answers),
+    )
     expect(User.find_by(email: "sgs@sdgsg.com")).to be_nil
 
     follow_redirect!
@@ -34,9 +42,9 @@ RSpec.describe "Support user check answers", travel: mid_cycle do
     expect(response.body).to include("The user will be sent an email to tell them you’ve added them to the organisation.")
     expect(response.body).to include("Add user")
 
-    put "/support/#{recruitment_cycle.year}/users/check"
+    patch wizard_support_recruitment_cycle_users_path(recruitment_cycle.year, state_key:, step: :check_answers)
 
-    expect(response).to redirect_to("/support/#{recruitment_cycle.year}/users")
+    expect(response).to redirect_to(support_recruitment_cycle_users_path(recruitment_cycle.year))
     follow_redirect!
     expect(response.body).to include("User added")
     expect(User.find_by(email: "sgs@sdgsg.com")).to be_present

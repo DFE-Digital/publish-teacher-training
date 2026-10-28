@@ -21,8 +21,8 @@
 
     <%= govuk_button_to(
           t(".submit", name: @user.full_name),
-          support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
-          method: :delete,
+          delete_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
+          method: :patch,
           class: "govuk-button--warning",
         ) %>
   </div>

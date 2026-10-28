@@ -2,8 +2,6 @@
 
 module Support
   class UsersController < ApplicationController
-    include NewUserDraft
-
     def index
       recruitment_cycle
       @pagy, @users = pagy(filtered_users)
@@ -13,24 +11,8 @@ module Support
       user
     end
 
-    def new
-      clear_new_user_draft unless params[:change]
-      @user = User.new(new_user_draft)
-    end
-
     def edit
       user
-    end
-
-    def create
-      @user = User.new(new_user_params.merge(state: "new"))
-
-      if @user.valid?
-        stash_new_user(new_user_params)
-        redirect_to check_support_recruitment_cycle_users_path
-      else
-        render :new, status: :unprocessable_entity
-      end
     end
 
     def update
@@ -39,10 +21,6 @@ module Support
       else
         render :edit
       end
-    end
-
-    def delete
-      user
     end
 
     def destroy
