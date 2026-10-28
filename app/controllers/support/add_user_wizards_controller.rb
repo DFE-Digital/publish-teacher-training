@@ -44,19 +44,21 @@ module Support
 
     def set_wizard
       recruitment_cycle
-      repository = DfE::Wizard::Repository::Session.new(
-        session:,
-        key: :support_add_user_wizard,
-        state_key: params[:state_key],
-      )
 
       @wizard = AddUserWizard.new(
         current_step: current_step_name,
         current_step_params: params,
-        state_store: AddUserWizard::StateStores::AddUserWizardStore.new(repository:),
+        state_store: AddUserWizard::StateStores::AddUserWizardStore.new(repository: wizard_repository),
       )
       @wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
       @wizard.state_key = params[:state_key]
+    end
+
+    def wizard_repository
+      AddUserWizard::Repositories::AddUser.new(
+        recruitment_cycle_year: params[:recruitment_cycle_year],
+        state_key: params[:state_key],
+      )
     end
   end
 end

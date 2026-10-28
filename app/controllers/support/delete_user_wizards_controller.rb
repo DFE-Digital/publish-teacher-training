@@ -24,19 +24,21 @@ module Support
 
     def set_wizard
       recruitment_cycle
-      repository = DfE::Wizard::Repository::Session.new(
-        session:,
-        key: :support_delete_user_wizard,
-        state_key: params[:id],
-      )
 
       @wizard = DeleteUserWizard.new(
         current_step: :confirm,
         current_step_params: params,
-        state_store: DeleteUserWizard::StateStores::DeleteUserWizardStore.new(repository:),
+        state_store: DeleteUserWizard::StateStores::DeleteUserWizardStore.new(repository: wizard_repository),
       )
       @wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
       @wizard.user_id = params[:id]
+    end
+
+    def wizard_repository
+      DeleteUserWizard::Repositories::DeleteUser.new(
+        recruitment_cycle_year: params[:recruitment_cycle_year],
+        user_id: params[:id],
+      )
     end
   end
 end
