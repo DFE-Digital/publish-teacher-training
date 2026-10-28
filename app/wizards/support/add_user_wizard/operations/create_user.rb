@@ -22,8 +22,6 @@ class Support::AddUserWizard
         end
       end
 
-      def rollback; end
-
     private
 
       def user_attributes

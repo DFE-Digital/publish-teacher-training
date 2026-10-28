@@ -14,8 +14,6 @@ class Support::RemoveUserProviderWizard
         UserAssociationsService::Delete.call(user: @wizard.user, providers: @wizard.provider)
         { success: true }
       end
-
-      def rollback; end
     end
   end
 end
