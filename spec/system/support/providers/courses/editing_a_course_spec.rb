@@ -13,6 +13,7 @@ RSpec.describe "Edit provider course details", travel: mid_cycle do
 
   context "valid details" do
     scenario "I can edit a course details" do
+      and_i_note_the_applications_open_date
       when_i_fill_in_course_code_with valid_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, valid_date_year
@@ -21,6 +22,7 @@ RSpec.describe "Edit provider course details", travel: mid_cycle do
       and_i_click_the_continue_button
       then_i_am_redirected_back_to_the_support_provider_courses_index_page
       and_the_course_name_code_and_ratifying_provider_are_updated
+      and_the_applications_open_date_is_unchanged
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
       then_i_see_the_updated_ratifying_provider
@@ -173,6 +175,14 @@ private
     expect(support_provider_courses_index_page).to have_text(course_code)
     expect(support_provider_courses_index_page).to have_text(course_name)
     expect(support_provider_courses_index_page).to have_text(ratifying_provider_name)
+  end
+
+  def and_i_note_the_applications_open_date
+    @applications_open_from = provider.courses.first.applications_open_from
+  end
+
+  def and_the_applications_open_date_is_unchanged
+    expect(provider.courses.first.reload.applications_open_from).to eq(@applications_open_from)
   end
 
   def and_i_select_the_send_checkbox

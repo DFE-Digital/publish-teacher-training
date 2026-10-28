@@ -25,6 +25,14 @@ module Support
           expect(subject.save).to be(true)
           expect(course.reload.applications_open_from).to eq(original_applications_open_from)
         end
+
+        it "fills a blank applications open date from the recruitment cycle" do
+          course.update_column(:applications_open_from, nil)
+          subject.assign_attributes(valid_attributes)
+
+          expect(subject.save).to be(true)
+          expect(course.reload.applications_open_from).to eq(course.recruitment_cycle.application_start_date.to_date)
+        end
       end
 
       context "form is assigned invalid date value" do

@@ -39,6 +39,7 @@ module Support
     def valid?
       super
       assign_attributes_to_course
+      assign_default_applications_open_from
       course.valid?
       promote_errors_from_course
       errors.none?
@@ -83,6 +84,12 @@ module Support
       }
 
       course.assign_attributes(attributes)
+    end
+
+    # A blank date is filled from the cycle on save. Do that before validation,
+    # because this page no longer has a field for it.
+    def assign_default_applications_open_from
+      course.applications_open_from ||= course.recruitment_cycle.application_start_date
     end
 
     def promote_errors_from_course
