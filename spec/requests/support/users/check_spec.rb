@@ -39,7 +39,6 @@ RSpec.describe "Support add user wizard", travel: mid_cycle do
     expect(response.body).to include("ysysy")
     expect(response.body).to include("ssgs")
     expect(response.body).to include("sgs@sdgsg.com")
-    expect(response.body).to include("The user will be sent an email to tell them you’ve added them to the organisation.")
     expect(response.body).to include("Add user")
 
     patch wizard_support_recruitment_cycle_users_path(recruitment_cycle.year, state_key:, step: :check_answers)

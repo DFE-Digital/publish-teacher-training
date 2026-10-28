@@ -14,7 +14,6 @@ en:
           admin: Admin
           "yes": "Yes"
           "no": "No"
-          email_notice: The user will be sent an email to tell them you’ve added them to the organisation.
           submit: Add user
         update:
           success: User added

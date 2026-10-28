@@ -75,7 +75,6 @@ RSpec.describe "Creating a new user" do
     expect(page).to have_content("Luke")
     expect(page).to have_content("Skywalker")
     expect(page).to have_content("lukeskywalker@jedi.com")
-    expect(page).to have_content("The user will be sent an email to tell them you’ve added them to the organisation.")
     expect(User.find_by(email: "lukeskywalker@jedi.com")).to be_nil
   end
 
