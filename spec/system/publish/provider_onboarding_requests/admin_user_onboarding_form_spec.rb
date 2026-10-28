@@ -54,7 +54,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
     expect(page).to have_field("UK provider reference number (UKPRN)", with: onboarding_request.ukprn)
     expect(page).to have_field("Unique reference number (URN)", with: onboarding_request.urn)
     expect(page).to have_field("Contact email address", with: onboarding_request.contact_email_address)
-    expect(page).to have_field("Phone number", with: onboarding_request.telephone)
+    expect(page).to have_field("Telephone", with: onboarding_request.telephone)
     expect(page).to have_field("Organisation website", with: onboarding_request.website)
     expect(page).to have_field("Address line 1", with: onboarding_request.address_line_1)
     expect(page).to have_field("Address line 2") # optional

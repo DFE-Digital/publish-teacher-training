@@ -14,7 +14,7 @@ module ProvidersOnboardingFormRequestsHelper
   alias_method :then_i_am_on_the_providers_onboarding_form_requests_page, :when_i_visit_the_providers_onboarding_form_requests_page
 
   def then_i_see_providers_onboarding_form_requests_table
-    expect(page).to have_content("Provider Onboarding Requests")
+    expect(page).to have_content("Onboard a provider")
     expect(page).to have_content("Id")
     expect(page).to have_content("Form name")
     expect(page).to have_content("Status")
@@ -50,12 +50,12 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_see_the_generate_onboarding_form_button
-    expect(page).to have_link("Generate onboarding form", href: new_support_providers_onboarding_form_request_path)
-    expect(page).to have_css(".govuk-button", text: "Generate onboarding form")
+    expect(page).to have_link("Create an onboarding request", href: new_support_providers_onboarding_form_request_path)
+    expect(page).to have_css(".govuk-button", text: "Create an onboarding request")
   end
 
   def when_i_click_to_generate_a_new_onboarding_form
-    click_link_or_button "Generate onboarding form"
+    click_link_or_button "Create an onboarding request"
   end
 
   def then_i_am_on_new_onboarding_form_request_page
@@ -74,7 +74,7 @@ module ProvidersOnboardingFormRequestsHelper
 
   def then_i_see_fields_on_new_onboarding_form_request_page
     expect(page).to have_current_path(new_support_providers_onboarding_form_request_path)
-    expect(page).to have_content("Generate a new provider onboarding request")
+    expect(page).to have_content("Create an onboarding request")
     expect(page).to have_field("Form name")
     expect(page).to have_field("Support agent (optional)")
     expect(page).to have_field("Zendesk link (optional)")
@@ -161,7 +161,7 @@ module ProvidersOnboardingFormRequestsHelper
     # Contact details
     expect(page).to have_content("Contact email address")
     expect(page).to have_content(onboarding_request.contact_email_address)
-    expect(page).to have_content("Telephone number")
+    expect(page).to have_content("Telephone")
     expect(page).to have_content(onboarding_request.telephone)
     expect(page).to have_content("Website")
     expect(page).to have_content(onboarding_request.website)
