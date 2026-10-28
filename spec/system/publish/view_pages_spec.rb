@@ -7,6 +7,8 @@ RSpec.describe "View pages" do
     visit "/cookies"
 
     expect(page).to have_css(".govuk-tag.govuk-tag--grey.govuk-phase-banner__content__tag", text: Settings.environment.label)
+    expect(page).to have_no_link("feedback")
+    expect(page).to have_no_text("This is a new service")
   end
 
   scenario "Navigate to /cookies" do

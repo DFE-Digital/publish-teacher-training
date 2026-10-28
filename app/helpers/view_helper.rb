@@ -28,10 +28,6 @@ module ViewHelper
     govuk_mail_to(bat_contact_email_address, name || bat_contact_email_address_with_wrap, **)
   end
 
-  # def feedback_link_to
-  #  t("feedback.link")
-  # end
-
   def title_with_error_prefix(title, error)
     "#{t('page_titles.error_prefix') if error}#{title}"
   end

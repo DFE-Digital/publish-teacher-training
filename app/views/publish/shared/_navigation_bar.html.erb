@@ -1,7 +1,0 @@
-<% if render_navigation_bar?(@provider) %>
-  <%= render(NavigationBar.new(
-    items: navigation_items(@provider),
-    current_path: request.path,
-    current_user: @current_user,
-  )) %>
-<% end %>
