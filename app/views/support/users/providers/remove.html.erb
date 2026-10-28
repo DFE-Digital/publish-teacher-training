@@ -2,8 +2,8 @@
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
-    text: "All user records",
-    href: support_recruitment_cycle_users_path(params[:recruitment_cycle_year]),
+    text: "Back",
+    href: support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], @user),
   ) %>
 <% end %>
 
@@ -20,8 +20,8 @@
 
     <%= govuk_button_to(
           t(".submit"),
-          support_user_permission_path(@user_permission, recruitment_cycle_year: params[:recruitment_cycle_year]),
-          method: :delete,
+          remove_provider_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user, provider_id: @provider.id),
+          method: :patch,
           class: "govuk-button--warning",
         ) %>
 

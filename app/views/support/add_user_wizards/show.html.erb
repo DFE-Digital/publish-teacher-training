@@ -1,0 +1,29 @@
+<% content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: @wizard.previous_step_path(fallback: support_recruitment_cycle_users_path),
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(
+          model: current_step,
+          scope: current_step_name,
+          url: wizard_support_recruitment_cycle_users_path(
+            params[:recruitment_cycle_year],
+            state_key: params[:state_key],
+            step: current_step_name,
+            return_to_review: params[:return_to_review],
+          ),
+          method: :patch,
+        ) do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= render "support/add_user_wizards/steps/#{current_step_name}", form: %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), support_recruitment_cycle_users_path) %>
+    </p>
+  </div>
+</div>

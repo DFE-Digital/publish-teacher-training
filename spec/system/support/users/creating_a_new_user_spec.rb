@@ -43,7 +43,11 @@ RSpec.describe "Creating a new user" do
   end
 
   def then_i_am_taken_to_the_support_user_new_page
-    support_user_new_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year)
+    expect(page).to have_current_path(%r{/users/wizard/.+/details})
+    support_user_new_page.load(
+      recruitment_cycle_year: Find::CycleTimetable.current_year,
+      state_key: page.current_path[%r{wizard/([^/]+)/details}, 1],
+    )
   end
 
   def and_i_fill_in_first_name

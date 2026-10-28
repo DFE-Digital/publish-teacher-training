@@ -47,6 +47,7 @@ private
   def then_i_am_asked_to_confirm
     expect(page).to have_content("Are you sure you want to remove #{@user.full_name} from #{@provider.provider_name}?")
     expect(page).to have_content("#{@user.full_name} will be sent an email to tell them you removed them from #{@provider.provider_name}")
+    expect(page).to have_link("Back", href: support_recruitment_cycle_user_providers_path(Find::CycleTimetable.current_year, @user))
   end
 
   def when_i_confirm_removal
