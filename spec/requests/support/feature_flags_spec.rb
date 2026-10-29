@@ -16,16 +16,18 @@ RSpec.describe "Support::FeatureFlagsController" do
     get support_feature_flags_path
     expect(response.body).to include("This flag has not been updated")
 
-    put activate_support_feature_flag_path(:maintenance_banner)
+    put activate_support_feature_flag_path(:bursaries_and_scholarships_announced)
 
-    expect(FeatureFlagState.find_by(name: "maintenance_banner").active).to be(true)
+    expect(FeatureFlagState.find_by(name: "bursaries_and_scholarships_announced").active).to be(true)
+    expect(JSON.parse(RedisClient.current.get("feature_flags_bursaries_and_scholarships_announced"))["state"]).to be(true)
 
     get support_feature_flags_path
     expect(response.body).to include("at #{Time.zone.now.to_fs(:govuk_date_and_time)}")
 
-    put deactivate_support_feature_flag_path(:maintenance_banner)
+    put deactivate_support_feature_flag_path(:bursaries_and_scholarships_announced)
 
-    expect(FeatureFlagState.find_by(name: "maintenance_banner").active).to be(false)
+    expect(FeatureFlagState.find_by(name: "bursaries_and_scholarships_announced").active).to be(false)
+    expect(JSON.parse(RedisClient.current.get("feature_flags_bursaries_and_scholarships_announced"))["state"]).to be(false)
   end
 
   it "rejects an unknown feature without storing it" do

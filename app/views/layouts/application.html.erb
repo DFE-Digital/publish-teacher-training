@@ -58,7 +58,6 @@
     <div class="govuk-width-container">
       <%= yield :before_content %>
       <main class="govuk-main-wrapper " id="main-content" role="main">
-        <%= render Find::MaintenanceBannerComponent.new %>
         <%= render ActiveBannersComponent.new(interface: :publish) %>
         <%= render(FlashBanner.new(flash:)) %>
 
