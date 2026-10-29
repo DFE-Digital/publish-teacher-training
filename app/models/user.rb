@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   include PgSearch::Model
 
-  # Dropped in this release. Keep ignoring it until that migration has run
-  # in every environment, then remove this line.
+  # Unused. Ignore it so the column can be dropped in a follow-up release,
+  # then remove this line once that migration has run in every environment.
   self.ignored_columns += %w[discarded_at]
 
   before_save :downcase_email, :strip_email_whitespace
