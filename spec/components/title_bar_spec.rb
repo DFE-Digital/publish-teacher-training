@@ -14,12 +14,16 @@ describe TitleBar do
       render_inline(described_class.new(title:, current_user:, provider: provider_code))
     end
 
-    it "does not render the provided title" do
-      expect(component).to have_no_text("BAT School")
+    it "renders the provided title" do
+      expect(component).to have_text("BAT School")
     end
 
     it "does not render the recruitment cycle link" do
       expect(component.has_link?("Change recruitment cycle", href: "/publish/organisations/1BJ")).to be false
+    end
+
+    it "does not render the change organisation link" do
+      expect(component).to have_no_link("Change organisation")
     end
   end
 
