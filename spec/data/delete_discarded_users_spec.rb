@@ -4,20 +4,10 @@ require "rails_helper"
 require Rails.root.join("db/data/20261029091000_delete_discarded_users")
 
 describe DeleteDiscardedUsers do
-  # discarded_at is ignored on User, so expose it while building test data.
-  around do |example|
-    ignored_columns = User.ignored_columns
-    User.ignored_columns = []
-    User.reset_column_information
-    example.run
-  ensure
-    User.ignored_columns = ignored_columns
-    User.reset_column_information
-  end
-
   it "hard deletes users with discarded_at set and leaves other users alone" do
-    discarded_user = create(:user, discarded_at: Time.zone.now)
+    discarded_user = create(:user)
     active_user = create(:user)
+    User.connection.exec_update("UPDATE \"user\" SET discarded_at = NOW() WHERE id = #{discarded_user.id}")
 
     described_class.new.up
 
