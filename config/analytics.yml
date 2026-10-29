@@ -343,7 +343,6 @@ shared:
     - accept_terms_date_utc
     - state
     - admin
-    - discarded_at
     - magic_link_token_sent_at
   user_notification:
     - id
