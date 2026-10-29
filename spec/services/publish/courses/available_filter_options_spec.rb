@@ -135,11 +135,12 @@ RSpec.describe Publish::Courses::AvailableFilterOptions do
       expect(statuses_for(previous_provider)).to eq(%w[open])
     end
 
-    it "is scheduled in a future cycle" do
+    it "is scheduled for an open course and closed for a closed course in a future cycle" do
       next_provider = create(:provider, :next_recruitment_cycle)
-      create(:course, :published, provider: next_provider, application_status: :closed)
+      create(:course, :published, provider: next_provider, application_status: :open, name: "Open")
+      create(:course, :published, provider: next_provider, application_status: :closed, name: "Closed")
 
-      expect(statuses_for(next_provider)).to eq(%w[scheduled])
+      expect(statuses_for(next_provider)).to match_array(%w[scheduled closed])
     end
   end
 end

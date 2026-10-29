@@ -46,11 +46,17 @@ module Publish
       end
 
       def status_tags
-        if current_or_previous_cycle?
-          course.application_status_open? ? OPEN_APPLICATION_STATUS_TAGS : CLOSED_APPLICATION_STATUS_TAGS
-        else
+        if future_cycle? && course.application_status_open?
           SCHEDULED_STATUS_TAGS
+        elsif course.application_status_open?
+          OPEN_APPLICATION_STATUS_TAGS
+        else
+          CLOSED_APPLICATION_STATUS_TAGS
         end
+      end
+
+      def future_cycle?
+        !current_or_previous_cycle?
       end
 
       def current_or_previous_cycle?

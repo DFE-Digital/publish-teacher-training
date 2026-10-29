@@ -521,8 +521,8 @@ RSpec.describe Publish::Courses::Query do
       context "when scheduled is given" do
         let(:params) { { status: %w[scheduled] } }
 
-        it "returns published courses regardless of their application status" do
-          expect(rows).to match_collection([published, with_changes], attribute_names: %w[name])
+        it "returns published courses that are still open" do
+          expect(rows).to match_collection([published], attribute_names: %w[name])
         end
       end
 
@@ -537,8 +537,8 @@ RSpec.describe Publish::Courses::Query do
       context "when closed is given" do
         let(:params) { { status: %w[closed] } }
 
-        it "returns no courses" do
-          expect(rows).to be_empty
+        it "returns published courses that are closed" do
+          expect(rows).to match_collection([with_changes], attribute_names: %w[name])
         end
       end
 
@@ -740,7 +740,8 @@ RSpec.describe Publish::Courses::Query do
       expect(materialise(12, filters)).to eq(materialise(3, filters))
     end
 
-    it "adds no more than the cycle lookup when filtering" do
+    # Closed applies in every cycle, so it does not load the provider's cycle year.
+    it "adds no extra query when filtering by closed" do
       provider = create(:provider)
       create_list(
         :course, 12, :published, :primary, :fee, :resulting_in_qts,
@@ -754,7 +755,7 @@ RSpec.describe Publish::Courses::Query do
       # Guard against passing because the filters matched nothing, which would
       # skip the preload the unfiltered list performs.
       expect(described_class.call(provider: provider.reload, params: filters).size).to eq(12)
-      expect(filtered).to eq(unfiltered + 1)
+      expect(filtered).to eq(unfiltered)
     end
   end
 end
