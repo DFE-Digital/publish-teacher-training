@@ -125,3 +125,23 @@
     }
   }
 }
+
+.app-filter .app-search__controls {
+  margin-bottom: govuk-spacing(4);
+
+  @include govuk-media-query($from: "desktop") {
+    padding: govuk-spacing(3);
+  }
+
+  .app-find-search {
+    flex-direction: column;
+
+    > * {
+      align-self: stretch;
+    }
+  }
+
+  .govuk-button {
+    width: 100%;
+  }
+}
