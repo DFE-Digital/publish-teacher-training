@@ -193,7 +193,7 @@ A provider user or support user on Publish. Authenticated via DfE Sign-in.
 - `accept_terms_date_utc`: timestamp when the user accepted the Publish terms.
 - `magic_link_token`: used for fallback authentication when DfE Sign-in is unavailable.
 
-Soft-deleted via `discarded_at`. Supports full-text search on `first_name`, `last_name`, and `email`.
+Users are not soft-deleted. When a support user deletes a user, the record is removed from the database (`destroy!`). The `discarded_at` column is a leftover from when users were soft-deleted. The `User` model no longer uses `Discard`, so do not rely on this column. Supports full-text search on `first_name`, `last_name`, and `email`.
 
 ---
 
@@ -353,6 +353,50 @@ Stores aggregate statistics as JSON in the `json_data` column. Minimal model wit
 
 ---
 
+## Banner
+
+**Table:** `banner`
+**Model:** [`app/models/banner.rb`](../app/models/banner.rb)
+
+A message shown to users at the top of a service.
+
+- `name`, `heading` and `body`: the banner text.
+- `published_at` and `expired_at`: the dates when the banner starts and stops showing.
+- `display_on_find`, `display_on_publish`, `display_on_support`: choose which services show the banner. At least one must be true.
+
+---
+
+## FeatureFlagState
+
+**Table:** `feature_flag_state`
+**Model:** [`app/models/feature_flag_state.rb`](../app/models/feature_flag_state.rb)
+
+Stores whether a feature flag is on or off. `name` is unique and `active` is the on/off value.
+
+---
+
+## SiteSetting
+
+**Table:** `site_setting`
+**Model:** [`app/models/site_setting.rb`](../app/models/site_setting.rb)
+
+A named setting with a text `value`. `name` is unique and must be one of `SiteSetting::NAMES` (for example `cycle_schedule`).
+
+---
+
+## Course::SchoolBulkUpdateDraft
+
+**Table:** `course_school_bulk_update_draft`
+**Model:** [`app/models/course/school_bulk_update_draft.rb`](../app/models/course/school_bulk_update_draft.rb)
+
+A temporary draft used when a user changes the schools of a course in bulk. It belongs to a `Course` and a `User`.
+
+- `school_uuids`: the schools chosen in the draft.
+- `baseline_uuids`: the schools the course had when the draft was started.
+- `expires_at`: when the draft is no longer valid.
+
+---
+
 ## CourseIncentive
 
 **Model:** [`app/models/course_incentive.rb`](../app/models/course_incentive.rb)
@@ -377,9 +421,15 @@ The following tables support framework functionality. They are not part of the a
 
 `data_migrations` — tracks one-off data migration scripts. Uses a `version` string as the primary key.
 
-### DelayedJobs
+### Solid Queue and Solid Cache
 
-`delayed_jobs` — managed by the [Delayed Job](https://github.com/collectiveidea/delayed_job) gem for background job processing.
+`solid_queue_*` tables — managed by [Solid Queue](https://github.com/rails/solid_queue). This is how the app runs background jobs.
+
+`solid_cache_entries` — managed by [Solid Cache](https://github.com/rails/solid_cache). This is where the app stores its cache.
+
+### DelayedJobs (leftover)
+
+`delayed_jobs` — a leftover from [Delayed Job](https://github.com/collectiveidea/delayed_job), which the app used before Solid Queue. The app no longer uses it for background jobs.
 
 ### DataHubProcessSummary
 
