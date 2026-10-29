@@ -18,6 +18,15 @@ RSpec.describe CourseWizard::Repositories::Course do
     )
   end
 
+  it "keeps an edit of a saved course apart from a course draft with the same state_key" do
+    edit = CourseWizard::Repositories::CourseEdit.new(
+      provider_code: "PROV", recruitment_cycle_year: 2026, state_key: "test-state-key", expires_in: 24.hours, cache:,
+    )
+    edit.write({ funding_type: "salary" })
+
+    expect(repository.read).to eq({})
+  end
+
   describe "#write / #read" do
     it "keeps a single symbol key when merging string-keyed step writes" do
       repository.write({ "level" => "secondary" })

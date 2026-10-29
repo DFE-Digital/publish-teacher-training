@@ -59,25 +59,16 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     choose "QTS"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:funding_type)
+    then_i_am_on_step(:funding_type, change_from: :qualifications)
     choose "Fee - no salary"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:study_pattern)
+    then_i_am_on_step(:study_pattern, change_from: :qualifications)
     check "Full time"
     and_i_click_continue
 
-    then_i_am_on_step_without_return_to_review(:schools)
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:study_sites)
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
+    then_i_am_on_step(:visa_sponsorship, change_from: :qualifications)
     choose "No"
-    and_i_click_continue
-
-    then_i_am_on_step_without_return_to_review(:start_date)
     and_i_click_continue
 
     then_i_am_taken_to_the_check_answers_page
@@ -272,11 +263,9 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     when_i_click_change_link_for(:funding_type)
     choose "Fee - no salary"
     and_i_click_continue
-    and_i_continue_until_the_student_visa_question
+    then_i_am_on_step(:visa_sponsorship, change_from: :funding_type)
 
     expect(page).to have_checked_field("No")
-    and_i_click_continue
-    then_i_am_on_step_without_return_to_review(:start_date)
     and_i_click_continue
     then_i_am_taken_to_the_check_answers_page
 
@@ -319,15 +308,6 @@ private
 
   def and_the_partner_cannot_sponsor_student_visas
     provider.accredited_partners.first.update!(can_sponsor_student_visa: false)
-  end
-
-  def and_i_continue_until_the_student_visa_question
-    %i[study_pattern schools study_sites].each do |step|
-      then_i_am_on_step_without_return_to_review(step)
-      and_i_click_continue
-    end
-
-    then_i_am_on_step_without_return_to_review(:visa_sponsorship)
   end
 
   def tda_changeable_steps
@@ -446,8 +426,6 @@ private
       school_uuids: [placement_site.uuid],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
-      can_sponsor_student_visa: false,
-      visa_sponsorship_application_deadline_required: false,
     )
   end
 
@@ -471,8 +449,6 @@ private
       school_uuids: [@placement_site.uuid],
       study_sites_ids: [],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
-      can_sponsor_student_visa: false,
-      visa_sponsorship_application_deadline_required: false,
     )
   end
 
@@ -543,28 +519,18 @@ private
     link.click
   end
 
-  def then_i_am_on_step(step)
+  # A step shown in a change from check answers: the URL carries the step
+  # whose Change link was followed
+  def then_i_am_on_step(step, change_from: step)
     expect(page).to have_current_path(
       publish_provider_recruitment_cycle_course_wizard_path(
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
         step:,
         state_key: wizard_state_key,
-        return_to_review: step,
+        return_to_review: change_from,
       ),
       ignore_query: false,
-    )
-  end
-
-  def then_i_am_on_step_without_return_to_review(step)
-    expect(page).to have_current_path(
-      publish_provider_recruitment_cycle_course_wizard_path(
-        provider_code: provider.provider_code,
-        recruitment_cycle_year: provider.recruitment_cycle_year,
-        step:,
-        state_key: wizard_state_key,
-      ),
-      ignore_query: true,
     )
   end
 
@@ -794,8 +760,6 @@ private
       school_uuids: [placement_site.uuid],
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
-      can_sponsor_student_visa: false,
-      visa_sponsorship_application_deadline_required: false,
     )
   end
 
