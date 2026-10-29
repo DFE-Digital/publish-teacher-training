@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_21_152353) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -336,21 +336,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_21_152353) do
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler", null: false
-    t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
-    t.string "locked_by"
-    t.string "queue"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "feature_flag_state", force: :cascade do |t|
