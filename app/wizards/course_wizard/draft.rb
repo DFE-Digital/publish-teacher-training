@@ -26,8 +26,11 @@ class CourseWizard
       state_store.undergraduate_degree_with_qts?
     end
 
+    # A TDA course is always a full-time apprenticeship with no Skilled Worker
+    # visa sponsorship (see Publish::Courses::AssignTdaAttributesService), so
+    # these ignore answers left over from before the qualification changed.
     def funding
-      return "apprenticeship" if tda? && state_store.funding_type.blank?
+      return "apprenticeship" if tda?
 
       state_store.funding_type
     end
@@ -37,24 +40,19 @@ class CourseWizard
     end
 
     def study_modes
-      patterns = Array(state_store.study_pattern).compact_blank
-      return patterns if patterns.present?
       return %w[full_time] if tda?
 
-      []
+      Array(state_store.study_pattern).compact_blank
     end
 
     def can_sponsor_skilled_worker_visa
-      return false if tda? && state_store.can_sponsor_skilled_worker_visa.nil?
+      return false if tda?
 
       state_store.can_sponsor_skilled_worker_visa
     end
 
     def study_patterns_for_display
-      patterns = Array(state_store.study_pattern).compact_blank
-      return %w[full_time] if patterns.empty? && tda?
-
-      patterns
+      study_modes
     end
 
     def age_range_choice

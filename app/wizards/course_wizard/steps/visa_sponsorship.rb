@@ -30,7 +30,7 @@ class CourseWizard
       end
 
       def question
-        if wizard.provider.accredited?
+        if wizard.state_store.provider.accredited?
           I18n.t("course_wizard.steps.visa_sponsorship.questions.organisation")
         else
           I18n.t("course_wizard.steps.visa_sponsorship.questions.availability")
@@ -38,11 +38,11 @@ class CourseWizard
       end
 
       def show_recruiting_from_overseas_guidance?
-        wizard.provider.accredited? && !wizard.provider.can_sponsor_student_visa
+        wizard.state_store.provider.accredited? && !wizard.state_store.provider.can_sponsor_student_visa
       end
 
       def show_accrediting_provider_inset_text?
-        !wizard.provider.accredited? && accrediting_provider.present?
+        !wizard.state_store.provider.accredited? && accrediting_provider.present?
       end
 
       def accrediting_provider_name
@@ -64,7 +64,7 @@ class CourseWizard
       end
 
       def accrediting_provider
-        wizard.accreditation.accrediting_provider
+        wizard.state_store.accrediting_provider
       end
     end
   end

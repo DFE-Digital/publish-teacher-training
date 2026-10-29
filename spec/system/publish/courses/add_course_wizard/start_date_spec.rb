@@ -175,7 +175,6 @@ private
         recruitment_cycle_year: provider.recruitment_cycle_year,
         step: :start_date,
         state_key: wizard_state_key,
-        return_to_review: :start_date,
       ),
       ignore_query: false,
     )

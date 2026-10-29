@@ -1,7 +1,7 @@
 <% content_for :page_title, title_with_error_prefix(t("course_wizard.steps.visa_sponsorship.heading"), current_step.errors.any?) %>
 
 <h1 class="govuk-heading-l">
-  <%= render CaptionText.new(text: t("course_wizard.steps.visa_sponsorship.caption")) %>
+  <%= render CaptionText.new(text: local_assigns.fetch(:caption) { t("course_wizard.steps.visa_sponsorship.caption") }) %>
   <%= t("course_wizard.steps.visa_sponsorship.heading") %>
 </h1>
 
