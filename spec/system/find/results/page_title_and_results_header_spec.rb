@@ -132,7 +132,11 @@ RSpec.describe "Search results page title", :js, service: :find do
   end
 
   def and_i_dismiss_location_suggestions
+    # Wait for the async suggestion to open, otherwise Escape races the fetch
+    # and the overlay reappears over the sidebar Search button.
+    expect(page).to have_css("#location-field__listbox .autocomplete__option", wait: 5)
     page.find('input[name="location"]').send_keys(:escape)
+    expect(page).to have_no_css("#location-field__listbox .autocomplete__option", visible: :visible, wait: 5)
   end
 
   def when_i_search_for_london
@@ -160,7 +164,9 @@ RSpec.describe "Search results page title", :js, service: :find do
   end
 
   def and_i_click_search
-    click_link_or_button "Search"
+    # Location autocomplete overlays the sidebar Search button; force the click
+    # so Playwright does not wait on the listbox intercepting pointer events.
+    find_button("Search").click(force: true)
   end
 
   def and_i_set_the_radius_to_10_miles
