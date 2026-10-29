@@ -231,7 +231,7 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0)
     database_cleaner-core (2.0.1)
-    date (3.5.1)
+    date (3.6.0)
     debug_inspector (1.2.0)
     declarative (0.0.20)
     deep_merge (1.2.2)
@@ -293,7 +293,7 @@ GEM
       base64 (>= 0.1.0)
       csv (>= 3.0.0)
     geokit (1.14.0)
-    geokit-rails (2.5.0)
+    geokit-rails (2.5.2)
       geokit (~> 1.5)
       rails (>= 3.0)
     globalid (1.4.0)
@@ -453,14 +453,14 @@ GEM
       uri (>= 0.11.1)
     net-http-persistent (4.0.8)
       connection_pool (>= 2.2.4, < 4)
-    net-imap (0.6.7)
+    net-imap (0.6.8)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.4.0)
       timeout
-    net-smtp (0.5.1)
+    net-smtp (0.5.2)
       net-protocol
     nio4r (2.7.5)
     nokogiri (1.19.4-arm64-darwin)
