@@ -177,14 +177,6 @@ describe Provider do
     end
   end
 
-  describe "users" do
-    let(:discarded_user) { create(:user, :discarded, providers: [provider]) }
-
-    it "returns users who haven't been discarded" do
-      expect(subject.users).not_to include(discarded_user)
-    end
-  end
-
   describe "changed_at" do
     it "is set on create" do
       provider = create(:provider, changed_at: nil)
