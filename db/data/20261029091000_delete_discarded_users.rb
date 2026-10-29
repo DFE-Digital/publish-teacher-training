@@ -4,6 +4,7 @@
 # before the unused discarded_at column is dropped.
 class DeleteDiscardedUsers < ActiveRecord::Migration[8.1]
   def up
+    # Raw SQL because User ignores discarded_at, so Rails can't query it by attribute.
     User.where("discarded_at IS NOT NULL").find_each(&:destroy!)
   end
 
