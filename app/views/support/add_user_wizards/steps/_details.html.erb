@@ -1,0 +1,13 @@
+<%= render PageTitle.new(title: "support.users.new", has_errors: current_step.errors.any?) %>
+
+<h1 class="govuk-heading-l"><%= t("support.users.new.heading") %></h1>
+
+<%= form.govuk_text_field :first_name, label: { text: t("support.users.checks.show.first_name"), size: "s" }, width: "two-thirds" %>
+<%= form.govuk_text_field :last_name, label: { text: t("support.users.checks.show.last_name"), size: "s" }, width: "two-thirds" %>
+<%= form.govuk_text_field :email, label: { text: t("support.users.checks.show.email"), size: "s" } %>
+
+<%= form.govuk_check_boxes_fieldset :admin, legend: { text: "Admin" }, multiple: false do %>
+  <%= form.govuk_check_box :admin, true, false, label: { text: "This user is an admin" }, multiple: false, link_errors: true %>
+<% end %>
+
+<%= form.govuk_submit t("support.users.new.continue") %>

@@ -11,21 +11,8 @@ module Support
       user
     end
 
-    def new
-      @user = User.new
-    end
-
     def edit
       user
-    end
-
-    def create
-      @user = User.new(user_params)
-      if @user.save
-        redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year])
-      else
-        render :new
-      end
     end
 
     def update
@@ -36,16 +23,17 @@ module Support
       end
     end
 
+    def delete
+      recruitment_cycle
+      user
+    end
+
     def destroy
       user.destroy!
       redirect_to support_recruitment_cycle_users_path(params[:recruitment_cycle_year]), flash: { success: t("support.flash.deleted", resource: "User") }
     end
 
   private
-
-    def user_params
-      params.expect(user: %i[first_name last_name email]).merge(state: "new")
-    end
 
     def update_user_params
       params.expect(user: %i[first_name last_name email admin])
