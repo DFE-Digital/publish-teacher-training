@@ -58,6 +58,17 @@ RSpec.describe "Course show" do
       then_i_should_see_the_status_scheduled
     end
 
+    scenario "a closed scheduled course shows as closed and not scheduled" do
+      given_there_is_a_next_recruitment_cycle
+      given_i_am_authenticated_as_a_provider_user(course: build(:course))
+      and_there_is_the_provider_in_the_next_cycle
+      when_i_visit_the_next_cycle_courses_page
+      then_i_should_see_the_status_scheduled
+      when_i_close_the_next_cycle_course
+      when_i_visit_the_next_cycle_courses_page
+      then_i_should_see_the_status_closed
+    end
+
     # Find serves the current cycle only, so a next-cycle course has nowhere
     # live to link to however published and running it is.
     scenario "a published, running course offers a preview rather than a link to Find" do
@@ -410,9 +421,26 @@ private
   end
 
   def and_there_is_the_provider_in_the_next_cycle
-    @next_cycle_provider = create(:provider, recruitment_cycle: RecruitmentCycle.next, provider_code: @user.providers.first.provider_code, courses: [build(:course, :published)])
+    @next_cycle_provider = create(
+      :provider,
+      recruitment_cycle: RecruitmentCycle.next,
+      provider_code: @user.providers.first.provider_code,
+    )
+    create(:course, :published, provider: @next_cycle_provider, application_status: :open)
 
     @user.providers << @next_cycle_provider
+  end
+
+  def when_i_close_the_next_cycle_course
+    next_cycle_course = next_cycle_provider.courses.first
+
+    visit publish_provider_recruitment_cycle_course_path(
+      next_cycle_provider.provider_code,
+      next_cycle_provider.recruitment_cycle.year,
+      next_cycle_course.course_code,
+    )
+    click_link_or_button "Close course"
+    click_link_or_button "Close course"
   end
 
   def when_i_visit_the_course_page
@@ -508,5 +536,10 @@ private
 
   def then_i_should_see_the_status_scheduled
     expect(publish_provider_courses_index_page).to have_scheduled_tag
+  end
+
+  def then_i_should_see_the_status_closed
+    expect(page).to have_css(".govuk-tag--purple", text: "Closed")
+    expect(publish_provider_courses_index_page).to have_no_scheduled_tag
   end
 end
