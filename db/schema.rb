@@ -820,11 +820,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
     t.datetime "accept_terms_date_utc", precision: nil
     t.string "state"
     t.boolean "admin", default: false
-    t.datetime "discarded_at", precision: nil
     t.string "magic_link_token"
     t.datetime "magic_link_token_sent_at", precision: nil
     t.boolean "blazer_access", default: false, null: false
-    t.index ["discarded_at"], name: "index_user_on_discarded_at"
     t.index ["email"], name: "IX_user_email", unique: true
   end
 
