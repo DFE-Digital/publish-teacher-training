@@ -69,6 +69,7 @@ RSpec.describe "Publish::Courses::StatusTag drift", type: :component do
 
     before do
       create(:course, :published, provider:, application_status: :open, name: "Scheduled")
+      create(:course, :published, provider:, application_status: :closed, name: "Closed")
       create(:course, :draft_enrichment, provider:, name: "Draft")
     end
 

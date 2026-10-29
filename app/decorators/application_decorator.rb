@@ -15,10 +15,12 @@ class ApplicationDecorator < Draper::Decorator
   end
 
   def status_tags
-    if current_recruitment_cycle_year? || previous_recruitment_cycle?
-      object.application_status_open? ? status_tags_for_vacancies : status_tags_for_no_vacancies
-    else
+    if future_cycle? && object.application_status_open?
       status_tags_for_rolled_over_courses
+    elsif object.application_status_open?
+      status_tags_for_vacancies
+    else
+      status_tags_for_no_vacancies
     end
   end
 
@@ -40,6 +42,10 @@ private
 
   def status_tags_for_rolled_over_courses
     status_tags_for_vacancies.merge(published: { text: "Scheduled", colour: "blue" })
+  end
+
+  def future_cycle?
+    !current_recruitment_cycle_year? && !previous_recruitment_cycle?
   end
 
   def current_recruitment_cycle_year?

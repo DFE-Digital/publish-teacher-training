@@ -179,9 +179,9 @@ module Publish
         when "open"
           published_predicate(:open) if current_or_previous_cycle?
         when "closed"
-          published_predicate(:closed) if current_or_previous_cycle?
+          published_predicate(:closed)
         when "scheduled"
-          published_predicate unless current_or_previous_cycle?
+          published_predicate(:open) unless current_or_previous_cycle?
         end
       end
 
