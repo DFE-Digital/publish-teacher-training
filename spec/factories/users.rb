@@ -63,9 +63,5 @@ FactoryBot.define do
       magic_link_token { SecureRandom.uuid }
       magic_link_token_sent_at { Time.zone.now }
     end
-
-    trait :discarded do
-      discarded_at { Time.zone.now }
-    end
   end
 end
