@@ -75,7 +75,7 @@ private
   end
 
   def when_i_visit_the_remove_provider_page
-    visit remove_provider_support_recruitment_cycle_user_path(
+    visit delete_provider_support_recruitment_cycle_user_path(
       Find::CycleTimetable.current_year,
       @user,
       provider_id: @provider.id,

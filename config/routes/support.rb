@@ -108,8 +108,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       end
       member do
         get :delete
-        get "providers/:provider_id/remove", to: "users/providers#remove", as: :remove_provider
-        delete "providers/:provider_id/remove", to: "users/providers#destroy"
+        get "providers/:provider_id/delete", to: "users/providers#delete", as: :delete_provider
+        delete "providers/:provider_id/delete", to: "users/providers#destroy"
       end
       scope module: :users do
         resource :providers, on: :member, only: %i[show]
@@ -122,8 +122,6 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       end
     end
   end
-
-  resources :user_permissions, only: %i[destroy]
 
   resources :settings, only: %i[index]
   resources :feature_flags, path: "feature-flags", only: %i[index], param: :feature_name do
