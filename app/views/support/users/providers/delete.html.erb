@@ -1,4 +1,4 @@
-<%= render PageTitle.new(title: "support.users.providers.remove") %>
+<%= render PageTitle.new(title: "support.users.providers.delete") %>
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
@@ -20,7 +20,7 @@
 
     <%= govuk_button_to(
           t(".submit"),
-          remove_provider_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user, provider_id: @provider.id),
+          delete_provider_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user, provider_id: @provider.id),
           method: :delete,
           class: "govuk-button--warning",
         ) %>

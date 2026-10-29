@@ -8,7 +8,7 @@ module Support
         @pagy, @providers = pagy(providers.order(:provider_name))
       end
 
-      def remove
+      def delete
         recruitment_cycle
         user
         provider
@@ -18,13 +18,13 @@ module Support
         UserAssociationsService::Delete.call(user:, providers: provider)
 
         redirect_to support_recruitment_cycle_user_providers_path(params[:recruitment_cycle_year], user),
-                    flash: { success: t("support.users.providers.remove.success", name: user.full_name, provider: provider.provider_name) }
+                    flash: { success: t("support.users.providers.delete.success", name: user.full_name, provider: provider.provider_name) }
       end
 
     private
 
       # The providers list is /users/:user_id/providers. The confirmation page is
-      # /users/:id/providers/:provider_id/remove. Both actions use this lookup.
+      # /users/:id/providers/:provider_id/delete. Both actions use this lookup.
       def user
         @user ||= User.find(params[:user_id] || params[:id])
       end

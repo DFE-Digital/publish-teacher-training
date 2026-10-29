@@ -15,7 +15,7 @@ RSpec.describe "Support user provider removal", travel: mid_cycle do
   end
 
   it "does not open the confirmation for a provider from another cycle" do
-    get remove_provider_support_recruitment_cycle_user_path(
+    get delete_provider_support_recruitment_cycle_user_path(
       recruitment_cycle.year,
       user,
       provider_id: other_cycle_provider.id,
@@ -26,7 +26,7 @@ RSpec.describe "Support user provider removal", travel: mid_cycle do
   end
 
   it "does not remove a provider from another cycle" do
-    delete remove_provider_support_recruitment_cycle_user_path(
+    delete delete_provider_support_recruitment_cycle_user_path(
       recruitment_cycle.year,
       user,
       provider_id: other_cycle_provider.id,

@@ -25,7 +25,7 @@ en:
         no_emails: will no longer receive emails about the Publish service
         submit: Delete %{name}'s account
       providers:
-        remove:
+        delete:
           heading: Are you sure you want to remove %{name} from %{provider}?
           warning: "%{name} will be sent an email to tell them you removed them from %{provider}"
           submit: Remove user

@@ -24,7 +24,7 @@ module Support
 
         redirect_to @wizard.next_step_path
       else
-        render :show, status: :unprocessable_entity
+        render :show, status: :unprocessable_content
       end
     end
 
