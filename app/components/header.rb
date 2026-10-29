@@ -36,7 +36,6 @@ class Header < ApplicationComponent
       "rollover" => "teal",
       "sandbox" => "purple",
       "staging" => "red",
-      "unknown-environment" => "yellow",
     }.fetch(Settings.environment.name, "grey")
   end
 

@@ -40,7 +40,6 @@ describe Header do
     "sandbox" => "purple",
     "rollover" => "teal",
     "staging" => "red",
-    "unknown-environment" => "yellow",
   }.each do |environment, colour|
     it "renders a #{colour} phase banner for the #{environment} environment" do
       allow(Settings.environment).to receive(:name).and_return(environment)
