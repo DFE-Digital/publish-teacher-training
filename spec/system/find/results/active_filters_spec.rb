@@ -558,6 +558,7 @@ RSpec.describe "Courses search with active filters", :js, service: :find do
 
   def when_user_search_main_subject(subject)
     fill_in "Subject", with: subject
+    page.find('input[name="subject_name"]').send_keys(:return)
     click_link_or_button "Search"
   end
 
