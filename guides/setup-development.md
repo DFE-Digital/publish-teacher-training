@@ -13,7 +13,7 @@ asdf install
 ./bin/setup
 ```
 
-`asdf install` reads `.tool-versions` and gets you Ruby 3.4.10, Node 24.13.0 and
+`asdf install` reads `.tool-versions` and gets you Ruby 3.4.12, Node 24.13.0 and
 Caddy 2.9.1. Add the plugins first if you have not already (`asdf plugin add
 ruby`, and the same for `nodejs` and `caddy`). The file also pins deployment
 tooling — kubectl, terraform, azure-cli and others — that local development does
