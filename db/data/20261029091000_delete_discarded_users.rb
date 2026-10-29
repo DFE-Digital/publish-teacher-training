@@ -4,7 +4,7 @@
 # before the unused discarded_at column is dropped.
 class DeleteDiscardedUsers < ActiveRecord::Migration[8.1]
   def up
-    User.where.not(discarded_at: nil).find_each(&:destroy!)
+    User.where("discarded_at IS NOT NULL").find_each(&:destroy!)
   end
 
   def down
