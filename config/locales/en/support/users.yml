@@ -6,7 +6,7 @@ en:
         continue: Continue
       checks:
         show:
-          caption: Add user
+          caption: Add a user
           heading: Check your answers
           first_name: First name
           last_name: Last name
