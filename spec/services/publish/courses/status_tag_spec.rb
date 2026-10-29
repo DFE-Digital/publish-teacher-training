@@ -60,10 +60,16 @@ RSpec.describe Publish::Courses::StatusTag do
     context "in a future recruitment cycle" do
       let(:provider) { create(:provider, :accredited_provider, :next_recruitment_cycle) }
 
-      it "is :scheduled for a published course, whatever its application status" do
-        course = create(:course, :published, provider:, application_status: :closed)
+      it "is :scheduled for a published course accepting applications" do
+        course = create(:course, :published, provider:, application_status: :open)
 
         expect(described_class.token(row_for(course))).to eq(:scheduled)
+      end
+
+      it "is :closed for a published course not accepting applications" do
+        course = create(:course, :published, provider:, application_status: :closed)
+
+        expect(described_class.token(row_for(course))).to eq(:closed)
       end
 
       it "is still :draft for a draft course" do

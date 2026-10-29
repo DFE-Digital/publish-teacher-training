@@ -26,10 +26,17 @@ module Publish
 
       # published / published_with_unpublished_changes
       def self.published_token(course)
-        return :scheduled unless Find::CycleTimetable.current_or_previous_year?(course.recruitment_cycle.year)
-
-        course.application_status_open? ? :open : :closed
+        if future_cycle?(course)
+          course.application_status_open? ? :scheduled : :closed
+        else
+          course.application_status_open? ? :open : :closed
+        end
       end
+
+      def self.future_cycle?(course)
+        !Find::CycleTimetable.current_or_previous_year?(course.recruitment_cycle.year)
+      end
+      private_class_method :future_cycle?
     end
   end
 end
