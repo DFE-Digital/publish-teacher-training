@@ -58,7 +58,5 @@ RSpec.describe "Closing a scheduled course", travel: mid_cycle do
     page.find("h1 .govuk-tag")
   end
 
-  def course
-    @course
-  end
+  attr_reader :course
 end
