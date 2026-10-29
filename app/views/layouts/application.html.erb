@@ -33,7 +33,41 @@
 
     <%= render "layouts/add_js_enabled_class_to_body" %>
 
-    <%= render Header.new(service_name: I18n.t("service_name.publish"), current_user:, provider: @provider) %>
+    <%= render HeaderComponent.new(
+      service_name: I18n.t("service_name.publish"),
+      service_url: publish_root_path,
+      current_user:,
+    ) do |header| %>
+      <% if render_navigation_bar?(@provider) %>
+        <% navigation_items(@provider).each do |item| %>
+          <% header.with_navigation_item(
+               item[:name],
+               item[:url],
+               active_when: [item[:url], item[:additional_url]].compact,
+             ) %>
+        <% end %>
+      <% end %>
+
+      <% if Settings.environment.name == "sandbox" %>
+        <% header.with_phase_banner_text "This is a test version of Publish for providers and software vendors" %>
+      <% end %>
+
+      <% if current_user.present? %>
+        <% header.with_account_options do %>
+          <% if current_user.admin? %>
+            <%= govuk_link_to(support_root_path, inverse: true, no_underline: true) { "Support console" } %>
+            <%= govuk_link_to(sign_out_path, inverse: true, no_underline: true) { "Sign out" } %>
+          <% else %>
+            <% if current_user.associated_with_accredited_provider? %>
+              <%= govuk_link_to(publish_notifications_path, inverse: true, no_underline: true) { "Notifications" } %>
+            <% end %>
+            <%= govuk_link_to(sign_out_path, inverse: true, no_underline: true) { "Sign out" } %>
+            <%= govuk_link_to(Settings.dfe_signin.profile, inverse: true, no_underline: true) { "(#{current_user.first_name} #{current_user.last_name})" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
 
     <div class="govuk-width-container">
       <%= yield :breadcrumbs %>
