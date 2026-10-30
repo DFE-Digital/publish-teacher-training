@@ -1,6 +1,6 @@
 .app-card--inset {
   padding: govuk-spacing(3);
-  margin: 0 0 20px;
+  margin: 0 0 govuk-spacing(6);
 
   * {
     font-weight: 700;
@@ -123,5 +123,22 @@
     > * {
       align-self: flex-end;
     }
+  }
+}
+
+.app-filter .app-search__controls {
+  padding: govuk-spacing(4);
+  margin-bottom: govuk-spacing(4);
+
+  .app-find-search {
+    flex-direction: column;
+
+    > * {
+      align-self: stretch;
+    }
+  }
+
+  .govuk-button {
+    width: 100%;
   }
 }

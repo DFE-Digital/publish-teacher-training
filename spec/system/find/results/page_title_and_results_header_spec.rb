@@ -51,6 +51,7 @@ RSpec.describe "Search results page title", :js, service: :find do
 
   scenario "when searching by location only (simple location)" do
     when_i_search_for_london
+    and_i_dismiss_location_suggestions
     and_i_click_search
 
     then_i_see_page_title("6 courses in London")
@@ -58,6 +59,7 @@ RSpec.describe "Search results page title", :js, service: :find do
 
   scenario "when searching by location only (postcode - distance search)" do
     when_i_search_for_landmark
+    and_i_dismiss_location_suggestions
     and_i_click_search
 
     then_i_see_page_title("6 courses within 50 miles of Great Russell Street, London")
@@ -67,6 +69,7 @@ RSpec.describe "Search results page title", :js, service: :find do
     when_i_search_for_mathematics
     and_i_choose_the_first_subject_suggestion
     when_i_search_for_london
+    and_i_dismiss_location_suggestions
     and_i_click_search
 
     then_i_see_page_title("1 mathematics course in London")
@@ -76,11 +79,13 @@ RSpec.describe "Search results page title", :js, service: :find do
     when_i_search_for_mathematics
     and_i_choose_the_first_subject_suggestion
     when_i_search_for_landmark
+    and_i_dismiss_location_suggestions
     and_i_click_search
 
     then_i_see_page_title("1 mathematics course within 50 miles of Great Russell Street, London")
 
     when_i_search_for_landmark
+    and_i_dismiss_location_suggestions
     and_i_set_the_radius_to_100_miles
     and_i_click_search
     then_i_see_page_title("1 mathematics course within 100 miles of Great Russell Street, London")
@@ -90,6 +95,7 @@ RSpec.describe "Search results page title", :js, service: :find do
     when_i_search_for_a_subject_with_no_courses
     and_i_choose_the_first_subject_suggestion
     when_i_search_for_remote_location
+    and_i_dismiss_location_suggestions
     and_i_click_search
     and_i_set_the_radius_to_10_miles
     and_i_click_search
@@ -125,6 +131,14 @@ RSpec.describe "Search results page title", :js, service: :find do
     page.find('input[name="subject_name"]').send_keys(:return)
   end
 
+  def and_i_dismiss_location_suggestions
+    # Wait for the async suggestion to open, otherwise Escape races the fetch
+    # and the overlay reappears over the sidebar Search button.
+    expect(page).to have_css("#location-field__listbox .autocomplete__option", wait: 5)
+    page.find('input[name="location"]').send_keys(:escape)
+    expect(page).to have_no_css("#location-field__listbox .autocomplete__option", visible: :visible, wait: 5)
+  end
+
   def when_i_search_for_london
     fill_in "City, town or postcode", with: "London"
   end
@@ -150,7 +164,9 @@ RSpec.describe "Search results page title", :js, service: :find do
   end
 
   def and_i_click_search
-    click_link_or_button "Search"
+    # Location autocomplete overlays the sidebar Search button; force the click
+    # so Playwright does not wait on the listbox intercepting pointer events.
+    find_button("Search").click(force: true)
   end
 
   def and_i_set_the_radius_to_10_miles
