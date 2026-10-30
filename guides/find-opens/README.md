@@ -18,7 +18,7 @@ instructions for running the tests.
 
 ## Find opens reports
 
-- [2026/2027 - Find opens baseline](guides/find-opens-baseline.md)
+- [2026/2027 - Find opens baseline](../find-opens-baseline.md)
 
 ### Test runs
 
