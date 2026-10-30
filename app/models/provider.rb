@@ -86,19 +86,8 @@ class Provider < ApplicationRecord
 
   delegate :year, to: :recruitment_cycle, prefix: true
 
-  # Course#rollable? goes through content_status, which reads the latest
-  # enrichment and, for a course that has never been published, the rest of
-  # them.
-  def rollable_courses?
-    courses.includes(:latest_enrichment, :enrichments).any?(&:rollable?)
-  end
-
-  def rollable_accredited_courses?
-    accredited_courses.includes(:latest_enrichment, :enrichments).any?(&:rollable?)
-  end
-
   def rollable?
-    rollable_courses? || rollable_accredited_courses?
+    Provider.where(id:).rollable.exists?
   end
 
   def rolled_over?
@@ -117,6 +106,23 @@ class Provider < ApplicationRecord
   def current_accredited_courses
     accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
   end
+
+  # Providers that rollover copies to the next cycle: those with a rollable
+  # course of their own, and those that ratify a rollable course of a kept
+  # training provider in the same cycle.
+  # Both checks are EXISTS subqueries tied to the outer provider row, so a
+  # check for one provider only reads that provider's courses.
+  scope :rollable, lambda {
+    rollable_courses = Course.rollable
+    own = rollable_courses.where("course.provider_id = provider.id")
+    ratified = rollable_courses
+      .joins("INNER JOIN provider training_provider ON training_provider.id = course.provider_id")
+      .where("training_provider.discarded_at IS NULL")
+      .where("course.accredited_provider_code = provider.provider_code")
+      .where("training_provider.recruitment_cycle_id = provider.recruitment_cycle_id")
+
+    where(own.arel.exists).or(where(ratified.arel.exists))
+  }
 
   scope :accredited, -> { where(accredited: true) }
   scope :by_provider_code, lambda { |provider_code|

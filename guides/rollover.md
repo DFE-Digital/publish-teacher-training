@@ -80,7 +80,13 @@ First you need to create a new cycle.
 #### Eligibility: Who and What Gets Rolled Over?
 
 - **Providers:**
-  Only providers with **published** or **withdrawn** courses are eligible for rollover.
+  Only providers with **published** or **withdrawn** courses in the cycle being rolled over are eligible for rollover. A provider is eligible if either:
+  - it has a published or withdrawn course of its own, or
+  - it is the accredited provider for a training provider's published or withdrawn course.
+
+  Only courses in the cycle being rolled over count. A provider that only has, or only ratifies, published courses from earlier cycles is not eligible. A provider that only ratifies draft or rolled over courses, or courses of a discarded training provider, is not eligible. Partnerships alone do not make a provider eligible.
+
+  Rollover and the support progress page both use `Provider.rollable`, which is built on `Course.rollable`. A course counts once it has been published in the cycle, which is when `course.first_published_at` is set. Withdrawing a course keeps `first_published_at`, and rolling a course over clears it on the new course.
 - **Courses:**
   Only courses that are **published** or **withdrawn** will be rolled over.
 

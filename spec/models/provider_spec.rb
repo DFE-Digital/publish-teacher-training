@@ -585,6 +585,88 @@ describe Provider do
     end
   end
 
+  describe "#rollable?" do
+    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:training_provider) { create(:provider, recruitment_cycle: accredited_provider.recruitment_cycle) }
+
+    context "when the provider only accredits a published course in a past cycle" do
+      before do
+        last_years_provider = create(:provider, :previous_recruitment_cycle)
+        create(:course, :published, provider: last_years_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
+    context "when the provider has no courses but ratifies a training provider's published course in its own cycle" do
+      before do
+        create(:course, :published, provider: training_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is rollable" do
+        expect(accredited_provider).to be_rollable
+      end
+    end
+
+    context "when the provider has no courses and only ratifies a training provider's draft course" do
+      before do
+        create(:course, :draft_enrichment, provider: training_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
+    context "when the provider has no courses and only ratifies a training provider's rolled over course" do
+      before do
+        create(:course, :rolled_over_enrichment, provider: training_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
+    context "when the provider only ratifies a published course of a discarded training provider" do
+      let(:training_provider) { create(:provider, :discarded, recruitment_cycle: accredited_provider.recruitment_cycle) }
+
+      before do
+        create(:course, :published, provider: training_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
+    context "when the provider only ratifies a published course in a later cycle" do
+      let(:accredited_provider) { create(:provider, :accredited_provider, :previous_recruitment_cycle) }
+
+      let(:training_provider) { create(:provider) }
+
+      before do
+        create(:course, :published, provider: training_provider, accredited_provider_code: accredited_provider.provider_code)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
+    context "when the provider has a published course of its own" do
+      before do
+        create(:course, :published, provider: accredited_provider)
+      end
+
+      it "is rollable" do
+        expect(accredited_provider).to be_rollable
+      end
+    end
+  end
+
   describe "scopes" do
     describe ".accredited" do
       let!(:accredited_providers) { create_list(:accredited_provider, 2) }

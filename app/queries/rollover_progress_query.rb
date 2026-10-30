@@ -47,21 +47,11 @@ class RolloverProgressQuery
   end
 
   def eligible_providers
-    @eligible_providers ||= @previous_target_cycle.providers.where(
-      id: providers_with_own_rollable_courses.select(:id),
-    ).or(
-      @previous_target_cycle.providers.where(
-        id: providers_with_rollable_accredited_courses.select(:id),
-      ),
-    ).distinct
+    @eligible_providers ||= @previous_target_cycle.providers.rollable
   end
 
   def eligible_courses
-    @previous_target_cycle
-      .courses
-      .joins(:latest_enrichment)
-      .where(course_enrichment: { status: %i[published withdrawn] })
-      .where(provider_id: eligible_providers.select(:id)).distinct
+    @previous_target_cycle.courses.rollable
   end
 
   def eligible_partnerships
@@ -144,20 +134,6 @@ class RolloverProgressQuery
   end
 
 private
-
-  def providers_with_own_rollable_courses
-    @previous_target_cycle.providers
-      .joins(courses: :latest_enrichment)
-      .where(course_enrichment: { status: %i[published withdrawn] })
-      .distinct
-  end
-
-  def providers_with_rollable_accredited_courses
-    @previous_target_cycle.providers
-      .joins(accredited_courses: :latest_enrichment)
-      .where(course_enrichment: { status: %i[published withdrawn] })
-      .distinct
-  end
 
   def previous_cycle_discarded_providers
     Provider
