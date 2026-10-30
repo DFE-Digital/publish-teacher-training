@@ -332,12 +332,17 @@ FactoryBot.define do
       enrichments { [build(:course_enrichment, :initial_draft, course: nil)] }
     end
 
+    trait :rolled_over_enrichment do
+      enrichments { [build(:course_enrichment, :rolled_over, course: nil)] }
+    end
+
     trait :published do
       first_published_at { Time.zone.now }
       enrichments { [build(:course_enrichment, :published)] }
     end
 
     trait :withdrawn do
+      first_published_at { 5.days.ago }
       enrichments { [build(:course_enrichment, :withdrawn)] }
     end
 

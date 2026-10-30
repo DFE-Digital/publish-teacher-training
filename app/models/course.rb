@@ -242,6 +242,12 @@ class Course < ApplicationRecord
     SQL
   }
 
+  # A kept course is rollable once it has been published in its cycle.
+  # first_published_at is set on publish, kept on withdrawal, and cleared when
+  # the course is rolled over, so published and withdrawn courses count and
+  # drafts and rolled over courses do not.
+  scope :rollable, -> { kept.where.not(first_published_at: nil) }
+
   scope :by_name_ascending, lambda {
     order(name: :asc)
   }
@@ -455,12 +461,8 @@ class Course < ApplicationRecord
     end
   end
 
-  def rollable_withdrawn?
-    content_status == :withdrawn
-  end
-
   def rollable?
-    is_published? || rollable_withdrawn?
+    kept? && first_published_at.present?
   end
 
   def manually_rollable?
