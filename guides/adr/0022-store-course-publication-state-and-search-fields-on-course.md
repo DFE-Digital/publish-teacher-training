@@ -212,7 +212,6 @@ The following display states are derived and will not become enum values:
 - `scheduled` is `published` in a future recruitment cycle;
 - `open` and `closed` combine `published` with `application_status`;
 - discarded is represented by `discarded_at`; and
-- vacancies remain independent of publication.
 
 ### Migration and cutover
 
