@@ -112,15 +112,39 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
 
     it "includes providers with own rollable courses and accredited rollable courses" do
-      expect(rollover_progress.eligible_providers).to match_collection(
-        [
-          provider_with_own_course,
-          training_provider,
-          provider_with_accredited_course,
-          provider_with_withdrawn_course,
-        ],
-        attribute_names: %w[provider_code],
+      expect(rollover_progress.eligible_providers).to contain_exactly(
+        provider_with_own_course,
+        training_provider,
+        provider_with_accredited_course,
+        provider_with_withdrawn_course,
       )
+    end
+
+    context "when a provider only ratifies a published course from an earlier cycle" do
+      let(:earlier_cycle) { find_or_create(:recruitment_cycle, year: "2024") }
+      let(:provider_with_earlier_accredited_course) { create(:provider, recruitment_cycle: previous_target_cycle) }
+
+      before do
+        earlier_training_provider = create(:provider, recruitment_cycle: earlier_cycle)
+        create(:course, :published, provider: earlier_training_provider, accredited_provider_code: provider_with_earlier_accredited_course.provider_code)
+      end
+
+      it "does not include the provider" do
+        expect(rollover_progress.eligible_providers).not_to include(provider_with_earlier_accredited_course)
+      end
+    end
+
+    context "when a provider only ratifies a published course of a discarded training provider" do
+      let(:provider_with_discarded_training_provider) { create(:provider, recruitment_cycle: previous_target_cycle) }
+
+      before do
+        discarded_training_provider = create(:provider, :discarded, recruitment_cycle: previous_target_cycle)
+        create(:course, :published, provider: discarded_training_provider, accredited_provider_code: provider_with_discarded_training_provider.provider_code)
+      end
+
+      it "does not include the provider" do
+        expect(rollover_progress.eligible_providers).not_to include(provider_with_discarded_training_provider)
+      end
     end
   end
 
@@ -145,10 +169,7 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
 
     it "includes providers with own rollable courses and accredited rollable courses" do
-      expect(rollover_progress.eligible_courses).to match_collection(
-        [published_course, accredited_course, withdrawn_course],
-        attribute_names: %w[course_code],
-      )
+      expect(rollover_progress.eligible_courses).to contain_exactly(published_course, accredited_course, withdrawn_course)
     end
   end
 
