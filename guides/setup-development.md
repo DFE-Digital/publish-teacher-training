@@ -41,8 +41,8 @@ come from `DB_USERNAME`, `DB_PASSWORD`, `DB_HOSTNAME` and `DB_PORT`, all of whic
 fall back to the libpq defaults — a local socket as your own user — so a stock
 Homebrew install needs no configuration.
 
-Versions drift across environments and nothing pins them: CI runs Postgres 14,
-`docker-compose.yml` uses 17, and local machines vary.
+CI and `docker-compose.yml` use `postgis/postgis:17-3.6-alpine`; local
+package-manager versions may differ.
 
 ### Ruby and Node
 
