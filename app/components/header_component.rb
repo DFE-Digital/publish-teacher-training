@@ -5,6 +5,8 @@ class HeaderComponent < ApplicationComponent
 
   renders_one :phase_banner_text, ->(text) { text }
 
+  renders_one :account_options
+
   def initialize(service_name:, service_url: nil, current_user: nil, classes: [], html_attributes: {})
     super(classes:, html_attributes:)
 
@@ -30,13 +32,13 @@ private
 
   def colour
     {
-      development: "grey",
-      production: "blue",
-      review: "purple",
-      sandbox: "purple",
-      staging: "red",
-      qa: "orange",
-    }.fetch(Settings.environment.name.to_sym, "grey")
+      "development" => "grey",
+      "production" => "blue",
+      "qa" => "orange",
+      "review" => "purple",
+      "sandbox" => "purple",
+      "staging" => "red",
+    }.fetch(Settings.environment.name.to_s, "grey")
   end
 
   class NavigationItemComponent < ApplicationComponent
