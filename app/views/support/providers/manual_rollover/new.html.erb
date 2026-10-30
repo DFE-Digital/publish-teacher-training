@@ -19,7 +19,7 @@
     <%= govuk_summary_list do |summary_list| %>
       <% summary_list.with_row do |row| %>
         <% row.with_key { t(".summary.courses") } %>
-        <% row.with_value(text: @provider.courses.count) %>
+        <% row.with_value(text: @provider_manual_rollover_form.courses.size) %>
       <% end %>
       <% summary_list.with_row do |row| %>
         <% row.with_key { t(".summary.schools") } %>
@@ -28,6 +28,16 @@
       <% summary_list.with_row do |row| %>
         <% row.with_key { t(".summary.study_sites") } %>
         <% row.with_value(text: @provider.study_sites.count) %>
+      <% end %>
+    <% end %>
+
+    <% if @provider_manual_rollover_form.courses.any? %>
+      <%= form.govuk_check_boxes_fieldset :course_codes, legend: { text: t(".courses.legend"), size: "m" }, hint: { text: t(".courses.hint") } do %>
+        <% @provider_manual_rollover_form.courses.each_with_index do |course, index| %>
+          <%= form.govuk_check_box :course_codes, course.course_code, label: { text: course.name_and_code }, link_errors: index.zero? %>
+        <% end %>
+        <%= form.govuk_check_box_divider %>
+        <%= form.govuk_check_box :course_codes, Support::Providers::ManualRolloverForm::NO_COURSES, label: { text: t(".courses.none") }, hint: { text: t(".courses.none_hint") }, exclusive: true %>
       <% end %>
     <% end %>
 

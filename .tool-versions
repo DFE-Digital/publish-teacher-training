@@ -1,4 +1,4 @@
-ruby            3.4.10
+ruby            3.4.12
 kubectl         1.32.2
 nodejs          24.13.0
 terraform       1.14.5

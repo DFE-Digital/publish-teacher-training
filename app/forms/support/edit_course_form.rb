@@ -9,10 +9,9 @@ module Support
       course_code name
     ].freeze
 
-    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :applications_open_from_day, :applications_open_from_month, :applications_open_from_year, :is_send, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, :accredited_provider_code, :publish_without_schools_allowed)
+    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :is_send, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, :accredited_provider_code, :publish_without_schools_allowed)
 
     validate :validate_start_date_format
-    validate :validate_applications_open_from_format
 
     def initialize(course)
       @course = course
@@ -23,9 +22,6 @@ module Support
         start_date_day: @course.start_date&.day,
         start_date_month: @course.start_date&.month,
         start_date_year: @course.start_date&.year,
-        applications_open_from_day: @course.applications_open_from&.day,
-        applications_open_from_month: @course.applications_open_from&.month,
-        applications_open_from_year: @course.applications_open_from&.year,
         is_send: @course.is_send,
         can_sponsor_student_visa: @course.can_sponsor_student_visa,
         can_sponsor_skilled_worker_visa: @course.can_sponsor_skilled_worker_visa,
@@ -43,6 +39,7 @@ module Support
     def valid?
       super
       assign_attributes_to_course
+      assign_default_applications_open_from
       course.valid?
       promote_errors_from_course
       errors.none?
@@ -50,10 +47,6 @@ module Support
 
     def start_date
       @start_date ||= check_date(:start_date)
-    end
-
-    def applications_open_from
-      @applications_open_from ||= check_date(:applications_open_from)
     end
 
   private
@@ -83,7 +76,6 @@ module Support
         course_code:,
         name:,
         start_date: valid_date?(:start_date) ? start_date : nil,
-        applications_open_from: valid_date?(:applications_open_from) ? applications_open_from : nil,
         is_send: send?,
         can_sponsor_student_visa:,
         can_sponsor_skilled_worker_visa:,
@@ -92,6 +84,12 @@ module Support
       }
 
       course.assign_attributes(attributes)
+    end
+
+    # A blank date is filled from the cycle on save. Do that before validation,
+    # because this page no longer has a field for it.
+    def assign_default_applications_open_from
+      course.applications_open_from ||= course.recruitment_cycle.application_start_date
     end
 
     def promote_errors_from_course
@@ -110,10 +108,6 @@ module Support
       validate_date(:start_date)
     end
 
-    def validate_applications_open_from_format
-      validate_date(:applications_open_from)
-    end
-
     def validate_date(date_type)
       return if date_args_blank?(date_type)
 
@@ -121,12 +115,7 @@ module Support
     end
 
     def attribute(date_type)
-      case date_type
-      when :applications_open_from
-        "#{date_type.to_s.humanize.capitalize} date"
-      else
-        date_type.to_s.humanize.capitalize
-      end
+      date_type.to_s.humanize.capitalize
     end
 
     def valid_date?(date_type)

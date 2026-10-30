@@ -5,8 +5,9 @@ require "benchmark"
 class RolloverProviderService
   include ServicePattern
 
-  def initialize(provider_code:, force:, new_recruitment_cycle_id: nil, course_codes: nil)
+  def initialize(provider_code:, force:, recruitment_cycle_id: nil, new_recruitment_cycle_id: nil, course_codes: nil)
     @provider_code = provider_code
+    @recruitment_cycle_id = recruitment_cycle_id
     @course_codes = course_codes
     @new_recruitment_cycle_id = new_recruitment_cycle_id
     @force = force
@@ -47,7 +48,15 @@ private
   end
 
   def provider
-    @provider ||= RecruitmentCycle.current_recruitment_cycle.providers.find_by(provider_code:)
+    @provider ||= recruitment_cycle.providers.find_by(provider_code:)
+  end
+
+  def recruitment_cycle
+    @recruitment_cycle ||= if @recruitment_cycle_id.present?
+                             RecruitmentCycle.find(@recruitment_cycle_id)
+                           else
+                             RecruitmentCycle.current_recruitment_cycle
+                           end
   end
 
   def copy_provider_to_recruitment_cycle

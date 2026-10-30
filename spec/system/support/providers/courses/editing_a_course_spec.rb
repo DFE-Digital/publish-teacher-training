@@ -13,19 +13,19 @@ RSpec.describe "Edit provider course details", travel: mid_cycle do
 
   context "valid details" do
     scenario "I can edit a course details" do
+      and_i_note_the_applications_open_date
       when_i_fill_in_course_code_with valid_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, valid_date_year
-      and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, valid_date_year
       and_i_change_the_ratifying_provider
       and_i_select_the_send_checkbox
       and_i_click_the_continue_button
       then_i_am_redirected_back_to_the_support_provider_courses_index_page
       and_the_course_name_code_and_ratifying_provider_are_updated
+      and_the_applications_open_date_is_unchanged
       when_i_return_to_the_edit_page
       then_i_see_the_updated_start_date
       then_i_see_the_updated_ratifying_provider
-      then_i_see_the_updated_applications_open_from_date
       and_i_see_the_updated_send_specialism
     end
   end
@@ -35,7 +35,6 @@ RSpec.describe "Edit provider course details", travel: mid_cycle do
       when_i_fill_in_course_code_with existing_course_code
       and_i_fill_in_course_title_with valid_course_name
       and_i_fill_in_course_start_date_with valid_date_month, invalid_date_year
-      and_i_fill_in_course_application_open_from_with valid_date_day, valid_date_month, invalid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_invalid_value_errors
@@ -43,18 +42,15 @@ RSpec.describe "Edit provider course details", travel: mid_cycle do
 
     scenario "I cannot use invalid date format" do
       when_i_fill_in_course_start_date_with invalid_date_month, valid_date_year
-      and_i_fill_in_course_application_open_from_with invalid_date_day, invalid_date_month, valid_date_year
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_start_date_format_error
-      and_it_contains_applications_open_from_format_error
     end
 
     scenario "I cannot use a blank course details" do
       when_i_fill_in_course_code_with blank_value
       and_i_fill_in_course_title_with blank_value
       and_i_fill_in_course_start_date_with blank_value, blank_value
-      and_i_fill_in_course_application_open_from_with blank_value, blank_value, blank_value
       and_i_click_the_continue_button
       then_i_see_the_error_summary
       and_it_contains_blank_errors
@@ -120,14 +116,6 @@ private
     @new_ratifying_provider.provider_name
   end
 
-  def valid_date_day
-    @valid_date_day ||= "1"
-  end
-
-  def invalid_date_day
-    @invalid_date_day ||= "111"
-  end
-
   def valid_date_month
     @valid_date_month ||= "9"
   end
@@ -173,14 +161,7 @@ private
     support_provider_course_edit_page.start_date_year.set(year)
   end
 
-  def when_i_fill_in_course_application_open_from_with(day, month, year)
-    support_provider_course_edit_page.application_open_from_day.set(day)
-    support_provider_course_edit_page.application_open_from_month.set(month)
-    support_provider_course_edit_page.application_open_from_year.set(year)
-  end
-
   alias_method :and_i_fill_in_course_start_date_with, :when_i_fill_in_course_start_date_with
-  alias_method :and_i_fill_in_course_application_open_from_with, :when_i_fill_in_course_application_open_from_with
 
   def and_i_click_the_continue_button
     support_provider_course_edit_page.continue.click
@@ -196,6 +177,14 @@ private
     expect(support_provider_courses_index_page).to have_text(ratifying_provider_name)
   end
 
+  def and_i_note_the_applications_open_date
+    @applications_open_from = provider.courses.first.applications_open_from
+  end
+
+  def and_the_applications_open_date_is_unchanged
+    expect(provider.courses.first.reload.applications_open_from).to eq(@applications_open_from)
+  end
+
   def and_i_select_the_send_checkbox
     support_provider_course_edit_page.send_specialism_checkbox.check
   end
@@ -203,12 +192,6 @@ private
   def then_i_see_the_updated_start_date
     expect(support_provider_course_edit_page.start_date_month.value).to eq(valid_date_month)
     expect(support_provider_course_edit_page.start_date_year.value).to eq(valid_date_year)
-  end
-
-  def then_i_see_the_updated_applications_open_from_date
-    expect(support_provider_course_edit_page.application_open_from_day.value).to eq(valid_date_day)
-    expect(support_provider_course_edit_page.application_open_from_month.value).to eq(valid_date_month)
-    expect(support_provider_course_edit_page.application_open_from_year.value).to eq(valid_date_year)
   end
 
   def and_i_see_the_updated_send_specialism
@@ -234,14 +217,9 @@ private
     expect(support_provider_course_edit_page.error_summary.text).to include("Start date format is invalid")
   end
 
-  def and_it_contains_applications_open_from_format_error
-    expect(support_provider_course_edit_page.error_summary.text).to include("Applications open from date format is invalid")
-  end
-
   def and_it_contains_blank_errors
     expect(support_provider_course_edit_page.error_summary.text).to include("Course code cannot be blank")
     expect(support_provider_course_edit_page.error_summary.text).to include("Course title cannot be blank")
     expect(support_provider_course_edit_page.error_summary.text).to include("Select a course start date")
-    expect(support_provider_course_edit_page.error_summary.text).to include("Select an applications open date")
   end
 end
