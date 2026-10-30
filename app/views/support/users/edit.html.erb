@@ -2,23 +2,26 @@
 
 <%= content_for(:breadcrumbs) do %>
   <%= render GovukComponent::BackLinkComponent.new(
-    text: "User record",
+    text: "Back",
     href: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
   ) %>
 <% end %>
 
-<h1 class="govuk-heading-l">Edit user details</h1>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <%= form_with model: @user, url: support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), local: true do |f| %>
 
         <%= f.govuk_error_summary %>
 
-        <%= f.govuk_text_field :first_name, label: { text: "First name", size: "m" } %>
-        <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "m" } %>
-        <%= f.govuk_text_field :email, label: { text: "Email", size: "m" } %>
+        <h1 class="govuk-heading-l">
+          Edit user details
+        </h1>
 
-        <%= f.govuk_check_boxes_fieldset :admin, legend: { text: "Admin" }, multiple: false do %>
+        <%= f.govuk_text_field :first_name, width: "two-thirds", label: { text: "First name", size: "s" } %>
+        <%= f.govuk_text_field :last_name, width: "two-thirds", label: { text: "Last name", size: "s" } %>
+        <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" } %>
+
+        <%= f.govuk_check_boxes_fieldset :admin, legend: { text: "Admin", size: "s" }, multiple: false do %>
           <% f.govuk_check_box :admin, true, false, label: { text: "This user is an admin" }, multiple: false %>
         <% end %>
 

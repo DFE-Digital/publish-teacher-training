@@ -49,7 +49,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   end
 
   def then_i_see_the_onboarding_form_fields
-    expect(page).to have_content("Add an organisation to Publish")
+    expect(page).to have_content("Enter your provider details")
     expect(page).to have_css("h2.govuk-heading-m", text: "Organisation details")
     expect(page).to have_css("h2.govuk-heading-m", text: "Contact details")
     expect(page).to have_css("h2.govuk-heading-m", text: "User details")
@@ -60,7 +60,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_field("No", type: "radio")
     expect(page).to have_field("Unique reference number (URN)")
     expect(page).to have_field("Contact email address")
-    expect(page).to have_field("Phone number")
+    expect(page).to have_field("Telephone")
     expect(page).to have_field("Organisation website")
     expect(page).to have_field("Address line 1")
     expect(page).to have_field("Address line 2")
@@ -83,7 +83,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
 
     # Contact details
     fill_in "Contact email address", with: form_data[:contact_email_address]
-    fill_in "Phone number", with: form_data[:telephone]
+    fill_in "Telephone", with: form_data[:telephone]
     fill_in "Organisation website", with: form_data[:website]
     fill_in "Address line 1", with: form_data[:address_line_1]
     fill_in "Address line 2", with: form_data[:address_line_2]
@@ -212,7 +212,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_field("UK provider reference number (UKPRN)", disabled: true)
     expect(page).to have_field("Unique reference number (URN)", disabled: true)
     expect(page).to have_field("Contact email address", disabled: true)
-    expect(page).to have_field("Phone number", disabled: true)
+    expect(page).to have_field("Telephone", disabled: true)
     expect(page).to have_field("Organisation website", disabled: true)
     expect(page).to have_field("Address line 1", disabled: true)
     expect(page).to have_field("Address line 2", disabled: true)

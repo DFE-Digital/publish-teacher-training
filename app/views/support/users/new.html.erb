@@ -17,8 +17,8 @@
           Add a user
         </h1>
 
-        <%= f.govuk_text_field :first_name, label: { text: "First name", size: "s" }, class: "govuk-input govuk-!-width-two-thirds" %>
-        <%= f.govuk_text_field :last_name, label: { text: "Last name", size: "s" }, class: "govuk-input govuk-!-width-two-thirds" %>
+        <%= f.govuk_text_field :first_name, width: "two-thirds", label: { text: "First name", size: "s" } %>
+        <%= f.govuk_text_field :last_name, width: "two-thirds", label: { text: "Last name", size: "s" } %>
         <%= f.govuk_text_field :email, label: { text: "Email address", size: "s" } %>
 
         <%= f.govuk_submit %>
