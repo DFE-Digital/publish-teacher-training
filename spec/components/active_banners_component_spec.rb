@@ -26,6 +26,12 @@ describe ActiveBannersComponent, type: :component do
     expect(result.text.index("Published later")).to be < result.text.index("Published earlier")
   end
 
+  it "renders an active automated banner", travel: 1.hour.after(find_opens) do
+    result = render_inline(described_class.new(interface: :find))
+
+    expect(result.text).to include(AutomatedBanner.find("apply_opens_soon").heading)
+  end
+
   it "renders nothing when no banner is active" do
     result = render_inline(described_class.new(interface: :publish))
 

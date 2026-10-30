@@ -14,6 +14,7 @@ module Support
       }
       @scope_status = params[:status]&.to_sym || :active
       @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: PER_PAGE)
+      @automated_banners = @pagy.page == 1 ? automated_banners : []
     end
 
     def show; end
@@ -27,7 +28,7 @@ module Support
       @banner = Banner.new(form.banner_attributes)
 
       if form.valid? && @banner.save
-        redirect_to banner_status_path(@banner), flash: { success: t("support.flash.created", resource: Banner.name) }
+        redirect_to helpers.banner_status_path(@banner), flash: { success: t("support.flash.created", resource: Banner.name) }
       else
         merge_date_errors(form)
         render :new, status: :unprocessable_entity
@@ -41,7 +42,7 @@ module Support
       @banner.assign_attributes(form.banner_attributes)
 
       if form.valid? && @banner.save
-        redirect_to banner_status_path(@banner), flash: { success: t("support.flash.updated", resource: Banner.name) }
+        redirect_to helpers.banner_status_path(@banner), flash: { success: t("support.flash.updated", resource: Banner.name) }
       else
         merge_date_errors(form)
         render :edit, status: :unprocessable_entity
@@ -56,6 +57,14 @@ module Support
     end
 
   private
+
+    def automated_banners
+      case @scope_status
+      when :scheduled then AutomatedBanner.scheduled
+      when :active then AutomatedBanner.active
+      else []
+      end
+    end
 
     def set_banner
       @banner = Banner.find(params[:id])
@@ -79,15 +88,7 @@ module Support
     def reject_published
       return if @banner.deletable?
 
-      redirect_to banner_status_path(@banner), flash: { warning: t("support.banners.warnings.published") }
-    end
-
-    def banner_status_path(banner)
-      {
-        active: active_support_banners_path,
-        scheduled: scheduled_support_banners_path,
-        expired: expired_support_banners_path,
-      }.fetch(banner.status, active_support_banners_path)
+      redirect_to helpers.banner_status_path(@banner), flash: { warning: t("support.banners.warnings.published") }
     end
 
     def banner_params

@@ -112,6 +112,17 @@ RSpec.describe "Banner management support" do
     then_the_name_links_to_the_preview
   end
 
+  scenario "an automated banner can be previewed but not changed", travel: 1.hour.before(find_opens) do
+    when_i_visit_the_banners_page(:scheduled)
+    then_the_automated_banner_is_listed_without_edit_or_delete
+
+    when_i_preview_the_automated_banner
+    then_i_see_the_automated_banner
+
+    when_i_go_back
+    then_i_am_on_the_scheduled_banners_page
+  end
+
 private
 
   attr_reader :support_user
@@ -347,6 +358,32 @@ private
     within("tr", text: banner.name) do
       expect(page).to have_link(banner.name, href: support_banner_path(banner))
     end
+  end
+
+  def then_the_automated_banner_is_listed_without_edit_or_delete
+    within("tr", text: "Apply opens soon") do
+      expect(page).to have_text("Automated")
+      expect(page).to have_no_link("Apply opens soon")
+      expect(page).to have_no_link("Delete")
+    end
+  end
+
+  def when_i_preview_the_automated_banner
+    within("tr", text: "Apply opens soon") do
+      click_link_or_button "Preview"
+    end
+  end
+
+  def then_i_see_the_automated_banner
+    expect(page).to have_text(AutomatedBanner.find("apply_opens_soon").heading)
+  end
+
+  def when_i_go_back
+    click_link_or_button "Back"
+  end
+
+  def then_i_am_on_the_scheduled_banners_page
+    expect(page).to have_current_path(scheduled_support_banners_path)
   end
 
   def when_i_clear_the_banner_name
