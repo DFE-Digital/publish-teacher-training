@@ -44,6 +44,6 @@ Use this checklist on the morning Find opens. This checklist is for the 2026/202
 
 ## If anything degrades
 
-- [ ] Use the [Find Opens/DDoS escalation steps](../find-results-ddos-mitigations.md)
+- [ ] Follow the [Teacher services incident playbook](https://tech-docs.teacherservices.cloud/operating-a-service/incident-playbook.html)
 - [ ] Confirm who is leading the response
 - [ ] Keep a brief note of any changes made
