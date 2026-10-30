@@ -60,7 +60,7 @@ class AutomatedBanner
       next unless available_in_publish_from
 
       new(id: "rollover_started", year:, now:,
-          published_at: available_in_publish_from.in_time_zone.beginning_of_day,
+          published_at: available_in_publish_from.in_time_zone,
           expired_at: Find::CycleTimetable.find_opens(year))
     end
   end
@@ -74,7 +74,7 @@ class AutomatedBanner
   end
 
   def self.upcoming(now, &block)
-    year = Find::CycleTimetable.cycle_year_for_time(now)
+    year = Find::CycleTimetable.year_for_option(Find::CycleTimetable.current_cycle_schedule, Find::CycleTimetable.cycle_year_for_time(now))
 
     [year, year + 1]
       .select { |candidate| Find::CycleTimetable::CYCLE_DATES.key?(candidate) }

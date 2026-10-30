@@ -40,7 +40,7 @@ RSpec.describe AutomatedBanner do
       )
     end
 
-    it "is active when the cycle switcher turns the deadline banner on", travel: mid_cycle do
+    it "is active when the cycle switcher turns the deadline banner on" do
       enable_cycle_switcher
       SiteSetting.set(name: "cycle_schedule", value: "apply_open")
       SiteSetting.set(name: "deadline_banner", value: "true")
@@ -84,7 +84,7 @@ RSpec.describe AutomatedBanner do
       expect(banner("apply_closed")).to be_nil
     end
 
-    it "is active when the cycle switcher says Apply has closed", travel: mid_cycle do
+    it "is active when the cycle switcher says Apply has closed" do
       enable_cycle_switcher
       SiteSetting.set(name: "cycle_schedule", value: "apply_closed")
 
@@ -137,6 +137,12 @@ RSpec.describe AutomatedBanner do
         expect(described_class.active(interface: :find).map(&:id)).to eq(%w[apply_opens_soon])
       end
 
+      it "names the cycle the switcher has moved Find on to", travel: 1.hour.after(find_opens) do
+        SiteSetting.set(name: "cycle_schedule", value: "apply_not_open_yet")
+
+        expect(banner("apply_opens_soon").heading).to eq("Apply for courses from #{date(:apply_opens)}")
+      end
+
       it "is inactive when the cycle switcher says Apply is open", travel: 1.hour.after(find_opens) do
         SiteSetting.set(name: "cycle_schedule", value: "apply_open")
 
@@ -153,13 +159,13 @@ RSpec.describe AutomatedBanner do
     it "is scheduled for the day rollover is available to providers" do
       expect(described_class.scheduled.map(&:id)).to include("rollover_started")
       expect(rollover_started).to have_attributes(
-        published_at: next_cycle.available_in_publish_from.in_time_zone.beginning_of_day,
+        published_at: next_cycle.available_in_publish_from.in_time_zone,
         expired_at: Find::CycleTimetable.find_opens(next_year),
       )
     end
 
     it "is active on Publish until Find opens for the new cycle" do
-      travel_to next_cycle.available_in_publish_from.in_time_zone.beginning_of_day do
+      travel_to next_cycle.available_in_publish_from.in_time_zone do
         expect(described_class.active(interface: :publish).map(&:id)).to eq(%w[rollover_started])
         expect(described_class.active(interface: :find).map(&:id)).not_to include("rollover_started")
       end
