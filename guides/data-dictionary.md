@@ -427,10 +427,6 @@ The following tables support framework functionality. They are not part of the a
 
 `solid_cache_entries` — managed by [Solid Cache](https://github.com/rails/solid_cache). This is where the app stores its cache.
 
-### DelayedJobs (leftover)
-
-`delayed_jobs` — a leftover from [Delayed Job](https://github.com/collectiveidea/delayed_job), which the app used before Solid Queue. The app no longer uses it for background jobs.
-
 ### DataHubProcessSummary
 
 `data_hub_process_summary` — tracks the status and results of batch data processing operations. Uses single-table inheritance via the `type` column.
