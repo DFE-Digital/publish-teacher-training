@@ -8,7 +8,8 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:study_site) { build(:site, :study_site) }
     let(:published_course_enrichment) { build(:course_enrichment, :published) }
     let(:course_enrichments) { [published_course_enrichment] }
-    let(:course) { create(:course, enrichments: course_enrichments, provider: provider) }
+    let(:first_published_at) { 5.days.ago }
+    let(:course) { create(:course, enrichments: course_enrichments, first_published_at:, provider: provider) }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) do
       [
@@ -367,6 +368,7 @@ describe Providers::CopyToRecruitmentCycleService do
       end
       let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }
+      let(:first_published_at) { nil }
 
       it "is not rollable" do
         expect(provider).not_to be_rollable
@@ -428,6 +430,28 @@ describe Providers::CopyToRecruitmentCycleService do
             expect { subject }.to raise_error("Error: discrepancy between courses found and provided course codes (0 vs 1)")
           end
         end
+      end
+    end
+
+    context "when an accredited provider and a training provider are linked only by a partnership and neither has published a course" do
+      let(:accredited_provider) { create(:provider, :accredited_provider) }
+      let(:training_provider) { create(:provider) }
+
+      before do
+        create(:provider_partnership, accredited_provider:, training_provider:)
+        create(:course, :draft_enrichment, provider: training_provider, accrediting_provider: accredited_provider)
+
+        [accredited_provider, training_provider].each do |provider|
+          service.execute(provider:, new_recruitment_cycle:)
+        end
+      end
+
+      it "does not roll over either provider" do
+        expect(new_recruitment_cycle.providers.where(provider_code: [accredited_provider.provider_code, training_provider.provider_code])).to be_empty
+      end
+
+      it "does not copy the partnership" do
+        expect(mocked_copy_partnership_service).not_to have_received(:execute)
       end
     end
   end
