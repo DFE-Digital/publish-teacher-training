@@ -8,7 +8,8 @@ describe Providers::CopyToRecruitmentCycleService do
     let(:study_site) { build(:site, :study_site) }
     let(:published_course_enrichment) { build(:course_enrichment, :published) }
     let(:course_enrichments) { [published_course_enrichment] }
-    let(:course) { create(:course, enrichments: course_enrichments, provider: provider) }
+    let(:first_published_at) { 5.days.ago }
+    let(:course) { create(:course, enrichments: course_enrichments, first_published_at:, provider: provider) }
     let(:ucas_preferences) { build(:ucas_preferences, type_of_gt12: :coming_or_not) }
     let(:contacts) do
       [
@@ -367,6 +368,7 @@ describe Providers::CopyToRecruitmentCycleService do
       end
       let(:draft_course_enrichment) { build(:course_enrichment) }
       let(:course_enrichments) { [draft_course_enrichment] }
+      let(:first_published_at) { nil }
 
       it "is not rollable" do
         expect(provider).not_to be_rollable

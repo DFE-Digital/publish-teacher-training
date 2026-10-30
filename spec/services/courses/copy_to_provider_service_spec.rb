@@ -10,6 +10,7 @@ RSpec.describe Courses::CopyToProviderService do
   let(:course) do
     create(:course,
            enrichments: [published_course_enrichment],
+           first_published_at: 5.days.ago,
            accrediting_provider:,
            subjects: [maths], level: "secondary")
   end
