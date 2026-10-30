@@ -12,7 +12,7 @@ module Support
         active: active_support_banners_path,
         scheduled: scheduled_support_banners_path,
         expired: expired_support_banners_path,
-      }.fetch(banner.status, active_support_banners_path)
+      }.fetch(banner.status)
     end
 
     def banner_word_count_options(form, attribute, maximum)
