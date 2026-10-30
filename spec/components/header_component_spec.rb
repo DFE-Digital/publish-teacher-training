@@ -39,7 +39,6 @@ RSpec.describe HeaderComponent, type: :component do
     "qa" => "orange",
     "review" => "purple",
     "sandbox" => "purple",
-    "rollover" => "teal",
     "staging" => "red",
   }.each do |environment, colour|
     it "renders a #{colour} phase banner for the #{environment} environment" do

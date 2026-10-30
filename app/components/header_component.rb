@@ -36,7 +36,6 @@ private
       "production" => "blue",
       "qa" => "orange",
       "review" => "purple",
-      "rollover" => "teal",
       "sandbox" => "purple",
       "staging" => "red",
     }.fetch(Settings.environment.name.to_s, "grey")
