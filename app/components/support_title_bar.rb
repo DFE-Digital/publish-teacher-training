@@ -11,12 +11,14 @@ class SupportTitleBar < ViewComponent::Base
 
 private
 
+  def show_cycle_switcher?
+    rollover_active? && (provider_section? || onboarding_section?)
+  end
+
   def title
-    if current_recruitment_cycle?
-      "Recruitment cycle #{previous_recruitment_cycle_year} to #{current_recruitment_cycle_year} - current"
-    else
-      "Recruitment cycle #{current_recruitment_cycle_year} to #{next_recruitment_cycle_year}"
-    end
+    label = "Recruitment cycle #{selected_cycle_year - 1} to #{selected_cycle_year}"
+    label += " - current" if selected_cycle_year == Find::CycleTimetable.current_year
+    label
   end
 
   def change_cycle_link
@@ -31,39 +33,15 @@ private
     RolloverPeriod.active?(current_user:)
   end
 
-  def recruitment_cycle_year
-    params[:recruitment_cycle_year].to_i
+  def provider_section?
+    request.path.start_with?("/support/#{params[:recruitment_cycle_year]}/providers")
   end
 
-  def current_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.current_year
+  def onboarding_section?
+    request.path.start_with?("/support/providers-onboarding-form-requests")
   end
 
-  def next_recruitment_cycle?
-    recruitment_cycle_year == Find::CycleTimetable.next_year
-  end
-
-  def previous_recruitment_cycle_year
-    Find::CycleTimetable.previous_year
-  end
-
-  def current_recruitment_cycle_year
-    Find::CycleTimetable.current_year
-  end
-
-  def next_recruitment_cycle_year
-    Find::CycleTimetable.next_year
-  end
-
-  def support_index_page
-    request.path == "/support"
-  end
-
-  def support_candidates_page
-    request.path == "/support/candidates"
-  end
-
-  def support_users_page
-    request.path == "/support/#{recruitment_cycle_year}/users"
+  def selected_cycle_year
+    params[:recruitment_cycle_year].presence&.to_i || Find::CycleTimetable.current_year
   end
 end
