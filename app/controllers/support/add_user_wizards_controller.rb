@@ -6,6 +6,8 @@ module Support
 
     before_action :set_wizard, except: :new
 
+    delegate :current_step, :current_step_name, to: :@wizard
+
     helper_method :current_step, :current_step_name
 
     def new
@@ -28,14 +30,6 @@ module Support
       end
     end
 
-    def current_step
-      @wizard.current_step
-    end
-
-    def current_step_name
-      params[:step].to_sym
-    end
-
   private
 
     def complete
@@ -48,7 +42,7 @@ module Support
       recruitment_cycle
 
       @wizard = AddUserWizard.new(
-        current_step: current_step_name,
+        current_step: params[:step].to_sym,
         current_step_params: params,
         state_store: AddUserWizard::StateStores::AddUserWizardStore.new(repository: wizard_repository),
       )
