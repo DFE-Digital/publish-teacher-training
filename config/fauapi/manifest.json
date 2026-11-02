@@ -12,17 +12,7 @@
   "serviceLevel": "24/7",
   "technology": "REST, Ruby",
   "usage": "Publicly available API for accessing teacher training course data.",
-  "authentication": [
-    {
-      "type": "SubscriptionKey",
-      "enabled": true,
-      "autoEnforce": true,
-      "parameters": {
-        "headerName": "Ocp-Apim-Subscription-Key",
-        "queryName": "subscription-key"
-      }
-    }
-  ],
+  "authentication": [],
   "environments": [
     {
       "name": "dev",
@@ -31,8 +21,8 @@
       "backendMode": "None",
       "visibility": "Internal",
       "enabled": true,
-      "canSubscribe": true,
-      "requiresApproval": true
+      "canSubscribe": false,
+      "requiresApproval": false
     },
     {
       "name": "staging",
@@ -41,8 +31,8 @@
       "backendMode": "None",
       "visibility": "Internal",
       "enabled": true,
-      "canSubscribe": true,
-      "requiresApproval": true
+      "canSubscribe": false,
+      "requiresApproval": false
     },
     {
       "name": "live",
@@ -51,8 +41,8 @@
       "backendMode": "None",
       "visibility": "Public",
       "enabled": true,
-      "canSubscribe": true,
-      "requiresApproval": true
+      "canSubscribe": false,
+      "requiresApproval": false
     }
   ],
   "releases": [
