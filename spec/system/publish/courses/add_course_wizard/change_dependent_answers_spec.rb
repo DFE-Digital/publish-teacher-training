@@ -160,6 +160,27 @@ RSpec.describe "Add course wizard changes that need further answers", type: :sys
     expect(summary_row("Subjects")).to have_text(textiles.subject_name).and have_no_text(engineering.subject_name)
   end
 
+  scenario "changing two subjects with specialisms asks for each of them again" do
+    french = ModernLanguagesSubject.find_by!(subject_name: "French")
+    engineering = DesignTechnologySubject.find_by!(subject_name: "Engineering")
+    given_i_have_completed_a_fee_course(
+      subject_id: SecondarySubject.modern_languages.id,
+      subordinate_subject_id: SecondarySubject.design_technology.id,
+      language_ids: [french.id.to_s],
+      design_technology_ids: [engineering.id.to_s],
+    )
+    when_i_change(:secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_step(:modern_languages_specialisms, change_from: :secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_step(:design_technology_specialisms, change_from: :secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_check_answers
+  end
+
   scenario "back from the languages asked again goes to the subjects, then check answers" do
     french = ModernLanguagesSubject.find_by!(subject_name: "French")
     given_i_have_completed_a_fee_course(subject_id: SecondarySubject.modern_languages.id, language_ids: [french.id.to_s])
@@ -201,7 +222,8 @@ private
   end
 
   def given_i_have_completed_a_fee_course(subject: :business_studies, subject_id: find_or_create(:secondary_subject, subject).id, campaign_name: nil,
-                                          language_ids: nil, design_technology_ids: nil, can_sponsor_student_visa: false, deadline_required: nil)
+                                          subordinate_subject_id: nil, language_ids: nil, design_technology_ids: nil,
+                                          can_sponsor_student_visa: false, deadline_required: nil)
     placement_site = create(:site, :with_provider_school, provider:)
     study_site = create(:site, :study_site, provider:)
     deadline_answers = if deadline_required
@@ -216,6 +238,7 @@ private
       level: "secondary",
       is_send: "false",
       secondary_master_subject_id: subject_id.to_s,
+      subordinate_subject_id: subordinate_subject_id&.to_s,
       campaign_name:,
       language_ids:,
       design_technology_ids:,
