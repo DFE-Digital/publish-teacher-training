@@ -1,15 +1,21 @@
 <%= render PageTitle.new(title: "support.providers.courses.edit") %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(
-        support_recruitment_cycle_provider_courses_path(
-          @provider.recruitment_cycle_year,
-          @provider
-        )
-      ) %>
+  <%= govuk_back_link(
+      text: "Back",
+      href: support_recruitment_cycle_provider_courses_path(
+        @provider.recruitment_cycle.year,
+        @provider
+      )
+    ) %>
 <% end %>
 
+<span class="govuk-caption-l">
+  <%= "#{@course.name} (#{@course.course_code})" %> - <%= @provider.decorate.name_and_code %>
+</span>
 <h1 class="govuk-heading-l">Edit course details</h1>
+<p class="govuk-body">Providers are not able to change this information in Publish.</p>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <%= form_with model: @edit_course_form, url: support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider), method: :patch do |f| %>
@@ -19,6 +25,13 @@
       <%= f.govuk_text_field(:course_code, label: { text: "Course code", size: "m" }) %>
 
       <%= f.govuk_text_field(:name, label: { text: "Course title", size: "m" }) %>
+
+      <div class="govuk-!-margin-bottom-6">
+
+        <% if @course.is_withdrawn? %>
+          <%= govuk_link_to("Revert withdrawal", edit_support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider.id, @course.id)) %>
+        <% end %>
+      </div>
 
       <% if @course.accrediting_provider %>
         <%= tag.div class: "govuk-form-group" do %>
