@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@ministryofjustice/frontend": "11.1.0",
+    "@ministryofjustice/frontend": "12.0.0",
     "dfe-autocomplete": "DFE-Digital/dfe-autocomplete#v1.0.0",
     "govuk-frontend": "^6.6.0",
     "govuk-one-login-service-header": "https://github.com/govuk-one-login/service-header#v4.0.0",
