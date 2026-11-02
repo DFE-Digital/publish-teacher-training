@@ -16,7 +16,7 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l"><%= @provider.decorate.name_was_and_code %></h1>
 
-    <p class="govuk-body">Providers are not able to change this information in Publish.</p>
+    <p class="govuk-body-l">Providers are not able to change this information in Publish.</p>
 
   <%= f.govuk_text_field :provider_name,
   label: { text: "Provider name", size: "s" } %>
@@ -43,7 +43,7 @@
     </div>
     <%= f.govuk_radio_button :accredited, true, label: { text: "Yes", size: "s" } do %>
       <%= f.govuk_text_field :accredited_provider_number,
-        label: { text: "Accredited provider number" },
+        label: { text: "Accredited provider number", size: "s" },
         width: 10 %>
     <% end %>
     <%= f.govuk_radio_button :accredited, false, label: { text: "No", size: "s" } %>
@@ -53,13 +53,16 @@
     <%= f.govuk_radio_button :provider_type, :university, label: { text: "Higher education institute (HEI)" } %>
     <%= f.govuk_radio_button :provider_type, :scitt, label: { text: "School centred initial teacher training (SCITT) " } %>
     <%= f.govuk_radio_button :provider_type, :lead_school, label: { text: "School" } do %>
-      <%= f.govuk_text_field :urn,
-        label: { text: "Unique reference number (URN)" },
-        form_group: {},
-        width: 10 %>
-        <p class="govuk-body govuk-!-margin-top-2">
-          <%= t("links.urn_html") %>
-        </p>
+    <%= f.govuk_text_field :urn,
+    label: {
+      text: "Unique reference number (URN)",
+      size: "s"
+    },
+    hint: {
+      text: t("links.urn_html")
+    },
+    form_group: {},
+    width: 10 %>
     <% end %>
   <% end %>
 
