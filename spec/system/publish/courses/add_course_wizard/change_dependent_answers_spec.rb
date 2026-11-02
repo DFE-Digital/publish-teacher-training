@@ -127,6 +127,61 @@ RSpec.describe "Add course wizard changes that need further answers", type: :sys
     expect(page).to have_text(specialism)
   end
 
+  scenario "changing the subjects of a modern languages course asks for its languages again" do
+    french = ModernLanguagesSubject.find_by!(subject_name: "French")
+    spanish = ModernLanguagesSubject.find_by!(subject_name: "Spanish")
+    given_i_have_completed_a_fee_course(subject_id: SecondarySubject.modern_languages.id, language_ids: [french.id.to_s])
+    when_i_change(:secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_step(:modern_languages_specialisms, change_from: :secondary_subjects)
+    expect(page).to have_checked_field(french.subject_name)
+    check spanish.subject_name
+    and_i_click_continue
+
+    then_i_am_on_check_answers
+    expect(summary_row("Subjects")).to have_text(french.subject_name).and have_text(spanish.subject_name)
+  end
+
+  scenario "changing the subjects of a design and technology course asks for its specialisms again" do
+    engineering = DesignTechnologySubject.find_by!(subject_name: "Engineering")
+    textiles = DesignTechnologySubject.find_by!(subject_name: "Textiles")
+    given_i_have_completed_a_fee_course(subject_id: SecondarySubject.design_technology.id, design_technology_ids: [engineering.id.to_s])
+    when_i_change(:secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_step(:design_technology_specialisms, change_from: :secondary_subjects)
+    expect(page).to have_checked_field(engineering.subject_name)
+    uncheck engineering.subject_name
+    check textiles.subject_name
+    and_i_click_continue
+
+    then_i_am_on_check_answers
+    expect(summary_row("Subjects")).to have_text(textiles.subject_name).and have_no_text(engineering.subject_name)
+  end
+
+  scenario "back from the languages asked again goes to the subjects, then check answers" do
+    french = ModernLanguagesSubject.find_by!(subject_name: "French")
+    given_i_have_completed_a_fee_course(subject_id: SecondarySubject.modern_languages.id, language_ids: [french.id.to_s])
+    when_i_change(:secondary_subjects)
+    and_i_click_continue
+    then_i_am_on_step(:modern_languages_specialisms, change_from: :secondary_subjects)
+
+    click_on "Back"
+    then_i_am_on_step(:secondary_subjects)
+
+    click_on "Back"
+    then_i_am_on_check_answers
+  end
+
+  scenario "changing the subjects of a physics course does not ask Engineers Teach Physics again" do
+    given_i_have_completed_a_fee_course(subject: :physics, campaign_name: "engineers_teach_physics")
+    when_i_change(:secondary_subjects)
+    and_i_click_continue
+
+    then_i_am_on_check_answers
+  end
+
   scenario "changing from physics to another subject asks nothing more" do
     given_i_have_completed_a_fee_course(subject: :physics, campaign_name: "engineers_teach_physics")
     when_i_change(:secondary_subjects)
@@ -145,7 +200,8 @@ private
     given_i_am_authenticated(user: @user)
   end
 
-  def given_i_have_completed_a_fee_course(subject: :business_studies, campaign_name: nil, can_sponsor_student_visa: false, deadline_required: nil)
+  def given_i_have_completed_a_fee_course(subject: :business_studies, subject_id: find_or_create(:secondary_subject, subject).id, campaign_name: nil,
+                                          language_ids: nil, design_technology_ids: nil, can_sponsor_student_visa: false, deadline_required: nil)
     placement_site = create(:site, :with_provider_school, provider:)
     study_site = create(:site, :study_site, provider:)
     deadline_answers = if deadline_required
@@ -159,8 +215,10 @@ private
     wizard_state_store.write(
       level: "secondary",
       is_send: "false",
-      secondary_master_subject_id: find_or_create(:secondary_subject, subject).id.to_s,
+      secondary_master_subject_id: subject_id.to_s,
       campaign_name:,
+      language_ids:,
+      design_technology_ids:,
       age_range_in_years: "11_to_16",
       qualification: "qts",
       funding_type: "fee",

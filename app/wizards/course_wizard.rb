@@ -5,6 +5,10 @@ class CourseWizard
 
   TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern skilled_worker_visa].freeze
 
+  # The Subjects row on check answers also shows the languages and the design
+  # and technology specialisms, which have no Change link of their own
+  SUBJECTS_ROW_STEPS = %i[modern_languages_specialisms design_technology_specialisms].freeze
+
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
   delegate :accrediting_provider, to: :accreditation
@@ -15,9 +19,10 @@ class CourseWizard
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
       graph.add_edge from: :check_answers, to: :courses_index
 
-      # A change from check answers shows only the steps it affects, then
-      # goes back to check answers. Back retraces the steps it showed.
-      graph.before_next_step { next_step_in_review if return_to_review }
+      # A change from check answers shows only the steps it affects, and the
+      # steps its row shows, then goes back to check answers. Back retraces
+      # the steps it showed.
+      graph.before_next_step { next_step_in_review(show: review_row_steps) if return_to_review }
       graph.before_previous_step { previous_step_in_review(return_to_review) }
     end
   end
@@ -114,6 +119,12 @@ class CourseWizard
     return {} if return_to_review.blank? || step_id == check_answers_step
 
     { return_to_review: }
+  end
+
+  # Steps the row of the followed Change link shows besides its own step.
+  # Compared as a string: return_to_review is a request param.
+  def review_row_steps
+    return_to_review.to_s == "secondary_subjects" ? SUBJECTS_ROW_STEPS : []
   end
 
   # The step whose Change link was followed on check answers
