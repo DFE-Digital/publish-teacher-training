@@ -1,0 +1,12 @@
+en:
+  support:
+    providers:
+      organisation:
+        accredited_hint_html: >
+          <p class="govuk-body">
+            Select yes if your organisation is accredited by the Department for Education (DfE) to deliver courses that lead to qualified teacher status (QTS).
+          </p>
+
+          <p class="govuk-body govuk-!-margin-bottom-0">
+            If you work with an accredited provider but are not accredited yourself, select no.
+          </p>

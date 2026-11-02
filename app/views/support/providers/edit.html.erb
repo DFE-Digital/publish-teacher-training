@@ -16,6 +16,8 @@
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h1 class="govuk-heading-l"><%= @provider.decorate.name_was_and_code %></h1>
 
+    <p class="govuk-body">Providers are not able to change this information in Publish.</p>
+
   <%= f.govuk_text_field :provider_name,
   label: { text: "Provider name", size: "s" } %>
 
@@ -25,15 +27,20 @@
   <p class="govuk-body"><%= @provider.provider_code %></p>
 
   <%= f.govuk_text_field :ukprn,
-  label: { text: " UK provider reference number (UKPRN) ", size: "s" },
-  form_group: { class: "govuk-!-margin-bottom-2" },
+  label: { text: "UK provider reference number (UKPRN)", size: "s" },
+  hint: {
+    text: t("links.ukprn_html")
+  },
   width: 10 %>
 
-  <p class="govuk-body govuk-!-margin-bottom-5">
-    <%= t("links.ukprn_html") %>
-  </p>
-
-  <%= f.govuk_radio_buttons_fieldset :accredited, legend: { text: "Is the organisation an accredited provider?", size: "s" } do %>
+  <%= f.govuk_radio_buttons_fieldset :accredited,
+    legend: {
+      text: "Is the organisation an accredited provider?",
+      size: "s"
+    } do %>
+    <div class="govuk-hint govuk-!-margin-bottom-3">
+      <%= t("support.providers.organisation.accredited_hint_html").html_safe %>
+    </div>
     <%= f.govuk_radio_button :accredited, true, label: { text: "Yes", size: "s" } do %>
       <%= f.govuk_text_field :accredited_provider_number,
         label: { text: "Accredited provider number" },
