@@ -11,11 +11,7 @@ class Support::AddUserWizard
       attribute :email, :string
       attribute :admin, :boolean, default: false
 
-      validates :first_name, presence: true
-      validates :last_name, presence: true
-      validates :email, presence: true, format: { with: /\A.*@.*\z/, message: "must contain @" }
-      validate :email_is_unique
-      validate :admin_email_domain, if: :admin
+      validate :user_is_valid
 
       before_validation :normalise_email
 
@@ -29,17 +25,11 @@ class Support::AddUserWizard
         self.email = email.to_s.strip.downcase
       end
 
-      def email_is_unique
-        return if email.blank?
-        return unless User.exists?(email:)
+      def user_is_valid
+        user = User.new(first_name:, last_name:, email:, admin:)
+        return if user.valid?
 
-        errors.add(:email, :taken)
-      end
-
-      def admin_email_domain
-        return if email.match?(/\A.*@(digital\.){0,1}education\.gov\.uk\z/)
-
-        errors.add(:email, "must be an @[digital.]education.gov.uk domain")
+        errors.merge!(user.errors)
       end
     end
   end
