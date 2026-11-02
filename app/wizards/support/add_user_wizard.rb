@@ -36,7 +36,7 @@ module Support
 
     def steps_operator
       DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
-        builder.on_step(:check_answers, use: [DfE::Wizard::Operations::Validate, Operations::CreateUser])
+        builder.on_step(:check_answers, use: [Operations::CreateUser])
       end
     end
 
