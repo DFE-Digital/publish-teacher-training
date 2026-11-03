@@ -299,6 +299,8 @@ module Find
       SWITCHER_OPTIONS.dig(option, :advances_cycle) ? year + 1 : year
     end
 
+    def self.cycle_exists_for_option?(option) = RecruitmentCycle.exists?(year: year_for_option(option).to_s)
+
     def self.phase_for_option(option) = SWITCHER_OPTIONS.fetch(option).fetch(:phase)
 
     def self.option_range(option, year) = phase_range(phase_for_option(option), year)
@@ -353,6 +355,7 @@ module Find
       # stored, would match no phase and leave every predicate false.
       # Read it as the real cycle instead.
       return :real unless SWITCHER_OPTIONS.key?(schedule)
+      return :real unless cycle_exists_for_option?(schedule)
 
       schedule
     end

@@ -6,6 +6,7 @@ RSpec.describe "Find pages under each cycle phase", travel: Time.zone.local(2026
   before do
     allow(ENV).to receive(:[])
     allow(ENV).to receive(:[]).with("ENABLE_SWITCHER").and_return("1")
+    create(:recruitment_cycle, :next)
   end
 
   {

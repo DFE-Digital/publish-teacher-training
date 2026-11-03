@@ -129,7 +129,10 @@ RSpec.describe AutomatedBanner do
     end
 
     context "when the cycle switcher is on" do
-      before { enable_cycle_switcher }
+      before do
+        enable_cycle_switcher
+        create(:recruitment_cycle, :next)
+      end
 
       it "is active on Find when the cycle switcher says Apply has not opened", travel: 1.hour.after(apply_opens) do
         SiteSetting.set(name: "cycle_schedule", value: "apply_not_open_yet")
