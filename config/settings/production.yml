@@ -43,6 +43,7 @@ skylight:
 render_json_errors: true
 
 fauapi:
+  enabled: true
   base_url: "https://apimanagement.education.gov.uk"
 
 features:
