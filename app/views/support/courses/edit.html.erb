@@ -10,6 +10,9 @@
     ) %>
 <% end %>
 
+<%= form_with model: @edit_course_form, url: support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider), method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
 <span class="govuk-caption-l">
   <%= "#{@course.name} (#{@course.course_code})" %> - <%= @provider.decorate.name_and_code %>
 </span>
@@ -18,20 +21,18 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @edit_course_form, url: support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider), method: :patch do |f| %>
-
-      <%= f.govuk_error_summary %>
-
-      <%= f.govuk_text_field(:course_code, label: { text: "Course code", size: "s" }) %>
-
-      <%= f.govuk_text_field(:name, label: { text: "Course title", size: "s" }) %>
 
       <div class="govuk-!-margin-bottom-6">
-
         <% if @course.is_withdrawn? %>
-          <%= govuk_link_to("Revert withdrawal", edit_support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider.id, @course.id)) %>
+          <%= govuk_link_to("Revert withdrawal", edit_support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider.id, @course.id), class: "govuk-body") %>
         <% end %>
       </div>
+
+      <%= f.govuk_text_field(:name, label: { text: "Course name", size: "s" }) %>
+
+      <%= f.govuk_text_field :course_code, label: { text: "Course code", size: "s" }, width: 5 %>
+
+      <div class="govuk-!-margin-bottom-6">
 
       <% if @course.accrediting_provider %>
         <%= tag.div class: "govuk-form-group" do %>
@@ -43,39 +44,37 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_date_field(
-        :start_date,
-        omit_day: true,
-        legend: { text: "Start date", size: "s" },
-      ) %>
-
       <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special Education Needs and Disability (SEND)", size: "s" }, multiple: false do %>
         <% f.govuk_check_box :is_send, "true", "false", label: { text: "This course has an additional SEND specialism" }, multiple: false %>
       <% end %>
 
       <% if @course.decorate.salaried? %>
-
-           <%= f.govuk_check_boxes_fieldset :can_sponsor_skilled_worker_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
-          <% f.govuk_check_box :can_sponsor_skilled_worker_visa, "true", "false", label: { text: "This course can sponsor a skilled worker visa" }, multiple: false %>
-        <% end %>
+        <%= f.govuk_check_boxes_fieldset :can_sponsor_skilled_worker_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
+        <% f.govuk_check_box :can_sponsor_skilled_worker_visa, "true", "false", label: { text: "This course can sponsor a skilled worker visa" }, multiple: false %>
+      <% end %>
 
       <% else %>
-
-     <%= f.govuk_check_boxes_fieldset :can_sponsor_student_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
-          <% f.govuk_check_box :can_sponsor_student_visa, "true", "false", label: { text: "This course can sponsor a student visa" }, multiple: false %>
-        <% end %>
-
+        <%= f.govuk_check_boxes_fieldset :can_sponsor_student_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
+        <% f.govuk_check_box :can_sponsor_student_visa, "true", "false", label: { text: "This course can sponsor a student visa" }, multiple: false %>
       <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
-            legend: { text: "Publishing this course without schools", size: "s" },
-            hint: { text: "Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached" },
-            multiple: false do %>
-        <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "Allow this course to be published without schools attached" }, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_submit t("support.update_record") %>
     <% end %>
+
+    <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
+          legend: { text: "Publishing this course without schools", size: "s" },
+          hint: { text: "Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached" },
+          multiple: false do %>
+      <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "Allow this course to be published without schools attached" }, multiple: false %>
+    <% end %>
+
+    <%= f.govuk_date_field(
+        :start_date,
+        omit_day: true,
+        legend: { text: "Start date", size: "s" },
+      ) %>
+
+    <%= f.govuk_submit t("support.update_record") %>
+  <% end %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_courses_path) %>
