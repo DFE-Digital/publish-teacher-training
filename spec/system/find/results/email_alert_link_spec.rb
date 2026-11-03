@@ -39,18 +39,12 @@ RSpec.describe "Email alert link on results page", service: :find do
     then_i_do_not_see_the_email_alert_link
   end
 
-  scenario "Email alert link is hidden when an active alert exists for the search" do
+  scenario "Email alert link leads to email alerts when an active alert exists for the search" do
     when_i_sign_in
     and_i_have_an_active_alert_for_the_search
     when_i_visit_results_with_subject_filter
-    then_i_do_not_see_the_email_alert_link
-  end
-
-  scenario "Email alert link is shown when alert for the search has been unsubscribed" do
-    when_i_sign_in
-    and_i_have_an_unsubscribed_alert_for_the_search
-    when_i_visit_results_with_subject_filter
-    then_i_see_the_email_alert_link
+    and_i_click_the_email_alert_link
+    then_i_am_on_the_email_alerts_page
   end
 
   scenario "Email alert link is hidden when the location is outside England" do
@@ -85,6 +79,14 @@ RSpec.describe "Email alert link on results page", service: :find do
     expect(page).not_to have_link("Email me courses like this")
   end
 
+  def and_i_click_the_email_alert_link
+    click_link_or_button "Email me courses like this"
+  end
+
+  def then_i_am_on_the_email_alerts_page
+    expect(page).to have_current_path(find_candidate_email_alerts_path)
+  end
+
   def candidate
     Candidate.first
   end
@@ -98,18 +100,6 @@ RSpec.describe "Email alert link on results page", service: :find do
       subjects: [biology.subject_code],
       search_attributes: search_attributes_for_subject_filter,
     )
-  end
-
-  def and_i_have_an_unsubscribed_alert_for_the_search
-    biology = Subject.find_by(subject_name: "Biology")
-
-    alert = create(
-      :email_alert,
-      candidate:,
-      subjects: [biology.subject_code],
-      search_attributes: search_attributes_for_subject_filter,
-    )
-    alert.unsubscribe!
   end
 
   def search_attributes_for_subject_filter
