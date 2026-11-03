@@ -10,7 +10,7 @@
 <h1 class="govuk-heading-l">Download Publish users</h1>
 
 <% @data_exports.each do |data_export| %>
-  <section class="app-section app-section--with-top-border" id="<%= data_export.type %>">
+  <section class="app-section app-section--with-top-border">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body"><%= t(".#{data_export.type}.description") %></p>
