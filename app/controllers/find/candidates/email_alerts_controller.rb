@@ -6,6 +6,7 @@ module Find
       include ::Courses::ActiveFilters::SummaryRowBuilder
 
       before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email index sign_in]
+      before_action :redirect_existing_alert, only: :new, if: :existing_alert?
       before_action :redirect_if_subscription_limit_reached, only: %i[new create]
 
       def index
@@ -21,8 +22,6 @@ module Find
       end
 
       def new
-        return redirect_existing_alert if existing_alert?
-
         @title = build_title(subject_names:, search_attributes: search_params.to_h, location_name:, radius: search_params[:radius])
         @summary_rows = build_summary_rows(search_params.to_h.except("level"), subject_names:)
         @search_params = search_params
@@ -128,7 +127,7 @@ module Find
 
       def redirect_existing_alert
         flash[:info] = t("find.candidates.email_alerts.new.already_subscribed")
-        redirect_to redirect_back
+        redirect_to find_candidate_email_alerts_path
       end
 
       def build_title(subject_names:, search_attributes:, location_name:, radius:)
