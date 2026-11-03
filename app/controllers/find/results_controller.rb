@@ -83,25 +83,11 @@ module Find
     def show_email_alert_link?
       return unless current_user.present? && FeatureFlag.active?(:email_alerts)
 
-      filters_applied? && alert_does_not_exist? && meaningful_for_recent_search? && !location_outside_england?
+      filters_applied? && meaningful_for_recent_search? && !location_outside_england?
     end
 
     def location_outside_england?
       @address.country.present? && @address.country != "England"
-    end
-
-    def alert_does_not_exist?
-      !current_user.email_alerts.active.exists?(filter_key_digest: search_digest)
-    end
-
-    def search_digest
-      @search_digest ||= Find::FilterKeyDigest.digest(subjects: subject_codes, search_attributes: @search_params)
-    end
-
-    def subject_codes
-      codes = Array(params[:subjects])
-      codes << params[:subject_code] if params[:subject_code].present?
-      codes.compact_blank.uniq.sort
     end
 
     def filters_applied?

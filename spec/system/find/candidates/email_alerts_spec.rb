@@ -151,8 +151,17 @@ RSpec.describe "Email alerts", service: :find do
     and_i_have_an_existing_alert_for_biology
     when_i_visit_new_email_alert_with_params
 
-    then_i_am_redirected_away_from_new_page
+    then_i_am_on_the_email_alerts_page
     then_i_see_already_subscribed_notice
+  end
+
+  scenario "Shows the confirmation page when the alert for the search params has been unsubscribed" do
+    when_i_sign_in
+    and_i_have_an_existing_alert_for_biology
+    and_one_subscription_is_unsubscribed
+    when_i_visit_new_email_alert_with_params
+
+    then_i_see_the_confirmation_page
   end
 
   scenario "Creating an alert via new page then revisiting redirects" do
@@ -163,7 +172,7 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_success_banner
     when_i_visit_new_email_alert_with_params
 
-    then_i_am_redirected_away_from_new_page
+    then_i_am_on_the_email_alerts_page
     then_i_see_already_subscribed_notice
   end
 
@@ -172,7 +181,7 @@ RSpec.describe "Email alerts", service: :find do
     and_i_have_reached_the_subscription_limit
     when_i_visit_new_email_alert_with_params
 
-    then_i_am_redirected_away_from_new_page
+    then_i_am_on_the_email_alerts_page
     then_i_see_subscription_limit_warning
   end
 
@@ -184,6 +193,16 @@ RSpec.describe "Email alerts", service: :find do
     when_i_click_set_up_email_alert_on_recent_search
 
     then_i_see_subscription_limit_warning
+  end
+
+  scenario "Shows already subscribed notice rather than limit warning when an alert exists at the limit" do
+    when_i_sign_in
+    and_i_have_an_existing_alert_for_biology
+    and_that_alert_reaches_the_subscription_limit
+    when_i_visit_new_email_alert_with_params
+
+    then_i_am_on_the_email_alerts_page
+    then_i_see_already_subscribed_notice
   end
 
   scenario "Can create email alert when some subscriptions are unsubscribed and active count is below limit" do
@@ -471,12 +490,13 @@ RSpec.describe "Email alerts", service: :find do
     expect(page).not_to have_link("Email me courses like this")
   end
 
-  def then_i_am_redirected_away_from_new_page
-    expect(page).not_to have_current_path(new_find_candidate_email_alert_path)
+  def then_i_am_on_the_email_alerts_page
+    expect(page).to have_current_path(find_candidate_email_alerts_path)
   end
 
   def then_i_see_already_subscribed_notice
-    expect(page).to have_content("You already have an email alert for this search")
+    expect(page).to have_content("Important")
+    expect(page).to have_content("You already have an email alert set up for these criteria.")
   end
 
   def and_i_have_reached_the_subscription_limit
@@ -485,6 +505,10 @@ RSpec.describe "Email alerts", service: :find do
     2.times do |i|
       create(:email_alert, candidate:, subjects: %w[C1], search_attributes: { "level" => "secondary", "send_courses" => i.to_s })
     end
+  end
+
+  def and_that_alert_reaches_the_subscription_limit
+    stub_const("Candidate::EmailAlert::MAXIMUM_SUBSCRIPTIONS", 1)
   end
 
   def and_one_subscription_is_unsubscribed
