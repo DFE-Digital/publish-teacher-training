@@ -21,10 +21,6 @@ RSpec.describe "Reverting a withdrawal" do
     expect(page).to have_no_link("Revert withdrawal")
   end
 
-  def then_i_should_see_the_published_and_closed_course
-    expect(page).to have_css(".govuk-tag.govuk-tag--purple", text: "Closed")
-  end
-
   def and_i_see_the_success_message
     expect(page).to have_css(".govuk-notification-banner__heading", text: "Course status updated")
   end

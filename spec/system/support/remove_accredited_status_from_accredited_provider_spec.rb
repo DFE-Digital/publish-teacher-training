@@ -18,6 +18,7 @@ RSpec.describe "Support::UpdateProviders", service: :publish do
 
     expect(page).to have_content("MyAccredited")
     click_on accredited_provider.provider_name
+    click_on "Organisation"
     expect(page).to have_css(:h1, text: accredited_provider.provider_name)
 
     expect(page).to have_content("Is the organisation an accredited provider?Yes")
