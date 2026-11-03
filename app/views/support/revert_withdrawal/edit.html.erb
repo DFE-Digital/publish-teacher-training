@@ -21,7 +21,7 @@
     <%= govuk_button_to "Revert withdrawal",
                         support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider, @course),
         method: :patch,
-        class: "govuk-button--warning" %>
+        class: "govuk-button" %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), edit_support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider, @course)) %>
