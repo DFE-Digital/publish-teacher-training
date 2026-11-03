@@ -6,6 +6,10 @@ require_relative "../../app/lib/authentications/dfe_sign_in_omni_auth"
 
 OmniAuth.config.logger = Rails.logger
 
+# Guard against forged Host / X-Forwarded-Host when OmniAuth builds callback URLs
+# (CVE-2026-63183). Find and Publish use separate hosts; keep both allowlisted.
+OmniAuth.config.allowed_hosts = Settings.find_hosts + Settings.publish_hosts
+
 if Publish::AuthenticationService.persona?
   Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer,

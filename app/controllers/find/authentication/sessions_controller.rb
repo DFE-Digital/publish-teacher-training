@@ -31,6 +31,7 @@ module Find
         invalid_response
         connection_failed
         invalid_authenticity_token
+        invalid_host
       ].freeze
 
       THRESHOLDED_ONE_LOGIN_ERROR_TYPES = %w[invalid_authenticity_token].freeze
