@@ -38,6 +38,17 @@ RSpec.describe "Authentication error", service: :find, type: :request do
       )
     end
 
+    it "always reports invalid_host without checking the threshold" do
+      expect(ErrorReporting::RateLimiter).not_to receive(:report?)
+
+      get "/auth/failure", params: { message: "invalid_host" }
+
+      expect(Sentry).to have_received(:capture_message).with(
+        "One Login failure",
+        hash_including(tags: hash_including(error_type: "invalid_host", threshold: 1)),
+      )
+    end
+
     it "reports invalid_authenticity_token once the threshold is reached" do
       allow(ErrorReporting::RateLimiter).to receive(:report?)
         .with(key: "one_login:invalid_authenticity_token", threshold: 10)
