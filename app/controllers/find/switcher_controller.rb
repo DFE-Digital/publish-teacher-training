@@ -4,7 +4,9 @@ module Find
   class SwitcherController < ApplicationController
     skip_before_action :redirect_to_cycle_has_ended_if_find_is_down
 
-    def cycles; end
+    def cycles
+      @form = Find::ChangeCycleForm.new
+    end
 
     def update
       new_cycle = params[:find_change_cycle_form][:cycle_schedule_name]
@@ -13,6 +15,9 @@ module Find
         flash[:warning] = "#{new_cycle} is not a recruitment cycle phase"
         return redirect_to find_cycles_path
       end
+
+      @form = Find::ChangeCycleForm.new(cycle_schedule_name: new_cycle)
+      return render :cycles, status: :unprocessable_content unless @form.valid?
 
       SiteSetting.set(name: "cycle_schedule", value: new_cycle)
       SiteSetting.set(name: "deadline_banner", value: deadline_banner_wanted?.to_s)

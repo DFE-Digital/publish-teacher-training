@@ -25,6 +25,10 @@ en:
           blank: "Select at least one type of secondary course"
         find/subjects/primary_form:
           blank: "Select at least one type of primary course"
+        find/change_cycle_form:
+          attributes:
+            cycle_schedule_name:
+              missing_cycle: There is no %{year} recruitment cycle in this environment. Add it in Support or choose another option
         support/banner_form:
           attributes:
             published_at:

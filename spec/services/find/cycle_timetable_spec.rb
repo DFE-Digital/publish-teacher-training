@@ -30,12 +30,16 @@ module Find
           allow(SiteSetting).to receive(:cycle_schedule).and_return(:apply_reopened)
 
           Timecop.travel(Time.zone.local(2020, 10, 6, 10, 0, 0)) do
+            create(:recruitment_cycle, year: 2022)
+
             expect(described_class.current_year).to eq(2022)
           end
         end
       end
 
       it "moves to the next cycle for every option past the rollover" do
+        create(:recruitment_cycle, :next)
+
         described_class::SWITCHER_OPTIONS.each do |option, definition|
           allow(SiteSetting).to receive(:cycle_schedule).and_return(option)
 
@@ -44,6 +48,14 @@ module Find
 
           expect(described_class.current_year).to eq(expected), "wrong year for #{option}"
         end
+      end
+    end
+
+    describe ".current_cycle_schedule" do
+      it "reads a stored option as the real cycle when that option's cycle does not exist" do
+        allow(SiteSetting).to receive(:cycle_schedule).and_return(:apply_reopened)
+
+        expect(described_class.current_cycle_schedule).to eq(:real)
       end
     end
 
