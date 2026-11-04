@@ -17,7 +17,7 @@
     {
       "name": "dev",
       "baseUrl": "https://qa.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
-      "backendUrl": "https://qa.api.publish-teacher-training-courses.service.gov.uk",
+      "backendUrl": "https://qa.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "backendMode": "None",
       "visibility": "Internal",
       "enabled": true,
@@ -27,7 +27,7 @@
     {
       "name": "staging",
       "baseUrl": "https://staging.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
-      "backendUrl": "https://staging.api.publish-teacher-training-courses.service.gov.uk",
+      "backendUrl": "https://staging.api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "backendMode": "None",
       "visibility": "Internal",
       "enabled": true,
@@ -37,7 +37,7 @@
     {
       "name": "live",
       "baseUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
-      "backendUrl": "https://api.publish-teacher-training-courses.service.gov.uk",
+      "backendUrl": "https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1",
       "backendMode": "None",
       "visibility": "Public",
       "enabled": true,
