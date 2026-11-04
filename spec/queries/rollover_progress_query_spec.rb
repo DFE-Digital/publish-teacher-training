@@ -258,15 +258,14 @@ RSpec.describe RolloverProgressQuery, type: :model do
         accredited_provider: create(:provider, :accredited_provider, recruitment_cycle: previous_target_cycle),
       )
     end
-    let(:partnership_with_discarded_training_provider) do
-      discarded_provider = create(:provider, recruitment_cycle: previous_target_cycle)
-      create(:course, :published, provider: discarded_provider)
-      discarded_provider.update_column(:discarded_at, Time.zone.now)
+    let(:partnership_with_discarded_accredited_provider) do
+      discarded_provider = create(:provider, :accredited_provider, :discarded, recruitment_cycle: previous_target_cycle)
+      create(:course, :published, provider: training_provider, accrediting_provider: discarded_provider)
 
       create(
         :provider_partnership,
-        training_provider: discarded_provider,
-        accredited_provider:,
+        training_provider:,
+        accredited_provider: discarded_provider,
       )
     end
 
@@ -276,7 +275,7 @@ RSpec.describe RolloverProgressQuery, type: :model do
       rollable_partnership_two
       partnership_with_training_provider_not_rollable
       partnership_with_accredited_provider_not_rollable
-      partnership_with_discarded_training_provider
+      partnership_with_discarded_accredited_provider
     end
 
     it "includes only partnerships where both providers are eligible" do
