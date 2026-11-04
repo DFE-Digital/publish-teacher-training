@@ -226,7 +226,10 @@ RSpec.describe RolloverProgressQuery, type: :model do
   end
 
   describe "#eligible_partnerships" do
-    let(:accredited_provider) { create(:provider, :accredited_provider) }
+    let(:provider_with_accredited_course) do
+      create(:provider, :accredited_provider, recruitment_cycle: previous_target_cycle)
+    end
+    let(:accredited_provider) { provider_with_accredited_course }
     let(:rollable_partnership_one) do
       create(
         :provider_partnership,
@@ -234,24 +237,35 @@ RSpec.describe RolloverProgressQuery, type: :model do
         accredited_provider:,
       )
     end
-    let(:rollable_partnership2_two) do
+    let(:rollable_partnership_two) do
       create(
         :provider_partnership,
         training_provider: provider_with_withdrawn_course,
         accredited_provider:,
       )
     end
-    let(:not_rollable_partnership_one) do
+    let(:partnership_with_training_provider_not_rollable) do
       create(
         :provider_partnership,
         training_provider: provider_without_courses,
         accredited_provider:,
       )
     end
-    let(:not_rollable_partnership2_two) do
+    let(:partnership_with_accredited_provider_not_rollable) do
       create(
         :provider_partnership,
-        training_provider: create(:provider, recruitment_cycle: previous_target_cycle),
+        training_provider:,
+        accredited_provider: create(:provider, :accredited_provider, recruitment_cycle: previous_target_cycle),
+      )
+    end
+    let(:partnership_with_discarded_training_provider) do
+      discarded_provider = create(:provider, recruitment_cycle: previous_target_cycle)
+      create(:course, :published, provider: discarded_provider)
+      discarded_provider.update_column(:discarded_at, Time.zone.now)
+
+      create(
+        :provider_partnership,
+        training_provider: discarded_provider,
         accredited_provider:,
       )
     end
@@ -259,14 +273,15 @@ RSpec.describe RolloverProgressQuery, type: :model do
     before do
       given_we_have_providers_and_courses_on_previous_target_cycle
       rollable_partnership_one
-      rollable_partnership2_two
-      not_rollable_partnership_one
-      not_rollable_partnership2_two
+      rollable_partnership_two
+      partnership_with_training_provider_not_rollable
+      partnership_with_accredited_provider_not_rollable
+      partnership_with_discarded_training_provider
     end
 
-    it "includes partnerships with eligible providers" do
+    it "includes only partnerships where both providers are eligible" do
       expect(rollover_progress.eligible_partnerships).to match_collection(
-        [rollable_partnership_one, rollable_partnership2_two],
+        [rollable_partnership_one, rollable_partnership_two],
       )
     end
 
