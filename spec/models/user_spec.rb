@@ -13,6 +13,7 @@ describe User do
     it { is_expected.to have_many(:organisation_users).dependent(:destroy) }
     it { is_expected.to have_many(:user_permissions).dependent(:destroy) }
     it { is_expected.to have_many(:user_notifications).dependent(:destroy) }
+    it { is_expected.to have_many(:api_keys).dependent(:destroy) }
     it { is_expected.to have_many(:created_course_enrichments).dependent(:nullify) }
     it { is_expected.to have_many(:updated_course_enrichments).dependent(:nullify) }
     it { is_expected.to have_many(:providers_onboarding_form_requests).dependent(:nullify) }

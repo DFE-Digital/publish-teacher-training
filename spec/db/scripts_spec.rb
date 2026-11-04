@@ -27,6 +27,14 @@ RSpec.describe "db/scripts" do
     expect(SolidCache::Entry.count).to eq(0)
   end
 
+  it "wipes api_key" do
+    create(:api_key)
+
+    run_script("sanitise")
+
+    expect(APIKey.count).to eq(0)
+  end
+
   it "wipes Solid Queue arguments and errors" do
     job = SolidQueue::Job.create!(
       queue_name: "default",
