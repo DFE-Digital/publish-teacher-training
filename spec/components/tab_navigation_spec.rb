@@ -49,7 +49,7 @@ describe TabNavigation do
     end
 
     before do
-      with_request_url "/support/#{year}/providers/1/schools/abc/delete", host: "publish.localhost" do
+      with_request_url "/support/#{year}/providers/1/schools/search", host: "publish.localhost" do
         render_inline(described_class.new(items:))
       end
     end
