@@ -75,7 +75,7 @@ private
   end
 
   def when_onboarding_hides_the_switcher
-    visit_page support_providers_onboarding_form_requests_path, "Provider Onboarding Requests"
+    visit_page support_providers_onboarding_form_requests_path, "Onboard a provider"
     expect_no_cycle_switcher
   end
 
@@ -137,7 +137,7 @@ private
   end
 
   def when_onboarding_shows_the_current_cycle
-    visit_page support_providers_onboarding_form_requests_path, "Provider Onboarding Requests"
+    visit_page support_providers_onboarding_form_requests_path, "Onboard a provider"
     expect_current_cycle_switcher
   end
 
