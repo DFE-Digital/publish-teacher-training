@@ -71,6 +71,9 @@
   - filter_key_digest
   :candidate_email_alerts:
   - filter_key_digest
+  :api_key:
+  - key_digest
+  - prefix
   :user:
   - magic_link_token
   - blazer_access

@@ -24,6 +24,12 @@ en:
         subject_knowledge_enhancement_course_available: SKE
     errors:
       models:
+        api_key:
+          attributes:
+            name:
+              blank: "Enter a name for your API key"
+            base:
+              limit_reached: "You can only have %{count} active API keys. Revoke a key before creating another"
         user:
           attributes:
             first_name:

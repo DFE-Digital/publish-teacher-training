@@ -2329,6 +2329,70 @@
         ]
       },
       {
+        "name": "api_key",
+        "syncMode": "incremental_append",
+        "cursorField": [
+          "_ab_cdc_lsn"
+        ],
+        "primaryKey": [
+          [
+            "id"
+          ]
+        ],
+        "selectedFields": [
+          {
+            "fieldPath": [
+              "_ab_cdc_lsn"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_deleted_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "_ab_cdc_updated_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "id"
+            ]
+          },
+          {
+            "fieldPath": [
+              "email"
+            ]
+          },
+          {
+            "fieldPath": [
+              "name"
+            ]
+          },
+          {
+            "fieldPath": [
+              "last_used_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "revoked_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "created_at"
+            ]
+          },
+          {
+            "fieldPath": [
+              "updated_at"
+            ]
+          }
+        ]
+      },
+      {
         "name": "user",
         "syncMode": "incremental_append",
         "cursorField": [

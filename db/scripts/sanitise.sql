@@ -1,6 +1,13 @@
 DELETE FROM session;
 DELETE FROM audit;
 
+DO $$
+BEGIN
+  DELETE FROM api_key;
+EXCEPTION
+  WHEN undefined_table THEN NULL;
+END $$;
+
 -- Solid Cache blobs are opaque (keys can include postcodes/addresses).
 -- Skip if the dump predates the solid_cache_entries migration.
 -- TRUNCATE rather than DELETE: after cutover this table can grow toward the 1GB cap.

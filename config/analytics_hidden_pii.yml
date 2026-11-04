@@ -4,6 +4,9 @@ shared:
     - subject_key
   candidate:
     - email_address
+  api_key:
+    - email
+    - name
   user:
     - email
     - first_name
