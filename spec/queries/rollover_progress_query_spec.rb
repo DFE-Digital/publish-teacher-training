@@ -279,8 +279,9 @@ RSpec.describe RolloverProgressQuery, type: :model do
     end
 
     it "includes only partnerships where both providers are eligible" do
-      expect(rollover_progress.eligible_partnerships).to match_collection(
-        [rollable_partnership_one, rollable_partnership_two],
+      expect(rollover_progress.eligible_partnerships).to contain_exactly(
+        rollable_partnership_one,
+        rollable_partnership_two,
       )
     end
 
