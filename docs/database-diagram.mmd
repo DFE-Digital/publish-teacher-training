@@ -1,5 +1,14 @@
 erDiagram
 	direction TB
+	APIKey {
+		text email FK
+		integer id PK
+		string key_digest
+		datetime last_used_at
+		string name
+		string prefix
+		datetime revoked_at
+	}
 	"Audited::Audit" {
 		string action
 		integer associated_id FK
@@ -542,7 +551,7 @@ erDiagram
 		datetime accept_terms_date_utc
 		boolean admin
 		boolean blazer_access
-		text email
+		text email FK
 		datetime first_login_date_utc
 		text first_name
 		integer id PK
@@ -567,6 +576,7 @@ erDiagram
 		integer provider_id FK
 		integer user_id FK
 	}
+	APIKey o|--}o "Audited::Audit" : ""
 	Candidate o|--}o "Audited::Audit" : ""
 	Contact o|--}o "Audited::Audit" : ""
 	Course o|--}o "Audited::Audit" : ""
@@ -579,6 +589,7 @@ erDiagram
 	Site o|--}o "Audited::Audit" : ""
 	SiteStatus o|--}o "Audited::Audit" : ""
 	User o|--}o "Audited::Audit" : ""
+	User ||--}o APIKey : ""
 	User ||--}o Authentication : ""
 	User o|--}o "Blazer::Audit" : ""
 	"Blazer::Query" o|--}o "Blazer::Audit" : ""

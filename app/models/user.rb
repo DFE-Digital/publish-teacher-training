@@ -23,6 +23,8 @@ class User < ApplicationRecord
   has_many :user_permissions, dependent: :destroy
   has_many :providers, through: :user_permissions
 
+  has_many :api_keys, foreign_key: :email, primary_key: :email, inverse_of: :user, dependent: :destroy
+
   has_many :created_course_enrichments,
            class_name: "CourseEnrichment",
            foreign_key: :created_by_user_id,
@@ -70,6 +72,7 @@ class User < ApplicationRecord
   }
 
   audited
+  has_associated_audits
 
   def to_s
     "#{first_name} #{last_name} <#{email}>"
