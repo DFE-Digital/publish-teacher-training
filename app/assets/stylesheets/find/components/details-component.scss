@@ -1,3 +1,5 @@
+@use "../../settings" as *;
+
 [data-controller="details-component"] {
   .app-c-filter-section + section {
     display: none;

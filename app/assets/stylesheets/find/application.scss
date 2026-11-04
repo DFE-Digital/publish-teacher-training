@@ -1,35 +1,38 @@
-// Entry point for your Sass build
-@import "../govuk_style_setup";
-@import "dfe-autocomplete/src/dfe-autocomplete";
-@import "../one-login";
+// Entry point for the Find Sass build
+//
+// ../settings must load first. It configures GOV.UK Frontend, and Sass only
+// lets a module be configured on its first load.
+@use "../settings";
+@use "govuk-frontend/dist/govuk";
+@use "../dfe-autocomplete";
+@use "../one-login";
 
-$app-callout-light-blue-colour: #f3f8f6;
 // Treat this as a library. It may become distributed by Gov.uk
-@import "../components/filter-panel";
-@import "../components/active-filters";
+@use "../components/filter-panel";
+@use "../components/active-filters";
 
-@import "../components/accordion";
-@import "../components/autocomplete";
-@import "../components/button-link";
-@import "../components/card";
-@import "../components/footer";
-@import "../components/header";
-@import "../components/js-enabled";
-@import "../components/list";
-@import "../components/pagination";
-@import "../components/summary-card";
-@import "../components/callout";
-@import "../components/stacked_summary_list";
-@import "../components/save-course-button";
+@use "../components/accordion";
+@use "../components/autocomplete";
+@use "../components/button-link";
+@use "../components/card";
+@use "../components/footer";
+@use "../components/header";
+@use "../components/js-enabled";
+@use "../components/list";
+@use "../components/pagination";
+@use "../components/summary-card";
+@use "../components/callout";
+@use "../components/stacked_summary_list";
+@use "../components/save-course-button";
 
-@import "./components/accordion";
-@import "./components/details-component";
-@import "./components/feedback";
-@import "./components/filter-layout";
-@import "./components/filter-panel-overrides";
-@import "./components/quick-link-card";
-@import "./components/saved-course";
-@import "./components/search-results";
-@import "./components/homepage_search";
-@import "./components/recent-search";
-@import "./components/email-alert";
+@use "./components/accordion" as find-accordion;
+@use "./components/details-component";
+@use "./components/feedback";
+@use "./components/filter-layout";
+@use "./components/filter-panel-overrides";
+@use "./components/quick-link-card";
+@use "./components/saved-course";
+@use "./components/search-results";
+@use "./components/homepage_search";
+@use "./components/recent-search";
+@use "./components/email-alert";

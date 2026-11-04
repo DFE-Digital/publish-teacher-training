@@ -1,3 +1,5 @@
+@use "../settings" as *;
+
 // make the summary list look on desktop the way it looks on mobile
 // The list key is stacked on top of the list value instead of side by side
 .govuk-summary-list.govuk-summary-list--stacked {
