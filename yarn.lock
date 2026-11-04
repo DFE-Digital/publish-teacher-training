@@ -472,7 +472,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@govuk-one-login/service-header@npm:7.0.1":
+"@govuk-one-login/service-header@npm:^7.0.1":
   version: 7.0.1
   resolution: "@govuk-one-login/service-header@npm:7.0.1"
   dependencies:
@@ -5350,7 +5350,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "teacher-training-api@workspace:."
   dependencies:
-    "@govuk-one-login/service-header": "npm:7.0.1"
+    "@govuk-one-login/service-header": "npm:^7.0.1"
     "@hotwired/stimulus": "npm:^3.2.2"
     "@ministryofjustice/frontend": "npm:12.0.0"
     dfe-autocomplete: "DFE-Digital/dfe-autocomplete#v1.0.0"
