@@ -19,7 +19,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to t(".remove", school_name: school.location_name), delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid), class: "app-link--destructive" %>
+      <%= govuk_link_to t(".remove", school_name: school.location_name), delete_publish_provider_recruitment_cycle_school_path(@provider.provider_code, school.recruitment_cycle.year, school.uuid, **support_return_params), class: "app-link--destructive" %>
     </p>
   </div>
 </div>

@@ -31,7 +31,7 @@
         </abbr>
       </th>
       <th scope="col" class="govuk-table__header"><%= t(".courses_attached") %></th>
-      <th scope="col" class="govuk-table__header"><%= t(".remove") %></th>
+      <th scope="col" class="govuk-table__header"><%= t(".view_in_publish") %></th>
     </tr>
   </thead>
 
@@ -40,8 +40,8 @@
       <% @schools.each do |school| %>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell name">
-            <span class="govuk-!-display-block govuk-!-margin-bottom-1">
-              <%= govuk_link_to school.location_name, support_recruitment_cycle_provider_school_path(@provider.recruitment_cycle_year, @provider, school.uuid) %>
+            <span class="govuk-!-display-block govuk-!-margin-bottom-1 govuk-!-font-weight-bold">
+              <%= school.location_name %>
             </span>
             <p class="govuk-body govuk-hint address"><%= school.full_address %></p>
           </td>
@@ -58,19 +58,18 @@
           <td class="govuk-table__cell courses-count">
             <%= t(".courses_count", count: school.courses_count) %>
           </td>
-          <td class="govuk-table__cell remove">
+          <td class="govuk-table__cell view-in-publish">
             <%= govuk_link_to(
               safe_join([
-                t(".remove"),
+                t(".view_school"),
                 content_tag(:span, school.location_name, class: "govuk-visually-hidden"),
               ], " "),
-              delete_support_recruitment_cycle_provider_school_path(
+              publish_provider_recruitment_cycle_school_path(
+                @provider.provider_code,
                 @provider.recruitment_cycle_year,
-                @provider,
                 school.uuid,
-                { from: :index, page: params[:page] }.compact_blank,
+                return_to: :support,
               ),
-              class: "app-link--destructive",
             ) %>
           </td>
         </tr>

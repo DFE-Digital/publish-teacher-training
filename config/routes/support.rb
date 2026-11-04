@@ -58,12 +58,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       namespace :schools, module: "providers/schools" do
         resource :check, only: %i[show update]
       end
-      resources :schools, param: :uuid, only: %i[index show destroy], module: "providers" do
-        member do
-          get :delete
-          delete :delete, to: "schools#destroy"
-        end
-
+      resources :schools, only: :index, module: "providers" do
         collection do
           get "/search", to: "schools/search#new"
           post "/search", to: "schools/search#create"

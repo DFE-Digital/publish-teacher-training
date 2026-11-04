@@ -30,8 +30,8 @@ module Publish
 
       def destroy
         if school_removal.call
-          flash[:success] = t(".removed", school_name: school.location_name)
-          redirect_to publish_provider_recruitment_cycle_schools_path
+          flash[:success] = removal_success_message
+          redirect_to removal_success_path
         else
           redirect_to school_delete_path_with_return,
                       flash: { warning: cannot_remove_school_message }
@@ -77,6 +77,7 @@ module Publish
             @provider.provider_code,
             school.recruitment_cycle.year,
             school.uuid,
+            **support_return_params,
           )
         end
       end
@@ -97,11 +98,40 @@ module Publish
       end
 
       def school_delete_return_params
-        params.permit(:from, :filter, :page).to_h.compact_blank.symbolize_keys
+        permitted = params.permit(:from, :filter, :page, :return_to).to_h.compact_blank.symbolize_keys
+        permitted.delete(:return_to) unless permitted[:return_to] == "support"
+        permitted
       end
 
       def schools_index_return_params
-        school_delete_return_params.except(:from)
+        school_delete_return_params.except(:from, :return_to)
+      end
+
+      def support_return_params
+        return {} unless params[:return_to] == "support"
+
+        { return_to: "support" }
+      end
+      helper_method :support_return_params
+
+      def returning_to_support?
+        params[:return_to] == "support"
+      end
+
+      def removal_success_message
+        if returning_to_support?
+          t(".removed_from_provider", school_name: school.location_name, provider_name: provider.provider_name)
+        else
+          t(".removed", school_name: school.location_name)
+        end
+      end
+
+      def removal_success_path
+        if returning_to_support?
+          support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider)
+        else
+          publish_provider_recruitment_cycle_schools_path
+        end
       end
 
       def reset_urn_form

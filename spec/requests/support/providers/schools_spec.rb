@@ -37,231 +37,27 @@ RSpec.describe "Support provider schools" do
       get support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider)
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include("View in Publish")
       expect(response.body).to include("St Joseph")
       expect(response.body).to include("Catholic Primary School")
       expect(response.body).to include("112992")
-      expect(response.body).to include(support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
 
       school_row = response.parsed_body.at_css("tbody tr")
+      expect(school_row.at_css(".name a")).to be_nil
+      expect(school_row.at_css(".name .govuk-\\!-font-weight-bold").text.squish).to eq("St Joseph's Catholic Primary School")
       expect(school_row.at_css(".address").text.squish).to eq("1 School Lane, Leeds, LS1 1AA")
       expect(school_row.at_css(".courses-count").text.squish).to eq("2 courses")
 
-      remove_link = school_row.at_css(".remove a")
-      expect(remove_link.text.squish).to eq("Remove school St Joseph's Catholic Primary School")
-      expect(remove_link["href"]).to eq(
-        delete_support_recruitment_cycle_provider_school_path(
+      view_link = school_row.at_css(".view-in-publish a")
+      expect(view_link.text.squish).to eq("View school St Joseph's Catholic Primary School")
+      expect(view_link["href"]).to eq(
+        publish_provider_recruitment_cycle_school_path(
+          provider.provider_code,
           recruitment_cycle.year,
-          provider,
           provider_school.uuid,
-          from: :index,
+          return_to: :support,
         ),
       )
-      expect(remove_link["class"]).to include("app-link--destructive")
-    end
-  end
-
-  describe "GET /support/:recruitment_cycle_year/providers/:provider_id/schools/:uuid" do
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "A") }
-
-    it "shows the school" do
-      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("St Joseph")
-      expect(response.body).to include("Catholic Primary School")
-      expect(response.body).to include("1 School Lane, Leeds, LS1 1AA")
-      expect(response.body).to include("School code: A")
-      expect(response.body).to include("URN: 112992")
-      expect(response.body).to include("Remove St Joseph")
-      expect(response.body).to include("Catholic Primary School from their account")
-      expect(response.body).not_to include("govuk-summary-list")
-    end
-
-    it "shows the no-courses message instead of an empty table" do
-      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("This school is not attached to any courses.")
-      expect(response.body).not_to include("govuk-table")
-    end
-
-    it "lists attached courses with their information and status" do
-      course = create(
-        :course,
-        :published_postgraduate,
-        provider:,
-        name: "Biology",
-        course_code: "B123",
-        start_date: Time.zone.local(recruitment_cycle.year.to_i, 9, 1),
-      )
-      create(:course_school, course:, provider_school:, gias_school:)
-      create(
-        :course,
-        :published_postgraduate,
-        provider:,
-        name: "History",
-        course_code: "H100",
-      )
-
-      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Biology (B123)")
-      expect(response.body).to include("Course information")
-      expect(response.body).to include("Fee-paying")
-      expect(response.body).to include("QTS with PGCE")
-      expect(response.body).to include("Full time")
-      expect(response.body).to include("September #{recruitment_cycle.year}")
-      expect(response.parsed_body.at_css(".govuk-tag")).to be_present
-      expect(response.body).to include(
-        publish_provider_recruitment_cycle_course_path(provider.provider_code, recruitment_cycle.year, "B123"),
-      )
-      expect(response.body).not_to include("History (H100)")
-      expect(response.body).not_to include("This school is not attached to any courses.")
-    end
-
-    it "returns not found for another provider's school" do
-      other_provider_school = create(:provider_school)
-
-      get support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, other_provider_school.uuid)
-
-      expect(response).to have_http_status(:not_found)
-    end
-  end
-
-  describe "GET /support/:recruitment_cycle_year/providers/:provider_id/schools/:uuid/delete" do
-    let!(:provider_school) { create(:provider_school, provider:, gias_school:, site_code: "A") }
-    # A provider's last school cannot be removed, so give it a spare.
-    let!(:other_provider_school) { create(:provider_school, provider:) }
-
-    it "offers to remove a school that no course uses" do
-      get delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("St Joseph")
-      expect(response.body).to include("Remove school")
-    end
-
-    it "returns Back and Cancel to the schools index when removal starts there" do
-      get delete_support_recruitment_cycle_provider_school_path(
-        recruitment_cycle.year,
-        provider,
-        provider_school.uuid,
-        from: :index,
-        page: 2,
-      )
-
-      expected_path = support_recruitment_cycle_provider_schools_path(
-        recruitment_cycle.year,
-        provider,
-        page: 2,
-      )
-      page = response.parsed_body
-
-      expect(page.at_css(".govuk-back-link")["href"]).to eq(expected_path)
-      expect(page.css("a").find { |link| link.text.squish == "Cancel" }["href"]).to eq(expected_path)
-    end
-
-    it "returns Back and Cancel to the school details when removal starts there" do
-      get delete_support_recruitment_cycle_provider_school_path(
-        recruitment_cycle.year,
-        provider,
-        provider_school.uuid,
-      )
-
-      expected_path = support_recruitment_cycle_provider_school_path(
-        recruitment_cycle.year,
-        provider,
-        provider_school.uuid,
-      )
-      page = response.parsed_body
-
-      expect(page.at_css(".govuk-back-link")["href"]).to eq(expected_path)
-      expect(page.css("a").find { |link| link.text.squish == "Cancel" }["href"]).to eq(expected_path)
-    end
-
-    it "explains why a school that is the only placement school on a course cannot be removed" do
-      course = create(:course, provider:)
-      create(:course_school, course:, gias_school:, provider_school:)
-
-      get delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("is a school for courses run by #{provider.provider_name}")
-    end
-
-    it "offers to remove a school that is not the only school on its courses" do
-      course = create(:course, provider:)
-      create(:course_school, course:, gias_school:, provider_school:)
-      create(:course_school, course:, gias_school: other_provider_school.gias_school, provider_school: other_provider_school)
-
-      get delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-
-      expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Remove school")
-    end
-  end
-
-  describe "DELETE /support/:recruitment_cycle_year/providers/:provider_id/schools/:uuid" do
-    let!(:site) { create(:site, provider:, urn: gias_school.urn, code: "A", uuid: SecureRandom.uuid) }
-    let!(:provider_school) do
-      create(:provider_school, provider:, gias_school:, site_code: site.code, uuid: site.uuid)
-    end
-    let!(:other_provider_school) { create(:provider_school, provider:) }
-    let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
-
-    def remove_school
-      delete support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid)
-    end
-
-    it "removes the school" do
-      expect { remove_school }.to change { provider.schools.count }.by(-1)
-
-      expect(response).to redirect_to(support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider))
-    end
-
-    # A course that is allowed to publish without schools is served by the API
-    # with all of its provider's schools as locations, so removing one changes
-    # that course's payload.
-    it "touches every course that is publishable without schools" do
-      second_exempt_course = create(:course, :with_salary, provider:, publish_without_schools_allowed: true)
-
-      expect { remove_school }.to(change { [exempt_course.reload.changed_at, second_exempt_course.reload.changed_at] })
-    end
-
-    it "does not touch another provider's courses" do
-      other_exempt_course = create(:course, :with_salary, publish_without_schools_allowed: true)
-
-      expect { remove_school }.not_to(change { other_exempt_course.reload.changed_at })
-    end
-
-    it "does not touch courses when the school cannot be removed" do
-      course = create(:course, provider:)
-      create(:course_school, course:, gias_school:, provider_school:)
-
-      expect { remove_school }.not_to(change { exempt_course.reload.changed_at })
-
-      expect(provider.schools).to contain_exactly(provider_school, other_provider_school)
-      expect(flash[:warning]).to eq("This school could not be removed because it is the only placement school attached to a course")
-    end
-
-    it "removes a school that is not the only school on its courses" do
-      course = create(:course, provider:)
-      create(:course_school, course:, gias_school:, provider_school:)
-      create(:course_school, course:, gias_school: other_provider_school.gias_school, provider_school: other_provider_school)
-
-      expect { remove_school }.to change { provider.schools.count }.by(-1)
-
-      expect(course.schools.reload.map(&:provider_school)).to contain_exactly(other_provider_school)
-    end
-
-    it "does not remove the provider's last school" do
-      other_provider_school.destroy!
-
-      expect { remove_school }.not_to(change { provider.schools.count })
-
-      expect(response).to redirect_to(delete_support_recruitment_cycle_provider_school_path(recruitment_cycle.year, provider, provider_school.uuid))
-      expect(flash[:warning]).to eq("This school could not be removed because it is the provider’s only school")
     end
   end
 end
