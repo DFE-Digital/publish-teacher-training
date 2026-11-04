@@ -56,20 +56,9 @@ class RolloverProgressQuery
 
   def eligible_partnerships
     ProviderPartnership
-    .includes(:training_provider, :accredited_provider)
-    .where(
-      "accredited_provider_id IN (:ids) OR training_provider_id IN (:ids)",
-      ids: eligible_providers.select(:id),
-    )
-    .where.not(
-      training_provider_id: providers_without_published_courses.select(:id),
-    )
-    .where.not(
-      training_provider_id: previous_cycle_discarded_providers.select(:id),
-    )
-    .where.not(
-      accredited_provider_id: previous_cycle_discarded_providers.select(:id),
-    )
+      .includes(:training_provider, :accredited_provider)
+      .where(training_provider_id: eligible_providers.select(:id))
+      .where(accredited_provider_id: eligible_providers.select(:id))
   end
 
   def eligible_study_sites
@@ -131,14 +120,5 @@ class RolloverProgressQuery
     rolled_over_provider_codes = @target_cycle.providers.pluck(:provider_code)
 
     eligible_provider_codes - rolled_over_provider_codes
-  end
-
-private
-
-  def previous_cycle_discarded_providers
-    Provider
-      .unscoped
-      .where(recruitment_cycle_id: @previous_target_cycle.id)
-      .discarded
   end
 end
