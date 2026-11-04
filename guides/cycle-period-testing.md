@@ -100,7 +100,6 @@ The public predicates on `Find::CycleTimetable` read these:
 | --- | --- |
 | `find_down?` | `now_is_before_find_opens` |
 | `find_open?` | the negation of `now_is_before_find_opens` |
-| `mid_cycle?` | `today_is_after_find_opens` |
 | `show_apply_deadline_banner?` | `today_is_mid_cycle` |
 | `apply_deadline_passed` | `today_is_after_apply_deadline_passed` |
 | `show_cycle_closed_banner?` | `today_is_after_apply_deadline_passed` and not `today_is_between_find_opening_and_apply_opening` |
@@ -410,9 +409,6 @@ of UTC. `find_opens` for the 2026 cycle is `09:00` local but prints as `08:00`
 under `to_fs(:db)`, which formats UTC. A spec that asserts on a formatted
 timestamp, or compares against a UTC literal, can pass in midwinter and fail in
 June. Assert against the helper rather than a literal.
-
-**`mid_cycle?` does not mean mid cycle.** `Find::CycleTimetable.mid_cycle?` maps
-to `today_is_after_find_opens`, which spans almost the entire cycle.
 
 **`find_reopens(2027)` raises.** The helper module generates the same
 signature for every name, so it passes the year through, but

@@ -112,7 +112,6 @@ into, because A puts all but a sliver of those nine hours in that cycle.
 ### C. Apply opens
 
 - `apply_not_open_yet` ends and `apply_open` begins
-- `mid_cycle?` goes true, the stable open stage
 - the apply-opens-soon banner disappears
 - the grey "Not yet open" tag disappears
 
@@ -124,8 +123,7 @@ from C.
 ### D. First deadline banner
 
 - the layout banner switches to the apply-by-deadline variant
-- `mid_cycle?` goes false, since a banner is now up. Nothing in the app branches on
-  this, and the apply button is unaffected: it reads `can_create_application?`
+- the apply button is unaffected: it reads `can_create_application?`
 
 No phase begins or ends here. `apply_open` keeps running.
 
@@ -186,13 +184,6 @@ only what the page says about the wait. When this is false the apply button is r
 by the end-of-cycle notice, which tells candidates the courses are closed and gives them
 next cycle's reopening dates, so it must stay true for the whole of B to E including the
 deadline banner window.
-
-`mid_cycle?` is a different question and gates nothing:
-
-> is this the stable open stage, Apply taking applications and no banner up?
-
-It is `apply_open` with the deadline banner not yet up, so C to D. It exists to name
-the ordinary state, and `mid_cycle`, the instant, sits inside it.
 
 ## The full cycle
 
@@ -263,9 +254,5 @@ The deadline banner is not in this table. It runs `first_deadline_banner` to
 shutting and Find reopening are the seam between two cycles. Every other row reads one
 cycle's dates.
 
-Two names carry the words "mid cycle", and they do not mean the same span:
-
-| Name | Meaning |
-| --- | --- |
-| `mid_cycle(year)` | an instant, `apply_opens` plus two months, the stable open stage, used as the default clock for unpinned specs |
-| `mid_cycle?` | a predicate, `apply_open` with no deadline banner up, so `apply_opens` to `first_deadline_banner` |
+`mid_cycle(year)` is an instant, `apply_opens` plus two months, the stable open stage. It
+is the default clock for unpinned specs.
