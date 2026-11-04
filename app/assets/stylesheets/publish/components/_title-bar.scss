@@ -1,3 +1,5 @@
+@use "../../settings" as *;
+
 .title-bar {
   @include govuk-clearfix;
   margin-top: govuk-spacing(2);

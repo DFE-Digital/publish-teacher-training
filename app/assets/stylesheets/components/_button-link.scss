@@ -1,3 +1,5 @@
+@use "../settings" as *;
+
 // Make a button look like a link
 .app-button-link {
   @include govuk-link-common;

@@ -1,64 +1,53 @@
-// Entry point for your Sass build
+// Entry point for the Publish Sass build
 //
-// MOJ Frontend v12+ requires GOV.UK Frontend to be configured before MOJ
-// loads. Sass only lets a module be configured on its first load, so the
-// paths and font-face flag below are set on govuk/base first. The full GOV.UK
-// stylesheet is then pulled in via ../govuk_style_setup (which also sets the
-// shared app variables Find uses).
+// ../settings must load first. It configures GOV.UK Frontend, and Sass only
+// lets a module be configured on its first load. MOJ Frontend v12+ also
+// requires GOV.UK Frontend to be configured before MOJ loads.
 //
-// Asset paths are "/" so Propshaft can resolve fonts/images by bare filename
-// against config.assets.paths. $moj-images-path must still be set explicitly
-// so MOJ icons stay as bare filenames rather than inheriting
+// $moj-images-path must be set explicitly so MOJ icons stay as bare
+// filenames (for Propshaft) rather than inheriting
 // "#{$moj-assets-path}images/".
-@use "govuk-frontend/dist/govuk/base" as * with (
-  $govuk-fonts-path: "/",
-  $govuk-images-path: "/",
-  $govuk-include-default-font-face: true
-);
-
-@use "node_modules/@ministryofjustice/frontend/moj/all" as * with (
+@use "../settings" as *;
+@use "@ministryofjustice/frontend/moj/all" as moj with (
   $moj-images-path: "/"
 );
-
-@import "../govuk_style_setup";
-@import "dfe-autocomplete/src/dfe-autocomplete";
-@import "../one-login";
-
-$app-callout-light-blue-colour: #f3f8f6;
+@use "govuk-frontend/dist/govuk";
+@use "../dfe-autocomplete";
+@use "../one-login";
 
 // Shared with Find: the course list filter panel and its active filter chips.
-@import "../components/filter-panel";
-@import "../components/active-filters";
+@use "../components/filter-panel";
+@use "../components/active-filters";
 // Shared with Find: the save/sign-in prompt, shown inertly on the course preview.
-@import "../components/save-course-button";
+@use "../components/save-course-button";
 
-@import "../components/accordion";
-@import "../components/autocomplete";
-@import "../components/button-link";
-@import "../components/card";
-@import "../components/filters";
-@import "../components/footer";
-@import "../components/header";
-@import "../components/js-enabled";
-@import "../components/list";
-@import "../components/pagination";
-@import "../components/summary-card";
-@import "../components/callout";
-@import "../components/stacked_summary_list";
+@use "../components/accordion";
+@use "../components/autocomplete";
+@use "../components/button-link";
+@use "../components/card";
+@use "../components/filters";
+@use "../components/footer";
+@use "../components/header";
+@use "../components/js-enabled";
+@use "../components/list";
+@use "../components/pagination";
+@use "../components/summary-card";
+@use "../components/callout";
+@use "../components/stacked_summary_list";
 
-@import "./components/inset-text";
-@import "./components/link";
-@import "./components/status-box";
-@import "./components/summary-list";
-@import "./components/tab-navigation";
-@import "./components/table";
-@import "./components/tabs";
-@import "./components/title-bar";
-@import "./components/code";
-@import "./components/secondary-navigation";
-@import "./components/dynamic_preview";
-@import "./components/school-search";
-@import "./components/copy-course-content";
+@use "./components/inset-text";
+@use "./components/link";
+@use "./components/status-box";
+@use "./components/summary-list";
+@use "./components/tab-navigation";
+@use "./components/table";
+@use "./components/tabs";
+@use "./components/title-bar";
+@use "./components/code";
+@use "./components/secondary-navigation";
+@use "./components/dynamic_preview";
+@use "./components/school-search";
+@use "./components/copy-course-content";
 
 .app-list--dash {
   padding-left: govuk-spacing(3);

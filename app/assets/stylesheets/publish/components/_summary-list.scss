@@ -1,3 +1,6 @@
+// Loads the GOV.UK Frontend CSS so this file can @extend its selectors.
+@use "govuk-frontend/dist/govuk";
+
 .app-summary-list__value--truncate {
   max-width: 295px;
 

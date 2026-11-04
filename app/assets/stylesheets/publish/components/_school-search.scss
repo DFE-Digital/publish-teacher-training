@@ -1,3 +1,5 @@
+@use "../../settings" as *;
+
 // A plain grey panel. It shares six declarations with .app-callout - padding at
 // both breakpoints, the light-grey background, the responsive top and bottom
 // margins and the last-child reset - but not the rest of it: .app-callout
