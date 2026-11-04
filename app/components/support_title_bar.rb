@@ -34,7 +34,9 @@ private
   end
 
   def provider_section?
-    request.path.start_with?("/support/#{params[:recruitment_cycle_year]}/providers")
+    section, year, page = request.path.split("/")[1, 3]
+
+    section == "support" && page == "providers" && year.to_i.to_s == year
   end
 
   def onboarding_section?
