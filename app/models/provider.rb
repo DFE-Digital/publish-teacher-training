@@ -107,9 +107,9 @@ class Provider < ApplicationRecord
     accredited_courses.includes(:provider).where(provider: { recruitment_cycle: })
   end
 
-  # Providers that rollover copies to the next cycle: those with a rollable
-  # course of their own, and those that ratify a rollable course of a kept
-  # training provider in the same cycle.
+  # Providers that rollover copies to the next cycle: kept providers with a
+  # rollable course of their own, and kept providers that ratify a rollable
+  # course of a kept training provider in the same cycle.
   # Both checks are EXISTS subqueries tied to the outer provider row, so a
   # check for one provider only reads that provider's courses.
   scope :rollable, lambda {
@@ -121,7 +121,7 @@ class Provider < ApplicationRecord
       .where("course.accredited_provider_code = provider.provider_code")
       .where("training_provider.recruitment_cycle_id = provider.recruitment_cycle_id")
 
-    where(own.arel.exists).or(where(ratified.arel.exists))
+    where(own.arel.exists).or(where(ratified.arel.exists)).kept
   }
 
   scope :accredited, -> { where(accredited: true) }

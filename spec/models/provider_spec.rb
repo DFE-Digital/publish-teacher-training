@@ -642,6 +642,18 @@ describe Provider do
       end
     end
 
+    context "when the provider is discarded and ratifies a published course of a kept training provider" do
+      let(:accredited_provider) { create(:provider, :accredited_provider, :discarded) }
+
+      before do
+        create(:course, :published, provider: training_provider, accrediting_provider: accredited_provider)
+      end
+
+      it "is not rollable" do
+        expect(accredited_provider).not_to be_rollable
+      end
+    end
+
     context "when the provider only ratifies a published course in a later cycle" do
       let(:accredited_provider) { create(:provider, :accredited_provider, :previous_recruitment_cycle) }
 
