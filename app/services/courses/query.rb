@@ -380,7 +380,7 @@ module Courses
 
       @applied_scopes[:order] = params[:order]
 
-      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
+      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC, course.id ASC")
     end
 
     def course_name_ascending_order_scope
@@ -395,6 +395,7 @@ module Courses
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
@@ -411,6 +412,7 @@ module Courses
             providers_table[:provider_name] => :asc,
             courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
@@ -425,7 +427,7 @@ module Courses
         .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name, course_enrichment.last_published_timestamp_utc")
         .order(
-          "course_enrichment.last_published_timestamp_utc DESC, LOWER(provider.provider_name) ASC, LOWER(course.name) ASC, course.course_code ASC",
+          "course_enrichment.last_published_timestamp_utc DESC, LOWER(provider.provider_name) ASC, LOWER(course.name) ASC, course.course_code ASC, course.id ASC",
         )
     end
 
@@ -442,6 +444,7 @@ module Courses
             providers_table[:provider_name] => :asc,
             courses_table[:name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
@@ -494,6 +497,7 @@ module Courses
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
@@ -514,6 +518,7 @@ module Courses
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
