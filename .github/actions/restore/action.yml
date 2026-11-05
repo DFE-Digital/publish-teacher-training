@@ -142,6 +142,9 @@ runs:
         {
           printf '%s\n' "${preamble}" | gzip
           gzip --stdout db/scripts/preserve_environment_state_before_restore.sql
+          if [ "${{ env.app_environment }}" = "review" ]; then
+            printf 'DROP SCHEMA public CASCADE;\nCREATE SCHEMA public;\n' | gzip
+          fi
           cat "${SANITISED_FILE_NAME}.sql.gz"
           printf '\n' | gzip
           gzip --stdout db/scripts/restore_environment_state_after_restore.sql
