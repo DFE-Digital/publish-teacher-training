@@ -13,6 +13,8 @@ require "action_view/railtie"
 require "active_support/core_ext/integer/time"
 require "view_component/compile_cache"
 require "govuk/components"
+require_relative "../app/lib/api_key_secret"
+require_relative "../app/middleware/reject_api_key_in_url"
 require_relative "../app/middleware/request_logging_tags"
 require_relative "../app/middleware/store_save_course_intent"
 # Require the gems listed in Gemfile, including any gems
@@ -85,6 +87,8 @@ module ManageCoursesBackend
 
     config.log_tags = []
     config.log_level = Settings.log_level
+
+    config.middleware.insert_before Rails::Rack::Logger, RejectAPIKeyInUrl
 
     # Capture candidate "save course" intent during OmniAuth request phase (CSRF-protected POST).
     # Must run after the session middleware so `env["rack.session"]` is available.

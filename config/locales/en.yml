@@ -1220,6 +1220,9 @@ en:
     "400":
       title: BAD REQUEST
       detail: "%{message}"
+    "401":
+      title: UNAUTHORIZED
+      detail: "The API key was not accepted. Send an active key in the Authorization header using the Bearer scheme, and never in the URL"
     "404":
       title: NOT_FOUND
       detail: "The requested resource could not be found"
