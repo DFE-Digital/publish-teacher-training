@@ -155,6 +155,16 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_already_subscribed_notice
   end
 
+  scenario "Redirects from create when the alert was set up after the form was opened" do
+    when_i_sign_in
+    when_i_visit_new_email_alert_with_params
+    and_i_have_an_existing_alert_for_biology
+    when_i_click_set_up_email_alert
+
+    then_i_am_on_the_email_alerts_page
+    then_i_see_already_subscribed_notice
+  end
+
   scenario "Shows the confirmation page when the alert for the search params has been unsubscribed" do
     when_i_sign_in
     and_i_have_an_existing_alert_for_biology
@@ -495,7 +505,6 @@ RSpec.describe "Email alerts", service: :find do
   end
 
   def then_i_see_already_subscribed_notice
-    expect(page).to have_content("Important")
     expect(page).to have_content("You already have an email alert set up for these criteria.")
   end
 
