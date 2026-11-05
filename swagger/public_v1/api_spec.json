@@ -134,7 +134,7 @@
             "description": "Short factual summary of the course. Returns null for courses published or updated from the 2026 recruitment cycle onwards, where this information is instead split across `placement_school_activities`, `theoretical_training_activities`, `assessment_methods` and `support_and_mentorship`.",
             "example": "The Secondary PGCE consists of three core modules: two Master's-level modules, which are assessed through written assignments, and the Professional Practice module, which is assessed by the observation of practical teaching in placement schools."
           },
-          "accredited_provider_code": {
+          "accredited_body_code": {
             "type": "string",
             "description": "Unique provider-code for the accredited provider of this course. Only present if the provider delivering the course is not the accredited body.",
             "maxLength": 3,
@@ -2079,7 +2079,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2235,7 +2235,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2310,7 +2310,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2423,7 +2423,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2497,7 +2497,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2554,7 +2554,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
@@ -2651,7 +2651,7 @@
             "in": "path",
             "required": true,
             "description": "The starting year of the recruitment cycle. Also accepts \"current\" for the current recruitment cycle. Defaults to current recruitment cycle if invalid year (eg \"1066\") is provided",
-            "example": 2026,
+            "example": 2027,
             "schema": {
               "type": "string"
             }
