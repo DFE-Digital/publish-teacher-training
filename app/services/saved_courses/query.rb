@@ -87,7 +87,7 @@ module SavedCourses
 
       @applied_scopes[:order] = params[:order]
 
-      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC")
+      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC, saved_course.id ASC")
     end
 
     def newest_first_order_scope
@@ -95,7 +95,7 @@ module SavedCourses
 
       @applied_scopes[:order] = params[:order]
 
-      @scope.order("saved_course.created_at DESC")
+      @scope.order("saved_course.created_at DESC, saved_course.id DESC")
     end
 
     # Override: select saved_course.* instead of course.* and adjust GROUP BY
@@ -121,6 +121,7 @@ module SavedCourses
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
@@ -142,6 +143,7 @@ module SavedCourses
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
+            courses_table[:id] => :asc,
           },
         )
     end
