@@ -2,6 +2,7 @@
 
 # A wizard with one or more form steps in a fixed order, a check answers
 # page, and a commit. For branching journeys, use DfE::Wizard directly.
+# See guides/base-wizard.md.
 #
 # Answers are kept in Rails.cache under a key built from the wizard class,
 # the context values and a per-journey state_key. Attribute names must be
