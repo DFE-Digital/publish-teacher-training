@@ -2,7 +2,7 @@
 
 module Support
   class AddUserWizard < BaseWizard
-    form_step :details, Steps::Details
+    step :details, Steps::Details
     commit_with Operations::CreateUser
 
     def build_step_path(helpers, step_id, **options)

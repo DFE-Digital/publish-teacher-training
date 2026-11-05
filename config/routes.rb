@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
-  # Routes for a BaseWizard inside a resource block:
+  # Routes for a BaseWizard inside a resources or resource block:
   #   resources :users do
   #     concerns :base_wizard, controller: "add_user_wizards"
   #   end

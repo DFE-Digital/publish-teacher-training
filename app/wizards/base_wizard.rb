@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-# A wizard with one form step, a check answers page, and a commit.
+# A wizard with one or more form steps in a fixed order, a check answers
+# page, and a commit. For branching journeys, use DfE::Wizard directly.
 #
 # Answers are kept in Rails.cache under a key built from the wizard class,
-# the context values and a per-journey state_key.
+# the context values and a per-journey state_key. Attribute names must be
+# unique across steps, because the gem stores all answers in one hash.
 #
 #   class Support::AddUserWizard < BaseWizard
-#     form_step :details, Steps::Details
+#     step :details, Steps::Details
 #     commit_with Operations::CreateUser
 #
 #     def build_step_path(helpers, step_id, **options)
@@ -24,21 +26,25 @@ class BaseWizard
 
   CACHE_EXPIRY = 24.hours
 
-  class_attribute :form_step_id, :form_step_class, :commit_operation
+  class_attribute :form_steps, default: {}
+  class_attribute :commit_operation
 
   class << self
-    def form_step(step_id, step_class)
-      self.form_step_id = step_id
-      self.form_step_class = step_class
+    def step(step_id, step_class)
+      self.form_steps = form_steps.merge(step_id => step_class)
+    end
+
+    def first_step_id
+      form_steps.keys.first
     end
 
     def commit_with(operation)
       self.commit_operation = operation
     end
 
-    # A new journey, positioned on the form step.
+    # A new journey, positioned on the first step.
     def start(context:)
-      new(state_key: SecureRandom.uuid, context:, current_step: form_step_id)
+      new(state_key: SecureRandom.uuid, context:, current_step: first_step_id)
     end
 
     def repository_for(state_key:, context:)
@@ -60,15 +66,17 @@ class BaseWizard
 
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
-      graph.root form_step_id
+      graph.root self.class.first_step_id
 
-      graph.add_node form_step_id, form_step_class
+      form_steps.each { |step_id, step_class| graph.add_node step_id, step_class }
       graph.add_node :check_answers, CheckAnswers
       graph.add_node :exit, DfE::Wizard::Core::Redirect
 
-      graph.add_edge from: form_step_id, to: :check_answers
-      graph.add_edge from: :check_answers, to: :exit
+      [*form_steps.keys, :check_answers, :exit].each_cons(2) do |from, to|
+        graph.add_edge from:, to:
+      end
 
+      graph.before_next_step(:handle_return_to_review)
       graph.before_previous_step(:handle_back_to_review)
     end
   end
@@ -102,16 +110,23 @@ class BaseWizard
     resolve_step_path(:exit)
   end
 
-  def change_path
-    resolve_step_path(form_step_id, return_to_review: form_step_id)
+  def change_path(step_id = self.class.first_step_id)
+    resolve_step_path(step_id, return_to_review: step_id)
   end
 
   def final_step?
     current_step_name == :check_answers
   end
 
-  # With one form step, the forward route always reaches check answers.
-  # Only the back link changes: after a Change link, it returns to check answers.
+  # After a Change link, Continue returns to check answers instead of the
+  # next step, once every step before check answers is saved.
+  def handle_return_to_review
+    return if return_to_review_param.blank?
+
+    handle_return_to_check_your_answers(:check_answers)
+  end
+
+  # After a Change link, Back returns to check answers.
   def handle_back_to_review
     return if return_to_review_param.blank?
 

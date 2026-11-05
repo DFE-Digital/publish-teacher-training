@@ -7,6 +7,8 @@
 #   wizard_context         - a hash of route params that scope the journey
 #   wizard_success_message - the flash shown after the commit
 #
+# They can override wizard_completed_path, which defaults to the exit path.
+#
 # Step partials live in "<controller_path>/steps/_<step_id>.html.erb".
 module BaseWizardController
   extend ActiveSupport::Concern
@@ -44,7 +46,11 @@ private
   def complete
     wizard.clear_state
     flash[:success] = wizard_success_message
-    redirect_to wizard.exit_path
+    redirect_to wizard_completed_path
+  end
+
+  def wizard_completed_path
+    wizard.exit_path
   end
 
   def set_wizard
