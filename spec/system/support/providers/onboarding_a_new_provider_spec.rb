@@ -216,15 +216,15 @@ private
   end
 
   def then_i_am_redirected_to_check_your_answer_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/check")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/check_answers\z})
   end
 
   def then_i_am_redirected_to_the_onboarding_contacts_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/contacts/new")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/contact_details\z})
   end
 
   def then_i_am_redirected_back_to_the_onboarding_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/provider_details\z})
   end
 
   def then_i_am_redirected_back_to_the_support_providers_index_page

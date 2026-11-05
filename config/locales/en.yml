@@ -1006,7 +1006,7 @@ en:
               blank: "Enter a first name"
             last_name:
               blank: "Enter a last name"
-        support/provider_contact_form:
+        support/add_provider_wizard/steps/contact_details:
           attributes:
             email:
               blank: "Enter an email address"
@@ -1044,7 +1044,7 @@ en:
             postcode:
               blank: Enter a postcode
               invalid: Enter a real postcode
-        support/provider_form:
+        support/add_provider_wizard/steps/provider_details:
           attributes:
             provider_name:
               blank: "Enter a provider name"
