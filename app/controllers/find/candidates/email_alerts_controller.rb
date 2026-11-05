@@ -6,7 +6,7 @@ module Find
       include ::Courses::ActiveFilters::SummaryRowBuilder
 
       before_action :require_authentication, except: %i[unsubscribe_from_email confirm_unsubscribe_from_email index sign_in]
-      before_action :redirect_existing_alert, only: :new, if: :existing_alert?
+      before_action :redirect_existing_alert, only: %i[new create], if: :existing_alert?
       before_action :redirect_if_subscription_limit_reached, only: %i[new create]
 
       def index
