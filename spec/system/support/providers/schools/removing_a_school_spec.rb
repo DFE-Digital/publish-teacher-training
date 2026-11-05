@@ -9,6 +9,10 @@ RSpec.describe "Removing a school from a provider" do
 
     when_i_view_the_support_schools_list
     and_i_view_the_school_in_publish
+    and_i_go_back
+    then_i_am_back_on_the_support_schools_list
+
+    and_i_view_the_school_in_publish
     and_i_remove_the_school_from_the_provider_account
 
     then_i_am_back_on_the_support_schools_list
@@ -70,6 +74,10 @@ private
     within("tr", text: school.location_name) do
       click_link "View school"
     end
+  end
+
+  def and_i_go_back
+    click_link "Back"
   end
 
   def when_i_open_the_school_in_publish

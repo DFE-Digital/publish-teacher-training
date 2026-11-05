@@ -107,12 +107,29 @@ module Publish
         school_delete_return_params.except(:from, :return_to)
       end
 
-      def support_return_params
-        return {} unless params[:return_to] == "support"
+      def school_show_back_path
+        if returning_to_support?
+          support_recruitment_cycle_provider_schools_path(
+            provider.recruitment_cycle_year,
+            provider,
+            **support_list_page_params,
+          )
+        else
+          publish_provider_recruitment_cycle_schools_path
+        end
+      end
+      helper_method :school_show_back_path
 
-        { return_to: "support" }
+      def support_return_params
+        return {} unless returning_to_support?
+
+        { return_to: "support", **support_list_page_params }
       end
       helper_method :support_return_params
+
+      def support_list_page_params
+        params[:page].present? ? { page: params[:page] } : {}
+      end
 
       def returning_to_support?
         params[:return_to] == "support"

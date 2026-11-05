@@ -68,7 +68,7 @@
                 @provider.provider_code,
                 @provider.recruitment_cycle_year,
                 school.uuid,
-                return_to: :support,
+                { return_to: :support, page: params[:page].presence }.compact,
               ),
             ) %>
           </td>
