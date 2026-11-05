@@ -6,6 +6,7 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   subject(:results) { described_class.call(params:) }
 
   let(:mathematics) { find_or_create(:secondary_subject, :mathematics) }
+  let(:physics) { find_or_create(:secondary_subject, :physics) }
   let(:location) { { latitude: 52.4862, longitude: -1.8904, radius: 10 } }
 
   # Pages through the results the way Pagy does, with LIMIT and OFFSET.
@@ -61,6 +62,31 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
       2.times do
         expect(described_class.call(params: params.dup).limit(5).offset(5).map(&:id)).to eq(second_page)
+      end
+    end
+  end
+
+  context "when searching two subjects and a course has both" do
+    let!(:maths_and_physics) do
+      create(:course, :secondary, :published, name: "Mathematics with physics", subjects: [mathematics, physics], master_subject_id: mathematics.id)
+    end
+    let!(:maths_only) do
+      create(:course, :secondary, :published, name: "Mathematics", subjects: [mathematics], master_subject_id: mathematics.id)
+    end
+    let!(:physics_only) do
+      create(:course, :secondary, :published, name: "Physics", subjects: [physics], master_subject_id: physics.id)
+    end
+
+    %w[course_name_ascending provider_name_ascending start_date_ascending].each do |order|
+      context "when ordering by #{order}" do
+        let(:params) { { subjects: [mathematics.subject_code, physics.subject_code], order: } }
+
+        it "returns the course once" do
+          query = described_class.new(params:)
+
+          expect(query.call.map(&:id)).to contain_exactly(maths_and_physics.id, maths_only.id, physics_only.id)
+          expect(query.count).to eq(3)
+        end
       end
     end
   end
