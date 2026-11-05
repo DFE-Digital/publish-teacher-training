@@ -64,4 +64,4 @@
   <% end %>
 <% end %>
 
-<%= govuk_pagination(pagy: @pagy) %>
+<%= govuk_pagination(pagy: @pagy) if @pagy %>

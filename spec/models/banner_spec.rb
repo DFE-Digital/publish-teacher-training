@@ -275,6 +275,19 @@ RSpec.describe Banner, type: :model do
     end
   end
 
+  describe "list order" do
+    it "breaks a shared timestamp with the later id" do
+      published_at = Time.zone.local(2026, 8, 1, 9)
+      expired_at = Time.zone.local(2026, 8, 2, 9)
+      earlier = create(:banner, name: "Earlier", published_at:, expired_at:)
+      later = create(:banner, name: "Later", published_at:, expired_at:)
+
+      expect(described_class.scheduled_order.where(id: [earlier.id, later.id]).pluck(:id)).to eq([later.id, earlier.id])
+      expect(described_class.active_order.where(id: [earlier.id, later.id]).pluck(:id)).to eq([later.id, earlier.id])
+      expect(described_class.expired_order.where(id: [earlier.id, later.id]).pluck(:id)).to eq([later.id, earlier.id])
+    end
+  end
+
   describe "#status" do
     [
 

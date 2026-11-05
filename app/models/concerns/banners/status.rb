@@ -6,16 +6,16 @@ module Banners
 
     included do
       scope :scheduled, ->(now = Time.current) { where("published_at > ?", now) }
-      scope :scheduled_order, -> { order(published_at: :asc) }
+      scope :scheduled_order, -> { order(published_at: :asc, id: :desc) }
 
       scope :active, lambda { |now = Time.current|
         where(published_at: ..now)
           .where("expired_at IS NULL OR expired_at >= ?", now)
       }
-      scope :active_order, -> { order(published_at: :desc, expired_at: :asc) }
+      scope :active_order, -> { order(published_at: :desc, expired_at: :asc, id: :desc) }
 
       scope :expired, ->(now = Time.current) { where("expired_at < ?", now) }
-      scope :expired_order, -> { order(expired_at: :desc, published_at: :desc) }
+      scope :expired_order, -> { order(expired_at: :desc, published_at: :desc, id: :desc) }
 
       def status(now = Time.current)
         return :scheduled if scheduled?(now)
