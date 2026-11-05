@@ -200,32 +200,30 @@ RSpec.describe "Support::BannersController" do
   end
 
   describe "GET /support/banners/scheduled" do
-    it "splits a long list across pages" do
+    it "lists every scheduled banner without pagination" do
       stub_const("Support::BannersController::PER_PAGE", 2)
-      soonest = create(:banner, name: "Soonest scheduled", published_at: 1.day.from_now)
-      create(:banner, name: "Later scheduled", published_at: 2.days.from_now)
-      create(:banner, name: "Latest scheduled", published_at: 3.days.from_now)
+      banners = create_list(:banner, 3, published_at: 2.days.from_now)
 
       get scheduled_support_banners_path
 
-      expect(response.body).to include(soonest.name, "Later scheduled")
-      expect(response.body).not_to include("Latest scheduled")
-      expect(response.body).to include(scheduled_support_banners_path(page: 2))
+      banners.each { |banner| expect(response.body).to include(banner.name) }
+      expect(response.body).not_to include("govuk-pagination")
     end
   end
 
   describe "GET /support/banners/active" do
-    it "splits a long list across pages" do
+    it "lists every active banner without pagination" do
       stub_const("Support::BannersController::PER_PAGE", 2)
-      newest = create(:banner, name: "Newest active", published_at: 1.hour.ago, expired_at: nil)
-      create(:banner, name: "Older active", published_at: 1.day.ago, expired_at: nil)
-      create(:banner, name: "Oldest active", published_at: 2.days.ago, expired_at: nil)
+      banners = [
+        create(:banner, name: "Newest active", published_at: 1.hour.ago, expired_at: nil),
+        create(:banner, name: "Older active", published_at: 1.day.ago, expired_at: nil),
+        create(:banner, name: "Oldest active", published_at: 2.days.ago, expired_at: nil),
+      ]
 
       get active_support_banners_path
 
-      expect(response.body).to include(newest.name, "Older active")
-      expect(response.body).not_to include("Oldest active")
-      expect(response.body).to include(active_support_banners_path(page: 2))
+      banners.each { |banner| expect(response.body).to include(banner.name) }
+      expect(response.body).not_to include("govuk-pagination")
     end
   end
 
