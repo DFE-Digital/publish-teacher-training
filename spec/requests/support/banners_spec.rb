@@ -182,12 +182,50 @@ RSpec.describe "Support::BannersController" do
   describe "GET /support/banners/expired" do
     it "splits a long list across pages" do
       stub_const("Support::BannersController::PER_PAGE", 2)
-      create_list(:banner, 3, published_at: 3.days.ago, expired_at: 1.day.ago)
+      create(:banner, name: "Newest expired", published_at: 5.days.ago, expired_at: 1.hour.ago)
+      create(:banner, name: "Middle expired", published_at: 6.days.ago, expired_at: 1.day.ago)
+      create(:banner, name: "Oldest expired", published_at: 7.days.ago, expired_at: 2.days.ago)
 
       get expired_support_banners_path
 
-      expect(response.body.scan("govuk-table__row").size).to eq(3)
-      expect(response.body).to include("govuk-pagination")
+      expect(response.body).to include("Newest expired", "Middle expired")
+      expect(response.body).not_to include("Oldest expired")
+      expect(response.body).to include(expired_support_banners_path(page: 2))
+
+      get expired_support_banners_path(page: 2)
+
+      expect(response.body).to include("Oldest expired")
+      expect(response.body).not_to include("Newest expired")
+    end
+  end
+
+  describe "GET /support/banners/scheduled" do
+    it "splits a long list across pages" do
+      stub_const("Support::BannersController::PER_PAGE", 2)
+      soonest = create(:banner, name: "Soonest scheduled", published_at: 1.day.from_now)
+      create(:banner, name: "Later scheduled", published_at: 2.days.from_now)
+      create(:banner, name: "Latest scheduled", published_at: 3.days.from_now)
+
+      get scheduled_support_banners_path
+
+      expect(response.body).to include(soonest.name, "Later scheduled")
+      expect(response.body).not_to include("Latest scheduled")
+      expect(response.body).to include(scheduled_support_banners_path(page: 2))
+    end
+  end
+
+  describe "GET /support/banners/active" do
+    it "splits a long list across pages" do
+      stub_const("Support::BannersController::PER_PAGE", 2)
+      newest = create(:banner, name: "Newest active", published_at: 1.hour.ago, expired_at: nil)
+      create(:banner, name: "Older active", published_at: 1.day.ago, expired_at: nil)
+      create(:banner, name: "Oldest active", published_at: 2.days.ago, expired_at: nil)
+
+      get active_support_banners_path
+
+      expect(response.body).to include(newest.name, "Older active")
+      expect(response.body).not_to include("Oldest active")
+      expect(response.body).to include(active_support_banners_path(page: 2))
     end
   end
 
