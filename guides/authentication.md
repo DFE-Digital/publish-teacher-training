@@ -62,4 +62,4 @@ Alternatively you can simply begin merging PRs again which will reset the authen
 
 ## API
 
-The API is public and does not require authentication.
+The public API does not require authentication. A caller may send an API key as `Authorization: Bearer <key>`, and any credential that is not a valid, active key gets a 401. So does a key-shaped value anywhere in the path or query string of any request, even a live key alongside a valid header: `RejectAPIKeyInUrl` answers before the request logger, so it never reaches logs or analytics, and the rejection leaves no application log line. A key does not change what data the caller sees. See `API::KeyAuthenticable`.

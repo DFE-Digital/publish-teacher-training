@@ -9,7 +9,7 @@ The service has four levels of access.
 
 ### Public (anonymous)
 
-Anyone can browse and search courses on Find without an account. The public API is also unauthenticated.
+Anyone can browse and search courses on Find without an account. The public API does not require authentication either; an API key is optional and changes nothing about the data returned.
 
 ### Candidates
 

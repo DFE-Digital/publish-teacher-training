@@ -84,7 +84,9 @@ private
 
   def job_argument_filter
     @job_argument_filter ||= ActiveSupport::ParameterFilter.new(
-      Rails.application.config.filter_parameters + %i[email_address code data body hidden_data headers],
+      [->(_key, value) { APIKeySecret.mask(value, with: REDACTED) }] +
+        Rails.application.config.filter_parameters +
+        %i[email_address code data body hidden_data headers],
       mask: REDACTED,
     )
   end
