@@ -50,7 +50,8 @@ class BaseWizard
     def repository_for(state_key:, context:)
       DfE::Wizard::Repository::Cache.new(
         cache: Rails.cache,
-        key: [name.underscore.tr("/", "_"), *context.values, state_key].join("_"),
+        # Sorted by key, so the order the context is built in does not matter.
+        key: [name.underscore.tr("/", "_"), *context.sort_by { |key, _| key.to_s }.map(&:last), state_key].join("_"),
         expires_in: CACHE_EXPIRY,
       )
     end

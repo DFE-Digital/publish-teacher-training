@@ -157,6 +157,14 @@ RSpec.describe BaseWizard do
       expect(repository.cache_key).to eq("base_wizard_spec_wizard_2027_spec-state-key")
     end
 
+    it "gives the same key whatever order the context is in" do
+      one = BaseWizardSpecWizard.repository_for(state_key:, context: { year: "2027", code: "A1" })
+      other = BaseWizardSpecWizard.repository_for(state_key:, context: { code: "A1", year: "2027" })
+
+      expect(one.cache_key).to eq(other.cache_key)
+      expect(one.cache_key).to eq("base_wizard_spec_wizard_A1_2027_spec-state-key")
+    end
+
     it "keeps journeys with different state keys apart" do
       save(:first, name: "Ada")
 
