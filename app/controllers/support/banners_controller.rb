@@ -7,13 +7,10 @@ module Support
     PER_PAGE = 20
 
     def index
-      scopes = {
-        scheduled: Banner.scheduled.scheduled_order,
-        active: Banner.active.active_order,
-        expired: Banner.expired.expired_order,
-      }
       @scope_status = params[:status]&.to_sym || :active
-      @pagy, @banners = pagy(scopes.fetch(@scope_status, scopes.fetch(:active)), limit: PER_PAGE)
+      scope = banner_scopes.fetch(@scope_status, banner_scopes.fetch(:active))
+
+      @pagy, @banners = pagy(scope, limit: PER_PAGE)
       @automated_banners = @pagy.page == 1 ? automated_banners : []
     end
 
@@ -57,6 +54,14 @@ module Support
     end
 
   private
+
+    def banner_scopes
+      {
+        scheduled: Banner.scheduled.scheduled_order,
+        active: Banner.active.active_order,
+        expired: Banner.expired.expired_order,
+      }
+    end
 
     def automated_banners
       case @scope_status
