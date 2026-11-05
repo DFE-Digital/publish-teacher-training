@@ -278,6 +278,9 @@ RSpec.describe "Publish provider school show page", service: :publish do
         return_to: "support",
       )
 
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider),
+      )
       expect(response.body).to include(
         delete_publish_provider_recruitment_cycle_school_path(
           provider.provider_code,
