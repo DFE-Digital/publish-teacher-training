@@ -7,11 +7,12 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: 1beb572140130981efc7c7a77229c1702c7e79bd
-  tag: v1.16.1
+  revision: f3e4a76013f8ab2118daa2d97a4e8aefcdc02edc
+  tag: v1.16.2
   specs:
-    dfe-analytics (1.16.1)
+    dfe-analytics (1.16.2)
       google-cloud-bigquery (~> 1.38)
+      googleauth (~> 1.17)
       httparty (~> 0.24)
       json (< 3)
       multi_xml (~> 0.6.0)
@@ -221,7 +222,7 @@ GEM
     crass (1.0.8)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
-    csv (3.3.6)
+    csv (3.3.7)
     data_migrate (11.3.1)
       activerecord (>= 6.1)
       railties (>= 6.1)
@@ -300,14 +301,14 @@ GEM
       activesupport (>= 6.1)
     google-apis-bigquery_v2 (0.109.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-core (1.4.0)
+    google-apis-core (1.4.1)
       addressable (~> 2.9)
       faraday (~> 2.13)
       faraday-follow_redirects (~> 0.3)
       googleauth (~> 1.14)
       mini_mime (~> 1.1)
-      multi_json (~> 1.11)
-      representable (~> 3.0)
+      multi_json (~> 1.21, >= 1.21.2)
+      representable (~> 3.3, >= 3.3.1)
       retriable (>= 3.1, < 5.0)
     google-cloud-bigquery (1.64.2)
       bigdecimal (>= 3.0, < 5)
