@@ -1,0 +1,9 @@
+<%= render GovukComponent::SummaryListComponent.new do |component|
+      rows.each do |answer|
+        component.with_row do |row|
+          row.with_key(text: answer.label)
+          row.with_value(text: answer.formatted_value)
+          row.with_action(text: "Change", href: answer.change_path, visually_hidden_text: presenter.visually_hidden_text(answer))
+        end
+      end
+    end %>

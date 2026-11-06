@@ -27,6 +27,14 @@ RSpec.describe "Onboarding a new provider" do
       then_i_am_redirected_back_to_the_support_providers_index_page
     end
 
+    scenario "a step that does not exist" do
+      when_i_change_the_step_in_the_url_to "not_a_step"
+      then_i_see_page_not_found
+
+      when_i_change_the_step_in_the_url_to "exit"
+      then_i_see_page_not_found
+    end
+
     scenario "cancel link return to correct page" do
       when_i_click_on "Cancel"
       then_i_am_redirected_back_to_the_support_providers_index_page
@@ -137,6 +145,15 @@ private
     visit "/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new"
   end
 
+  def when_i_change_the_step_in_the_url_to(step)
+    @wizard_url ||= page.current_url
+    visit @wizard_url.sub(%r{/provider_details\z}, "/#{step}")
+  end
+
+  def then_i_see_page_not_found
+    expect(page).to have_content("Page not found")
+  end
+
   def when_i_fill_in_a_valid_provider_contact_details
     fill_in "Email address", with: "test@example.com"
     fill_in "Telephone number", with: "01234 567890"
@@ -216,15 +233,15 @@ private
   end
 
   def then_i_am_redirected_to_check_your_answer_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/check")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/check_answers\z})
   end
 
   def then_i_am_redirected_to_the_onboarding_contacts_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/contacts/new")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/contact_details\z})
   end
 
   def then_i_am_redirected_back_to_the_onboarding_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/provider_details\z})
   end
 
   def then_i_am_redirected_back_to_the_support_providers_index_page

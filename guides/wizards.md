@@ -14,6 +14,8 @@ dfe-wizard is a framework for building multi-step forms in Rails with conditiona
 
 See the [gem README](https://github.com/DFE-Digital/dfe-wizard) for full API documentation.
 
+For journeys with steps in a fixed order that end on a check answers page, use `BaseWizard`. It sets up the graph, cache, controller actions, view and routes for you. See [base-wizard.md](base-wizard.md).
+
 ## Directory structure
 
 A wizard implementation follows this layout:
@@ -83,6 +85,13 @@ The largest multi-step flow in the app.
 - **Views:** `app/views/publish/course_wizards/`
 - **Routes:** `config/routes/publish.rb` (under `/course_wizard/`)
 
+### BaseWizard (Support add user and provider onboarding)
+
+Both use `BaseWizard`. See [base-wizard.md](base-wizard.md).
+
+- **Add user:** `app/wizards/support/add_user_wizard.rb`, controller `app/controllers/support/add_user_wizards_controller.rb`
+- **Provider onboarding:** `app/wizards/support/add_provider_wizard.rb`, controller `app/controllers/support/providers/onboardings_controller.rb`
+
 ## Course edit pages
 
 The per-field edit pages for a saved course, under `app/controllers/publish/courses/`, are single-step forms, not a chain. They use `CourseBasicDetailConcern` for their `edit`/`update` actions.
@@ -108,17 +117,6 @@ Single-page form (edit/update) for GCSE requirements. Not multi-step, but could 
 
 - **Controller:** `app/controllers/publish/courses/gcse_requirements_controller.rb`
 - **Form:** `app/forms/publish/gcse_requirements_form.rb`
-
-### Provider onboarding (Support)
-
-3-step flow for support users to onboard a new provider.
-
-- **Controllers:**
-  - `app/controllers/support/providers/onboardings_controller.rb` - provider details
-  - `app/controllers/support/providers/onboarding/contacts_controller.rb` - contact details
-  - `app/controllers/support/providers/onboarding/checks_controller.rb` - check and confirm
-- **Forms:** `app/forms/support/provider_form.rb`, `app/forms/support/provider_contact_form.rb`
-- **Pattern:** Uses session stashing between steps
 
 ### Provider onboarding (Public)
 
