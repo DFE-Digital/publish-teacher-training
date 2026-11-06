@@ -21,27 +21,55 @@ RSpec.describe RecruitmentCycleHelper do
     end
   end
 
-  describe "#hint_for_option" do
-    it "uses the phase's own boundaries" do
+  describe "cycle switcher content", travel: mid_cycle(2026) do
+    before do
       allow(Find::CycleTimetable).to receive(:cycle_year_for_time).and_return(2026)
-
-      hint = helper.hint_for_option(:apply_closed)
-
-      expect(hint).to eq(
-        "<strong>2026 cycle.</strong> Candidates can no longer submit any subsequent applications " \
-        "(6pm on 15 September 2026 to 28 September 2026)",
-      )
     end
 
-    it "names the next cycle year and the closed window for find_closed" do
-      allow(Find::CycleTimetable).to receive(:cycle_year_for_time).and_return(2026)
+    describe "#switcher_option_label" do
+      it "puts the date range on the label and keeps the year on both dates when the range spans years" do
+        expect(helper.switcher_option_label(:apply_open)).to eq(
+          "Find and Apply open<span class=\"govuk-hint govuk-!-margin-bottom-0\"> - 7 October 2025 to 15 September 2026</span>",
+        )
+      end
 
-      hint = helper.hint_for_option(:find_closed)
+      it "drops the year from the start date when both dates are in the same year" do
+        expect(helper.switcher_option_label(:apply_closed)).to eq(
+          "Find open, Apply closed<span class=\"govuk-hint govuk-!-margin-bottom-0\"> - 15 September to 28 September 2026</span>",
+        )
+      end
 
-      expect(hint).to eq(
-        "<strong>2027 cycle.</strong> Candidates can no longer browse courses on Find " \
-        "(11:59pm on 28 September 2026 to 29 September 2026)",
-      )
+      it "describes Find and Apply closed from the end of the current cycle" do
+        expect(helper.switcher_option_label(:find_closed)).to eq(
+          "Find and Apply closed<span class=\"govuk-hint govuk-!-margin-bottom-0\"> - 28 September to 29 September 2026</span>",
+        )
+      end
+
+      it "describes the next cycle opening before Apply" do
+        expect(helper.switcher_option_label(:apply_not_open_yet)).to eq(
+          "Find open, Apply closed<span class=\"govuk-hint govuk-!-margin-bottom-0\"> - 29 September to 6 October 2026</span>",
+        )
+      end
+
+      it "describes Find and Apply opening in the next cycle" do
+        expect(helper.switcher_option_label(:apply_reopened)).to eq(
+          "Find and Apply open<span class=\"govuk-hint govuk-!-margin-bottom-0\"> - 6 October 2026 to 21 September 2027</span>",
+        )
+      end
+    end
+
+    describe "#switcher_cycle_group_heading" do
+      it "names the current recruitment cycle" do
+        expect(helper.switcher_cycle_group_heading(:apply_open)).to eq(
+          "2025-2026 recruitment cycle - current",
+        )
+      end
+
+      it "names the next recruitment cycle" do
+        expect(helper.switcher_cycle_group_heading(:apply_not_open_yet)).to eq(
+          "2026-2027 recruitment cycle",
+        )
+      end
     end
   end
 end
