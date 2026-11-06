@@ -142,8 +142,17 @@ RSpec.describe BaseWizard, type: :wizard do
       expect(wizard_on(:first, return_to_review: "first")).to have_next_step(:second)
     end
 
-    it "goes back to check answers" do
+    it "goes back to check answers when every step is valid" do
+      save(:first, name: "Ada")
+      save(:second, colour: "blue")
+
       expect(wizard_on(:second, return_to_review: "second")).to have_previous_step(:check_answers)
+    end
+
+    it "goes back to the previous step when an earlier step is not valid" do
+      save(:second, colour: "blue")
+
+      expect(wizard_on(:second, return_to_review: "second")).to have_previous_step(:first)
     end
   end
 

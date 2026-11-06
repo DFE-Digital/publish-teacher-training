@@ -47,7 +47,7 @@ Good examples are adding a user and onboarding a provider.
 | State store | `BaseWizard::StateStore` | The gem state store, with an accessor for each step attribute. |
 | Repository | `BaseWizard.repository_for` | A `Rails.cache` repository. The key is the wizard class, the context values sorted by key, and the `state_key`. Answers expire after 24 hours. |
 | Routes for steps | `BaseWizard#route_strategy` | Calls your two path methods. |
-| Change links | `#change_path`, `#handle_return_to_review`, `#handle_back_to_review` | A Change link adds `return_to_review` to the URL. Continue and Back then return to check answers. |
+| Change links | `#change_path`, `#handle_return_to_review`, `#handle_back_to_review` | A Change link adds `return_to_review` to the URL. Continue and Back then return to check answers, if every step before it is valid. |
 | Empty submits | `#extract_step_params_from_request` | Check answers posts no step params. This stops the gem from raising on that. |
 | Controller actions | `BaseWizardController` | `new` starts a journey with a new `state_key` and redirects to the first step. `show` renders a step. `update` saves the step, then goes to the next step or commits. |
 | Page layout | `app/views/base_wizards/show.html.erb` | Back link, form, error summary, the step partial and a Cancel link. |
@@ -75,7 +75,7 @@ Good examples are adding a user and onboarding a provider.
 - **The route params are `state_key` and `step`.** The routes concern gives these. If you write the routes by hand, use the same names.
 - **Step partials are at `<controller_path>/steps/_<step_id>.html.erb`.** The check answers partial is `_check_answers.html.erb`.
 - **The form scope is the step id.** Params arrive as `params[:provider_details]`, not as a model param key.
-- **Continue returns to check answers only when every step before it is saved.** If a Change link is followed on a journey with a step still empty, Continue goes on to that step instead.
+- **Continue and Back return to check answers only when every step before it is valid.** If a Change link is followed on a journey with a step that is empty or no longer valid, Continue and Back go to the next or previous step instead.
 
 ## Step by step: provider onboarding
 

@@ -128,9 +128,11 @@ class BaseWizard
     handle_return_to_check_your_answers(:check_answers)
   end
 
-  # After a Change link, Back returns to check answers.
+  # After a Change link, Back returns to check answers, once every step
+  # before check answers is valid. Otherwise Back goes to the previous step.
   def handle_back_to_review
     return if return_to_review_param.blank?
+    return unless valid_path_to?(:check_answers)
 
     handle_back_in_check_your_answers(:check_answers, return_to_review_param)
   end
