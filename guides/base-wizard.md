@@ -421,3 +421,48 @@ You do not need specs for the graph, routes, cache or controller actions. `spec/
 
 - `Support::AddUserWizard`: one step, `details`. Routes under `/support/:year/users`.
 - `Support::AddProviderWizard`: two steps, `provider_details` and `contact_details`. Routes under `/support/:year/providers/onboarding`.
+
+## Limitations and gotchas
+
+### Routes
+
+- **One wizard for each resource.** The concern always uses the route name `wizard_<resources>` and the path `wizard/:state_key/:step`. A second wizard on the same resource stops the app from booting:
+
+  ```ruby
+  resources :users, only: [] do
+    concerns :base_wizard, controller: "add_user_wizards"
+    concerns :base_wizard, controller: "invite_user_wizards"
+  end
+  # ArgumentError: Invalid route name, already in use: 'wizard_users'
+  ```
+
+- **The concern replaces the `new` action of the resource, with no error.** The concern is drawn first, so it takes `/users/new` and the `new_user` name. The `new` route of the resource stays in the route table, but no request can get to it:
+
+  ```ruby
+  resources :users, only: %i[index new create] do
+    concerns :base_wizard, controller: "add_user_wizards"
+  end
+  # GET /users/new  new_user  add_user_wizards#new
+  # GET /users/new            users#new  (not reachable)
+  ```
+
+  Remove `new` from the resource, as with `except: %i[new create]` or `only: []`. This is important when you move an existing form to a wizard and keep the old form behind a feature flag.
+
+- **There are no routes for an existing record.** The concern draws collection routes only. It does not work inside `member`, so an edit journey such as `/users/:id/edit/wizard/:state_key/:step` is not possible:
+
+  ```ruby
+  resources :users, only: [] do
+    member { concerns :base_wizard, controller: "edit_user_wizards" }
+  end
+  # ArgumentError: can't use new outside resource(s) scope
+  ```
+
+- **The step in the URL is not checked.** The controller changes `params[:step]` to a symbol and gives it to the wizard. A step that does not exist, such as `/wizard/abc/not_a_step`, raises `NoMethodError` in the gem. The `exit` step loads a redirect node that has no partial. Both give a 500 error, not a 404.
+
+- **The journey can start only from route params.** `new` makes the context from `wizard_context`, which reads route params. Query params are not used. A journey that starts from a selected record, such as `/study-sites/new?urn=123456`, cannot fill its first step.
+
+- **Other actions need routes outside the concern.** An action on check answers, such as removing a school from a list, needs a route of its own beside the concern. Its path helper must include the `state_key` segment.
+
+- **The `state_key` is the only key for the answers.** The key is not related to the user. A person who opens a copied wizard URL, and who passes the checks in the controller, sees the same answers.
+
+- **The order of routes is important.** A more general route earlier in the same block, such as `get ":user_id/:section/:id", on: :collection`, matches `/users/wizard/abc/details` before the concern does. Draw the concern before other routes in the block.
