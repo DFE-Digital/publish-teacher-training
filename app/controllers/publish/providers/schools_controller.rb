@@ -145,7 +145,11 @@ module Publish
 
       def removal_success_path
         if returning_to_support?
-          support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider)
+          support_recruitment_cycle_provider_schools_path(
+            provider.recruitment_cycle_year,
+            provider,
+            **support_list_page_params,
+          )
         else
           publish_provider_recruitment_cycle_schools_path
         end
