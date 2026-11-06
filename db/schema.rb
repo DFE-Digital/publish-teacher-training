@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -23,6 +23,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
 
   create_table "__EFMigrationsHistory", primary_key: "MigrationId", id: { type: :string, limit: 150 }, force: :cascade do |t|
     t.string "ProductVersion", limit: 32, null: false
+  end
+
+  create_table "api_key", force: :cascade do |t|
+    t.text "email", null: false
+    t.string "name", null: false
+    t.string "key_digest", null: false
+    t.string "prefix", null: false
+    t.datetime "last_used_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_api_key_on_email"
+    t.index ["key_digest"], name: "index_api_key_on_key_digest", unique: true
   end
 
   create_table "audit", force: :cascade do |t|
@@ -848,6 +861,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
     t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
+  add_foreign_key "api_key", "user", column: "email", primary_key: "email", on_update: :cascade, on_delete: :cascade
   add_foreign_key "candidate_email_alerts", "candidate"
   add_foreign_key "candidate_recent_search", "candidate", column: "find_candidate_id"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"

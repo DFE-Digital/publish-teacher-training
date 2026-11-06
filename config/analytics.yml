@@ -330,6 +330,14 @@ shared:
     - name
     - created_at
     - updated_at
+  api_key:
+    - id
+    - email
+    - name
+    - last_used_at
+    - revoked_at
+    - created_at
+    - updated_at
   user:
     - id
     - email

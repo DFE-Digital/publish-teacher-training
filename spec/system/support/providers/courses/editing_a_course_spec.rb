@@ -98,11 +98,11 @@ private
     support_provider_courses_index_page.courses_row.first.change_link.click
   end
 
-  alias_method :when_i_return_to_the_edit_page, :and_click_on_the_first_course_change_link
-
   def then_i_am_on_the_support_provider_course_edit_page
     support_provider_course_edit_page.load(recruitment_cycle_year: Find::CycleTimetable.current_year, provider_id: provider.id, course_id: provider.courses.first.id)
   end
+
+  alias_method :when_i_return_to_the_edit_page, :then_i_am_on_the_support_provider_course_edit_page
 
   def course_code
     @course_code ||= "D0N3"
@@ -199,9 +199,7 @@ private
   end
 
   def then_i_see_the_updated_ratifying_provider
-    radio_button = support_provider_course_edit_page.find(:label, text: ratifying_provider_name).sibling("input")
-
-    expect(radio_button).to be_checked
+    expect(support_provider_course_edit_page).to have_checked_field(ratifying_provider_name)
   end
 
   def then_i_see_the_error_summary

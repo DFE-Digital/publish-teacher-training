@@ -104,6 +104,8 @@ RSpec.configure do |config|
 
   # start the transaction strategy as examples are run
   config.around do |example|
+    next example.run if example.metadata[:commits_data]
+
     DatabaseCleaner.cleaning do
       example.run
     end
