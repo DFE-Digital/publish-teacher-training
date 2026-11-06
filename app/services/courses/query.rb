@@ -144,7 +144,7 @@ module Courses
       # Used by master_subject_ordering_scope to prioritise courses whose master subject matches the search
       @searched_subject_ids = Subject.where(subject_code: subject_codes).select(:id)
 
-      @scope.where(id: CourseSubject.joins(:subject).where(subject: { subject_code: subject_codes }).select(:course_id))
+      @scope.where(id: CourseSubject.where(subject_id: @searched_subject_ids).select(:course_id))
     end
 
     def excluded_courses_scope
