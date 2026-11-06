@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe BaseWizard do
+RSpec.describe BaseWizard, type: :wizard do
   let(:state_key) { "spec-state-key" }
   let(:context) { { year: "2027" } }
 
@@ -77,16 +77,39 @@ RSpec.describe BaseWizard do
   end
 
   describe "the step order" do
-    it "goes through the form steps, then check answers, then exit" do
-      expect(wizard_on(:first).next_step).to eq(:second)
-      expect(wizard_on(:second).next_step).to eq(:check_answers)
-      expect(wizard_on(:check_answers).next_step).to eq(:exit)
+    subject(:wizard) { wizard_on(:first) }
+
+    it "starts on the first form step" do
+      expect(wizard).to have_root_step(:first)
     end
 
-    it "goes back through the steps, then to the fallback" do
-      expect(wizard_on(:check_answers).previous_step_path(fallback: "/exit")).to eq("/wizard/#{state_key}/second")
-      expect(wizard_on(:second).previous_step_path(fallback: "/exit")).to eq("/wizard/#{state_key}/first")
-      expect(wizard_on(:first).previous_step_path(fallback: "/exit")).to eq("/exit")
+    it "goes through the form steps, then check answers, then exit" do
+      expect(wizard).to have_next_step(:second).from(:first)
+      expect(wizard).to have_next_step(:check_answers).from(:second)
+      expect(wizard).to have_next_step(:exit).from(:check_answers)
+    end
+
+    it "goes back through the form steps" do
+      expect(wizard).to have_previous_step(:second).from(:check_answers)
+      expect(wizard).to have_previous_step(:first).from(:second)
+    end
+
+    it "goes back from the first step to the fallback" do
+      expect(wizard.previous_step_path(fallback: "/exit")).to eq("/exit")
+    end
+
+    it "has every step valid on check answers once every step is saved" do
+      save(:first, name: "Ada")
+      save(:second, colour: "blue")
+
+      expect(wizard_on(:check_answers)).to have_flow_path(%i[first second check_answers])
+      expect(wizard_on(:check_answers)).to have_valid_path(%i[first second check_answers])
+    end
+
+    it "stops the valid path at the first step that is not saved" do
+      save(:first, name: "Ada")
+
+      expect(wizard_on(:check_answers)).to have_valid_path(%i[first])
     end
   end
 
@@ -110,18 +133,17 @@ RSpec.describe BaseWizard do
       save(:first, name: "Ada")
       save(:second, colour: "blue")
 
-      expect(wizard_on(:first, return_to_review: "first").next_step).to eq(:check_answers)
+      expect(wizard_on(:first, return_to_review: "first")).to have_next_step(:check_answers)
     end
 
     it "continues to the next step when a later step is not saved" do
       save(:first, name: "Ada")
 
-      expect(wizard_on(:first, return_to_review: "first").next_step).to eq(:second)
+      expect(wizard_on(:first, return_to_review: "first")).to have_next_step(:second)
     end
 
     it "goes back to check answers" do
-      expect(wizard_on(:second, return_to_review: "second").previous_step_path(fallback: "/exit"))
-        .to eq("/wizard/#{state_key}/check_answers")
+      expect(wizard_on(:second, return_to_review: "second")).to have_previous_step(:check_answers)
     end
   end
 
