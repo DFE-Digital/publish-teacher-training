@@ -14,8 +14,7 @@ RSpec.describe "Removing accredited status from provider", service: :publish do
     visit "/support/#{RecruitmentCycle.current.year}/providers"
 
     click_on "Pro Vider"
-    expect(page).to have_current_path("/support/#{RecruitmentCycle.current.year}/providers/#{provider.id}")
-
+    expect(page).to have_current_path("/support/#{RecruitmentCycle.current.year}/providers/#{provider.id}/courses")
     within '[data-qa="ap-number-row"]' do
       expect(page.find(".govuk-summary-list__value").text).to eq(provider.accredited_provider_number.to_s)
       click_on("Change")

@@ -1,28 +1,47 @@
 <%= render PageTitle.new(title: "support.providers.courses.edit") %>
 
+<% content_for :before_content do %>
+  <%= govuk_back_link(
+      text: "Back",
+      href: support_recruitment_cycle_provider_courses_path(
+        @provider.recruitment_cycle.year,
+        @provider,
+      ),
+    ) %>
+<% end %>
+
+<%= form_with model: @edit_course_form, url: support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider), method: :patch do |f| %>
+  <%= f.govuk_error_summary %>
+
+<span class="govuk-caption-l">
+  <%= "#{@course.name} (#{@course.course_code})" %> - <%= @provider.decorate.name_and_code %>
+</span>
 <h1 class="govuk-heading-l">Edit course details</h1>
+<p class="govuk-body-l">Providers are not able to change this information in Publish.</p>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with model: @edit_course_form, url: support_recruitment_cycle_provider_course_path(@provider.recruitment_cycle_year, @provider), method: :patch do |f| %>
 
-      <%= f.govuk_error_summary %>
+    <% if @course.is_withdrawn? %>
+      <%= content_tag :p, class: "govuk-body govuk-!-margin-bottom-6" do %>
+        <%= govuk_link_to(
+              "Revert withdrawal",
+              edit_support_recruitment_cycle_provider_course_revert_withdrawal_path(
+                @provider.recruitment_cycle_year,
+                @provider.id,
+                @course.id,
+              ),
+            ) %>
+      <% end %>
+    <% end %>
 
-      <%= f.govuk_text_field(:course_code, label: { text: "Course code", size: "m" }) %>
+      <%= f.govuk_text_field(:name, label: { text: "Course name", size: "s" }) %>
 
-      <%= f.govuk_text_field(:name, label: { text: "Course title", size: "m" }) %>
-
-      <div class="govuk-!-margin-bottom-6">
-        <h2 class="govuk-heading-m">Course status</h2>
-        <p><%= @course.decorate.status_tag %></p>
-
-        <% if @course.is_withdrawn? %>
-          <%= govuk_link_to("Revert withdrawal", edit_support_recruitment_cycle_provider_course_revert_withdrawal_path(@provider.recruitment_cycle_year, @provider.id, @course.id)) %>
-        <% end %>
-      </div>
+      <%= f.govuk_text_field :course_code, label: { text: "Course code", size: "s" }, width: 10 %>
 
       <% if @course.accrediting_provider %>
         <%= tag.div class: "govuk-form-group" do %>
-          <%= f.govuk_fieldset legend: { text: "Ratifying provider", size: "m" } do %>
+          <%= f.govuk_fieldset legend: { text: "Accredited provider", size: "s" } do %>
             <div class="govuk-radios govuk-!-margin-top-2" data-module="govuk-radios" data-qa="course__accredited_provider">
               <%= render partial: "publish/courses/ratifying_provider/provider_suggestion", collection: @provider.accredited_partners, locals: { form: f } %>
             </div>
@@ -30,38 +49,38 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_date_field(:start_date, omit_day: true, legend: { text: "Start date" }) %>
-
-      <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special Education Needs and Disability (SEND)" }, multiple: false do %>
+      <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special educational needs (SEND)", size: "s" }, multiple: false do %>
         <% f.govuk_check_box :is_send, "true", "false", label: { text: "This course has an additional SEND specialism" }, multiple: false %>
       <% end %>
 
       <% if @course.decorate.salaried? %>
-
-           <%= f.govuk_check_boxes_fieldset :can_sponsor_skilled_worker_visa, legend: { text: "Visa sponsorship" }, multiple: false do %>
-          <% f.govuk_check_box :can_sponsor_skilled_worker_visa, "true", "false", label: { text: "This course can sponsor a skilled worker visa" }, multiple: false %>
-        <% end %>
+        <%= f.govuk_check_boxes_fieldset :can_sponsor_skilled_worker_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
+        <% f.govuk_check_box :can_sponsor_skilled_worker_visa, "true", "false", label: { text: "This course can sponsor a skilled worker visa" }, multiple: false %>
+      <% end %>
 
       <% else %>
-
-     <%= f.govuk_check_boxes_fieldset :can_sponsor_student_visa, legend: { text: "Visa sponsorship" }, multiple: false do %>
-          <% f.govuk_check_box :can_sponsor_student_visa, "true", "false", label: { text: "This course can sponsor a student visa" }, multiple: false %>
-        <% end %>
-
+        <%= f.govuk_check_boxes_fieldset :can_sponsor_student_visa, legend: { text: "Visa sponsorship", size: "s" }, multiple: false do %>
+        <% f.govuk_check_box :can_sponsor_student_visa, "true", "false", label: { text: "This course can sponsor a student visa" }, multiple: false %>
       <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
-            legend: { text: "Publishing this course without schools" },
-            hint: { text: "Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached." },
-            multiple: false do %>
-        <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "Allow this course to be published without schools attached" }, multiple: false %>
-      <% end %>
-
-      <%= f.govuk_submit t("support.update_record") %>
     <% end %>
+
+    <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
+          legend: { text: "Allow provider to publish this course without schools", size: "s" },
+          multiple: false do %>
+      <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "This course can be published without schools attached" }, multiple: false %>
+    <% end %>
+
+    <%= f.govuk_date_field(
+        :start_date,
+        omit_day: true,
+        legend: { text: "Start date", size: "s" },
+      ) %>
+
+    <%= f.govuk_submit t("support.update_record") %>
+  <% end %>
 
     <p class="govuk-body">
       <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_courses_path) %>
     </p>
   </div>
-</div>

@@ -18,6 +18,8 @@
           <h1 class="govuk-fieldset__heading"><%= @provider_user.full_name %></h1>
         </legend>
 
+        <p class="govuk-body-l">Providers are not able to change this information in Publish.</p>
+
         <%= f.govuk_text_field :first_name, label: { text: t("support.providers.users.first_name"), size: "s" }, width: 20 %>
         <%= f.govuk_text_field :last_name, label: { text: t("support.providers.users.last_name"), size: "s" }, width: 20 %>
         <%= f.govuk_text_field :email, label: { text: t("support.providers.users.email"), size: "s" } %>
@@ -26,6 +28,7 @@
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider)) %>
+    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider), class: "govuk-body") %>
+
   </div>
 </div>

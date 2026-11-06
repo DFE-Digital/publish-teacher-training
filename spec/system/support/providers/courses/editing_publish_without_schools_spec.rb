@@ -77,9 +77,8 @@ private
 
   def then_i_see_the_publish_without_schools_checkbox
     expect(support_provider_course_edit_page).to have_publish_without_schools_allowed_checkbox
-    expect(support_provider_course_edit_page).to have_text("Publishing this course without schools")
-    expect(support_provider_course_edit_page).to have_text("Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached.")
-    expect(support_provider_course_edit_page).to have_text("Allow this course to be published without schools attached")
+    expect(support_provider_course_edit_page).to have_text("Allow provider to publish this course without school")
+    expect(support_provider_course_edit_page).to have_text("This course can be published without schools attached")
   end
 
   def when_i_tick_the_publish_without_schools_checkbox
@@ -109,6 +108,6 @@ private
   # have_checked_field returns false rather than raising, so a missing or
   # unticked checkbox fails here immediately instead of waiting on Capybara.
   def and_the_publish_without_schools_checkbox_is_still_ticked
-    expect(page).to have_checked_field("Allow this course to be published without schools attached", wait: 0)
+    expect(page).to have_checked_field("This course can be published without schools attached", wait: 0)
   end
 end

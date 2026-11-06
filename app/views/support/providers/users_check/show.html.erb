@@ -33,16 +33,14 @@
           end
         end %>
 
-        <div class="govuk-warning-text"> <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
+        <p class="govuk-body">
             The user will be sent an email to tell them you’ve added them to <%= @provider.provider_name %>.
-          </strong>
-        </div>
+        </p>
 
         <%= f.govuk_submit(t("support.providers.users.new")) %>
       </fieldset>
     <% end %>
 
-    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_users_path) %>
+    <%= govuk_link_to(t("cancel"), support_recruitment_cycle_provider_users_path, class: "govuk-link govuk-body") %>
   </div>
 </div>
