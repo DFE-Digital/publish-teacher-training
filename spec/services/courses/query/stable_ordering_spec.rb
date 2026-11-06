@@ -15,20 +15,20 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   end
 
   describe "the final sort key" do
-    %w[
-      distance
-      course_name_ascending
-      provider_name_ascending
-      newest_course
-      start_date_ascending
-      fee_uk_ascending
-      fee_intl_ascending
-    ].each do |order|
+    {
+      "distance" => /ORDER BY .* course\.id ASC\z/,
+      "course_name_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "provider_name_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "newest_course" => /ORDER BY .* course\.id ASC\z/,
+      "start_date_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "fee_uk_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "fee_intl_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+    }.each do |order, final_key|
       context "when ordering by #{order}" do
         let(:params) { location.merge(order:) }
 
         it "breaks ties by course id" do
-          expect(results.to_sql).to match(/ORDER BY .*"?course"?\."?id"? ASC\z/)
+          expect(results.to_sql).to match(final_key)
         end
       end
     end

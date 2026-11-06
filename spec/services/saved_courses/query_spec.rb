@@ -50,12 +50,17 @@ RSpec.describe SavedCourses::Query do
   end
 
   describe "the final sort key" do
-    %w[newest_first distance fee_uk_ascending fee_intl_ascending].each do |order|
+    {
+      "newest_first" => /ORDER BY .*saved_course\.id DESC\z/,
+      "distance" => /ORDER BY .*saved_course\.id ASC\z/,
+      "fee_uk_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "fee_intl_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+    }.each do |order, final_key|
       context "when ordering by #{order}" do
         let(:params) { { order:, latitude: 51.5074, longitude: -0.1278 } }
 
         it "breaks ties by id" do
-          expect(results.to_sql).to match(/ORDER BY .*"?(saved_)?course"?\."?id"? (ASC|DESC)\z/)
+          expect(results.to_sql).to match(final_key)
         end
       end
     end
