@@ -26,7 +26,10 @@ module Publish
       )
     end
 
-    def show; end
+    def show
+      journey_start = @wizard.journey_start_redirect
+      redirect_to(journey_start) if journey_start
+    end
 
     def create
       update

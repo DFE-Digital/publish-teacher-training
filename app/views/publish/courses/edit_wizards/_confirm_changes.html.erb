@@ -1,0 +1,13 @@
+<% section = t("publish.courses.edit_wizards.confirm_changes.sections.#{@wizard.changeset.edit_unit}") %>
+<% content_for :page_title, t("publish.courses.confirm_live_changes.page_title", section:) %>
+
+<h1 class="govuk-heading-l">
+  <%= render CaptionText.new(text: @wizard.record.name_and_code) %>
+  <%= t("publish.courses.confirm_live_changes.heading", section:) %>
+</h1>
+
+<p class="govuk-body">
+  <%= t("publish.courses.confirm_live_changes.body") %>
+</p>
+
+<%= form.govuk_submit t("publish.courses.confirm_live_changes.continue") %>
