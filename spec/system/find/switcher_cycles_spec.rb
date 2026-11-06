@@ -17,57 +17,66 @@ RSpec.describe "switcher cycle" do
     and_i_should_see_the_page_heading
   end
 
-  scenario "Says which recruitment cycle each choice leads to" do
-    visit find_cycles_path
-
-    expect(page).to have_content("2024 cycle. Candidates are able to apply for the courses in the new cycle.")
-    expect(page).to have_content("2023 cycle. Candidates can no longer submit any subsequent applications")
-  end
-
-  scenario "Emphasises the cycle year in each hint" do
-    visit find_cycles_path
-
-    expect(page).to have_css(".govuk-radios__hint strong", text: "2024 cycle.", exact_text: true)
-    expect(page).to have_css(".govuk-radios__hint strong", text: "2023 cycle.", exact_text: true)
-  end
-
-  scenario "Divides the switcher options where the recruitment cycle changes" do
-    visit find_cycles_path
-
-    expect(page).to have_css(".govuk-radios__divider", text: "2024 cycle", exact_text: true)
-  end
-
-  scenario "Update to Apply deadline has passed" do
+  scenario "Describes each point in the recruitment cycle" do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Apply deadline has passed")
+
+    expect(page).to have_text("You can change the point in the recruitment cycle to test features.")
+    expect(page).to have_text("What point in the cycle do you want to change to?")
+    expect(page).to have_css("h2", text: "2022-2023 recruitment cycle - current")
+    expect(page).to have_css("label", text: "Find and Apply open")
+    expect(page).not_to have_css("label strong")
+    expect(page).to have_css("label .govuk-hint", text: "11 October 2022 to 19 September 2023")
+    expect(page).to have_text("Find and Apply open - 11 October 2022 to 19 September 2023")
+    expect(page).to have_text("Candidates can find and apply for courses")
+    expect(page).to have_text("Find open, Apply closed - 19 September to 2 October 2023")
+    expect(page).to have_text("Candidates can find courses, but can no longer apply for them")
+    expect(page).to have_text("Find and Apply closed - 2 October to 3 October 2023")
+    expect(page).to have_text("Candidates can no longer find or apply for courses")
+    expect(page).to have_css("h2", text: "2023-2024 recruitment cycle")
+    expect(page).to have_text("Find open, Apply closed - 3 October to 10 October 2023")
+    expect(page).to have_text("Candidates can find courses, but cannot apply for them yet")
+    expect(page).to have_text("Find and Apply open - 10 October 2023 to 17 September 2024")
+    expect(page).to have_css(".govuk-radios__divider", text: "or")
+    expect(page).to have_text("Same as production environment")
+    expect(page).to have_button("Change recruitment cycle")
+    expect(page).to have_field("Show the banner with the application deadline", visible: :all)
+    expect(page).not_to have_css("h2", text: "Cycle years")
+    expect(page).not_to have_css("h2", text: "Deadlines")
+  end
+
+  scenario "Update to Find open, Apply closed" do
+    when_i_visit_switcher_cycle_page
+    and_i_choose("can no longer apply for them")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_the_cycle_point_is_now("Apply deadline has passed")
+    and_the_cycle_point_is_now("apply_closed")
   end
 
-  scenario "Find has closed" do
+  scenario "Find and Apply closed" do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Find has closed")
+    and_i_choose("can no longer find or apply for courses")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_i_visit_the_find_homepage
     then_i_should_see_the_applications_closed_text
   end
 
-  scenario "Apply has reopened" do
+  scenario "Find and Apply open in the next cycle" do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Apply has reopened")
+    and_i_choose_the_next_cycle_apply_option
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_i_should_see_the_correct_previous_recruitment_cycle_year
+    and_the_cycle_point_is_now("apply_reopened")
+    and_the_recruitment_cycle_has_moved_forward
   end
 
-  scenario "Find has reopened, but Apply has not" do
+  scenario "Find open before Apply in the next cycle" do
     when_i_visit_switcher_cycle_page
-    and_i_choose("Find has reopened, but Apply has not")
+    and_i_choose("cannot apply for them yet")
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
-    and_i_should_see_the_correct_previous_recruitment_cycle_year
+    and_the_cycle_point_is_now("apply_not_open_yet")
+    and_the_recruitment_cycle_has_moved_forward
   end
 
   def when_i_visit_switcher_cycle_page
@@ -75,19 +84,23 @@ RSpec.describe "switcher cycle" do
   end
 
   def then_i_should_see_the_page_title
-    expect(page.title).to have_content "Recruitment cycles"
+    expect(page.title).to have_content "Change recruitment cycle"
   end
 
   def and_i_should_see_the_page_heading
-    expect(find_courses_by_location_or_training_provider_page.heading).to have_content "Recruitment cycles"
+    expect(find_courses_by_location_or_training_provider_page.heading).to have_content "Change recruitment cycle"
   end
 
-  def and_i_choose(option)
-    page.choose(option)
+  def and_i_choose(text)
+    page.find(".govuk-radios__item", text:).choose
+  end
+
+  def and_i_choose_the_next_cycle_apply_option
+    page.all(".govuk-radios__item", text: "Candidates can find and apply for courses").last.choose
   end
 
   def then_i_click_on_update_button
-    page.click_link_or_button("Update point in recruitment cycle")
+    page.click_link_or_button("Change recruitment cycle")
   end
 
   def and_i_should_see_the_success_banner
@@ -98,15 +111,16 @@ RSpec.describe "switcher cycle" do
     visit "/"
   end
 
-  def and_the_cycle_point_is_now(option)
-    expect(page).to have_checked_field(option)
+  def and_the_cycle_point_is_now(value)
+    expect(page).to have_checked_field(with: value)
   end
 
   def then_i_should_see_the_applications_closed_text
     expect(page).to have_text("Applications are currently closed but you can get ready to apply")
   end
 
-  def and_i_should_see_the_correct_previous_recruitment_cycle_year
-    expect(page).to have_text("Previous cycle year2023") # After find reopens, the previous cycle year for the fake cycle becomes the current cycle year for the real cycle
+  def and_the_recruitment_cycle_has_moved_forward
+    expect(Find::CycleTimetable.current_year).to eq(2024)
+    expect(Find::CycleTimetable.previous_year).to eq(2023)
   end
 end

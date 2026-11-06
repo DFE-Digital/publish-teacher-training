@@ -17,16 +17,21 @@ module RecruitmentCycleHelper
     "#{Find::CycleTimetable.previous_year - 1} to #{Find::CycleTimetable.previous_year}"
   end
 
-  def hint_for_option(option, year = Find::CycleTimetable.year_for_option(option))
+  def switcher_option_label(option)
+    year = Find::CycleTimetable.year_for_option(option)
     from, to = Find::CycleTimetable.option_range(option, year)
-    description = I18n.t("find.cycles.#{option}.description")
 
-    safe_join(
-      [
-        tag.strong("#{year} cycle."),
-        " #{description} (#{from.to_fs(:govuk_date_and_time)} to #{to.to_fs(:govuk_date)})",
-      ],
-    )
+    safe_join([
+      t("find.cycles.#{option}.name"),
+      tag.span(" - #{switcher_date_range(from, to)}", class: "govuk-hint govuk-!-margin-bottom-0"),
+    ])
+  end
+
+  def switcher_cycle_group_heading(option)
+    year = Find::CycleTimetable.year_for_option(option)
+    key = option == :apply_open ? "find.cycles.groups.current" : "find.cycles.groups.next"
+
+    t(key, from: year - 1, to: year)
   end
 
   def current_recruitment_cycle?(provider)
@@ -43,5 +48,13 @@ module RecruitmentCycleHelper
 
   def next_cycle_provider(provider)
     RecruitmentCycle.next.providers.find_by(provider_code: provider.provider_code)
+  end
+
+private
+
+  def switcher_date_range(from, to)
+    start_date = from.to_date.year == to.to_date.year ? from.to_fs(:day_and_month) : from.to_fs(:govuk_date)
+
+    "#{start_date} to #{to.to_fs(:govuk_date)}"
   end
 end

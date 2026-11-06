@@ -1,53 +1,46 @@
-<%= content_for :page_title, title_with_error_prefix("Recruitment cycles", @form.errors.any?) %>
+<%= content_for :page_title, title_with_error_prefix(t("find.cycles.title"), @form.errors.any?) %>
+
 <% unless Rails.env.production? %>
-  <%= form_with model: @form, url: find_switch_cycle_schedule_path, method: :post do |f| %>
-    <%= f.govuk_error_summary %>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <%= form_with model: @form, url: find_switch_cycle_schedule_path, method: :post do |f| %>
+        <%= f.govuk_error_summary %>
 
-    <h1 class="govuk-heading-xl">Recruitment cycles</h1>
+        <h1 class="govuk-heading-l"><%= t("find.cycles.title") %></h1>
 
-    <%= f.govuk_radio_buttons_fieldset :cycle_schedule_name,
-      legend: { text: "Current point in the recruitment cycle" } do %>
-      <%= f.govuk_radio_button :cycle_schedule_name, "real", label: { text: t("find.cycles.real.name") }, link_errors: true %>
-      <%= f.govuk_radio_divider %>
-      <% previous_option_year = nil %>
-      <% Find::CycleTimetable::SWITCHER_OPTIONS.each_key do |option| %>
-        <% option_year = Find::CycleTimetable.year_for_option(option) %>
-        <% if previous_option_year && option_year != previous_option_year %>
-          <%= f.govuk_radio_divider "#{option_year} cycle" %>
-        <% end %>
-        <%= f.govuk_radio_button :cycle_schedule_name,
-              option.to_s,
-              label: { text: t("find.cycles.#{option}.name") },
-              hint: -> { hint_for_option(option, option_year) } do %>
-          <% if option == :apply_open %>
-            <%= f.govuk_check_box :deadline_banner, "1", "0",
-                  multiple: false,
-                  label: { text: t("find.cycles.deadline_banner.name") },
-                  hint: { text: t("find.cycles.deadline_banner.description") } %>
+        <p class="govuk-body"><%= t("find.cycles.introduction") %></p>
+
+        <%= f.govuk_radio_buttons_fieldset :cycle_schedule_name, legend: { text: t("find.cycles.legend"), size: "m" } do %>
+          <% Find::CycleTimetable::SWITCHER_OPTIONS.each_key do |option| %>
+            <% if option == :apply_open %>
+              <h2 class="govuk-heading-s govuk-!-margin-bottom-2"><%= switcher_cycle_group_heading(option) %></h2>
+            <% elsif option == :apply_not_open_yet %>
+              <h2 class="govuk-heading-s govuk-!-margin-top-6 govuk-!-margin-bottom-2"><%= switcher_cycle_group_heading(option) %></h2>
+            <% end %>
+
+            <%= f.govuk_radio_button :cycle_schedule_name,
+                  option.to_s,
+                  label: -> { switcher_option_label(option) },
+                  hint: { text: t("find.cycles.#{option}.description") },
+                  link_errors: true do %>
+              <% if option == :apply_open %>
+                <%= f.govuk_check_box :deadline_banner, "1", "0",
+                      multiple: false,
+                      label: { text: t("find.cycles.deadline_banner.name") } %>
+              <% end %>
+            <% end %>
           <% end %>
+
+          <%= f.govuk_radio_divider %>
+
+          <%= f.govuk_radio_button :cycle_schedule_name,
+                "real",
+                label: { text: t("find.cycles.real.name") },
+                link_errors: true %>
         <% end %>
-        <% previous_option_year = option_year %>
+
+        <%= f.govuk_submit t("find.cycles.submit") %>
       <% end %>
-    <% end %>
-
-    <%= f.govuk_submit "Update point in recruitment cycle" %>
-  <% end %>
-
-  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    </div>
+  </div>
 <% end %>
-
-<h2 class="govuk-heading-m">Cycle years</h2>
-
- <%= render Find::Utility::SummaryListComponent.new(rows: {
-  "Previous cycle year" => Find::CycleTimetable.previous_year,
-  "Current cycle year" => Find::CycleTimetable.current_year,
-  "Next cycle year" => Find::CycleTimetable.next_year,
-}) %>
-
-<h2 class="govuk-heading-m">Deadlines</h2>
-
-<%= render Find::Utility::SummaryListComponent.new(rows: {
-  "Apply deadline" => Find::CycleTimetable.apply_deadline.to_fs(:govuk_date),
-  "Find closes on" => Find::CycleTimetable.find_closes.to_fs(:govuk_date),
-  "Find reopens on" => Find::CycleTimetable.find_reopens.to_fs(:govuk_date),
-}) %>
