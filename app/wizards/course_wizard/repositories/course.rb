@@ -12,7 +12,11 @@ class CourseWizard
       end
 
       def self.cache_key(provider_code:, recruitment_cycle_year:, state_key:)
-        "course_wizard_#{provider_code}_#{recruitment_cycle_year}_#{state_key}"
+        "#{key_prefix}_#{provider_code}_#{recruitment_cycle_year}_#{state_key}"
+      end
+
+      def self.key_prefix
+        "course_wizard"
       end
     end
   end
