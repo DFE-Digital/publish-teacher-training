@@ -49,6 +49,38 @@ RSpec.describe SavedCourses::Query do
     end
   end
 
+  describe "the final sort key" do
+    {
+      "newest_first" => /ORDER BY .*saved_course\.id DESC\z/,
+      "distance" => /ORDER BY .*saved_course\.id ASC\z/,
+      "fee_uk_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+      "fee_intl_ascending" => /ORDER BY .*"course"\."id" ASC\z/,
+    }.each do |order, final_key|
+      context "when ordering by #{order}" do
+        let(:params) { { order:, latitude: 51.5074, longitude: -0.1278 } }
+
+        it "breaks ties by id" do
+          expect(results.to_sql).to match(final_key)
+        end
+      end
+    end
+  end
+
+  context "when saved courses were saved at the same time" do
+    let(:saved_at) { 1.hour.ago }
+    let!(:saved_courses) do
+      create_list(:course, 6, :with_full_time_sites).map do |course|
+        create(:saved_course, candidate:, course:, created_at: saved_at)
+      end
+    end
+
+    it "shows each saved course exactly once, newest saved first" do
+      ids = (0...6).step(4).flat_map { |offset| results.limit(4).offset(offset).map(&:id) }
+
+      expect(ids).to eq(saved_courses.map(&:id).sort.reverse)
+    end
+  end
+
   context "when searching by location" do
     let(:london) { build(:location, :london) }
     let!(:london_saved_result) { saved_course_near(london, name: "London Course", provider_name: "London University", distance: 0.0) }
