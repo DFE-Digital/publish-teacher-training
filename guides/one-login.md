@@ -167,12 +167,20 @@ Fix:
 
 ### One Login Header
 
-The header in Find is displays the Sign in button when the user is not signed in and displays the links to the users One Login profile and a Sign out button when the user is signed in. The header is defined in `Govuk::OneLoginHeaderComponent`.
-The javascript and css is copied from the header maintained by One Login team.
+The header in Find shows a Sign in button when the user is not signed in. When the user is signed in, it shows a link to their One Login profile and a Sign out button.
 
-The current version we use is v3.0.1.
+The header comes from the [`@govuk-one-login/service-header`](https://github.com/govuk-one-login/service-header) npm package, maintained by the One Login team. We use v7.
 
-https://github.com/govuk-one-login/service-header
+- **Markup**: we write the markup ourselves in `Govuk::OneLoginHeaderComponent`. It follows the package's reference markup in `node_modules/@govuk-one-login/service-header/dist/html/header.html`, but renders Sign in and Sign out as `button_to` forms.
+- **Styles**: `app/assets/stylesheets/one-login.scss` loads the package styles, then adds our own styles for the Sign in and Sign out buttons.
+- **JavaScript**: `app/javascript/find/application.js` imports `initCrossServiceHeader` from the package. It opens and closes the menu on mobile.
+- **`<header>` element**: the component renders a `div`. The Find layout wraps it and the service navigation in `<header class="govuk-template__header">`, as the package expects.
+
+#### Upgrading the header
+
+Read the [release notes](https://github.com/govuk-one-login/service-header/releases) for each version. Because we copy the markup, a release that changes class names or markup means a change to `Govuk::OneLoginHeaderComponent`. Compare the component with `dist/html/header.html` in the new version.
+
+After an upgrade, check the header in Find at mobile and desktop widths, signed in and signed out.
 
 
 ### Setup in QA
