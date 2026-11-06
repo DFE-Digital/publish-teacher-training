@@ -49,7 +49,7 @@
         <% end %>
       <% end %>
 
-      <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special Education Needs and Disability (SEND)", size: "s" }, multiple: false do %>
+      <%= f.govuk_check_boxes_fieldset :is_send, legend: { text: "Special educational needs (SEND)", size: "s" }, multiple: false do %>
         <% f.govuk_check_box :is_send, "true", "false", label: { text: "This course has an additional SEND specialism" }, multiple: false %>
       <% end %>
 
@@ -66,10 +66,9 @@
     <% end %>
 
     <%= f.govuk_check_boxes_fieldset :publish_without_schools_allowed,
-          legend: { text: "Publishing this course without schools", size: "s" },
-          hint: { text: "Only tick this box if you have confirmed that this provider is allowed to publish courses without schools attached" },
+          legend: { text: "Allow provider to publish this course without schools", size: "s" },
           multiple: false do %>
-      <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "Allow this course to be published without schools attached" }, multiple: false %>
+      <% f.govuk_check_box :publish_without_schools_allowed, "true", "false", label: { text: "This course can be published without schools attached" }, multiple: false %>
     <% end %>
 
     <%= f.govuk_date_field(
