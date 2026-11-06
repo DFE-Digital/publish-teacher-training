@@ -262,13 +262,6 @@ module Find
       apply_not_open_yet? || apply_open?
     end
 
-    # The stable open stage: Apply is taking applications and no deadline banner
-    # is up yet. Nothing in the app branches on this. It names the ordinary state
-    # that `mid_cycle`, the instant, sits inside.
-    def self.mid_cycle?
-      apply_open? && !show_apply_deadline_banner?
-    end
-
     # The deadline banner is a window inside `apply_open`, not a phase: nothing a
     # candidate can do changes when it appears. The switcher therefore toggles it
     # on its own rather than reaching it by picking a phase.

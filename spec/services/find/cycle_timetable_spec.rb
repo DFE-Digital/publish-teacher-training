@@ -225,32 +225,6 @@ module Find
       end
     end
 
-    describe ".mid_cycle?" do
-      it "returns true at the instant mid_cycle names" do
-        Timecop.travel(described_class.mid_cycle(2022)) do
-          expect(described_class.mid_cycle?).to be true
-        end
-      end
-
-      it "returns false during the week before Apply opens" do
-        Timecop.travel(described_class.find_opens(2022) + 1.hour) do
-          expect(described_class.mid_cycle?).to be false
-        end
-      end
-
-      it "returns false once the deadline banner is up" do
-        Timecop.travel(described_class.first_deadline_banner(2022) + 1.day) do
-          expect(described_class.mid_cycle?).to be false
-        end
-      end
-
-      it "returns false after the apply deadline" do
-        Timecop.travel(described_class.apply_deadline(2022) + 1.hour) do
-          expect(described_class.mid_cycle?).to be false
-        end
-      end
-    end
-
     describe ".show_apply_deadline_banner?" do
       context "when the switcher forces apply_open with the banner on" do
         it "returns true" do
