@@ -61,6 +61,17 @@ RSpec.describe CustomLogFormatter do
       end
     end
 
+    it "redacts an API key under a name the filters miss, with the same mask" do
+      log.message = "Performed TestJob::DispatcherCanaryJob"
+      log.payload = {
+        job_class: "TestJob::DispatcherCanaryJob",
+        adapter: "SolidQueue",
+        arguments: solid_queue_arguments({ "note" => "#{APIKey::SECRET_PREFIX}#{'a' * 64}" }),
+      }
+
+      expect(parsed_arguments).to eq([{ "note" => "[REDACTED]" }])
+    end
+
     it "leaves wholly non-sensitive arguments unredacted" do
       log.message = "Performed UpdateCourseSchoolsJob"
       log.payload = {

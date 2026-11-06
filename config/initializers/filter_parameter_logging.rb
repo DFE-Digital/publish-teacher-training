@@ -8,3 +8,5 @@
 Rails.application.config.filter_parameters += %i[
   passw email secret token _key key_digest crypt salt certificate otp ssn password email first_name last_name
 ]
+
+Rails.application.config.filter_parameters << ->(_key, value) { APIKeySecret.mask(value) }

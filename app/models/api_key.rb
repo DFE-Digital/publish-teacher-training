@@ -2,7 +2,7 @@
 
 class APIKey < ApplicationRecord
   MAXIMUM_ACTIVE = 5
-  SECRET_PREFIX = "ptt_"
+  SECRET_PREFIX = APIKeySecret::PREFIX
   DISPLAY_PREFIX_LENGTH = 12
 
   self.filter_attributes += %i[email key_digest name]
