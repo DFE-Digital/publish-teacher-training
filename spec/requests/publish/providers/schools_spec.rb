@@ -417,10 +417,11 @@ RSpec.describe "Publish provider school show page", service: :publish do
         provider.recruitment_cycle.year,
         provider_school.uuid,
         return_to: "support",
+        page: 2,
       )
 
       expect(response).to redirect_to(
-        support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider),
+        support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider, page: 2),
       )
       expect(flash[:success]).to eq(
         "#{provider_school.decorate.location_name} has been removed from #{provider.provider_name}",
