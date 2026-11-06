@@ -76,6 +76,19 @@ RSpec.describe BaseWizard, type: :wizard do
     end
   end
 
+  describe ".page_step_id" do
+    it "finds a form step or check answers from its name in a URL" do
+      expect(BaseWizardSpecWizard.page_step_id("second")).to eq(:second)
+      expect(BaseWizardSpecWizard.page_step_id("check_answers")).to eq(:check_answers)
+    end
+
+    it "finds no step for a name that has no page" do
+      expect(BaseWizardSpecWizard.page_step_id("exit")).to be_nil
+      expect(BaseWizardSpecWizard.page_step_id("not_a_step")).to be_nil
+      expect(BaseWizardSpecWizard.page_step_id(nil)).to be_nil
+    end
+  end
+
   describe "the step order" do
     subject(:wizard) { wizard_on(:first) }
 

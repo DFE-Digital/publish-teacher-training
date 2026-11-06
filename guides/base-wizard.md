@@ -113,7 +113,7 @@ flowchart TB
 | Routes for steps | `BaseWizard#route_strategy` | Calls your two path methods. |
 | Change links | `#change_path`, `#handle_return_to_review`, `#handle_back_to_review` | A Change link adds `return_to_review` to the URL. Continue and Back then return to check answers, if every step before it is valid. |
 | Empty submits | `#extract_step_params_from_request` | Check answers posts no step params. This stops the gem from raising on that. |
-| Controller actions | `BaseWizardController` | `new` starts a journey with a new `state_key` and redirects to the first step. `show` renders a step. `update` saves the step, then goes to the next step or commits. |
+| Controller actions | `BaseWizardController` | `new` starts a journey with a new `state_key` and redirects to the first step. `show` renders a step. `update` saves the step, then goes to the next step or commits. A step in the URL that has no page, such as a mistyped step or `exit`, gives a 404. |
 | Page layout | `app/views/base_wizards/show.html.erb` | Back link, form, error summary, the step partial and a Cancel link. |
 | Routes | `concerns :base_wizard` in `config/routes.rb` | `new`, plus `GET` and `PATCH` on `wizard/:state_key/:step`. |
 
@@ -456,8 +456,6 @@ You do not need specs for the graph, routes, cache or controller actions. `spec/
   end
   # ArgumentError: can't use new outside resource(s) scope
   ```
-
-- **The step in the URL is not checked.** The controller changes `params[:step]` to a symbol and gives it to the wizard. A step that does not exist, such as `/wizard/abc/not_a_step`, raises `NoMethodError` in the gem. The `exit` step loads a redirect node that has no partial. Both give a 500 error, not a 404.
 
 - **The journey can start only from route params.** `new` makes the context from `wizard_context`, which reads route params. Query params are not used. A journey that starts from a selected record, such as `/study-sites/new?urn=123456`, cannot fill its first step.
 

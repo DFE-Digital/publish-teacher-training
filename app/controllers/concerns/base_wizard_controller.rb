@@ -53,11 +53,15 @@ private
     wizard.exit_path
   end
 
+  # A step with no page, such as a mistyped step or :exit, is not found.
   def set_wizard
+    step_id = wizard_class.page_step_id(params[:step])
+    return render_not_found if step_id.nil?
+
     @wizard = wizard_class.new(
       state_key: params[:state_key],
       context: wizard_context,
-      current_step: params[:step].to_sym,
+      current_step: step_id,
       current_step_params: params,
     )
   end

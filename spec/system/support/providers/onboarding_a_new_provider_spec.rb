@@ -27,6 +27,14 @@ RSpec.describe "Onboarding a new provider" do
       then_i_am_redirected_back_to_the_support_providers_index_page
     end
 
+    scenario "a step that does not exist" do
+      when_i_change_the_step_in_the_url_to "not_a_step"
+      then_i_see_page_not_found
+
+      when_i_change_the_step_in_the_url_to "exit"
+      then_i_see_page_not_found
+    end
+
     scenario "cancel link return to correct page" do
       when_i_click_on "Cancel"
       then_i_am_redirected_back_to_the_support_providers_index_page
@@ -135,6 +143,15 @@ private
 
   def and_i_visit_the_onboarding_a_new_provider_page
     visit "/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new"
+  end
+
+  def when_i_change_the_step_in_the_url_to(step)
+    @wizard_url ||= page.current_url
+    visit @wizard_url.sub(%r{/provider_details\z}, "/#{step}")
+  end
+
+  def then_i_see_page_not_found
+    expect(page).to have_content("Page not found")
   end
 
   def when_i_fill_in_a_valid_provider_contact_details

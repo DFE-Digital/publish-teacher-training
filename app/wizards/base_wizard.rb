@@ -39,6 +39,13 @@ class BaseWizard
       form_steps.keys.first
     end
 
+    # The step that has a page with this name in the URL, or nil. Only the
+    # form steps and check answers have pages. The name is compared as a
+    # string, so a name from a URL is not made into a symbol.
+    def page_step_id(name)
+      [*form_steps.keys, :check_answers].find { |step_id| step_id.to_s == name.to_s }
+    end
+
     def commit_with(operation)
       self.commit_operation = operation
     end
