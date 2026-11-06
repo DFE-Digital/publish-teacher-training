@@ -19,13 +19,13 @@ module Govuk
       button_to(find_sign_out_path,
                 class: %w[
                   one-login-header__button-link
-                  rebranded-one-login-header__nav__link
+                  one-login-header__nav__link
                 ],
                 form_class: %w[
                   one-login-header__button-form
                 ],
                 method: :delete) do
-                  tag.span("Sign out", class: %w[rebranded-one-login-header__nav__link-content])
+                  tag.span("Sign out", class: %w[one-login-header__nav__text])
                 end
     end
 
@@ -33,12 +33,12 @@ module Govuk
       button_to(path,
                 class: %w[
                   one-login-header__button-link
-                  rebranded-one-login-header__nav__link
+                  one-login-header__nav__link
                 ],
                 form_class: %w[
                   one-login-header__button-form
                 ], method: :post) do
-                  tag.span("Sign in", class: %w[rebranded-one-login-header__nav__link-content])
+                  tag.span("Sign in", class: %w[one-login-header__nav__text])
                 end
     end
 

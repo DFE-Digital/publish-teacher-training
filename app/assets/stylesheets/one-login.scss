@@ -1,4 +1,4 @@
-@import "govuk-one-login-service-header/dist/styles/service-header-no-imports";
+@import "@govuk-one-login/service-header/dist/styles/service-header.import";
 
 .one-login-header__button-form {
   display: contents;
@@ -56,13 +56,13 @@
 
   @include govuk-media-query($from: tablet) {
     // These hover/active styles are copy and pasted from the src of
-    // govuk-one-login/service-header/dist/styles/service-header-no-imports
+    // @govuk-one-login/service-header/dist/styles/_index.scss
     // So that our Sign out button has the underline effect on hover same as the profile link
     // "GOV.UK One Login" does
     // https://github.com/govuk-one-login/service-header/issues/85
 
     // Make button fill the vertical space in the Gov.uk header
-    & .rebranded-one-login-header__nav__link-content {
+    & .one-login-header__nav__text {
       min-height: 30px;
     }
 
