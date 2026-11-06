@@ -6,9 +6,8 @@ require "rails_helper"
 # gias_school.
 #
 # schools_location_scope annotates each course with a distance taken from a derived
-# table while the fee and newest_course orderings add a GROUP BY of their own, and
-# subjects_scope joins a has_many. All three have to agree on the grouping, or
-# Postgres rejects the query and duplicate courses reach the results page.
+# table while the fee and newest_course orderings add a GROUP BY of their own. Both
+# have to agree on the grouping, or Postgres rejects the query.
 RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
   subject(:results) { described_class.call(params:) }
 
