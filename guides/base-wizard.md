@@ -37,6 +37,70 @@ Good examples are adding a user and onboarding a provider.
 - **The check answers page needs other actions.** An example is removing an item from a list. You can add an action to your controller that writes to `wizard.state_store`, but the base class does not help with it.
 - **The form starts from an existing record.** An edit journey needs the first page filled from the record. There is no hook for this yet.
 
+## The parts
+
+Each row is one layer of a wizard. The parts you write for each wizard are on the left, and the shared parts they plug into are on the right. The diagram uses provider onboarding as the example.
+
+```mermaid
+flowchart TB
+  subgraph legend["Key: an arrow points to the part it plugs into"]
+    direction LR
+    key_own["You write for each wizard"]
+    key_optional["Optional"]
+    key_shared["Shared, written once"]
+    key_own ~~~ key_optional ~~~ key_shared
+  end
+
+  subgraph routing["Routes"]
+    direction LR
+    routes["resource :onboarding"] -- uses --> concern["concerns :base_wizard"]
+  end
+
+  subgraph control["Controller"]
+    direction LR
+    controller["OnboardingsController<br/>wizard_class, wizard_context,<br/>wizard_success_message"] -- includes --> controller_concern["BaseWizardController<br/>new, show, update, complete"]
+  end
+
+  subgraph views["Views"]
+    direction LR
+    presenter["CheckAnswersPresenter"] -. rows .-> partials["Step partials<br/>_provider_details, _contact_details,<br/>_check_answers"]
+    partials -- rendered by --> layout["base_wizards/show<br/>Back, form, errors, Cancel"]
+  end
+
+  subgraph model["Wizard"]
+    direction LR
+    locales["Locale entries"] -. labels and errors .-> steps["Steps<br/>ProviderDetails, ContactDetails"]
+    steps -- step --> wizard["AddProviderWizard<br/>build_step_path, build_exit_path"]
+    operation["Operations::CreateProvider"] -- commit_with --> wizard
+    wizard -- inherits --> base["BaseWizard<br/>steps graph, check answers step,<br/>commit, routes, return to review"]
+  end
+
+  subgraph storage["Storage"]
+    direction LR
+    store["BaseWizard::StateStore"] -- reads and writes --> cache[("Rails.cache<br/>key: wizard, context, state_key")]
+  end
+
+  legend ~~~ routing
+  routing -- routes to --> control
+  control -- renders --> views
+  views -- reads answers from --> model
+  model -- keeps answers in --> storage
+
+  classDef sharedPart fill:#e8f1f8,stroke:#1d70b8,color:#0b0c0c
+  classDef ownPart fill:#fff7e6,stroke:#f47738,color:#0b0c0c
+  classDef optional fill:#fff7e6,stroke:#f47738,stroke-dasharray: 5 5,color:#0b0c0c
+  class key_shared,concern,controller_concern,layout,base,store,cache sharedPart
+  class key_own,routes,controller,wizard,steps,operation,partials,locales ownPart
+  class key_optional,presenter optional
+
+  style legend fill:#ffffff,stroke:#b1b4b6
+  style routing fill:#f3f2f1,stroke:#b1b4b6
+  style control fill:#f3f2f1,stroke:#b1b4b6
+  style views fill:#f3f2f1,stroke:#b1b4b6
+  style model fill:#f3f2f1,stroke:#b1b4b6
+  style storage fill:#f3f2f1,stroke:#b1b4b6
+```
+
 ## What the base class does for you
 
 | Part | Where | What it does |
