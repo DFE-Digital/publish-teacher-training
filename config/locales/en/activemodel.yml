@@ -12,6 +12,19 @@ en:
         available_for_support_users_from_description: Date when courses will become available to support users (in Support and in Publish).
         available_in_publish_from: Available in Publish from
         available_in_publish_from_description: Date when courses will become available to providers in Publish.
+      support/add_provider_wizard/steps/provider_details:
+        provider_name: Provider name
+        provider_code: Provider code
+        ukprn: UK provider reference number (UKPRN)
+        accredited: Is the organisation an accredited provider?
+        accredited_provider_number: Accredited provider number
+        provider_type: Provider type
+        urn: Unique reference number (URN)
+      support/add_provider_wizard/steps/contact_details:
+        email: Email address
+        telephone: Telephone number
+        website: Website
+        full_address: Address
       rollover_progress_query:
         providers_summary: Rolled over providers
         courses_summary: Rolled over courses

@@ -63,6 +63,7 @@ Good examples are adding a user and onboarding a provider.
 | The controller | Includes `BaseWizardController` and defines `wizard_class`, `wizard_context` and `wizard_success_message`. |
 | One routes line | `concerns :base_wizard, controller: "..."` inside a `resource` or `resources` block. |
 | Step partials | One for each form step, and one for check answers. |
+| A check answers presenter | Gives the rows of the check answers page. Optional, but it saves building each row by hand. |
 | Error messages | Under the step class names in `config/locales/en.yml`. |
 | Specs | Step specs for validations, and a system spec for the journey. |
 
@@ -272,17 +273,49 @@ Put one partial for each step in `app/views/support/providers/onboardings/steps/
 <%= form.govuk_submit %>
 ```
 
-The check answers partial reads each step with `wizard.step(:id)`, and links each row to its step with `wizard.change_path(:id)`.
+For the check answers rows, write a presenter that includes the gem's `DfE::Wizard::CheckAnswersPresenter`. `rows_for` gives a row for each attribute. Each row has a `label` from `human_attribute_name`, a `formatted_value` and a `change_path` that already includes `return_to_review`. Override `format_value` to change how a value shows.
+
+```ruby
+# app/wizards/support/add_provider_wizard/check_answers_presenter.rb
+class Support::AddProviderWizard
+  class CheckAnswersPresenter
+    include DfE::Wizard::CheckAnswersPresenter
+
+    def contact_rows
+      rows_for(:contact_details, %i[email telephone website full_address])
+    end
+
+    # "Email address" becomes "email address", for the Change link.
+    def visually_hidden_text(row)
+      row.label.sub(/\A[A-Z](?=[a-z])/, &:downcase)
+    end
+  end
+end
+```
+
+Put the labels under the step class names in `config/locales/en/activemodel.yml`:
+
+```yaml
+en:
+  activemodel:
+    attributes:
+      support/add_provider_wizard/steps/contact_details:
+        email: Email address
+```
+
+The check answers partial renders the rows:
 
 ```erb
 <%# _check_answers.html.erb %>
-<% provider = wizard.step(:provider_details) %>
+<% presenter = Support::AddProviderWizard::CheckAnswersPresenter.new(wizard) %>
 
 <%= render GovukComponent::SummaryListComponent.new do |component|
-      component.with_row do |row|
-        row.with_key { "Provider name" }
-        row.with_value { provider.provider_name }
-        row.with_action(text: "Change", href: wizard.change_path(:provider_details), visually_hidden_text: "provider name")
+      presenter.contact_rows.each do |answer|
+        component.with_row do |row|
+          row.with_key(text: answer.label)
+          row.with_value(text: answer.formatted_value)
+          row.with_action(text: "Change", href: answer.change_path, visually_hidden_text: presenter.visually_hidden_text(answer))
+        end
       end
     end %>
 
