@@ -108,6 +108,6 @@ private
   # have_checked_field returns false rather than raising, so a missing or
   # unticked checkbox fails here immediately instead of waiting on Capybara.
   def and_the_publish_without_schools_checkbox_is_still_ticked
-    expect(page).to have_checked_field("Allow this course to be published without schools attached", wait: 0)
+    expect(page).to have_checked_field("This course can be published without schools attached", wait: 0)
   end
 end
