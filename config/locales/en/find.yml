@@ -2,26 +2,32 @@ en:
   find:
     metadescription: Find teaching training courses in England. Search by location, subject, primary, secondary or further education. Compare full-time, part-time, salaried and fee-paying routes.
     cycles:
+      title: Change recruitment cycle
+      introduction: You can change the point in the recruitment cycle to test features.
+      legend: What point in the cycle do you want to change to?
+      submit: Change recruitment cycle
+      groups:
+        current: "%{from}-%{to} recruitment cycle - current"
+        next: "%{from}-%{to} recruitment cycle"
       real:
         name: Same as production environment
       apply_closed:
-        name: Apply deadline has passed
-        description: Candidates can no longer submit any subsequent applications
+        name: Find open, Apply closed
+        description: Candidates can find courses, but can no longer apply for them
       find_closed:
-        name: Find has closed
-        description: Candidates can no longer browse courses on Find
+        name: Find and Apply closed
+        description: Candidates can no longer find or apply for courses
       apply_open:
-        name: Apply is open
-        description: Candidates are able to apply for the courses in the current cycle
+        name: Find and Apply open
+        description: Candidates can find and apply for courses
       apply_reopened:
-        name: Apply has reopened
-        description: Candidates are able to apply for the courses in the new cycle.
+        name: Find and Apply open
+        description: Candidates can find and apply for courses
       apply_not_open_yet:
-        name: Find has reopened, but Apply has not
-        description: Candidates can browse courses on Find. Courses returned are from the next recruitment cycle
+        name: Find open, Apply closed
+        description: Candidates can find courses, but cannot apply for them yet
       deadline_banner:
-        name: Show the apply deadline banner
-        description: Candidates see the deadline warning. Only applies while Apply is open
+        name: Show the banner with the application deadline
       updated: Cycle schedule updated
     enic:
       statement_of_comparability:
