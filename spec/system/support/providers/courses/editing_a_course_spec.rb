@@ -199,9 +199,7 @@ private
   end
 
   def then_i_see_the_updated_ratifying_provider
-    radio_button = support_provider_course_edit_page.find(:label, text: ratifying_provider_name).sibling("input")
-
-    expect(radio_button.checked?).to be true
+    expect(support_provider_course_edit_page).to have_checked_field(ratifying_provider_name)
   end
 
   def then_i_see_the_error_summary
