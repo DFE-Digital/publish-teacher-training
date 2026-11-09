@@ -4,10 +4,10 @@ module APIKeys
   class Creator
     include ServicePattern
 
-    def initialize(user:, name:)
-      @user = user
+    def initialize(email:, name:)
       @secret = "#{APIKey::SECRET_PREFIX}#{SecureRandom.hex(32)}"
       @api_key = APIKey.new(
+        email:,
         name:,
         key_digest: APIKey.digest(secret),
         prefix: secret.first(APIKey::DISPLAY_PREFIX_LENGTH),
@@ -15,8 +15,8 @@ module APIKeys
     end
 
     def call
-      User.transaction do
-        api_key.user = User.lock.find(user.id)
+      APIKey.transaction do
+        APIKey.lock_email(api_key.email)
         api_key.secret = secret if api_key.save
       end
 
@@ -25,6 +25,6 @@ module APIKeys
 
   private
 
-    attr_reader :user, :secret, :api_key
+    attr_reader :secret, :api_key
   end
 end

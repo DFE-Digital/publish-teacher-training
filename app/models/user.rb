@@ -8,6 +8,9 @@ class User < ApplicationRecord
   self.ignored_columns += %w[discarded_at]
 
   before_save :downcase_email, :strip_email_whitespace
+  before_destroy :lock_api_keys
+  before_update :lock_api_keys_for_move, if: :email_changed?
+  after_update :move_api_keys_to_new_email, if: :saved_change_to_email?
 
   has_many :sessions, as: :sessionable, dependent: :destroy
   has_many :authentications, as: :authenticable, inverse_of: :authenticable, dependent: :destroy
@@ -135,5 +138,17 @@ private
 
   def strip_email_whitespace
     email.strip!
+  end
+
+  def lock_api_keys
+    APIKey.lock_email(email)
+  end
+
+  def lock_api_keys_for_move
+    [email_in_database, email].compact.sort.each { |address| APIKey.lock_email(address) }
+  end
+
+  def move_api_keys_to_new_email
+    APIKey.where(email: email_before_last_save).update_all(email:)
   end
 end
