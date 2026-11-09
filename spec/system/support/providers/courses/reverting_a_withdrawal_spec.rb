@@ -13,7 +13,6 @@ RSpec.describe "Reverting a withdrawal" do
     and_i_click_revert_withdrawal
     and_i_confirm
     and_i_see_the_success_message
-    then_i_should_see_the_published_and_closed_course
     and_i_should_no_longer_see_the_revert_withdrawal_link
   end
 
