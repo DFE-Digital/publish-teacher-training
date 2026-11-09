@@ -9,8 +9,13 @@ class APIKey < ApplicationRecord
 
   audited only: %i[prefix revoked_at], associated_with: :user
 
-  belongs_to :user, foreign_key: :email, primary_key: :email, inverse_of: :api_keys
+  belongs_to :user, foreign_key: :email, primary_key: :email, inverse_of: :api_keys, optional: true
 
+  attr_readonly :email
+
+  normalizes :email, with: ->(email) { email.strip.downcase }
+
+  validates :email, presence: true, email_address: { allow_blank: true }, on: :create
   validates :name, presence: true
   validate :active_limit_not_reached, on: :create
 
@@ -22,6 +27,11 @@ class APIKey < ApplicationRecord
 
   def self.find_active_by_secret(secret)
     active.find_by(key_digest: digest(secret))
+  end
+
+  def self.lock_email(email)
+    key = digest(normalize_value_for(:email, email))
+    connection.execute(sanitize_sql(["SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", key]))
   end
 
   def revoke!

@@ -1,6 +1,6 @@
 class CreateAPIKey < ActiveRecord::Migration[8.1]
   def change
-    create_table :api_key do |t|
+    create_table :api_key, if_not_exists: true do |t|
       t.text :email, null: false, index: true
       t.string :name, null: false
       t.string :key_digest, null: false
@@ -9,10 +9,8 @@ class CreateAPIKey < ActiveRecord::Migration[8.1]
       t.datetime :revoked_at
 
       t.timestamps
-
-      t.foreign_key :user, column: :email, primary_key: :email, on_delete: :cascade, on_update: :cascade
     end
 
-    add_index :api_key, :key_digest, unique: true
+    add_index :api_key, :key_digest, unique: true, if_not_exists: true
   end
 end

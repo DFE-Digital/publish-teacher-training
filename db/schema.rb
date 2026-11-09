@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_04_134500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_06_155631) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -859,7 +859,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_134500) do
     t.index ["user_id"], name: "index_user_permission_on_user_id"
   end
 
-  add_foreign_key "api_key", "user", column: "email", primary_key: "email", on_update: :cascade, on_delete: :cascade
   add_foreign_key "candidate_email_alerts", "candidate"
   add_foreign_key "candidate_recent_search", "candidate", column: "find_candidate_id"
   add_foreign_key "contact", "provider", name: "fk_contact_provider"

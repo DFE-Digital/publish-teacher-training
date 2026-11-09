@@ -3,15 +3,16 @@
 require "rails_helper"
 
 RSpec.describe APIKeys::Creator do
-  let(:user) { create(:user) }
+  let(:email) { "api-user@example.org" }
+  let(:moved_email) { "moved@example.org" }
 
   it "returns the secret once and stores only its digest" do
-    api_key = described_class.call(user:, name: "Reporting")
+    api_key = described_class.call(email:, name: "Reporting")
     secret = api_key.secret
 
     expect(secret).to match(/\Aptt_\h{64}\z/)
     expect(APIKey.find(api_key.id)).to have_attributes(
-      email: user.email,
+      email:,
       name: "Reporting",
       key_digest: Digest::SHA256.hexdigest(secret),
       prefix: secret.first(12),
@@ -21,61 +22,75 @@ RSpec.describe APIKeys::Creator do
   end
 
   it "returns an unsaved key with errors and no secret when invalid" do
-    api_key = described_class.call(user:, name: "")
+    api_key = described_class.call(email:, name: "")
 
     expect(api_key).not_to be_persisted
     expect(api_key.errors).to be_of_kind(:name, :blank)
     expect(api_key.secret).to be_nil
   end
 
-  it "leaves a rejected key off the user" do
-    described_class.call(user:, name: "")
-
-    expect(user.api_keys).to be_empty
-    expect(user).to be_valid
-  end
-
-  it "creates a key under the saved email of a user with unsaved changes and keeps those changes" do
-    saved_email = user.email
-    user.email = "unsaved@example.org"
-
-    expect(described_class.call(user:, name: "Reporting")).to have_attributes(persisted?: true, email: saved_email)
-    expect(user.email).to eq("unsaved@example.org")
-  end
-
-  it "creates the key for the user behind a stale record, not whoever now holds its old email" do
-    stale_user = User.find(user.id)
-    old_email = user.email
-    user.update!(email: "moved@example.org")
-    new_holder = create(:user, email: old_email)
-
-    expect(described_class.call(user: stale_user, name: "Reporting")).to have_attributes(user:, email: "moved@example.org")
-    expect(new_holder.api_keys).to be_empty
-  end
-
   describe "concurrent creation", :commits_data, :no_default_recycle do
     self.use_transactional_tests = false
 
     after do
-      user.destroy!
-      Audited.audit_class.where(auditable: user).or(Audited.audit_class.where(associated: user)).delete_all
+      APIKey.where(email: [email, moved_email]).delete_all
+      User.where(email: [email, moved_email]).delete_all
+      Audited.audit_class.delete_all
     end
 
-    it "holds the active limit when creations race" do
-      create_list(:api_key, APIKey::MAXIMUM_ACTIVE - 1, user:)
+    it "takes the email lock before the user row when an email changes, so it cannot deadlock with a destroy" do
+      user = create(:user, email:)
+      edit = nil
+
+      APIKey.transaction do
+        APIKey.lock_email(email)
+        edit = Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection { User.find(user.id).update!(email: moved_email) }
+        end
+        sleep 0.2
+
+        expect { User.lock("FOR UPDATE NOWAIT").find(user.id) }.not_to raise_error
+      end
+
+      edit.value
+    end
+
+    it "leaves no key behind when the user holding the email is destroyed during creation" do
+      user = create(:user, email:)
+      locked = Concurrent::Event.new
+
+      creation = Thread.new do
+        ActiveRecord::Base.connection_pool.with_connection do
+          APIKey.transaction do
+            APIKey.lock_email(email)
+            locked.set
+            sleep 0.2
+            create(:api_key, email:)
+          end
+        end
+      end
+
+      expect(locked.wait(10)).to be(true)
+      user.destroy!
+      creation.value
+
+      expect(APIKey.where(email:)).to be_empty
+    end
+
+    it "holds the active limit when creations race, whatever case the email arrives in" do
+      create_list(:api_key, APIKey::MAXIMUM_ACTIVE - 1, email:)
       barrier = Concurrent::CyclicBarrier.new(3)
 
-      Array.new(3) { |n|
+      [email, email.upcase, " #{email} "].map { |racing_email|
         Thread.new do
           ActiveRecord::Base.connection_pool.with_connection do
-            racing_user = User.find(user.id)
             barrier.wait(10)
-            described_class.call(user: racing_user, name: "Racer #{n}")
+            described_class.call(email: racing_email, name: "Racer")
           end
         end
       }.each(&:value)
 
-      expect(user.api_keys.active.count).to eq(APIKey::MAXIMUM_ACTIVE)
+      expect(APIKey.active.where(email:).count).to eq(APIKey::MAXIMUM_ACTIVE)
     end
   end
 end

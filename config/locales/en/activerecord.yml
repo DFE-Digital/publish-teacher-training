@@ -26,6 +26,8 @@ en:
       models:
         api_key:
           attributes:
+            email:
+              blank: "Enter an email address"
             name:
               blank: "Enter a name for your API key"
             base:

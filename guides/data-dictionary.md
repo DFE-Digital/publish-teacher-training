@@ -389,14 +389,14 @@ A named setting with a text `value`. `name` is unique and must be one of `SiteSe
 **Table:** `api_key`
 **Model:** [`app/models/api_key.rb`](../app/models/api_key.rb)
 
-A key a `User` holds to authenticate against the public API. The secret is returned once, by `APIKeys::Creator`, and never stored. A user can hold at most five active keys. Keys do not expire and are not affected by organisation membership.
+A key an email address holds to authenticate against the public API, so its holder needs no login or `user` row. The secret is returned once, by `APIKeys::Creator`, and never stored. An email can hold at most five active keys. Keys do not expire and are not affected by organisation membership.
 
-- `email`: the owning user's email. A foreign key to `user.email`, so it follows an edit to that email and the key is deleted with the user.
-- `name`: free text the user chooses to tell keys apart.
+- `email`: the owner, stored stripped and in lower case, and fixed once created. Not a foreign key. A `User` with the same email owns the key: it moves when they change their email, and destroying them destroys it.
+- `name`: free text to tell keys apart.
 - `key_digest`: SHA-256 digest of the secret, used to look the key up.
-- `prefix`: the start of the secret, safe to display so a user can tell keys apart.
+- `prefix`: the start of the secret, safe to display to tell keys apart.
 - `last_used_at`: when the key last authenticated a request.
-- `revoked_at`: when the key was revoked. A revoked key is retained until its user is deleted, cannot be found by `APIKey.find_active_by_secret`, and does not count towards the limit.
+- `revoked_at`: when the key was revoked. A revoked key is retained unless a `User` with its email is destroyed, cannot be found by `APIKey.find_active_by_secret`, and does not count towards the limit.
 
 ---
 
