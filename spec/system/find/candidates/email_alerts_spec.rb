@@ -119,33 +119,6 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_filter_details_in_summary_card
   end
 
-  scenario "Hides email alert link on recent searches when an active alert already exists" do
-    when_i_sign_in
-    and_i_have_a_recent_search
-    and_i_have_an_alert_matching_recent_search
-    when_i_visit_recent_searches
-
-    then_i_do_not_see_email_alert_link
-  end
-
-  scenario "Hides email alert link on recent searches with many filters" do
-    when_i_sign_in
-    and_i_have_a_recent_search_with_many_filters
-    and_i_have_an_alert_matching_many_filters
-    when_i_visit_recent_searches
-
-    then_i_do_not_see_email_alert_link
-  end
-
-  scenario "Shows email alert link when alert has been unsubscribed" do
-    when_i_sign_in
-    and_i_have_a_recent_search
-    and_i_have_an_unsubscribed_alert_matching_recent_search
-    when_i_visit_recent_searches
-
-    then_i_see_email_alert_link
-  end
-
   scenario "Redirects from new page when an active alert already exists for the search params" do
     when_i_sign_in
     and_i_have_an_existing_alert_for_biology
@@ -224,7 +197,7 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_the_confirmation_page
   end
 
-  scenario "Creating an alert from recent searches then link is hidden" do
+  scenario "Following the recent search link again after creating its alert redirects" do
     when_i_sign_in
     and_i_have_a_recent_search_with_many_filters
     when_i_visit_recent_searches
@@ -235,8 +208,10 @@ RSpec.describe "Email alerts", service: :find do
 
     then_the_email_alert_is_created
     when_i_visit_recent_searches
+    when_i_click_set_up_email_alert_on_recent_search
 
-    then_i_do_not_see_email_alert_link
+    then_i_am_on_the_email_alerts_page
+    then_i_see_already_subscribed_notice
   end
 
   def when_i_sign_in
@@ -453,38 +428,6 @@ RSpec.describe "Email alerts", service: :find do
     )
   end
 
-  def and_i_have_an_alert_matching_many_filters
-    create(
-      :email_alert,
-      candidate:,
-      subjects: %w[13 C1 F1 L1 W1 W3],
-      search_attributes: many_filters_search_attributes,
-    )
-  end
-
-  def and_i_have_an_unsubscribed_alert_matching_recent_search
-    alert = create(
-      :email_alert,
-      candidate:,
-      subjects: %w[C1],
-      search_attributes: { "level" => "secondary" },
-    )
-    alert.unsubscribe!
-  end
-
-  def then_i_see_email_alert_link
-    expect(page).to have_link("Email me courses like this")
-  end
-
-  def and_i_have_an_alert_matching_recent_search
-    create(
-      :email_alert,
-      candidate:,
-      subjects: %w[C1],
-      search_attributes: { "level" => "secondary" },
-    )
-  end
-
   def and_i_have_an_existing_alert_for_biology
     create_subject!("C1", "Biology")
 
@@ -494,10 +437,6 @@ RSpec.describe "Email alerts", service: :find do
       subjects: %w[C1],
       search_attributes: { "level" => "secondary" },
     )
-  end
-
-  def then_i_do_not_see_email_alert_link
-    expect(page).not_to have_link("Email me courses like this")
   end
 
   def then_i_am_on_the_email_alerts_page
