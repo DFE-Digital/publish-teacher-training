@@ -4,15 +4,18 @@ en:
       index:
         title: Find Feedback
         heading: Feedback on Find teacher training courses
-        truncate_experience_chars_max: 100
-        view_full_experience_text: View full
+        truncate_experience_chars_max: 500
+        view_full_experience_text: View full feedback
       show:
         title: Feedback details
         heading: Feedback details
         back_link_text: Back
       delete_multiple:
+        caption: Feedback
         title:
-          one: Are you sure you want to delete %{count} entries?
+          one: Are you sure you want to delete %{count} entry?
           other: Are you sure you want to delete %{count} entries?
-        confirm_delete: Delete entries
+        confirm_delete:
+          one: Delete entry
+          other: Delete entries
         cancel_link: Cancel
