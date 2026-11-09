@@ -7,7 +7,10 @@
     <% summary_card.with_action do %>
       <% protect_against_mistakes do %>
         <% if FeatureFlag.active?(feature_name) %>
-          <%= govuk_button_to t(".deactivate"), deactivate_support_feature_flag_path(feature_name), method: :put, class: "govuk-!-margin-bottom-0" %>
+          <%= govuk_button_to t(".deactivate"),
+                    deactivate_support_feature_flag_path(feature_name),
+                    method: :put,
+                    class: "govuk-button--warning govuk-!-margin-bottom-0" %>
         <% else %>
           <%= govuk_button_to t(".activate"), activate_support_feature_flag_path(feature_name), method: :put, class: "govuk-!-margin-bottom-0" %>
         <% end %>
