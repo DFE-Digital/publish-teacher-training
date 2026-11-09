@@ -118,7 +118,7 @@ RSpec.describe "Support console feedback view", service: :support do
     scenario "user can download feedback data" do
       expect(page.response_headers["Content-Type"]).to include "text/csv"
       expect(page.response_headers["Content-Disposition"]).to include "attachment; filename=\"feedbacks-#{Time.zone.today}.csv\""
-      expect(page.body).to include("ID,Ease of use,User experience,Created at")
+      expect(page.body).to include("ID,Ease of use,Feedback,Created at")
       expect(page.body).to include("1,easy,Great experience,2025-07-10")
     end
   end
@@ -140,7 +140,7 @@ RSpec.describe "Support console feedback view", service: :support do
     expect(page).to have_content("Feedback on Find teacher training courses")
     expect(page).to have_content("ID")
     expect(page).to have_content("Ease of use")
-    expect(page).to have_content("User experience")
+    expect(page).to have_content("Feedback")
     expect(page).to have_content("Created at")
   end
 
@@ -171,7 +171,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_truncated_feedback_with_link(feedback)
-    experience_limit = 100
+    experience_limit = 500
     expect(page).to have_content(truncate(feedback.experience, length: experience_limit))
     expect(page).to have_link("View full", href: support_feedback_path(feedback))
   end
@@ -223,7 +223,7 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_feedbacks_destroyed_message(count:)
-    expect(page).to have_content("#{count} entries destroyed")
+    expect(page).to have_content("#{count} entries deleted")
   end
 
   def then_i_see_no_feedback_selected_warning
