@@ -3,12 +3,11 @@
 module Find
   module RecentSearches
     class SummaryCardComponent < ViewComponent::Base
-      def initialize(recent_search:, subject_names_by_code: {}, alerted_search_keys: Set.new)
+      def initialize(recent_search:, subject_names_by_code: {})
         super()
         @recent_search = recent_search
         @attrs = recent_search.search_attributes || {}
         @subject_names_by_code = subject_names_by_code
-        @alerted_search_keys = alerted_search_keys
       end
 
       def title
@@ -37,7 +36,7 @@ module Find
       end
 
       def show_email_alert_link?
-        FeatureFlag.active?(:email_alerts) && !@alerted_search_keys.include?(@recent_search.filter_key_digest)
+        FeatureFlag.active?(:email_alerts)
       end
 
     private
