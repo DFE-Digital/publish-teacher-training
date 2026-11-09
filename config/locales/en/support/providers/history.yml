@@ -1,0 +1,17 @@
+en:
+  support:
+    providers:
+      history:
+        index:
+          change: Change
+          time: Time
+          user: User
+          admin: Admin
+          no_changes: No changes have been recorded for this provider.
+          system_user: System
+        change:
+          status_changed_from: Status changed from
+          status_changed_to: to
+          provider_name_html: Provider name changed from %{old_value} to %{new_value}
+          provider_code_html: Provider code changed from %{old_value} to %{new_value}
+          course_name_html: Course name changed from %{old_value} to %{new_value}

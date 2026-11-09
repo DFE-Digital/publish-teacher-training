@@ -49,6 +49,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
         end
       end
 
+      resources :history, only: :index, controller: "providers/history"
+
       resources :courses do
         get "/download-full-course-information", on: :collection, to: "courses/exports#full_course_information", as: :download_full_course_information
 

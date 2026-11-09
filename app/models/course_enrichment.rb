@@ -3,6 +3,9 @@
 class CourseEnrichment < ApplicationRecord
   include TouchCourse
   include RecruitmentCycleHelper
+
+  audited only: :status, associated_with: :course
+
   enum :status, { draft: 0, published: 1, rolled_over: 2, withdrawn: 3 }
 
   attribute :version, :integer, default: 2

@@ -1,0 +1,25 @@
+<% if entry.course_change? && entry.course.present? %>
+  <div class="govuk-!-margin-bottom-1">
+    <%= govuk_link_to(
+          entry.course.name_and_code,
+          publish_provider_recruitment_cycle_course_url(
+            provider.provider_code,
+            provider.recruitment_cycle_year,
+            entry.course.course_code,
+          ),
+        ) %>
+  </div>
+<% end %>
+
+<% if entry.status_change? %>
+  <%= t(".status_changed_from") %>
+  <%= govuk_tag(**entry.status_label(entry.old_value)) %>
+  <%= t(".status_changed_to") %>
+  <%= govuk_tag(**entry.status_label(entry.new_value)) %>
+<% else %>
+  <%= t(
+        ".#{entry.change_type}_html",
+        old_value: tag.strong(entry.old_value),
+        new_value: tag.strong(entry.new_value),
+      ) %>
+<% end %>
