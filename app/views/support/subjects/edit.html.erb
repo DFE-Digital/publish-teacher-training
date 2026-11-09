@@ -14,20 +14,20 @@
         label: {
           text: t(
             "support.subjects.update_subject_synonyms",
-            subject_name: @subject.subject_name
+            subject_name: @subject.subject_name,
           ),
           size: "l",
-          tag: "h1"
+          tag: "h1",
         },
         hint: {
-          text: t("support.subjects.match_synonyms_hint_html").html_safe
+          text: t("support.subjects.match_synonyms_hint_html").html_safe,
         },
         rows: 4,
         value: @subject.match_synonyms_text %>
 
       <%= f.govuk_submit t(
             "support.subjects.update_subject_synonyms",
-            subject_name: @subject.subject_name
+            subject_name: @subject.subject_name,
           ) %>
 
       <p class="govuk-body">
