@@ -115,17 +115,6 @@ Single-page form (edit/update) for GCSE requirements. Not multi-step, but could 
 - **Controller:** `app/controllers/publish/courses/gcse_requirements_controller.rb`
 - **Form:** `app/forms/publish/gcse_requirements_form.rb`
 
-### Provider onboarding (Support)
-
-3-step flow for support users to onboard a new provider.
-
-- **Controllers:**
-  - `app/controllers/support/providers/onboardings_controller.rb` - provider details
-  - `app/controllers/support/providers/onboarding/contacts_controller.rb` - contact details
-  - `app/controllers/support/providers/onboarding/checks_controller.rb` - check and confirm
-- **Forms:** `app/forms/support/provider_form.rb`, `app/forms/support/provider_contact_form.rb`
-- **Pattern:** Uses session stashing between steps
-
 ### Provider onboarding (Public)
 
 Public-facing form (accessed via unique link) for providers to submit onboarding details.

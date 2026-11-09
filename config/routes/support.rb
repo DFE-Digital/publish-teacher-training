@@ -24,11 +24,9 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
 
   resources :recruitment_cycle, only: %i[index], param: :year, constraints: CycleYearConstraint.new, path: "" do
     namespace :providers do
-      namespace :onboarding do
-        resource :contacts, only: %i[new create]
-        resource :check, only: %i[show update]
+      resource :onboarding, only: [] do
+        concerns :base_wizard, controller: "onboardings"
       end
-      resource :onboarding, only: %i[new create]
     end
     resources :providers, except: %i[new create destroy] do
       collection do
