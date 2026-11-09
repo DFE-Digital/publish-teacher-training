@@ -90,13 +90,13 @@ RSpec.describe "Add match synonyms to subjects" do
 
   def and_i_see_no_synonyms_listed
     within(".govuk-summary-list") do
-      expect(page).to have_content("Match synonyms")
+      expect(page).to have_content("Synonyms")
       expect(page).to have_content("[]")
     end
   end
 
   def when_i_click_change_synonyms
-    within(".govuk-summary-list__row", text: "Match synonyms") do
+    within(".govuk-summary-list__row", text: "Synonyms") do
       click_link_or_button "Change"
     end
   end
@@ -126,7 +126,7 @@ RSpec.describe "Add match synonyms to subjects" do
 
   def and_i_see_all_three_synonyms_listed
     within(".govuk-summary-list") do
-      synonym_row = page.find(".govuk-summary-list__row", text: "Match synonyms")
+      synonym_row = page.find(".govuk-summary-list__row", text: "Synonyms")
       within(synonym_row) do
         expect(page).to have_content("Maths")
         expect(page).to have_content("Math")
@@ -152,7 +152,7 @@ RSpec.describe "Add match synonyms to subjects" do
 
   def and_i_see_only_non_blank_synonyms
     within(".govuk-summary-list") do
-      synonym_row = page.find(".govuk-summary-list__row", text: "Match synonyms")
+      synonym_row = page.find(".govuk-summary-list__row", text: "Synonyms")
       within(synonym_row) do
         expect(page).to have_content("Maths")
         expect(page).to have_content("Math")
