@@ -1,0 +1,16 @@
+<%= render PageTitle.new(title: "support.providers.onboarding.checks.show", has_errors: current_step.errors.any?) %>
+
+<% presenter = Support::AddProviderWizard::CheckAnswersPresenter.new(wizard) %>
+
+<h1 class="govuk-heading-l">
+  <span class="govuk-caption-l">Add organisation</span>
+  Check your answers
+</h1>
+
+<%= render "support/providers/onboardings/answers", presenter:, rows: presenter.provider_rows %>
+
+<h2 class="govuk-heading-m">Contact details</h2>
+
+<%= render "support/providers/onboardings/answers", presenter:, rows: presenter.contact_rows %>
+
+<%= form.govuk_submit(t("support.providers.add")) %>

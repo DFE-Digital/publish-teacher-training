@@ -4,8 +4,6 @@ module Stores
   class UserStore < BaseStore
     FORM_STORE_KEYS = %i[
       user
-      provider
-      provider_contact
     ].freeze
 
     def store_keys
