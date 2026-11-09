@@ -114,10 +114,7 @@ RSpec.describe "Add match synonyms to subjects" do
 
   def and_i_click_update_subject
     click_link_or_button(
-    I18n.t(
-    "support.subjects.update_subject_synonyms",
-    subject_name: subject.subject_name,
-    ),
+      I18n.t("support.subjects.update_subject_synonyms", subject_name: mathematics.subject_name),
     )
   end
 
@@ -126,7 +123,9 @@ RSpec.describe "Add match synonyms to subjects" do
   end
 
   def and_i_see_the_success_message
-    expect(page).to have_content("Subject updated")
+    expect(page).to have_content(
+      I18n.t("support.subjects.synonyms_updated"),
+    )
   end
 
   def and_i_see_all_three_synonyms_listed
