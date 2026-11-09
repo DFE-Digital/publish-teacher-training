@@ -113,7 +113,12 @@ RSpec.describe "Add match synonyms to subjects" do
   end
 
   def and_i_click_update_subject
-    click_link_or_button "Update subject"
+    click_link_or_button(
+    I18n.t(
+    "support.subjects.update_subject_synonyms",
+    subject_name: subject.subject_name,
+    ),
+    )
   end
 
   def then_i_am_redirected_to_the_subject_page
