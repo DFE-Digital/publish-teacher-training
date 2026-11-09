@@ -42,6 +42,13 @@ en:
       delete: "Delete this %{resource}"
       remove_school: "Remove school"
       remove_study_site: "Remove study site"
+    subjects:
+      synonyms: "Synonyms"
+      update_subject_synonyms: "Update synonyms for %{subject_name}"
+      match_synonyms_hint_html: |
+        <p>Candidates can search for courses using synonyms.</p>
+        <p>Enter one synonym per line.</p>
+      synonyms_updated: "Synonyms updated"
     update_record: "Update"
     update_resource: "Update %{resource}"
     create_record: "Create"

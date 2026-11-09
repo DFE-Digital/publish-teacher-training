@@ -16,7 +16,7 @@ module Support
       DataHub::Subjects::UpdateMatchSynonyms.new(subject: @subject, synonyms:).call
 
       redirect_to support_subject_path(@subject),
-                  flash: { success: t("support.flash.updated", resource: Subject.name) }
+                  flash: { success: t("support.subjects.synonyms_updated") }
     end
 
   private
