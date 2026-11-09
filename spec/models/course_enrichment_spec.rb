@@ -3,6 +3,10 @@
 require "rails_helper"
 
 RSpec.describe CourseEnrichment do
+  describe "auditing" do
+    it { is_expected.to be_audited.only(:status).associated_with(:course) }
+  end
+
   describe "associations" do
     it { is_expected.to have_one(:provider) }
     it { is_expected.to belong_to(:course) }
