@@ -94,13 +94,8 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       end
     end
     resources :users, except: %i[new create] do
-      new do
-        get :new, to: "add_user_wizards#new"
-      end
-      collection do
-        get "wizard/:state_key/:step", to: "add_user_wizards#show", as: :wizard
-        patch "wizard/:state_key/:step", to: "add_user_wizards#update"
-      end
+      concerns :base_wizard, controller: "add_user_wizards"
+
       member do
         get :delete
         get "providers/:provider_id/delete", to: "users/providers#delete", as: :delete_provider
