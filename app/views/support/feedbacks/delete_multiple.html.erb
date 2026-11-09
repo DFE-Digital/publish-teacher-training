@@ -6,6 +6,7 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
+    <span class="govuk-caption-l"><%= t(".caption") %></span>
     <h1 class="govuk-heading-l">
       <%= t(".title", count: @feedbacks.count) %>
     </h1>
@@ -15,7 +16,7 @@
         <%= hidden_field_tag "feedback_ids[]", feedback.id %>
       <% end %>
 
-      <%= f.govuk_submit t(".confirm_delete"), class: "govuk-button--warning" %>
+      <%= f.govuk_submit t(".confirm_delete", count: @feedbacks.count), class: "govuk-button--warning" %>
     <% end %>
 
     <p class="govuk-body">

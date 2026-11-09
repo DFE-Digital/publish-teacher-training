@@ -12,7 +12,7 @@ en:
       feedback:
         id: ID
         ease_of_use: Ease of use
-        experience: User experience
+        experience: Feedback
         created_at: Created at
       financial_incentive:
         bursary_amount: Bursary amount

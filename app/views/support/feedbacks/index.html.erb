@@ -24,10 +24,10 @@
             </div>
           </div>
         <% end %>
-        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:id), width: "one-quarter") %>
-        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:ease_of_use), width: "one-quarter") %>
-        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:experience), width: "one-quarter") %>
-        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:created_at), width: "one-quarter") %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:id)) %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:ease_of_use)) %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:experience), width: "one-half") %>
+        <% row.with_cell(header: true, text: Feedback.human_attribute_name(:created_at)) %>
       <% end %>
     <% end %>
     <% table.with_body do |body| %>
@@ -60,7 +60,7 @@
     <% end %>
   <% end %>
 
-  <%= f.govuk_submit "Delete selected", class: "govuk-button--warning" %>
+  <%= f.govuk_submit "Delete selected feedback", class: "govuk-button--warning" %>
 <% end %>
 
 <%= govuk_pagination(pagy: @pagy) %>

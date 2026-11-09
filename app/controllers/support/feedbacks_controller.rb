@@ -40,7 +40,7 @@ module Support
 
       feedbacks.destroy_all
 
-      redirect_to support_feedback_index_path, flash: { success: "#{count} #{'entry'.pluralize(count)} destroyed" }
+      redirect_to support_feedback_index_path, flash: { success: "#{count} #{'entry'.pluralize(count)} deleted" }
     end
   end
 end
