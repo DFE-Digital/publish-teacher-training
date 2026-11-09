@@ -197,16 +197,10 @@ RSpec.describe "Email alerts", service: :find do
     then_i_see_the_confirmation_page
   end
 
-  scenario "Following the recent search link again after creating its alert redirects" do
+  scenario "Following the recent search link when an alert already exists redirects" do
     when_i_sign_in
     and_i_have_a_recent_search_with_many_filters
-    when_i_visit_recent_searches
-    when_i_click_set_up_email_alert_on_recent_search
-
-    then_i_see_the_confirmation_page
-    when_i_click_set_up_email_alert
-
-    then_the_email_alert_is_created
+    and_i_have_an_alert_matching_many_filters
     when_i_visit_recent_searches
     when_i_click_set_up_email_alert_on_recent_search
 
@@ -413,6 +407,15 @@ RSpec.describe "Email alerts", service: :find do
       "interview_location" => "online",
       "start_date" => %w[jan_to_mar september next_jul],
     }
+  end
+
+  def and_i_have_an_alert_matching_many_filters
+    create(
+      :email_alert,
+      candidate:,
+      subjects: %w[13 C1 F1 L1 W1 W3],
+      search_attributes: many_filters_search_attributes,
+    )
   end
 
   def and_i_have_a_recent_search_with_many_filters
