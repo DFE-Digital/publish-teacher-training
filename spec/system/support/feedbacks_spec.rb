@@ -173,11 +173,11 @@ RSpec.describe "Support console feedback view", service: :support do
   def then_i_see_truncated_feedback_with_link(feedback)
     experience_limit = I18n.t("support.feedbacks.index.truncate_experience_chars_max")
     expect(page).to have_content(
-      truncate(feedback.experience, length: experience_limit)
+      truncate(feedback.experience, length: experience_limit),
     )
     expect(page).to have_link(
       "View full",
-      href: support_feedback_path(feedback)
+      href: support_feedback_path(feedback),
     )
   end
 
