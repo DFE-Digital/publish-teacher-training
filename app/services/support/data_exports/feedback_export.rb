@@ -10,7 +10,7 @@ module Support
       end
 
       def headers
-        ["ID", "Ease of use", "User experience", "Created at"]
+        ["ID", "Ease of use", "Feedback", "Created at"]
       end
 
       def to_csv
