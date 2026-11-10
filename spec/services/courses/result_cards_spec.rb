@@ -38,6 +38,13 @@ RSpec.describe Courses::ResultCards do
     )
   end
 
+  context "when no courses match" do
+    it "has no cards" do
+      expect(result_cards.count).to eq(0)
+      expect(result_cards.cards).to be_empty
+    end
+  end
+
   context "when a provider has courses of the same subject next to each other" do
     before do
       create_course(provider: ashford, course_code: "A001")

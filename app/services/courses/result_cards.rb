@@ -17,10 +17,9 @@ module Courses
       @per_page = per_page
     end
 
-    # Number of cards across every page. It comes with the page's courses, so
-    # it only needs its own query on a page past the last card.
+    # Number of cards across every page.
     def count
-      @count ||= page_rows.first&.last || count_past_last_page
+      @count ||= rows.first&.last || 0
     end
 
     # The courses on this page's cards, in the order of the search.
@@ -36,29 +35,30 @@ module Courses
   private
 
     def card_numbers
-      @card_numbers ||= page_rows.to_h { |id, card_number, _total_cards| [id, card_number] }
+      @card_numbers ||= rows
+        .select { |_id, card_number, _total_cards| card_number.between?(first_card, last_card) }
+        .to_h { |id, card_number, _total_cards| [id, card_number] }
     end
 
-    # [course id, card number, total cards] for each course on this page.
-    def page_rows
-      @page_rows ||= connection.select_rows(page_sql).map { |row| row.map(&:to_i) }
+    # [course id, card number, total cards] for each course on this page, plus
+    # the first course in the results so the total comes back even on a page
+    # past the last card.
+    def rows
+      @rows ||= connection.select_rows(page_sql).map { |row| row.map(&:to_i) }
     end
 
     def page_sql
       Course.sanitize_sql_array([<<~SQL, first_card, last_card])
         SELECT id, card_number, total_cards
         FROM (
-          SELECT id,
+          SELECT id, position,
                  SUM(starts_card) OVER (ORDER BY position) AS card_number,
                  SUM(starts_card) OVER () AS total_cards
           FROM (#{marked_sql}) marked
         ) cards
-        WHERE card_number BETWEEN ? AND ?
+        WHERE card_number BETWEEN ? AND ? OR position = 1
+        ORDER BY position
       SQL
-    end
-
-    def count_past_last_page
-      connection.select_value("SELECT COALESCE(SUM(starts_card), 0) FROM (#{marked_sql}) marked").to_i
     end
 
     # Marks each course that starts a new card: the first course, and any
