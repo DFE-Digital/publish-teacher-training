@@ -9,7 +9,7 @@ RSpec.describe Support::DataExports::FeedbackExport do
     end
 
     it "returns expected headers" do
-      expect(subject.headers).to eql(["ID", "Ease of use", "User experience", "Created at"])
+      expect(subject.headers).to eql(["ID", "Ease of use", "Feedback", "Created at"])
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe Support::DataExports::FeedbackExport do
 
     it "generates CSV with headers and data" do
       csv = subject.to_csv
-      expect(csv).to include("ID,Ease of use,User experience,Created at")
+      expect(csv).to include("ID,Ease of use,Feedback,Created at")
       expect(csv).to include("1")
       expect(csv).to include("easy")
       expect(csv).to include("Great")
