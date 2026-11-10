@@ -129,6 +129,7 @@ RSpec.describe "Support console feedback view", service: :support do
 
   def when_i_navigate_to_the_feedback_page
     visit support_root_path
+    click_link "Settings"
     click_link "Feedback"
   end
 

@@ -18,7 +18,7 @@ RSpec.describe "Viewing feature flags" do
   def when_i_navigate_to_the_feature_flags_page
     visit support_root_path
     click_on "Settings"
-    click_on "Feature Flags"
+    click_on "Feature flags"
   end
 
   def then_i_see_the_list_of_available_feature_flags

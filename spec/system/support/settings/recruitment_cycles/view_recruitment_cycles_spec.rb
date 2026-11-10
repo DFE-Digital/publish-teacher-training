@@ -24,7 +24,7 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
   end
 
   def when_i_click_recruitment_cycles
-    click_link_or_button "Recruitment Cycles"
+    click_link_or_button "Recruitment cycles"
   end
 
   def then_i_see_the_current_recruitment_cycle
