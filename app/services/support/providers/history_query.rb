@@ -3,8 +3,6 @@
 module Support
   module Providers
     class HistoryQuery
-      include ServicePattern
-
       RELEVANT_KEYS = %w[
         provider_name
         provider_code
@@ -13,11 +11,31 @@ module Support
         status
       ].freeze
 
+      def self.call(provider:)
+        new(provider:).call
+      end
+
+      def self.for(provider)
+        new(provider:)
+      end
+
       def initialize(provider:)
         @provider = provider
       end
 
       def call
+        entries_for(audits_scope)
+      end
+
+      def audits_scope
+        Audited::Audit
+          .includes(:user)
+          .where(auditable_condition)
+          .where("audited_changes ?| array[:keys]", keys: RELEVANT_KEYS)
+          .order(created_at: :desc, id: :desc)
+      end
+
+      def entries_for(audits)
         courses_by_id
         enrichments_by_id
 
@@ -33,14 +51,6 @@ module Support
     private
 
       attr_reader :provider
-
-      def audits
-        Audited::Audit
-          .includes(:user)
-          .where(auditable_condition)
-          .where("audited_changes ?| array[:keys]", keys: RELEVANT_KEYS)
-          .order(created_at: :desc, id: :desc)
-      end
 
       def auditable_condition
         [

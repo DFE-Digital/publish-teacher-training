@@ -35,7 +35,9 @@ module Support
             old_value, new_value = change_pair(audit, key)
             next if old_value.nil? && new_value.nil?
             next if old_value == new_value
-            next if old_value.nil? # skip initial create values
+            # Skip create-time values except enrichment status (e.g. rollover sets
+            # rolled_over on a new enrichment record).
+            next if old_value.nil? && change_type != :enrichment_status
 
             new_entries << new(
               change_type:,

@@ -12,10 +12,15 @@
 <% end %>
 
 <% if entry.status_change? %>
-  <%= t(".status_changed_from") %>
-  <%= govuk_tag(**entry.status_label(entry.old_value)) %>
-  <%= t(".status_changed_to") %>
-  <%= govuk_tag(**entry.status_label(entry.new_value)) %>
+  <% if entry.old_value.nil? %>
+    <%= t(".#{entry.change_type}_set") %>
+    <%= govuk_tag(**entry.status_label(entry.new_value)) %>
+  <% else %>
+    <%= t(".#{entry.change_type}_changed_from") %>
+    <%= govuk_tag(**entry.status_label(entry.old_value)) %>
+    <%= t(".status_changed_to") %>
+    <%= govuk_tag(**entry.status_label(entry.new_value)) %>
+  <% end %>
 <% else %>
   <%= t(
         ".#{entry.change_type}_html",

@@ -95,6 +95,31 @@ RSpec.describe Support::Providers::HistoryQuery do
     expect(entry.status_label("published")).to eq(text: "Published", colour: "teal")
   end
 
+  it "includes enrichment status set on create (for example rollover)" do
+    Audited.audit_class.as_user(admin) do
+      create(:course_enrichment, :rolled_over, course:)
+    end
+
+    entry = entries.find { |item| item.change_type == :enrichment_status && item.old_value.nil? }
+
+    expect(entry).to be_present
+    expect(entry.new_value).to eq("rolled_over")
+    expect(entry.course).to eq(course)
+  end
+
+  it "still skips create-time provider name values" do
+    Audited::Audit.where(auditable: provider).delete_all
+    Audited::Audit.create!(
+      auditable: provider,
+      user: admin,
+      action: "create",
+      audited_changes: { "provider_name" => "2Schools Consortium" },
+      version: 1,
+    )
+
+    expect(entries.select { |item| item.change_type == :provider_name }).to be_empty
+  end
+
   it "orders entries reverse chronologically and ignores irrelevant course audits" do
     create_audit!(
       auditable: course,

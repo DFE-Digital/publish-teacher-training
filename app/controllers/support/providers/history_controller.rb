@@ -3,8 +3,12 @@
 module Support
   module Providers
     class HistoryController < ApplicationController
+      PER_PAGE = 50
+
       def index
-        @history_entries = HistoryQuery.call(provider:)
+        query = HistoryQuery.for(provider)
+        @pagy, audits = pagy(query.audits_scope, limit: PER_PAGE)
+        @history_entries = query.entries_for(audits)
       end
 
     private

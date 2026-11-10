@@ -62,13 +62,14 @@ private
 
   def then_i_see_the_history_table
     expect(page).to have_css(".app-tab-navigation__link[aria-current='page']", text: "History")
+    expect(page).to have_content("Publishing status history is recorded from when this feature was released")
     expect(page).to have_content("Change")
     expect(page).to have_content("Time")
     expect(page).to have_content("User")
     expect(page).to have_content("Provider name changed from")
     expect(page).to have_content("3Schools Consortium")
     expect(page).to have_content("Course name changed from")
-    expect(page).to have_content("Status changed from")
+    expect(page).to have_content("Applications status changed from")
     expect(page).to have_css(".govuk-tag", text: "Open")
     expect(page).to have_css(".govuk-tag", text: "Closed")
   end
