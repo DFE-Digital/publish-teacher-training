@@ -10,7 +10,7 @@ RSpec.describe "Support::UpdateProviders", service: :publish do
   end
 
   let(:user) { create(:user, :admin, providers: [build(:provider)]) }
-  let(:accredited_provider) { create(:accredited_provider, provider_name: "MyAccredited") }
+  let(:accredited_provider) { create(:accredited_provider, provider_name: "MyAccredited", accredited_provider_number: 1234) }
   let!(:providers) { [build(:provider), accredited_provider] }
 
   it "Remove accredited status from accredited provider" do
@@ -19,17 +19,21 @@ RSpec.describe "Support::UpdateProviders", service: :publish do
     expect(page).to have_content("MyAccredited")
     click_on accredited_provider.provider_name
     click_on "Organisation"
-    expect(page).to have_css(:h1, text: accredited_provider.provider_name)
+    expect(page).to have_css("h1", text: accredited_provider.provider_name)
 
-    expect(page).to have_content("Is the organisation an accredited provider?Yes")
-    expect(page).to have_content("Accredited provider number")
-    click_on "Change accredited provider"
+    expect(provider_table_cell("Accredited provider number").text).to eq("1234")
+    provider_table_cell("Provider name").click_link(accredited_provider.provider_name)
     within_fieldset("Is the organisation an accredited provider?") do
       choose "No", disabled: false
     end
     click_on "Update organisation details"
     expect(page).to have_content("Provider updated")
-    expect(page).to have_content("Is the organisation an accredited provider?No")
-    expect(page).to have_no_content("Accredited provider number")
+    expect(provider_table_cell("Accredited provider number").text).to be_blank
+  end
+
+  def provider_table_cell(heading)
+    headings = page.all("table.govuk-table thead th").map(&:text)
+
+    page.all("table.govuk-table tbody td")[headings.index(heading)]
   end
 end

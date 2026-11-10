@@ -83,7 +83,6 @@ private
     when_the_current_providers_list_shows_the_current_cycle
     when_a_provider_shows_the_current_cycle
     when_a_providers_courses_show_the_current_cycle
-    when_a_providers_contact_details_show_the_current_cycle
   end
 
   def when_the_next_cycle_provider_pages_show_the_next_cycle
@@ -118,11 +117,6 @@ private
 
   def when_a_providers_courses_show_the_current_cycle
     visit_page support_recruitment_cycle_provider_courses_path(current_year, provider), provider.name_and_code
-    expect_current_cycle_switcher
-  end
-
-  def when_a_providers_contact_details_show_the_current_cycle
-    visit_page edit_support_recruitment_cycle_provider_contact_details_path(current_year, provider), provider.decorate.name_was_and_code
     expect_current_cycle_switcher
   end
 
