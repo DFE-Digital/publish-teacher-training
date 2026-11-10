@@ -34,6 +34,41 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
     end
   end
 
+  describe "#order_sql" do
+    %w[
+      distance
+      course_name_ascending
+      provider_name_ascending
+      newest_course
+      start_date_ascending
+      fee_uk_ascending
+      fee_intl_ascending
+    ].each do |order|
+      context "when ordering by #{order}" do
+        let(:params) { location.merge(subjects: [mathematics.subject_code], order:) }
+        let(:query) { described_class.new(params:) }
+
+        before do
+          school = create(:gias_school, latitude: 52.4862, longitude: -1.8904)
+          create_list(:course, 3, :secondary, :published, :with_full_time_sites, subjects: [mathematics], master_subject_id: mathematics.id).each do |course|
+            create(:course_school, course:, gias_school: school)
+          end
+        end
+
+        it "numbers the results in the same order as the query" do
+          courses = query.call
+          numbered_ids = courses
+            .unscope(:order)
+            .pluck(Arel.sql("course.id"), Arel.sql("ROW_NUMBER() OVER (ORDER BY #{query.order_sql})"))
+            .sort_by(&:last)
+            .map(&:first)
+
+          expect(numbered_ids).to eq(courses.map(&:id))
+        end
+      end
+    end
+  end
+
   context "when courses tie on every sort column across a page boundary" do
     let(:provider) { create(:provider, provider_name: "NITE") }
     let(:school) { create(:gias_school, latitude: 52.4862, longitude: -1.8904) }
