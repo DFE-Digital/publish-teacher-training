@@ -75,3 +75,10 @@
 .app-table--banners__automated-name {
   white-space: nowrap;
 }
+
+.app-table--history__time,
+.app-table--history__user {
+  width: 1%;
+
+  white-space: nowrap;
+}
