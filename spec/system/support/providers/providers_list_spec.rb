@@ -33,7 +33,7 @@ RSpec.describe "View providers" do
   end
 
   def then_i_am_on_the_provider_page
-    expect(page).to have_current_path("/support/#{Find::CycleTimetable.current_year}/providers/onboarding/new")
+    expect(page).to have_current_path(%r{/support/#{Find::CycleTimetable.current_year}/providers/onboarding/wizard/[^/]+/provider_details\z})
   end
 
   def and_i_click_on_add_provider

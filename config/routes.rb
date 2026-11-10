@@ -6,6 +6,25 @@ Rails.application.routes.draw do
   get :sha, controller: :heartbeat
   get :reporting, controller: :reporting
 
+  # Routes for a BaseWizard inside a resources or resource block:
+  #   resources :users do
+  #     concerns :base_wizard, controller: "add_user_wizards"
+  #   end
+  # gives new_<resource>, and GET/PATCH wizard_<resources> at
+  # <resources>/wizard/:state_key/:step.
+  concern :base_wizard do |options|
+    wizard_controller = options.fetch(:controller)
+
+    new do
+      get :new, to: "#{wizard_controller}#new"
+    end
+
+    collection do
+      get "wizard/:state_key/:step", to: "#{wizard_controller}#show", as: :wizard
+      patch "wizard/:state_key/:step", to: "#{wizard_controller}#update"
+    end
+  end
+
   # Drawn outside the host constraints: the response varies by host, but the
   # route must answer on every one of them.
   get "/robots.txt", to: "robots#show", format: false
