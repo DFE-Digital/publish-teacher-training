@@ -21,8 +21,8 @@
     <% table.with_head do |head| %>
       <% head.with_row do |row| %>
         <% row.with_cell text: t(".change") %>
-        <% row.with_cell text: t(".time") %>
-        <% row.with_cell text: t(".user") %>
+        <% row.with_cell text: t(".time"), classes: "app-table--history__time" %>
+        <% row.with_cell text: t(".user"), classes: "app-table--history__user" %>
       <% end %>
     <% end %>
 
@@ -32,8 +32,8 @@
           <% row.with_cell do %>
             <%= render "support/providers/history/change", entry: entry, provider: @provider %>
           <% end %>
-          <% row.with_cell text: entry.formatted_time %>
-          <% row.with_cell do %>
+          <% row.with_cell text: entry.formatted_time, classes: "app-table--history__time" %>
+          <% row.with_cell classes: "app-table--history__user" do %>
             <%= entry.user_name %>
             <% if entry.admin? %>
               <%= govuk_tag(text: t(".admin"), colour: "grey", classes: "govuk-!-margin-left-1") %>
