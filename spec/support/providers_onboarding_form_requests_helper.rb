@@ -26,7 +26,11 @@ module ProvidersOnboardingFormRequestsHelper
       expect(page).to have_content(request.id)
       expect(page).to have_content(request.form_name)
       expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
-      expect(page).to have_content(request.status.titleize)
+      expect(page).to have_content(
+        I18n.t(
+          "support.providers_onboarding_form_requests.requests_table.statuses.#{request.status}",
+        ),
+      )
       expect(page).to have_content(request.created_at.strftime("%-d %B %Y"))
     end
   end
@@ -45,7 +49,7 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_see_second_page_of_requests_with_pagination
-    expect(page).to have_selector("table tbody tr", count: 8)
+    expect(page).to have_selector("table tbody tr", count: 5)
     expect(page).to have_link("Previous")
   end
 

@@ -16,6 +16,12 @@ en:
         unassigned: Unassigned
         not_available: Not available
         view_zendesk_ticket: View Zendesk ticket
+        statuses:
+          pending: Sent
+          submitted: Ready for review
+          closed: Onboarded
+          rejected: Rejected
+          expired: Expired
       new:
         title: New Provider Onboarding Request
         heading: Create an onboarding request

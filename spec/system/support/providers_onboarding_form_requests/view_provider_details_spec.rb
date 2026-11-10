@@ -29,7 +29,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       when_i_click_accept
 
       then_i_am_on_the_providers_onboarding_form_requests_page
-      then_status_should_be("Closed", onboarding_request)
+      then_status_should_be("Onboarded", onboarding_request)
     end
 
     scenario "I can reject an onboarding request" do
