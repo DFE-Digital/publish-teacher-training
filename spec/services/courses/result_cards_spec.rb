@@ -136,6 +136,25 @@ RSpec.describe Courses::ResultCards do
     it "shows nothing past the last page" do
       expect(result_cards(page: 3, per_page: 2).courses).to be_empty
     end
+
+    it "still counts cards past the last page" do
+      expect(result_cards(page: 3, per_page: 2).count).to eq(3)
+    end
+
+    it "numbers the cards once for a page's courses and card count" do
+      page = result_cards(page: 1, per_page: 2)
+      numbering_queries = []
+      subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        numbering_queries << payload[:sql] if payload[:sql].include?("ROW_NUMBER()")
+      end
+
+      page.courses
+      page.count
+
+      expect(numbering_queries.size).to eq(1)
+    ensure
+      ActiveSupport::Notifications.unsubscribe(subscriber)
+    end
   end
 
   context "with every sort option" do
