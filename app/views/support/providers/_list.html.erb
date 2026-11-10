@@ -28,7 +28,7 @@
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <% if provider.accredited? %>
                <% if provider.accredited_provider_number.present? %>
-                  <%= govuk_tag(text: provider.accredited_provider_number, colour: "green") %>
+                  <%= provider.accredited_provider_number %>
                <% else %>
                   <%= govuk_tag(text: "Fill me in", colour: "yellow") %>
                <% end %>
