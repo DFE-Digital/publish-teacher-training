@@ -7,7 +7,36 @@
 <% end %>
 <div class="govuk-caption-l"><%= Provider.human_attribute_name(@provider.provider_type) %></div>
 <h1 class="govuk-heading-l">
-  <%= govuk_link_to @provider.name_and_code, publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle.year), no_visited_state: true %>
+  <%= govuk_link_to @provider.name_and_code, edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider), no_visited_state: true %>
 </h1>
+
 <%= render "support/providers/navigation" %>
-<%= render Providers::ProviderList::View.new(provider: @provider) %>
+
+<%= govuk_table do |table| %>
+  <% table.with_head do |head| %>
+    <% head.with_row do |row| %>
+      <% row.with_cell(text: t(".provider_name"), classes: "govuk-!-width-one-quarter") %>
+      <% row.with_cell(text: t(".provider_code")) %>
+      <% row.with_cell(text: t(".accredited_provider_number"), classes: "govuk-!-width-one-quarter") %>
+      <% row.with_cell(text: t(".ukprn")) %>
+      <% row.with_cell(text: t(".view_in_publish")) %>
+    <% end %>
+  <% end %>
+
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell do %>
+        <%= govuk_link_to @provider.provider_name,
+              edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
+              class: "govuk-!-font-weight-bold" %>
+        <span class="govuk-hint"><%= Provider.human_attribute_name(@provider.provider_type) %></span>
+      <% end %>
+      <% row.with_cell(text: @provider.provider_code) %>
+      <% row.with_cell(text: @provider.accredited_provider_number) %>
+      <% row.with_cell(text: @provider.ukprn) %>
+      <% row.with_cell do %>
+        <%= govuk_link_to t(".view_provider"), details_publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

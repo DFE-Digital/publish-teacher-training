@@ -7,9 +7,6 @@ module PageObjects
 
       element :users_tab, ".app-tab-navigation__link", text: "Users"
       element :courses_tab, ".app-tab-navigation__link", text: "Courses"
-
-      element :edit_provider_name, "a", text: "Change"
-      element :edit_address, "a", text: "Change"
     end
   end
 end
