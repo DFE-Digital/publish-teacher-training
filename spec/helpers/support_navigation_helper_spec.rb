@@ -19,16 +19,14 @@ RSpec.describe SupportNavigationHelper, type: :helper do
       expect(item("Users")[:active_when]).to include(support_recruitment_cycle_data_exports_path(year))
     end
 
-    it "treats financial incentives as part of Subjects" do
-      expect(item("Subjects")[:active_when]).to include(support_financial_incentives_path)
-    end
-
     it "treats settings pages that live outside /settings as part of Settings" do
       expect(item("Settings")[:active_when]).to include(
         support_feature_flags_path,
-        support_view_components_path,
         support_recruitment_cycles_path,
+        support_financial_incentives_path,
         support_banners_path,
+        support_feedback_index_path,
+        support_subjects_path,
       )
     end
   end

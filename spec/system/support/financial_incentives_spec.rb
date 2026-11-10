@@ -12,7 +12,7 @@ RSpec.describe "Financial incentives support" do
   end
 
   scenario "creating a new year and repairing a missing incentive" do
-    given_i_visit_the_support_subjects_page
+    given_i_visit_the_support_settings_page
     when_i_click_financial_incentives
     then_i_see_the_financial_incentives_page
     and_i_see_there_are_no_incentives_for_the_current_year
@@ -87,12 +87,12 @@ private
     FinancialIncentive.for_year(current_year).delete_all
   end
 
-  def given_i_visit_the_support_subjects_page
-    visit support_subjects_path
+  def given_i_visit_the_support_settings_page
+    visit support_settings_path
   end
 
   def when_i_click_financial_incentives
-    click_link_or_button "Financial incentives"
+    click_on "Financial incentives"
   end
 
   def then_i_see_the_financial_incentives_page

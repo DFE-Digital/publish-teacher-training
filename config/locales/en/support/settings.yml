@@ -3,11 +3,10 @@ en:
     settings:
       index:
         page_title: Settings
-        feature_flag: Feature Flags
-        view_components: View Components
-        recruitment_cycles: Recruitment Cycles
-        financial_incentives: Financial Incentives
+        feature_flag: Feature flags
+        recruitment_cycles: Recruitment cycles
+        financial_incentives: Financial incentives
         banners: Banners
-        email_previews: Email Previews
+        email_previews: Email previews
         feedback: Feedback
         subjects: Subject synonyms

@@ -30,7 +30,7 @@ RSpec.describe "Adding a new recruitment cycle", service: :publish, travel: mid_
   end
 
   def when_i_click_recruitment_cycles
-    click_link_or_button "Recruitment Cycles"
+    click_link_or_button "Recruitment cycles"
   end
 
   def and_i_click_add_recruitment_cycle

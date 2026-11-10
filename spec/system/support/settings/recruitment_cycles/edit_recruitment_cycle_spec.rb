@@ -46,7 +46,7 @@ RSpec.describe "Editing a recruitment cycle", service: :publish, travel: mid_cyc
   end
 
   def when_i_click_recruitment_cycles
-    click_link_or_button "Recruitment Cycles"
+    click_link_or_button "Recruitment cycles"
   end
 
   def and_i_click_on_previous_cycle
