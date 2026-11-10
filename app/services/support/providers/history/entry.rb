@@ -12,21 +12,19 @@ module Support
           enrichment_status: "status",
         }.freeze
 
-        APPLICATION_STATUS_LABELS = {
-          "open" => { text: "Open", colour: "teal" },
-          "closed" => { text: "Closed", colour: "purple" },
-        }.freeze
-
-        ENRICHMENT_STATUS_LABELS = {
-          "draft" => { text: "Draft", colour: "grey" },
-          "published" => { text: "Published", colour: "teal" },
-          "rolled_over" => { text: "Rolled over", colour: "yellow" },
-          "withdrawn" => { text: "Withdrawn", colour: "red" },
+        # Colours match ApplicationDecorator status tags where the statuses overlap.
+        STATUS_COLOURS = {
+          "open" => "teal",
+          "closed" => "purple",
+          "draft" => "grey",
+          "published" => "teal",
+          "rolled_over" => "yellow",
+          "withdrawn" => "red",
         }.freeze
 
         attr_reader :change_type, :old_value, :new_value, :created_at, :user, :course
 
-        def self.entries_for(audit:, courses_by_id:, enrichments_by_id:)
+        def self.entries_for(audit:, courses_by_id:)
           new_entries = []
 
           ATTRIBUTE_KEYS.each do |change_type, key|
@@ -35,8 +33,8 @@ module Support
             old_value, new_value = change_pair(audit, key)
             next if old_value.nil? && new_value.nil?
             next if old_value == new_value
-            # Skip create-time values except enrichment status (e.g. rollover sets
-            # rolled_over on a new enrichment record).
+            # Enrichment creates (e.g. rollover) have no old value and are shown;
+            # provider/course creates are excluded upstream in HistoryQuery.
             next if old_value.nil? && change_type != :enrichment_status
 
             new_entries << new(
@@ -45,7 +43,7 @@ module Support
               new_value:,
               created_at: audit.created_at,
               user: audit.user,
-              course: course_for(audit, courses_by_id, enrichments_by_id),
+              course: course_for(audit, courses_by_id),
             )
           end
 
@@ -83,42 +81,29 @@ module Support
 
           case key
           when "application_status"
-            normalize_application_status(value)
+            normalize_enum(Course.application_statuses, value)
           when "status"
-            normalize_enrichment_status(value)
+            normalize_enum(CourseEnrichment.statuses, value)
           else
             value.to_s
           end
         end
         private_class_method :normalize
 
-        def self.normalize_application_status(value)
-          case value
-          when 0, "0", "closed" then "closed"
-          when 1, "1", "open" then "open"
-          else value.to_s
-          end
-        end
-        private_class_method :normalize_application_status
+        def self.normalize_enum(enum_mapping, value)
+          string_value = value.to_s
+          return string_value if enum_mapping.key?(string_value)
 
-        def self.normalize_enrichment_status(value)
-          case value
-          when 0, "0", "draft" then "draft"
-          when 1, "1", "published" then "published"
-          when 2, "2", "rolled_over" then "rolled_over"
-          when 3, "3", "withdrawn" then "withdrawn"
-          else value.to_s
-          end
+          enum_mapping.key(value.is_a?(Integer) ? value : string_value.to_i)&.to_s || string_value
         end
-        private_class_method :normalize_enrichment_status
+        private_class_method :normalize_enum
 
-        def self.course_for(audit, courses_by_id, enrichments_by_id)
+        def self.course_for(audit, courses_by_id)
           case audit.auditable_type
           when Course.name
             courses_by_id[audit.auditable_id]
           when CourseEnrichment.name
-            enrichment = enrichments_by_id[audit.auditable_id]
-            courses_by_id[enrichment.course_id] if enrichment
+            courses_by_id[audit.associated_id]
           end
         end
         private_class_method :course_for
@@ -153,14 +138,13 @@ module Support
         end
 
         def status_label(value)
-          labels =
-            case change_type
-            when :application_status then APPLICATION_STATUS_LABELS
-            when :enrichment_status then ENRICHMENT_STATUS_LABELS
-            else {}
-            end
-
-          labels.fetch(value) { { text: value.to_s.humanize, colour: "grey" } }
+          {
+            text: I18n.t(
+              "support.providers.history.status_labels.#{value}",
+              default: value.to_s.humanize,
+            ),
+            colour: STATUS_COLOURS.fetch(value, "grey"),
+          }
         end
       end
     end
