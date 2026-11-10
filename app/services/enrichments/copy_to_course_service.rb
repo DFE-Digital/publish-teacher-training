@@ -5,10 +5,10 @@ module Enrichments
     def execute(enrichment:, new_course:)
       new_enrichment = enrichment.dup
       new_enrichment.last_published_timestamp_utc = nil
-      # Assign status before the first save so the create audit is associated
-      # with new_course rather than the source course from dup.
-      new_enrichment.status = :rolled_over
-      new_course.enrichments << new_enrichment
+      # Assign the destination course before the first save so audited associates
+      # the create with new_course, and so rolled_over! still raises on invalid data.
+      new_enrichment.course = new_course
+      new_enrichment.rolled_over!
     end
   end
 end

@@ -155,6 +155,20 @@ RSpec.describe Support::Providers::HistoryQuery do
     expect(entry.new_value).to eq("open")
   end
 
+  it "leaves unknown non-numeric enum strings unchanged" do
+    create_audit!(
+      auditable: course,
+      user: admin,
+      changes: { "application_status" => %w[anything weird] },
+    )
+
+    entry = entries.find { |item| item.change_type == :application_status }
+
+    expect(entry.old_value).to eq("anything")
+    expect(entry.new_value).to eq("weird")
+    expect(entry.status_label("anything")).to eq(text: "Anything", colour: "grey")
+  end
+
   it "orders entries reverse chronologically and ignores irrelevant course audits" do
     create_audit!(
       auditable: course,

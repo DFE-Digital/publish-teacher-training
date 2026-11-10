@@ -4,12 +4,37 @@ module Support
   module Providers
     module History
       class Entry
-        ATTRIBUTE_KEYS = {
-          provider_name: "provider_name",
-          provider_code: "provider_code",
-          course_name: "name",
-          application_status: "application_status",
-          enrichment_status: "status",
+        # One place to add a new history change type: audit key, which model it
+        # belongs to, optional enum mapping, and whether creates are shown.
+        CHANGE_TYPES = {
+          provider_name: {
+            key: "provider_name",
+            auditable_type: "Provider",
+          },
+          provider_code: {
+            key: "provider_code",
+            auditable_type: "Provider",
+          },
+          course_name: {
+            key: "name",
+            auditable_type: "Course",
+            course: true,
+          },
+          application_status: {
+            key: "application_status",
+            auditable_type: "Course",
+            course: true,
+            status: true,
+            enum: -> { Course.application_statuses },
+          },
+          enrichment_status: {
+            key: "status",
+            auditable_type: "CourseEnrichment",
+            course: true,
+            status: true,
+            enum: -> { CourseEnrichment.statuses },
+            allow_create: true,
+          },
         }.freeze
 
         # Colours match ApplicationDecorator status tags where the statuses overlap.
@@ -25,19 +50,17 @@ module Support
         attr_reader :change_type, :old_value, :new_value, :created_at, :user, :course
 
         def self.entries_for(audit:, courses_by_id:)
-          new_entries = []
+          CHANGE_TYPES.filter_map do |change_type, definition|
+            next unless audit.auditable_type == definition[:auditable_type]
 
-          ATTRIBUTE_KEYS.each do |change_type, key|
-            next unless relevant_for?(audit, change_type)
-
-            old_value, new_value = change_pair(audit, key)
+            old_value, new_value = change_pair(audit, definition)
             next if old_value.nil? && new_value.nil?
             next if old_value == new_value
             # Enrichment creates (e.g. rollover) have no old value and are shown;
             # provider/course creates are excluded upstream in HistoryQuery.
-            next if old_value.nil? && change_type != :enrichment_status
+            next if old_value.nil? && !definition[:allow_create]
 
-            new_entries << new(
+            new(
               change_type:,
               old_value:,
               new_value:,
@@ -46,47 +69,26 @@ module Support
               course: course_for(audit, courses_by_id),
             )
           end
-
-          new_entries
         end
 
-        def self.relevant_for?(audit, change_type)
-          case change_type
-          when :provider_name, :provider_code
-            audit.auditable_type == Provider.name
-          when :course_name, :application_status
-            audit.auditable_type == Course.name
-          when :enrichment_status
-            audit.auditable_type == CourseEnrichment.name
-          else
-            false
-          end
-        end
-        private_class_method :relevant_for?
-
-        def self.change_pair(audit, key)
+        def self.change_pair(audit, definition)
+          key = definition[:key]
           raw = audit.audited_changes[key] || audit.audited_changes[key.to_sym]
           return [nil, nil] if raw.nil?
 
           if raw.is_a?(Array)
-            [normalize(key, raw[0]), normalize(key, raw[1])]
+            [normalize(definition, raw[0]), normalize(definition, raw[1])]
           else
-            [nil, normalize(key, raw)]
+            [nil, normalize(definition, raw)]
           end
         end
         private_class_method :change_pair
 
-        def self.normalize(key, value)
+        def self.normalize(definition, value)
           return if value.nil?
+          return value.to_s if definition[:enum].blank?
 
-          case key
-          when "application_status"
-            normalize_enum(Course.application_statuses, value)
-          when "status"
-            normalize_enum(CourseEnrichment.statuses, value)
-          else
-            value.to_s
-          end
+          normalize_enum(definition[:enum].call, value)
         end
         private_class_method :normalize
 
@@ -94,15 +96,26 @@ module Support
           string_value = value.to_s
           return string_value if enum_mapping.key?(string_value)
 
-          enum_mapping.key(value.is_a?(Integer) ? value : string_value.to_i)&.to_s || string_value
+          integer_value = integer_enum_value(value)
+          return string_value if integer_value.nil?
+
+          enum_mapping.key(integer_value)&.to_s || string_value
         end
         private_class_method :normalize_enum
 
+        def self.integer_enum_value(value)
+          return value if value.is_a?(Integer)
+          return value.to_i if value.is_a?(String) && value.match?(/\A\d+\z/)
+
+          nil
+        end
+        private_class_method :integer_enum_value
+
         def self.course_for(audit, courses_by_id)
           case audit.auditable_type
-          when Course.name
+          when "Course"
             courses_by_id[audit.auditable_id]
-          when CourseEnrichment.name
+          when "CourseEnrichment"
             courses_by_id[audit.associated_id]
           end
         end
@@ -118,11 +131,11 @@ module Support
         end
 
         def course_change?
-          change_type.in?(%i[course_name application_status enrichment_status])
+          CHANGE_TYPES.fetch(change_type).fetch(:course, false)
         end
 
         def status_change?
-          change_type.in?(%i[application_status enrichment_status])
+          CHANGE_TYPES.fetch(change_type).fetch(:status, false)
         end
 
         def admin?
