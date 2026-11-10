@@ -77,8 +77,18 @@ RSpec.describe "Adding user to provider as an admin", :publish_features, travel:
   end
 
   def and_i_am_still_on_the_publish_personal_details_page
-    expect(publish_users_index_page).to be_displayed(provider_code: @provider.provider_code)
+    expect(page).to have_current_path(
+      publish_provider_users_path(
+        @provider.provider_code,
+        return_to: "support",
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+      ),
+    )
     expect(page).to have_css(".govuk-error-summary")
+    expect(page).to have_link(
+      "Cancel",
+      href: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider),
+    )
   end
 
   def and_i_continue

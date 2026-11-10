@@ -5,13 +5,13 @@ module Publish
     extend ActiveSupport::Concern
 
     included do
-      helper_method :user_add_flow_params, :users_cancel_path, :returning_to_support?
+      helper_method :user_add_flow_params, :users_return_path, :returning_to_support?
     end
 
   private
 
     def returning_to_support?
-      params[:return_to] == "support"
+      params[:return_to] == "support" && current_user.admin?
     end
 
     def user_add_flow_params
@@ -23,15 +23,7 @@ module Publish
       end
     end
 
-    def users_cancel_path
-      if returning_to_support?
-        support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
-      else
-        publish_provider_users_path(params[:provider_code])
-      end
-    end
-
-    def users_added_redirect_path
+    def users_return_path
       if returning_to_support?
         support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       else
