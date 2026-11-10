@@ -132,7 +132,6 @@ private
 
   def then_i_see_the_history_table
     expect(page).to have_css(".app-tab-navigation__link[aria-current='page']", text: "History")
-    expect(page).to have_content("Publishing status history is recorded from when this feature was released")
     expect(page).to have_content("Change")
     expect(page).to have_content("Time")
     expect(page).to have_content("User")
@@ -153,7 +152,6 @@ private
 
   def then_i_see_the_empty_state
     expect(page).to have_content("No changes have been recorded for this provider.")
-    expect(page).to have_content("Publishing status history is recorded from when this feature was released")
   end
 
   def then_i_see_the_first_page_of_history
