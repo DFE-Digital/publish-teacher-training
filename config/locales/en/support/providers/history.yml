@@ -9,9 +9,13 @@ en:
           admin: Admin
           no_changes: No changes have been recorded for this provider.
           system_user: System
+          coverage_caveat: Publishing status history is recorded from when this feature was released. Removed courses are not included.
         change:
-          status_changed_from: Status changed from
           status_changed_to: to
+          application_status_changed_from: Applications status changed from
+          application_status_set: Applications status set to
+          enrichment_status_changed_from: Publishing status changed from
+          enrichment_status_set: Publishing status set to
           provider_name_html: Provider name changed from %{old_value} to %{new_value}
           provider_code_html: Provider code changed from %{old_value} to %{new_value}
           course_name_html: Course name changed from %{old_value} to %{new_value}
