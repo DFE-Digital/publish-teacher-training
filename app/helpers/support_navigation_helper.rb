@@ -5,10 +5,8 @@ module SupportNavigationHelper
     [
       onboarding_navigation_item,
       providers_navigation_item,
-      candidates_navigation_item,
       users_navigation_item,
-      feedback_navigation_item,
-      subjects_navigation_item,
+      candidates_navigation_item,
       settings_navigation_item,
     ].compact
   end
@@ -40,21 +38,6 @@ private
     )
   end
 
-  def feedback_navigation_item
-    support_navigation_item("layouts.support.feedbacks", support_feedback_index_path)
-  end
-
-  def subjects_navigation_item
-    support_navigation_item(
-      "layouts.support.subjects",
-      support_subjects_path,
-      active_when: [
-        support_subjects_path,
-        support_financial_incentives_path,
-      ],
-    )
-  end
-
   def settings_navigation_item
     support_navigation_item(
       "layouts.support.settings",
@@ -62,9 +45,11 @@ private
       active_when: [
         support_settings_path,
         support_feature_flags_path,
-        support_view_components_path,
         support_recruitment_cycles_path,
+        support_financial_incentives_path,
         support_banners_path,
+        support_feedback_index_path,
+        support_subjects_path,
       ],
     )
   end

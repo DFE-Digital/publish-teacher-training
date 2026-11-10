@@ -1,11 +1,11 @@
 <% content_for :page_title, t(".page_title") %>
-
 <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
-
 <%= govuk_list([
   govuk_link_to(t(".feature_flag"), support_feature_flags_path),
-  govuk_link_to(t(".view_components"), support_view_components_path),
   govuk_link_to(t(".recruitment_cycles"), support_recruitment_cycles_path),
+  govuk_link_to(t(".financial_incentives"), support_financial_incentives_path),
   govuk_link_to(t(".banners"), active_support_banners_path),
+  govuk_link_to(t(".feedback"), support_feedback_index_path),
+  govuk_link_to(t(".subjects"), support_subjects_path),
   (govuk_link_to(t(".email_previews"), "/rails/mailers") if Rails.application.config.action_mailer.show_previews),
 ].compact, spaced: true) %>
