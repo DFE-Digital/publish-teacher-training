@@ -2,7 +2,7 @@
 <%= content_for :page_title, title_with_error_prefix(page_title, @user_form.errors.any?) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(users_cancel_path) %>
+  <%= govuk_back_link_to(users_return_path) %>
 <% end %>
 
 <%= form_with(model: @user_form, url: publish_provider_users_path(params[:provider_code], **user_add_flow_params), local: true) do |f| %>
@@ -30,7 +30,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), users_cancel_path) %>
+      <%= govuk_link_to(t("cancel"), users_return_path) %>
     </p>
   </div>
 </div>

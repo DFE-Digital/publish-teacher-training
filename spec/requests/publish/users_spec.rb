@@ -50,6 +50,8 @@ RSpec.describe "Publish provider users", type: :request do
 
   describe "add user return to support" do
     let(:admin) { create(:user, :admin) }
+    let(:next_provider) { create(:provider, :next_recruitment_cycle) }
+    let!(:current_cycle_provider) { create(:provider, provider_code: next_provider.provider_code) }
 
     before { login_user(admin) }
 
@@ -80,6 +82,50 @@ RSpec.describe "Publish provider users", type: :request do
       expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to include("return_to=support")
     end
 
+    it "uses recruitment_cycle_year from params over the session cycle year" do
+      get publish_provider_recruitment_cycle_path(current_cycle_provider.provider_code, current_cycle_provider.recruitment_cycle_year)
+
+      get new_publish_provider_user_path(
+        provider_code: next_provider.provider_code,
+        return_to: "support",
+        recruitment_cycle_year: next_provider.recruitment_cycle_year,
+      )
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_users_path(next_provider.recruitment_cycle_year, next_provider),
+      )
+      expect(response.body).to include("recruitment_cycle_year=#{next_provider.recruitment_cycle_year}")
+
+      stash_new_user_form(admin)
+
+      put publish_provider_check_user_path(
+        provider_code: next_provider.provider_code,
+        return_to: "support",
+        recruitment_cycle_year: next_provider.recruitment_cycle_year,
+      ), params: { publish_user_form: { email: "ada@example.com" } }
+
+      expect(response).to redirect_to(
+        support_recruitment_cycle_provider_users_path(next_provider.recruitment_cycle_year, next_provider),
+      )
+      expect(next_provider.users.reload.exists?(email: "ada@example.com")).to be(true)
+      expect(current_cycle_provider.users.reload.exists?(email: "ada@example.com")).to be(false)
+    end
+
+    it "keeps return_to=support on the form after a validation error" do
+      post publish_provider_users_path(
+        provider.provider_code,
+        return_to: "support",
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      ), params: { publish_user_form: { first_name: "", last_name: "", email: "" } }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("return_to=support")
+      expect(response.body).to include(
+        support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider),
+      )
+    end
+
     it "redirects to the support users tab after adding a user" do
       stash_new_user_form(admin)
 
@@ -92,7 +138,7 @@ RSpec.describe "Publish provider users", type: :request do
       expect(response).to redirect_to(
         support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider),
       )
-      expect(flash[:success]).to eq("User added")
+      expect(flash[:success]).to eq(I18n.t("success.user_added"))
       expect(provider.users.reload.exists?(email: "ada@example.com")).to be(true)
     end
 
@@ -103,7 +149,22 @@ RSpec.describe "Publish provider users", type: :request do
           params: { publish_user_form: { email: "ada@example.com" } }
 
       expect(response).to redirect_to(publish_provider_users_path(provider.provider_code))
-      expect(flash[:success]).to eq("User added")
+      expect(flash[:success]).to eq(I18n.t("success.user_added"))
+    end
+
+    it "ignores return_to=support for non-admin users" do
+      login_user(user)
+
+      get new_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        return_to: "support",
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        publish_provider_users_path(provider.provider_code),
+      )
+      expect(response.body).not_to include("return_to=support")
     end
   end
 
