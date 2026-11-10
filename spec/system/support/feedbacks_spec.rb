@@ -41,7 +41,7 @@ RSpec.describe "Support console feedback view", service: :support do
 
   context "when a feedback experience is over the truncation limit" do
     let!(:long_feedback) do
-      create(:feedback, experience: "This is a very long feedback message designed to be more than 100 characters long so that it can trigger the truncation logic and display the 'View full' link.")
+      create(:feedback, experience: "Very long feedback. " * 40)
     end
 
     before do
@@ -171,9 +171,14 @@ RSpec.describe "Support console feedback view", service: :support do
   end
 
   def then_i_see_truncated_feedback_with_link(feedback)
-    experience_limit = 500
-    expect(page).to have_content(truncate(feedback.experience, length: experience_limit))
-    expect(page).to have_link("View full", href: support_feedback_path(feedback))
+    experience_limit = I18n.t("support.feedbacks.index.truncate_experience_chars_max")
+    expect(page).to have_content(
+      truncate(feedback.experience, length: experience_limit)
+    )
+    expect(page).to have_link(
+      "View full",
+      href: support_feedback_path(feedback)
+    )
   end
 
   def when_i_click_to_view_full_feedback
