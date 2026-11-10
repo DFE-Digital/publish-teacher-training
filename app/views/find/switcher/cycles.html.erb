@@ -11,7 +11,7 @@
         <p class="govuk-body"><%= t("find.cycles.introduction") %></p>
 
         <%= f.govuk_radio_buttons_fieldset :cycle_schedule_name, legend: { text: t("find.cycles.legend"), size: "m" } do %>
-          <% Find::CycleTimetable::SWITCHER_OPTIONS.each_key do |option| %>
+          <% Find::CycleTimetable::SWITCHER_OPTIONS.each_key.with_index do |option, index| %>
             <% if option == :apply_open %>
               <h2 class="govuk-heading-s govuk-!-margin-bottom-2"><%= switcher_cycle_group_heading(option) %></h2>
             <% elsif option == :apply_not_open_yet %>
@@ -22,7 +22,7 @@
                   option.to_s,
                   label: -> { switcher_option_label(option) },
                   hint: { text: t("find.cycles.#{option}.description") },
-                  link_errors: true do %>
+                  link_errors: index.zero? do %>
               <% if option == :apply_open %>
                 <%= f.govuk_check_box :deadline_banner, "1", "0",
                       multiple: false,
@@ -35,8 +35,7 @@
 
           <%= f.govuk_radio_button :cycle_schedule_name,
                 "real",
-                label: { text: t("find.cycles.real.name") },
-                link_errors: true %>
+                label: { text: t("find.cycles.real.name") } %>
         <% end %>
 
         <%= f.govuk_submit t("find.cycles.submit") %>

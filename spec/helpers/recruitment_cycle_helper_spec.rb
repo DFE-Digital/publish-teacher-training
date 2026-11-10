@@ -22,10 +22,6 @@ RSpec.describe RecruitmentCycleHelper do
   end
 
   describe "cycle switcher content", travel: mid_cycle(2026) do
-    before do
-      allow(Find::CycleTimetable).to receive(:cycle_year_for_time).and_return(2026)
-    end
-
     describe "#switcher_option_label" do
       it "puts the date range on the label and keeps the year on both dates when the range spans years" do
         expect(helper.switcher_option_label(:apply_open)).to eq(

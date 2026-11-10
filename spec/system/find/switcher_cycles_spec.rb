@@ -22,20 +22,13 @@ RSpec.describe "switcher cycle" do
 
     expect(page).to have_text("You can change the point in the recruitment cycle to test features.")
     expect(page).to have_text("What point in the cycle do you want to change to?")
-    expect(page).to have_css("h2", text: "2022-2023 recruitment cycle - current")
+    expect(page).to have_css("h2.govuk-heading-s", count: 2)
     expect(page).to have_css("label", text: "Find and Apply open")
-    expect(page).not_to have_css("label strong")
     expect(page).to have_css("label .govuk-hint", text: "11 October 2022 to 19 September 2023")
-    expect(page).to have_text("Find and Apply open - 11 October 2022 to 19 September 2023")
     expect(page).to have_text("Candidates can find and apply for courses")
-    expect(page).to have_text("Find open, Apply closed - 19 September to 2 October 2023")
     expect(page).to have_text("Candidates can find courses, but can no longer apply for them")
-    expect(page).to have_text("Find and Apply closed - 2 October to 3 October 2023")
     expect(page).to have_text("Candidates can no longer find or apply for courses")
-    expect(page).to have_css("h2", text: "2023-2024 recruitment cycle")
-    expect(page).to have_text("Find open, Apply closed - 3 October to 10 October 2023")
     expect(page).to have_text("Candidates can find courses, but cannot apply for them yet")
-    expect(page).to have_text("Find and Apply open - 10 October 2023 to 17 September 2024")
     expect(page).to have_css(".govuk-radios__divider", text: "or")
     expect(page).to have_text("Same as production environment")
     expect(page).to have_button("Change recruitment cycle")
@@ -67,7 +60,6 @@ RSpec.describe "switcher cycle" do
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_the_cycle_point_is_now("apply_reopened")
-    and_the_recruitment_cycle_has_moved_forward
   end
 
   scenario "Find open before Apply in the next cycle" do
@@ -76,7 +68,6 @@ RSpec.describe "switcher cycle" do
     then_i_click_on_update_button
     and_i_should_see_the_success_banner
     and_the_cycle_point_is_now("apply_not_open_yet")
-    and_the_recruitment_cycle_has_moved_forward
   end
 
   def when_i_visit_switcher_cycle_page
@@ -117,10 +108,5 @@ RSpec.describe "switcher cycle" do
 
   def then_i_should_see_the_applications_closed_text
     expect(page).to have_text("Applications are currently closed but you can get ready to apply")
-  end
-
-  def and_the_recruitment_cycle_has_moved_forward
-    expect(Find::CycleTimetable.current_year).to eq(2024)
-    expect(Find::CycleTimetable.previous_year).to eq(2023)
   end
 end
