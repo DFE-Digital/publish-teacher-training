@@ -43,7 +43,7 @@ RSpec.describe "Find switcher", service: :find, type: :request do
       expect(response).to have_http_status(:unprocessable_content)
       page = Capybara.string(response.body)
       error_link = page.find(".govuk-error-summary a", text: "There is no #{Find::CycleTimetable.next_year} recruitment cycle in this environment. Add it in Support or choose another option")
-      expect(page).to have_css(error_link[:href])
+      expect(page).to have_css(error_link[:href], count: 1)
     end
   end
 end
