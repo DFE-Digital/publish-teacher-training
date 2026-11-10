@@ -29,4 +29,16 @@ describe Enrichments::CopyToCourseService do
     its(:last_published_timestamp_utc) { is_expected.to be_nil }
     it { is_expected.to be_rolled_over }
   end
+
+  it "records the rollover audit against the destination course" do
+    copied_enrichment = new_course.enrichments.first
+    audit = Audited::Audit.find_by!(
+      auditable: copied_enrichment,
+      action: "create",
+    )
+
+    expect(audit.associated).to eq(new_course)
+    expect(audit.audited_changes["status"]).to eq(CourseEnrichment.statuses[:rolled_over])
+      .or(eq("rolled_over"))
+  end
 end
