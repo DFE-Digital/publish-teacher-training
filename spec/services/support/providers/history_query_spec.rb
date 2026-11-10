@@ -10,14 +10,15 @@ RSpec.describe Support::Providers::HistoryQuery do
   let(:provider_user) { create(:user, first_name: "Emily", last_name: "Banks") }
   let(:course) { create(:course, provider:, name: "Primary", course_code: "A123") }
 
-  def create_audit!(auditable:, user:, changes:, created_at: Time.zone.now)
+  def create_audit!(auditable:, user:, changes:, created_at: Time.zone.now, action: "update", associated: nil)
     Audited::Audit.create!(
       auditable:,
       user:,
-      action: "update",
+      action:,
       audited_changes: changes,
       version: 1,
       created_at:,
+      associated:,
     )
   end
 
@@ -83,6 +84,7 @@ RSpec.describe Support::Providers::HistoryQuery do
     create_audit!(
       auditable: enrichment,
       user: provider_user,
+      associated: course,
       changes: { "status" => %w[rolled_over published] },
     )
 
@@ -107,17 +109,50 @@ RSpec.describe Support::Providers::HistoryQuery do
     expect(entry.course).to eq(course)
   end
 
-  it "still skips create-time provider name values" do
-    Audited::Audit.where(auditable: provider).delete_all
-    Audited::Audit.create!(
+  it "excludes provider and course create audits from the paginated scope" do
+    Audited::Audit.where(auditable: [provider, course]).delete_all
+
+    create_audit!(
       auditable: provider,
       user: admin,
       action: "create",
-      audited_changes: { "provider_name" => "2Schools Consortium" },
-      version: 1,
+      changes: { "provider_name" => "2Schools Consortium" },
+    )
+    create_audit!(
+      auditable: course,
+      user: admin,
+      action: "create",
+      changes: { "name" => "Primary" },
+    )
+    create_audit!(
+      auditable: provider,
+      user: admin,
+      changes: { "provider_name" => %w[Old Newer] },
+    )
+    create_audit!(
+      auditable: course,
+      user: admin,
+      changes: { "application_status" => %w[closed open] },
     )
 
-    expect(entries.select { |item| item.change_type == :provider_name }).to be_empty
+    scope = described_class.for(provider).audits_scope
+
+    expect(scope.map(&:action)).to all(eq("update"))
+    expect(scope.count).to eq(2)
+    expect(entries.map(&:change_type)).to contain_exactly(:provider_name, :application_status)
+  end
+
+  it "normalises integer enum values from audited_changes" do
+    create_audit!(
+      auditable: course,
+      user: admin,
+      changes: { "application_status" => [0, 1] },
+    )
+
+    entry = entries.find { |item| item.change_type == :application_status }
+
+    expect(entry.old_value).to eq("closed")
+    expect(entry.new_value).to eq("open")
   end
 
   it "orders entries reverse chronologically and ignores irrelevant course audits" do
