@@ -9,7 +9,6 @@ en:
           admin: Admin
           no_changes: No changes have been recorded for this provider.
           system_user: System
-          coverage_caveat: Publishing status history is recorded from when this feature was released. Removed courses are not included.
         status_labels:
           open: Open
           closed: Closed

@@ -14,8 +14,6 @@
 
 <%= render "support/providers/navigation" %>
 
-<%= govuk_inset_text(text: t(".coverage_caveat")) %>
-
 <% if @history_entries.any? %>
   <%= govuk_table do |table| %>
     <% table.with_head do |head| %>
