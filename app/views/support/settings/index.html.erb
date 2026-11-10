@@ -7,5 +7,4 @@
   govuk_link_to(t(".banners"), active_support_banners_path),
   govuk_link_to(t(".feedback"), support_feedback_index_path),
   govuk_link_to(t(".subjects"), support_subjects_path),
-  (govuk_link_to(t(".email_previews"), "/rails/mailers") if Rails.application.config.action_mailer.show_previews),
 ].compact, spaced: true) %>
