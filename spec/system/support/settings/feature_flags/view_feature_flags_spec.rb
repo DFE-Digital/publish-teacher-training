@@ -26,6 +26,7 @@ RSpec.describe "Viewing feature flags" do
       "Puts Find into maintenance mode",
       "Display scholarship and bursary information",
       "Group courses of the same subject from the same provider into one card on Find search results",
+      "Let support users create, search and revoke API keys in the support console",
     ].each do |feature_flag_text|
       expect(page).to have_content(feature_flag_text)
     end

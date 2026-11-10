@@ -92,5 +92,22 @@ RSpec.describe APIKeys::Creator do
 
       expect(APIKey.active.where(email:).count).to eq(APIKey::MAXIMUM_ACTIVE)
     end
+
+    it "creates one key when the same submission races" do
+      submission_token = SecureRandom.uuid
+      barrier = Concurrent::CyclicBarrier.new(2)
+
+      api_keys = Array.new(2) {
+        Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            barrier.wait(10)
+            described_class.call(email:, name: "Racer", submission_token:)
+          end
+        end
+      }.map(&:value)
+
+      expect(api_keys.count(&:persisted?)).to eq(1)
+      expect(api_keys.reject(&:persisted?).sole.errors).to be_of_kind(:submission_token, :taken)
+    end
   end
 end
