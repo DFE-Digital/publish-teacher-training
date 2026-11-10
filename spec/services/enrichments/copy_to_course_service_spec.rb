@@ -3,8 +3,6 @@
 require "rails_helper"
 
 describe Enrichments::CopyToCourseService do
-  subject { new_course.enrichments }
-
   let(:service) { described_class.new }
   let(:course) { create(:course) }
   let(:new_course) { create(:course) }
@@ -12,33 +10,61 @@ describe Enrichments::CopyToCourseService do
     create(:course_enrichment, :published, course:)
   end
 
-  before { service.execute(enrichment: published_enrichment, new_course:) }
+  describe "copying a valid enrichment" do
+    subject { new_course.enrichments }
 
-  its(:length) { is_expected.to eq 1 }
+    before do
+      service.execute(enrichment: published_enrichment, new_course:)
+      new_course.enrichments.reload
+    end
 
-  describe "the new course" do
-    subject { new_course }
+    its(:length) { is_expected.to eq 1 }
 
-    its(:content_status) { is_expected.to eq :rolled_over }
+    describe "the new course" do
+      subject { new_course }
+
+      its(:content_status) { is_expected.to eq :rolled_over }
+    end
+
+    describe "the copied enrichment" do
+      subject { new_course.enrichments.first }
+
+      its(:theoretical_training_activities) { is_expected.to eq published_enrichment.theoretical_training_activities }
+      its(:last_published_timestamp_utc) { is_expected.to be_nil }
+      it { is_expected.to be_rolled_over }
+    end
+
+    it "records the rollover audit against the destination course" do
+      copied_enrichment = new_course.enrichments.first
+      audit = Audited::Audit.find_by!(
+        auditable: copied_enrichment,
+        action: "create",
+      )
+
+      expect(audit.associated).to eq(new_course)
+      expect(audit.audited_changes["status"]).to eq(CourseEnrichment.statuses[:rolled_over])
+        .or(eq("rolled_over"))
+    end
   end
 
-  describe "the copied enrichment" do
-    subject { new_course.enrichments.first }
+  describe "copying an invalid enrichment" do
+    let(:published_enrichment) do
+      enrichment = build(
+        :course_enrichment,
+        :published,
+        course:,
+        personal_qualities: ("word " * 150).strip,
+      )
+      enrichment.save!(validate: false)
+      enrichment
+    end
 
-    its(:theoretical_training_activities) { is_expected.to eq published_enrichment.theoretical_training_activities }
-    its(:last_published_timestamp_utc) { is_expected.to be_nil }
-    it { is_expected.to be_rolled_over }
-  end
+    it "raises so rollover can roll back" do
+      expect {
+        service.execute(enrichment: published_enrichment, new_course:)
+      }.to raise_error(ActiveRecord::RecordInvalid)
 
-  it "records the rollover audit against the destination course" do
-    copied_enrichment = new_course.enrichments.first
-    audit = Audited::Audit.find_by!(
-      auditable: copied_enrichment,
-      action: "create",
-    )
-
-    expect(audit.associated).to eq(new_course)
-    expect(audit.audited_changes["status"]).to eq(CourseEnrichment.statuses[:rolled_over])
-      .or(eq("rolled_over"))
+      expect(new_course.enrichments.reload).to be_empty
+    end
   end
 end
