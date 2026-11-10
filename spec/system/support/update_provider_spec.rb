@@ -17,14 +17,18 @@ RSpec.describe "Removing accredited status from provider", service: :publish do
     expect(page).to have_current_path("/support/#{RecruitmentCycle.current.year}/providers/#{provider.id}/courses")
     click_on "Organisation"
     expect(page).to have_current_path("/support/#{RecruitmentCycle.current.year}/providers/#{provider.id}")
-    within '[data-qa="ap-number-row"]' do
-      expect(page.find(".govuk-summary-list__value").text).to eq(provider.accredited_provider_number.to_s)
-      click_on("Change")
-    end
+    expect(provider_table_cell("Accredited provider number").text).to eq(provider.accredited_provider_number.to_s)
+    provider_table_cell("Provider name").click_link(provider.provider_name)
     page.find_by_id("provider-accredited-field", visible: false).click
 
     click_on "Update organisation details"
     expect(page).to have_current_path("/support/#{RecruitmentCycle.current.year}/providers/#{provider.id}")
     expect(provider.reload.accredited_provider_number).to be_blank
+  end
+
+  def provider_table_cell(heading)
+    headings = page.all("table.govuk-table thead th").map(&:text)
+
+    page.all("table.govuk-table tbody td")[headings.index(heading)]
   end
 end
