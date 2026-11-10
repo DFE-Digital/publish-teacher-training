@@ -80,6 +80,12 @@ module Courses
       @scope.unscope(:order, :group).distinct.count(:id)
     end
 
+    # The ORDER BY of the results as SQL. It refers to expressions, not SELECT
+    # aliases, so it can also order a window function over the same rows.
+    def order_sql
+      @scope.arel.orders.map { |order| order.respond_to?(:to_sql) ? order.to_sql : order.to_s }.join(", ")
+    end
+
     # Pairs of [provider_id, master_subject_id] where the provider offers the
     # same subject through more than one accredited provider in these results.
     # Find shows the accredited provider under the course name on those cards.
@@ -378,7 +384,7 @@ module Courses
 
       @applied_scopes[:order] = params[:order]
 
-      @scope.order("minimum_distance_to_search_location ASC, LOWER(provider.provider_name) ASC, course.id ASC")
+      @scope.order("nearby_courses.distance_m ASC, LOWER(provider.provider_name) ASC, course.id ASC")
     end
 
     def course_name_ascending_order_scope
@@ -471,12 +477,15 @@ module Courses
     # prevent our sorting from placing Salary course in amongst the Fee courses
     # during sorting, we initially sort by funding type here
     def funding_sorting
-      Arel.sql(<<-SQL)
-        case funding
-        when 'fee' then 0
-        else 1
-        end fee_funding
-      SQL
+      Arel.sql("#{funding_sort_sql} fee_funding")
+    end
+
+    def funding_sort_sql
+      "case funding when 'fee' then 0 else 1 end"
+    end
+
+    def fee_sort_sql(fee_key)
+      "MAX((course_enrichment.json_data->>'#{fee_key}')::integer)"
     end
 
     def fee_uk_ascending_order_scope
@@ -485,13 +494,13 @@ module Courses
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeUkEu')::integer) as uk_fee")
+        .select("course.*, #{funding_sorting}, provider.provider_name, #{fee_sort_sql('FeeUkEu')} as uk_fee")
         .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
+          Arel.sql(funding_sort_sql).asc,
+          Arel.sql(fee_sort_sql("FeeUkEu")).asc,
           {
-            "fee_funding" => :asc,
-            "uk_fee" => :asc,
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
@@ -506,13 +515,13 @@ module Courses
       @applied_scopes[:order] = params[:order]
 
       @scope
-        .select("course.*, #{funding_sorting}, provider.provider_name, MAX((course_enrichment.json_data->>'FeeInternational')::integer) as intl_fee")
+        .select("course.*, #{funding_sorting}, provider.provider_name, #{fee_sort_sql('FeeInternational')} as intl_fee")
         .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
+          Arel.sql(funding_sort_sql).asc,
+          Arel.sql(fee_sort_sql("FeeInternational")).asc,
           {
-            "fee_funding" => :asc,
-            "intl_fee" => :asc,
             courses_table[:name] => :asc,
             providers_table[:provider_name] => :asc,
             courses_table[:course_code] => :asc,
