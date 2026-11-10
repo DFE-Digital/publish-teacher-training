@@ -3,6 +3,7 @@ en:
     support:
       candidates: Candidates
       providers: Providers
+      api_keys: API keys
       users: Users
       settings: Settings
       subjects: Subjects
