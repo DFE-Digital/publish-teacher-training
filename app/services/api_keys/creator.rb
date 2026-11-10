@@ -4,13 +4,14 @@ module APIKeys
   class Creator
     include ServicePattern
 
-    def initialize(email:, name:)
+    def initialize(email:, name:, submission_token: nil)
       @secret = "#{APIKey::SECRET_PREFIX}#{SecureRandom.hex(32)}"
       @api_key = APIKey.new(
         email:,
         name:,
         key_digest: APIKey.digest(secret),
         prefix: secret.first(APIKey::DISPLAY_PREFIX_LENGTH),
+        submission_token:,
       )
     end
 

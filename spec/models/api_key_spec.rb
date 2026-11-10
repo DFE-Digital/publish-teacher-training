@@ -66,7 +66,7 @@ RSpec.describe APIKey do
       api_key = build(:api_key, name: "")
 
       expect(api_key).not_to be_valid
-      expect(api_key.errors[:name]).to eq(["Enter a name for your API key"])
+      expect(api_key.errors[:name]).to eq(["Enter a name for the API key"])
     end
 
     it "tells the user to enter an email address" do
@@ -88,7 +88,7 @@ RSpec.describe APIKey do
       api_key = build(:api_key, email:)
 
       expect(api_key).not_to be_valid
-      expect(api_key.errors[:base]).to eq(["You can only have 5 active API keys. Revoke a key before creating another"])
+      expect(api_key.errors[:email]).to eq(["This email address already has 5 active API keys. Revoke one before creating another"])
     end
 
     it "counts only the same email's keys towards the active limit" do
@@ -101,6 +101,28 @@ RSpec.describe APIKey do
       keys = create_list(:api_key, described_class::MAXIMUM_ACTIVE, email:)
 
       expect(keys.first.update(name: "Renamed")).to be(true)
+    end
+  end
+
+  describe ".search" do
+    it "finds keys by name or email regardless of case" do
+      by_name = create(:api_key, name: "Teacher Vacancies")
+      by_email = create(:api_key, email: "vacancies@example.org")
+      create(:api_key, name: "Apply", email: "apply@example.org")
+
+      expect(described_class.search("VACANCIES")).to contain_exactly(by_name, by_email)
+    end
+
+    it "matches LIKE wildcards in the query literally" do
+      create(:api_key, name: "Apply")
+
+      expect(described_class.search("%")).to be_empty
+    end
+
+    it "returns every key when there is no query" do
+      api_key = create(:api_key)
+
+      expect(described_class.search(nil)).to contain_exactly(api_key)
     end
   end
 

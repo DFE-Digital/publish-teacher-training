@@ -74,6 +74,7 @@
   :api_key:
   - key_digest
   - prefix
+  - submission_token
   :user:
   - magic_link_token
   - blazer_access
