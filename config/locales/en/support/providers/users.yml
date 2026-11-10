@@ -2,6 +2,7 @@ en:
   support:
     providers:
       users:
+        add_user_in_publish: "Add user in Publish"
         provider_user_list:
           name: "Name"
           email: "Email"

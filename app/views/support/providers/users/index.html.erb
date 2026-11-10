@@ -14,7 +14,14 @@
 
 <%= render "support/providers/navigation" %>
 
-<%= govuk_button_link_to t("components.page_titles.support.providers.users.new"), new_support_recruitment_cycle_provider_user_path(@provider.recruitment_cycle_year, @provider) %>
+<%= govuk_button_link_to(
+  t("support.providers.users.add_user_in_publish"),
+  new_publish_provider_user_path(
+    provider_code: @provider.provider_code,
+    return_to: "support",
+    recruitment_cycle_year: @provider.recruitment_cycle_year,
+  ),
+) %>
 <%= render Users::SortLinksComponent.new(
   sort: @sort,
   name_path: support_recruitment_cycle_provider_users_path(@provider.recruitment_cycle_year, @provider),
