@@ -76,6 +76,13 @@
   white-space: nowrap;
 }
 
+.app-table--history {
+  // Keep status / Admin tags on the same small type scale as the table text.
+  .govuk-tag {
+    @include govuk-font($size: 16, $weight: bold, $line-height: 1);
+  }
+}
+
 .app-table--history__time,
 .app-table--history__user {
   width: 1%;
