@@ -6,6 +6,7 @@ module PageObjects
       set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/users"
 
       sections :users, PageObjects::Sections::User, ".user-row"
+      element :add_user_in_publish, ".govuk-button", text: "Add user in Publish"
       element :success_notification, ".govuk-notification-banner.govuk-notification-banner--success"
       element :remove_user_from_provider_button, "#remove-provider"
     end

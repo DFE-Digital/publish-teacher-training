@@ -20,26 +20,10 @@ module Support
         provider_user
       end
 
-      def new
-        provider
-        @user_form = UserForm.new(current_user, user)
-        @user_form.clear_stash
-      end
-
       def edit
         provider
         provider_user
         @user_form = UserForm.new(current_user, provider_user)
-      end
-
-      def create
-        provider
-        @user_form = UserForm.new(current_user, user, params: user_params, provider:)
-        if @user_form.stash
-          redirect_to support_recruitment_cycle_provider_check_user_path
-        else
-          render(:new)
-        end
       end
 
       def update
@@ -60,10 +44,6 @@ module Support
       end
 
     private
-
-      def user
-        User.find_or_initialize_by(email: params.dig(:support_user_form, :email)&.downcase)
-      end
 
       def user_params
         params.expect(support_user_form: %i[first_name last_name email])

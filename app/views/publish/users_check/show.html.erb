@@ -2,12 +2,12 @@
 <%= content_for :page_title, page_title %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(new_publish_provider_user_path) %>
+  <%= govuk_back_link_to(new_publish_provider_user_path(**user_add_flow_params)) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
-    <%= form_with(model: @user_form, url: publish_provider_check_user_path, method: :put, local: true) do |f| %>
+    <%= form_with(model: @user_form, url: publish_provider_check_user_path(**user_add_flow_params), method: :put, local: true) do |f| %>
 
       <%= f.hidden_field(:email, value: @user_form.email) %>
 
@@ -19,19 +19,19 @@
             component.with_row do |row|
               row.with_key { t("users.first_name") }
               row.with_value(text:  @user_form.first_name)
-              row.with_action(text: t("change"), href: new_publish_provider_user_path, classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
+              row.with_action(text: t("change"), href: new_publish_provider_user_path(**user_add_flow_params), classes: "first_name", visually_hidden_text: t("users.first_name").downcase)
             end
 
             component.with_row do |row|
               row.with_key { t("users.last_name") }
               row.with_value(text: @user_form.last_name)
-              row.with_action(text: t("change"), href: new_publish_provider_user_path, classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
+              row.with_action(text: t("change"), href: new_publish_provider_user_path(**user_add_flow_params), classes: "last_name", visually_hidden_text: t("users.last_name").downcase)
             end
 
             component.with_row do |row|
               row.with_key { t("users.email") }
               row.with_value(text:  @user_form.email)
-              row.with_action(text: t("change"), href: new_publish_provider_user_path, classes: "email", visually_hidden_text: t("users.email").downcase)
+              row.with_action(text: t("change"), href: new_publish_provider_user_path(**user_add_flow_params), classes: "email", visually_hidden_text: t("users.email").downcase)
             end
           end %>
 
@@ -46,7 +46,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_users_path(params[:provider_code])) %>
+      <%= govuk_link_to(t("cancel"), users_cancel_path) %>
     </p>
   </div>
 </div>

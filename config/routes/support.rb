@@ -40,8 +40,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
         post :manual_rollover_confirm, to: "providers/manual_rollover#confirm"
       end
 
-      resource :check_user, only: %i[show update], controller: "providers/users_check", path: "users/check"
-      resources :users, controller: "providers/users" do
+      resources :users, controller: "providers/users", except: %i[new create] do
         member do
           get :delete
           delete :delete, to: "providers/users#destroy"

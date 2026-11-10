@@ -453,8 +453,6 @@ en:
             edit: "Edit school details"
             check: "Check your answers"
           users:
-            new: "Add user"
-            check: "Check your answers"
             show: "User overview"
             delete: "Are you sure you want to remove this user?"
           accredited_providers:
