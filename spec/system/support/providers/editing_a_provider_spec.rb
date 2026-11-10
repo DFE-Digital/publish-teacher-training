@@ -52,6 +52,10 @@ private
   end
 
   def then_i_can_view_provider_details
+    expect(page).to have_css(
+      "h1 a[href='#{publish_provider_recruitment_cycle_path(@provider.provider_code, @provider.recruitment_cycle_year)}']",
+      text: @provider.name_and_code,
+    )
     expect(page.all("table.govuk-table thead th").map(&:text)).to eq(
       ["Provider name", "Provider code", "Accredited provider number", "UKPRN", "View in Publish"],
     )
