@@ -3,6 +3,7 @@
 module Courses
   class Query
     DEFAULT_RADIUS_IN_MILES = 10
+    FUNDING_SORT_SQL = "case funding when 'fee' then 0 else 1 end"
 
     attr_reader :applied_scopes, :scope, :params
 
@@ -477,11 +478,7 @@ module Courses
     # prevent our sorting from placing Salary course in amongst the Fee courses
     # during sorting, we initially sort by funding type here
     def funding_sorting
-      Arel.sql("#{funding_sort_sql} fee_funding")
-    end
-
-    def funding_sort_sql
-      "case funding when 'fee' then 0 else 1 end"
+      Arel.sql("#{FUNDING_SORT_SQL} fee_funding")
     end
 
     def fee_sort_sql(fee_key)
@@ -498,7 +495,7 @@ module Courses
         .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
-          Arel.sql(funding_sort_sql).asc,
+          Arel.sql(FUNDING_SORT_SQL).asc,
           Arel.sql(fee_sort_sql("FeeUkEu")).asc,
           {
             courses_table[:name] => :asc,
@@ -519,7 +516,7 @@ module Courses
         .joins(latest_published_enrichment_join_sql)
         .group("course.id, provider.id, provider.provider_name")
         .order(
-          Arel.sql(funding_sort_sql).asc,
+          Arel.sql(FUNDING_SORT_SQL).asc,
           Arel.sql(fee_sort_sql("FeeInternational")).asc,
           {
             courses_table[:name] => :asc,
