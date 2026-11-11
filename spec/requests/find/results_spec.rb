@@ -41,6 +41,12 @@ describe "/results" do
         expect(page.css(".govuk-pagination__next")).to be_empty
       end
 
+      it "handles a search with a question mark" do
+        get "/results", params: { provider_name: "Who?" }
+
+        expect(response).to have_http_status(:ok)
+      end
+
       it "still counts courses" do
         expect(page.text).to include("12 results")
       end

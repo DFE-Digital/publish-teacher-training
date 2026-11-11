@@ -38,6 +38,21 @@ RSpec.describe Courses::ResultCards do
     )
   end
 
+  context "when the search has characters that look like bind markers" do
+    let(:provider) { create(:provider, provider_name: "Who? St:Mary's") }
+    let(:params) { { provider_name: provider.provider_name, order: "provider_name_ascending" } }
+
+    before do
+      create_course(provider:, course_code: "W001")
+      create_course(provider:, course_code: "W002")
+    end
+
+    it "groups the results" do
+      expect(card_codes(result_cards.cards)).to eq([%w[W001 W002]])
+      expect(result_cards.count).to eq(1)
+    end
+  end
+
   context "when no courses match" do
     it "has no cards" do
       expect(result_cards.count).to eq(0)
