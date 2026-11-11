@@ -4,6 +4,7 @@ require "spec_helper"
 
 RSpec.describe "Viewing recruitment cycles", service: :publish do
   include DfESignInUserHelper
+  include SettingsPageSpecsHelper
   let(:provider) { create(:provider) }
   let(:user) { create(:user, :admin, providers: [provider]) }
   let!(:previous_recruitment_cycle) { find_or_create(:recruitment_cycle, :previous) }
@@ -17,6 +18,14 @@ RSpec.describe "Viewing recruitment cycles", service: :publish do
     when_i_click_recruitment_cycles
     then_i_see_the_current_recruitment_cycle
     then_i_see_the_past_recruitment_cycles
+  end
+
+  scenario "I can navigate back to the settings page via the backlink", travel: mid_cycle do
+    given_i_visit_support_settings
+    when_i_click_recruitment_cycles
+    then_i_see_the_backlink_to_the_settings_page
+    then_i_click_back_button
+    then_i_am_on_the_settings_page
   end
 
   def given_i_visit_support_settings

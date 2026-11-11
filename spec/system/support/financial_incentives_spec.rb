@@ -4,6 +4,7 @@ require "spec_helper"
 
 RSpec.describe "Financial incentives support" do
   include DfESignInUserHelper
+  include SettingsPageSpecsHelper
 
   before do
     given_a_support_user_exists
@@ -73,6 +74,14 @@ RSpec.describe "Financial incentives support" do
     when_i_visit_the_financial_incentives_page_with_year("9999")
     then_i_see_the_current_financial_incentive_year
     and_i_do_not_see_year_option("9999")
+  end
+
+  scenario "I can navigate back to the settings page via the backlink", travel: mid_cycle do
+    given_i_visit_the_support_settings_page
+    when_i_click_financial_incentives
+    then_i_see_the_backlink_to_the_settings_page
+    then_i_click_back_button
+    then_i_am_on_the_settings_page
   end
 
 private
