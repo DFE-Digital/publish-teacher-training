@@ -11,15 +11,17 @@ module Courses
   # Cards are numbered in the database with window functions over the sorted
   # results, so only the courses on the requested page are loaded.
   class ResultCards
+    Row = Data.define(:course_id, :card_number, :total_cards)
+
     def initialize(query:, page:, per_page:)
       @query = query
       @page = page
       @per_page = per_page
     end
 
-    # Number of cards across every page.
+    # Number of cards across every page. Every row carries it.
     def count
-      @count ||= rows.first&.last || 0
+      @count ||= rows.first&.total_cards || 0
     end
 
     # The courses on this page's cards, in the order of the search.
@@ -36,13 +38,12 @@ module Courses
 
     def card_numbers
       @card_numbers ||= rows
-        .select { |_id, card_number, _total_cards| card_number.between?(first_card, last_card) }
-        .to_h { |id, card_number, _total_cards| [id, card_number] }
+        .select { |row| row.card_number.between?(first_card, last_card) }
+        .to_h { |row| [row.course_id, row.card_number] }
     end
 
-    # [course id, card number, total cards] for each course on this page, plus
-    # the first course in the results so the total comes back even on a page
-    # past the last card.
+    # A Row for each course on this page, plus the first course in the results
+    # so the total comes back even on a page past the last card.
     #
     # Each level is a relation rather than SQL built from strings, so the
     # search's values (a provider name with a "?", say) are never read as bind
@@ -53,6 +54,7 @@ module Courses
         .where("card_number BETWEEN ? AND ? OR position = 1", first_card, last_card)
         .order(Arel.sql("cards.position"))
         .pluck(Arel.sql("cards.id"), Arel.sql("cards.card_number"), Arel.sql("cards.total_cards"))
+        .map { |course_id, card_number, total_cards| Row.new(course_id:, card_number:, total_cards:) }
     end
 
     # Adds up the card starts: a running total gives each course its card
