@@ -203,7 +203,7 @@ group :development, :test do
   gem "rspec-wait"
 
   # Test framework
-  gem "rspec-rails", "8.0.5"
+  gem "rspec-rails", "8.1.0"
 
   gem "capybara-playwright-driver"
 
