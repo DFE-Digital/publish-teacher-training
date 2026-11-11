@@ -18,12 +18,6 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
       then_i_see_recent_providers_onboarding_form_requests_entries
     end
 
-    scenario "check for backlink presence and navigation on the onboarding page", travel: mid_cycle do
-      then_i_see_backlink_to_support_homepage
-      then_i_click_back_button
-      then_i_am_on_the_support_homepage
-    end
-
     context "with more than one page of requests" do
       before do
         create_list(:providers_onboarding_form_request, 15)

@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Support console feedback view", service: :support do
   include ActionView::Helpers::TextHelper
+  include SettingsPageSpecsHelper
   let(:user) { create(:user, :admin) }
 
   before { given_i_am_authenticated }
@@ -16,10 +17,10 @@ RSpec.describe "Support console feedback view", service: :support do
       then_i_see_recent_feedback_entries
     end
 
-    scenario "check for backlink presence and navigation on feedback page", travel: mid_cycle do
-      then_i_see_backlink_to_support_homepage
-      click_link_or_button "Back"
-      then_i_am_on_the_support_homepage
+    scenario "I can navigate back to the settings page via the backlink", travel: mid_cycle do
+      then_i_see_the_backlink_to_the_settings_page
+      then_i_click_back_button
+      then_i_am_on_the_settings_page
     end
   end
 

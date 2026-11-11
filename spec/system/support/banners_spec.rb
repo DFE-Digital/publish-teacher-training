@@ -4,10 +4,18 @@ require "spec_helper"
 
 RSpec.describe "Banner management support" do
   include DfESignInUserHelper
+  include SettingsPageSpecsHelper
 
   before do
     given_a_support_user_exists
     sign_in_system_test(user: support_user)
+  end
+
+  scenario "I can navigate back to the settings page via the backlink", travel: mid_cycle do
+    when_i_visit_the_banners_page(:active)
+    then_i_see_the_backlink_to_the_settings_page
+    then_i_click_back_button
+    then_i_am_on_the_settings_page
   end
 
   scenario "viewing active banners" do
