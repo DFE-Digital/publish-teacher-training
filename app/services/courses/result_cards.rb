@@ -43,43 +43,44 @@ module Courses
     # [course id, card number, total cards] for each course on this page, plus
     # the first course in the results so the total comes back even on a page
     # past the last card.
+    #
+    # Each level is a relation rather than SQL built from strings, so the
+    # search's values (a provider name with a "?", say) are never read as bind
+    # markers. Only the page condition is sanitised.
     def rows
-      @rows ||= connection.select_rows(page_sql).map { |row| row.map(&:to_i) }
+      @rows ||= Course.unscoped
+        .from(numbered_cards, :cards)
+        .where("card_number BETWEEN ? AND ? OR position = 1", first_card, last_card)
+        .order(Arel.sql("cards.position"))
+        .pluck(Arel.sql("cards.id"), Arel.sql("cards.card_number"), Arel.sql("cards.total_cards"))
     end
 
-    def page_sql
-      Course.sanitize_sql_array([<<~SQL, first_card, last_card])
-        SELECT id, card_number, total_cards
-        FROM (
-          SELECT id, position,
-                 SUM(starts_card) OVER (ORDER BY position) AS card_number,
-                 SUM(starts_card) OVER () AS total_cards
-          FROM (#{marked_sql}) marked
-        ) cards
-        WHERE card_number BETWEEN ? AND ? OR position = 1
-        ORDER BY position
+    # Adds up the card starts: a running total gives each course its card
+    # number, and a total over every course gives the number of cards.
+    def numbered_cards
+      Course.unscoped.from(marked_courses, :marked).select(<<~SQL)
+        marked.id, marked.position,
+        SUM(starts_card) OVER (ORDER BY position) AS card_number,
+        SUM(starts_card) OVER () AS total_cards
       SQL
     end
 
     # Marks each course that starts a new card: the first course, and any
     # course whose provider or main subject differs from the course before it.
-    def marked_sql
-      <<~SQL
-        SELECT id, position,
-               CASE WHEN (provider_id, master_subject_id) IS NOT DISTINCT FROM
-                         (LAG(provider_id) OVER previous, LAG(master_subject_id) OVER previous)
-                    THEN 0 ELSE 1 END AS starts_card
-        FROM (#{ranked_sql}) ranked
-        WINDOW previous AS (ORDER BY position)
+    def marked_courses
+      Course.unscoped.from(ranked_courses, :ranked).select(<<~SQL)
+        ranked.id, ranked.position,
+        CASE WHEN (provider_id, master_subject_id) IS NOT DISTINCT FROM
+                  (LAG(provider_id) OVER (ORDER BY position), LAG(master_subject_id) OVER (ORDER BY position))
+             THEN 0 ELSE 1 END AS starts_card
       SQL
     end
 
     # Each course's position in the search's sort order.
-    def ranked_sql
+    def ranked_courses
       @query.scope
         .unscope(:select, :order)
         .select("course.id, course.provider_id, course.master_subject_id, ROW_NUMBER() OVER (ORDER BY #{@query.order_sql}) AS position")
-        .to_sql
     end
 
     def first_card
@@ -88,10 +89,6 @@ module Courses
 
     def last_card
       @page * @per_page
-    end
-
-    def connection
-      Course.connection
     end
   end
 end
