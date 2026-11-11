@@ -77,9 +77,11 @@
 }
 
 .app-table--history {
+  font-weight: 400;
+
   // Keep status / Admin tags on the same small type scale as the table text.
   .govuk-tag {
-    @include govuk-font($size: 16, $weight: bold, $line-height: 1);
+    @include govuk-font($size: 16, $weight: regular, $line-height: 1);
   }
 }
 
