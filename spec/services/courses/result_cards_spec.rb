@@ -63,12 +63,22 @@ RSpec.describe Courses::ResultCards do
   context "when a provider has courses of the same subject next to each other" do
     before do
       create_course(provider: ashford, course_code: "A001")
-      create_course(provider: ashford, course_code: "A002", is_send: true)
+      create_course(provider: ashford, course_code: "A002", name: "Mathematics (SEND)", is_send: true)
       create_course(provider: bexley, course_code: "B001")
     end
 
     it "puts them on one card, including SEND courses" do
       expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[B001]])
+    end
+
+    context "when sorting by course name" do
+      let(:params) { { order: "course_name_ascending" } }
+
+      # The sort comes first: other providers' "Mathematics" courses sort
+      # before "Mathematics (SEND)", so the SEND course gets its own card.
+      it "gives the SEND course its own card" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002]])
+      end
     end
   end
 
