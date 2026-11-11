@@ -385,7 +385,11 @@ module Courses
 
       @applied_scopes[:order] = params[:order]
 
-      @scope.order("nearby_courses.distance_m ASC, LOWER(provider.provider_name) ASC, course.id ASC")
+      # Provider id and main subject keep each provider's courses of a subject
+      # together, so grouped results don't split them into several cards.
+      @scope.order(
+        "nearby_courses.distance_m ASC, LOWER(provider.provider_name) ASC, provider.id ASC, course.master_subject_id ASC, course.id ASC",
+      )
     end
 
     def course_name_ascending_order_scope
