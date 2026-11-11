@@ -136,13 +136,16 @@ RSpec.describe "Support console feedback view", service: :support do
     visit support_feedback_index_path
   end
 
-  def then_i_see_feedback_table
-    expect(page).to have_content("Feedback on Find teacher training courses")
+def then_i_see_feedback_table
+  expect(page).to have_content("Feedback on Find teacher training courses")
+
+  within("thead") do
     expect(page).to have_content("ID")
     expect(page).to have_content("Ease of use")
     expect(page).to have_content("Feedback")
     expect(page).to have_content("Created at")
   end
+end
 
   def then_i_see_recent_feedback_entries
     Feedback.order(created_at: :desc).limit(50).each do |feedback|
