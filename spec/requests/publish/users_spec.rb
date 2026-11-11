@@ -78,8 +78,17 @@ RSpec.describe "Publish provider users", type: :request do
       )
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("return_to=support")
-      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to include("return_to=support")
+      # Back stays on the previous wizard step and keeps return_to; Cancel exits to Support.
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        new_publish_provider_user_path(
+          provider_code: provider.provider_code,
+          return_to: "support",
+          recruitment_cycle_year: provider.recruitment_cycle_year,
+        ),
+      )
+      expect(response.body).to include(
+        support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider),
+      )
     end
 
     it "uses recruitment_cycle_year from params over the session cycle year" do
