@@ -113,6 +113,23 @@ RSpec.describe Courses::ResultCards do
     end
   end
 
+  context "when a provider's subjects are at the same distance" do
+    let(:params) { { latitude: 52.4862, longitude: -1.8904, radius: 10, order: "distance" } }
+
+    before do
+      school = create(:gias_school, latitude: 52.4862, longitude: -1.8904)
+
+      [mathematics, physics, mathematics, physics].each_with_index do |subject, index|
+        course = create_course(provider: ashford, course_code: "A00#{index}", subject:)
+        create(:course_school, course:, gias_school: school)
+      end
+    end
+
+    it "keeps each subject on one card" do
+      expect(result_cards.cards.map { |card| card.map(&:master_subject_id).uniq }).to contain_exactly([mathematics.id], [physics.id])
+    end
+  end
+
   context "when a filter leaves one course from a provider" do
     let(:params) { { study_types: %w[part_time], order: "provider_name_ascending" } }
 
