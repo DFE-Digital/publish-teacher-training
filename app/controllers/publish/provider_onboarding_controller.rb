@@ -24,8 +24,8 @@ module Publish
     def check_answers; end
 
     def confirm
-      # Submit the onboarding request and change its status to 'submitted' if valid (and not an admin user)
-      if @onboarding_request.submit(admin_user?)
+      # Confirm the onboarding form and mark the request as submitted
+      if @onboarding_request.submit
         redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         # if submission fails (e.g. validations), re-render the check your answers page with errors
@@ -81,7 +81,7 @@ module Publish
       params.require(:providers_onboarding_form_request).permit(
         :provider_name, :email_address, :first_name, :last_name,
         :address_line_1, :address_line_2, :address_line_3, :town_or_city, :county, :postcode, :telephone, :contact_email_address,
-        :website, :ukprn, :accredited_provider, :urn
+        :website, :ukprn, :accredited_provider, :accredited_provider_number, :provider_type, :urn
       )
     end
   end

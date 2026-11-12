@@ -36,9 +36,21 @@
     <% row.with_key { "Is the organisation an accredited provider?" } %>
     <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %>
   <% end %>
+  <% if @onboarding_request.accredited_provider? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { "Accredited provider number" } %>
+      <% row.with_value { @onboarding_request.accredited_provider_number } %>
+    <% end %>
+  <% end %>
   <% summary_list.with_row do |row| %>
-    <% row.with_key { "Unique reference number (URN)" } %>
-    <% row.with_value { @onboarding_request.urn } %>
+    <% row.with_key { "Provider type" } %>
+    <% row.with_value { @onboarding_request.provider_type_label } %>
+  <% end %>
+  <% if @onboarding_request.lead_school? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { "Unique reference number (URN)" } %>
+      <% row.with_value { @onboarding_request.urn } %>
+    <% end %>
   <% end %>
 <% end %>
 <!-- Contact Details -->
@@ -77,16 +89,19 @@
     <% row.with_value { @onboarding_request.last_name } %>
   <% end %>
 <% end %>
-<div class="govuk-button-group">
-  <%= button_to "Accept",
+<p class="govuk-body">
+  Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.
+</p>
+<div class="govuk-button-group" id="onboard-provider">
+  <%= button_to "Onboard provider",
       support_providers_onboarding_form_request_path(@onboarding_request, status: "accept"),
       method: :patch,
       class: "govuk-button",
       form_class: "inline-form" %>
-  <%= button_to "Reject",
+  <%= button_to "Reject provider",
       support_providers_onboarding_form_request_path(@onboarding_request, status: "reject"),
       method: :patch,
-      class: "govuk-button govuk-button--warning govuk-!-margin-left-2",
+      class: "govuk-link app-link--destructive app-button-link",
       form_class: "inline-form" %>
 </div>
 <p class="govuk-body">

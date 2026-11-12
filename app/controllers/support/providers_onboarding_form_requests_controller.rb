@@ -2,7 +2,7 @@
 
 module Support
   class ProvidersOnboardingFormRequestsController < Support::ApplicationController
-    UPDATE_STATUS = { accept: "closed", reject: "rejected" }.freeze
+    UPDATE_STATUS = { reject: "rejected" }.freeze
     before_action :set_request, only: %i[show update]
 
     def index
@@ -36,8 +36,9 @@ module Support
     end
 
     def update
-      # Redirects to listing page with success or error message based on whether the update was successful
-      if updated_status && @onboarding_request.update(status: updated_status)
+      if params[:status] == "accept"
+        onboard_provider
+      elsif updated_status && @onboarding_request.update(status: updated_status)
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".updated_status_message_html", updated_status: updated_status.humanize, form_name: @onboarding_request.form_name) }
       else
         redirect_to support_providers_onboarding_form_requests_path, flash: { error: t(".error_message_html", form_name: @onboarding_request.form_name) }
@@ -49,6 +50,24 @@ module Support
     def set_request
       # Finds the request by id param for show and update actions
       @onboarding_request = ProvidersOnboardingFormRequest.find(params[:id])
+    end
+
+    def onboard_provider
+      result = Support::Providers::OnboardFromFormRequest.call(onboarding_request: @onboarding_request)
+
+      if result.success?
+        redirect_to support_recruitment_cycle_provider_path(result.provider.recruitment_cycle_year, result.provider),
+                    flash: {
+                      success: t(
+                        "support.providers.onboard_from_form_request.success",
+                        provider_name: result.provider.provider_name,
+                        provider_code: result.provider.provider_code,
+                      ),
+                    }
+      else
+        redirect_to support_providers_onboarding_form_request_path(@onboarding_request),
+                    flash: { error: { id: "onboard-provider", message: result.error_message } }
+      end
     end
 
     # Determines the updated status based on the status param passed in the request from the details/show page
