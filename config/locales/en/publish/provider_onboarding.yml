@@ -17,6 +17,7 @@ en:
         accredited_provider: Are you an accredited provider?
         accredited_provider_hint_html: Select yes if your organisation is accredited by the Department for Education (DfE) to provide courses that lead to qualified teacher status (QTS).<br><br>If you work with an accredited provider but are not accredited yourself, select no
         accredited_provider_number: Accredited provider number
+        accredited_provider_number_hint: Enter your Accredited Provider number. If you don't know it, leave this blank and our support team find this for you.
         provider_type: Provider type
         provider_type_university: Higher education institution (HEI)
         provider_type_scitt: School centred initial teacher training (SCITT)
