@@ -59,6 +59,11 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_field("Yes", type: "radio")
     expect(page).to have_field("No", type: "radio")
     expect(page).to have_field("Accredited provider number", visible: :all)
+    expect(page).to have_css(
+      ".govuk-hint",
+      text: "Enter your Accredited Provider number. If you don't know it, leave this blank and our support team find this for you.",
+      visible: :all,
+    )
     expect(page).to have_content("Provider type")
     expect(page).to have_field("Higher education institution (HEI)")
     expect(page).to have_field("School centred initial teacher training (SCITT)")

@@ -158,9 +158,19 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content(onboarding_request.accredited_provider ? "Yes" : "No")
     expect(page).to have_content("Provider type")
     expect(page).to have_content(onboarding_request.provider_type_label)
+    expect(page).to have_link(
+      "Change",
+      href: publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor: "providers-onboarding-form-request-provider-type-field"),
+    )
     if onboarding_request.accredited_provider?
       expect(page).to have_content("Accredited provider number")
-      expect(page).to have_content(onboarding_request.accredited_provider_number)
+      accredited_provider_number_path = publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor: "providers-onboarding-form-request-accredited-provider-number-field")
+      if onboarding_request.accredited_provider_number.present?
+        expect(page).to have_content(onboarding_request.accredited_provider_number)
+        expect(page).to have_link("Change", href: accredited_provider_number_path)
+      else
+        expect(page).to have_link("Enter accredited provider number", href: accredited_provider_number_path)
+      end
     end
     if onboarding_request.lead_school?
       expect(page).to have_content("Unique reference number (URN)")
@@ -197,6 +207,13 @@ module ProvidersOnboardingFormRequestsHelper
       text: "Reject provider",
     )
     expect(page).to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
+  end
+
+  def then_i_do_not_see_onboard_or_reject_actions
+    expect(page).not_to have_button("Onboard provider")
+    expect(page).not_to have_button("Reject provider")
+    expect(page).not_to have_content("Click Onboard provider to approve the request")
+    expect(page).not_to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
   end
 
   def when_i_click_onboard_provider
