@@ -2,10 +2,10 @@ en:
   activerecord:
     attributes:
       api_key:
-        name: Name
+        name: Key name
         email: Email address
         prefix: Key prefix
-        created_at: Created
+        created_at: Date created
       recruitment_cycle:
         year: Year
         start_date: Start date

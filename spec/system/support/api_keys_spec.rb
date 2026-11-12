@@ -71,16 +71,16 @@ private
   end
 
   def when_i_search_for(query)
-    fill_in "Search by name or email address", with: query
+    fill_in "Search by key name or email address", with: query
     click_on "Search"
   end
 
   def and_i_click_create_api_key
-    click_on "Create API key"
+    click_on "Create a new key"
   end
 
   def and_i_fill_in_the_key_details
-    fill_in "Name", with: "Teacher Vacancies"
+    fill_in "Key name", with: "Teacher Vacancies"
     fill_in "Email address", with: "vacancies@example.org"
   end
 
@@ -89,7 +89,7 @@ private
   end
 
   def and_i_click_revoke_for_the_teacher_vacancies_key
-    click_on "Revoke Teacher Vacancies"
+    click_on "Revoke key Teacher Vacancies"
   end
 
   def when_i_confirm_revoking_the_key
@@ -97,7 +97,7 @@ private
   end
 
   def then_i_see_what_api_keys_are_for
-    expect(page).to have_content("An API key lets an integration authenticate with the Publish teacher training courses API")
+    expect(page).to have_content("API keys allow providers’ integrations to securely access the Publish teacher training courses API")
   end
 
   def and_i_see_the_active_keys_newest_first
@@ -113,7 +113,7 @@ private
 
   def then_i_see_the_full_key_once
     expect(page).to have_content("API key created")
-    expect(page).to have_content("This is the only time the key will be shown. Copy it now and store it securely.")
+    expect(page).to have_content("This is the only time the key will be shown. Copy it now and share it securely with the provider.")
   end
 
   def and_the_key_shown_authenticates_as_the_new_key
@@ -126,7 +126,7 @@ private
     api_key = APIKey.sole
 
     expect(page).to have_table(rows: [
-      ["Teacher Vacancies", "vacancies@example.org", api_key.prefix, api_key.created_at.to_fs(:govuk_date), "Revoke Teacher Vacancies"],
+      ["Teacher Vacancies", "vacancies@example.org", api_key.prefix, api_key.created_at.to_fs(:govuk_date), "Revoke key Teacher Vacancies"],
     ])
     expect(page).to have_no_content(/#{APIKey::SECRET_PREFIX}\h{64}/o)
   end
@@ -140,8 +140,8 @@ private
   end
 
   def then_i_am_warned_that_integrations_will_stop_authenticating
-    expect(page).to have_content("Are you sure you want to revoke Teacher Vacancies?")
-    expect(page).to have_content("Any integration using this key will stop authenticating as soon as it is revoked. This cannot be undone.")
+    expect(page).to have_content("Are you sure you want to revoke this API key?")
+    expect(page).to have_content("Any integration using this key will stop working. This action cannot be undone.")
   end
 
   def then_i_see_the_key_was_revoked
@@ -157,10 +157,10 @@ private
   end
 
   def vacancies_row
-    ["Teacher Vacancies", "vacancies@example.org", vacancies_key.prefix, "2 October 2026", "Revoke Teacher Vacancies"]
+    ["Teacher Vacancies", "vacancies@example.org", vacancies_key.prefix, "2 October 2026", "Revoke key Teacher Vacancies"]
   end
 
   def apply_row
-    ["Apply", "apply@example.org", apply_key.prefix, "20 October 2026", "Revoke Apply"]
+    ["Apply", "apply@example.org", apply_key.prefix, "20 October 2026", "Revoke key Apply"]
   end
 end
