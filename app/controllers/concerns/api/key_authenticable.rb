@@ -17,7 +17,10 @@ module API
       return if header.nil?
 
       token = header.b[BEARER_KEY, 1]
-      reject_api_key unless token && APIKey.find_active_by_secret(token)
+      api_key = APIKey.find_active_by_secret(token) if token
+      return reject_api_key unless api_key
+
+      api_key.record_use!
     end
 
     def reject_api_key
