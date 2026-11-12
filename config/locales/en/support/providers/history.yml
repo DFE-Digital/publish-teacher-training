@@ -9,6 +9,7 @@ en:
           admin: Admin
           no_changes: No changes have been recorded for this provider.
           system_user: System
+          deleted_user: Deleted user
         status_labels:
           open: Open
           closed: Closed

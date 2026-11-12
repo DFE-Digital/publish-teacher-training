@@ -202,4 +202,17 @@ RSpec.describe Support::Providers::HistoryQuery do
     expect(entries.first.user_name).to eq("System")
     expect(entries.first).not_to be_admin
   end
+
+  it "shows Deleted user when the audit user no longer exists" do
+    deleted_user = create(:user, first_name: "Gone", last_name: "Person")
+    create_audit!(
+      auditable: provider,
+      user: deleted_user,
+      changes: { "provider_name" => %w[A B] },
+    )
+    deleted_user.destroy!
+
+    expect(entries.first.user_name).to eq("Deleted user")
+    expect(entries.first).not_to be_admin
+  end
 end
