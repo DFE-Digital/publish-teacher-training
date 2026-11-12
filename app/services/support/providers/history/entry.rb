@@ -47,7 +47,7 @@ module Support
           "withdrawn" => "red",
         }.freeze
 
-        attr_reader :change_type, :old_value, :new_value, :created_at, :user, :course
+        attr_reader :change_type, :old_value, :new_value, :created_at, :user, :user_id, :course
 
         def self.entries_for(audit:, courses_by_id:)
           CHANGE_TYPES.filter_map do |change_type, definition|
@@ -66,6 +66,7 @@ module Support
               new_value:,
               created_at: audit.created_at,
               user: audit.user,
+              user_id: audit.user_id,
               course: course_for(audit, courses_by_id),
             )
           end
@@ -121,12 +122,13 @@ module Support
         end
         private_class_method :course_for
 
-        def initialize(change_type:, old_value:, new_value:, created_at:, user:, course:)
+        def initialize(change_type:, old_value:, new_value:, created_at:, user:, user_id:, course:)
           @change_type = change_type
           @old_value = old_value
           @new_value = new_value
           @created_at = created_at
           @user = user
+          @user_id = user_id
           @course = course
         end
 
@@ -143,7 +145,10 @@ module Support
         end
 
         def user_name
-          user&.full_name.presence || I18n.t("support.providers.history.index.system_user")
+          return user.full_name if user&.full_name.present?
+          return I18n.t("support.providers.history.index.deleted_user") if user_id.present?
+
+          I18n.t("support.providers.history.index.system_user")
         end
 
         def formatted_time
