@@ -44,21 +44,21 @@ describe TabNavigation do
     let(:items) do
       [
         { name: "Details", url: "/support/#{year}/providers/1" },
-        { name: "Schools", url: "/support/#{year}/providers/1/schools" },
+        { name: "Courses", url: "/support/#{year}/providers/1/courses" },
       ]
     end
 
     before do
-      with_request_url "/support/#{year}/providers/1/schools/search", host: "publish.localhost" do
+      with_request_url "/support/#{year}/providers/1/courses/ABC1", host: "publish.localhost" do
         render_inline(described_class.new(items:))
       end
     end
 
     it "keeps the parent section active" do
-      schools = component.find(".app-tab-navigation__link", text: "Schools")
+      courses = component.find(".app-tab-navigation__link", text: "Courses")
       details = component.find(".app-tab-navigation__link", text: "Details")
 
-      expect(schools["aria-current"]).to eq("page")
+      expect(courses["aria-current"]).to eq("page")
       expect(details["aria-current"]).to be_nil
     end
   end
