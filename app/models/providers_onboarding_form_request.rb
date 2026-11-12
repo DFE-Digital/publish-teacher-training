@@ -100,11 +100,7 @@ private
 
   def accredited_provider_number_format
     return unless accredited_provider?
-
-    if accredited_provider_number.blank?
-      errors.add(:accredited_provider_number, :blank)
-      return
-    end
+    return if accredited_provider_number.blank?
 
     if university?
       errors.add(:accredited_provider_number, :university_format) unless accredited_provider_number.match?(/\A1\d{3}\z/)

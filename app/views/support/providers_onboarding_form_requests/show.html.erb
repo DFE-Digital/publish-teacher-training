@@ -23,7 +23,7 @@
 <% end %>
 <!-- Organisation Details -->
 <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
-<%= govuk_summary_list(actions: false) do |summary_list| %>
+<%= govuk_summary_list do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Provider name" } %>
     <% row.with_value { @onboarding_request.provider_name } %>
@@ -37,14 +37,31 @@
     <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %>
   <% end %>
   <% if @onboarding_request.accredited_provider? %>
+    <% accredited_provider_number_path = publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor: "providers-onboarding-form-request-accredited-provider-number-field") %>
     <% summary_list.with_row do |row| %>
       <% row.with_key { "Accredited provider number" } %>
-      <% row.with_value { @onboarding_request.accredited_provider_number } %>
+      <% if @onboarding_request.accredited_provider_number.present? %>
+        <% row.with_value { @onboarding_request.accredited_provider_number } %>
+        <% row.with_action(
+             text: "Change",
+             href: accredited_provider_number_path,
+             visually_hidden_text: "accredited provider number",
+           ) %>
+      <% else %>
+        <% row.with_value do %>
+          <%= govuk_link_to("Enter accredited provider number", accredited_provider_number_path) %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Provider type" } %>
     <% row.with_value { @onboarding_request.provider_type_label } %>
+    <% row.with_action(
+         text: "Change",
+         href: publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor: "providers-onboarding-form-request-provider-type-field"),
+         visually_hidden_text: "provider type",
+       ) %>
   <% end %>
   <% if @onboarding_request.lead_school? %>
     <% summary_list.with_row do |row| %>
@@ -89,25 +106,27 @@
     <% row.with_value { @onboarding_request.last_name } %>
   <% end %>
 <% end %>
-<p class="govuk-body">
-  Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.
-</p>
-<div class="govuk-button-group" id="onboard-provider">
-  <%= button_to "Onboard provider",
-      support_providers_onboarding_form_request_path(@onboarding_request, status: "accept"),
-      method: :patch,
-      class: "govuk-button",
-      form_class: "inline-form" %>
-  <%= button_to "Reject provider",
-      support_providers_onboarding_form_request_path(@onboarding_request, status: "reject"),
-      method: :patch,
-      class: "govuk-link app-link--destructive app-button-link",
-      form_class: "inline-form" %>
-</div>
-<p class="govuk-body">
-  <%= govuk_link_to(
-            t(".cancel"),
-            support_providers_onboarding_form_requests_path,
-          ) %>
-</p>
+<% unless @onboarding_request.onboarded? || @onboarding_request.rejected? %>
+  <p class="govuk-body">
+    Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.
+  </p>
+  <div class="govuk-button-group" id="onboard-provider">
+    <%= button_to "Onboard provider",
+        support_providers_onboarding_form_request_path(@onboarding_request, status: "accept"),
+        method: :patch,
+        class: "govuk-button",
+        form_class: "inline-form" %>
+    <%= button_to "Reject provider",
+        support_providers_onboarding_form_request_path(@onboarding_request, status: "reject"),
+        method: :patch,
+        class: "govuk-link app-link--destructive app-button-link",
+        form_class: "inline-form" %>
+  </div>
+  <p class="govuk-body">
+    <%= govuk_link_to(
+              t(".cancel"),
+              support_providers_onboarding_form_requests_path,
+            ) %>
+  </p>
+<% end %>
 </div>

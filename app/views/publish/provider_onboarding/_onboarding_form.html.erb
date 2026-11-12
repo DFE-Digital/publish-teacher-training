@@ -20,6 +20,9 @@
               url: publish_provider_onboarding_path(onboarding_request.uuid),
               method: :patch,
               local: true do |f| %>
+  <% if return_to_support? %>
+    <%= hidden_field_tag :return_to, Publish::ProviderOnboardingController::SUPPORT_RETURN_TO %>
+  <% end %>
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -47,6 +50,7 @@
         <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit do %>
           <%= f.govuk_text_field :accredited_provider_number,
             label: { text: t(".accredited_provider_number"), size: "s" },
+            hint: { text: t(".accredited_provider_number_hint") },
             width: 10,
             disabled: !can_edit %>
         <% end %>

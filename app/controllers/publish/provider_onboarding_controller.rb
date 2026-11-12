@@ -2,6 +2,10 @@
 
 module Publish
   class ProviderOnboardingController < ApplicationController
+    # Fixed token for support Change links. The redirect target is built from the
+    # onboarding request, so this value cannot be used as an open redirect.
+    SUPPORT_RETURN_TO = "support"
+
     # Public link: skip authentication and authorisation for provider onboarding form
     skip_before_action :authenticate, only: %i[show update submitted check_answers confirm], raise: false
     skip_after_action :verify_authorized, only: %i[show update submitted check_answers confirm]
@@ -12,10 +16,10 @@ module Publish
 
     # Handles the submission of the onboarding form by the provider
     def update
-      # Update the onboarding request with submitted form details and validate provider fields
-      # If successful, redirect to the check your answers page; otherwise, re-render the form with errors
+      # Update the onboarding request with submitted form details and validate provider fields.
+      # Support users who came from the request page return there. Everyone else goes to check your answers.
       if @onboarding_request.update_form_details(onboarding_request_params)
-        redirect_to check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+        redirect_to after_update_path
       else
         render :show
       end
@@ -36,7 +40,7 @@ module Publish
     # Page displayed after successful submission of the onboarding form by the provider
     def submitted; end
 
-    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?
+    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?, :return_to_support?
 
   private
 
@@ -68,6 +72,20 @@ module Publish
     # Check if the current user is an admin user
     def admin_user?
       current_user&.admin?
+    end
+
+    # Support users who opened the form from the request page return there after a
+    # successful save. Anyone else, and any other return_to value, continues to check your answers.
+    def return_to_support?
+      admin_user? && params[:return_to] == SUPPORT_RETURN_TO
+    end
+
+    def after_update_path
+      if return_to_support?
+        support_providers_onboarding_form_request_path(@onboarding_request)
+      else
+        check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      end
     end
 
     def show_already_submitted_notice?

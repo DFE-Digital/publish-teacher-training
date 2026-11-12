@@ -161,13 +161,17 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
           expect(university).to be_valid
         end
 
-        it "requires an accredited provider number when the provider is accredited" do
-          record.provider_type = "scitt"
-          record.accredited_provider = true
-          record.accredited_provider_number = nil
+        it "allows a blank accredited provider number" do
+          request = build(
+            :providers_onboarding_form_request,
+            :ready_to_onboard,
+            accredited_provider: true,
+            provider_type: "university",
+            accredited_provider_number: nil,
+            urn: nil,
+          )
 
-          expect(record).not_to be_valid
-          expect(record.errors[:accredited_provider_number]).to include("Enter an accredited provider number")
+          expect(request).to be_valid
         end
 
         it "rejects a university accredited provider number that does not start with 1" do
