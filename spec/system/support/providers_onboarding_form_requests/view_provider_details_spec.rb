@@ -7,9 +7,10 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
   include ProvidersOnboardingFormRequestsHelper
 
   let(:user) { create(:user, :admin) }
-  let!(:onboarding_request) { create(:providers_onboarding_form_request, :submitted) }
+  let!(:onboarding_request) { create(:providers_onboarding_form_request, :ready_to_onboard) }
 
   before do
+    find_or_create(:recruitment_cycle)
     given_i_am_authenticated
   end
 
@@ -25,11 +26,36 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       then_i_see_action_buttons_and_cancel_link
     end
 
-    scenario "I can accept an onboarding request" do
-      when_i_click_accept
+    scenario "I can onboard a provider" do
+      when_i_click_onboard_provider
 
-      then_i_am_on_the_providers_onboarding_form_requests_page
-      then_status_should_be("Closed", onboarding_request)
+      then_i_am_on_the_new_provider_organisation_page(onboarding_request)
+      then_i_see_the_onboarded_success_banner(onboarding_request)
+      then_the_provider_and_first_user_are_created(onboarding_request)
+    end
+
+    scenario "I cannot onboard a provider that has already been onboarded" do
+      when_i_click_onboard_provider
+      when_i_visit_the_show_page_for(onboarding_request)
+      when_i_click_onboard_provider
+
+      then_i_see_the_onboarding_error("This provider has already been onboarded")
+      then_only_one_provider_exists_for(onboarding_request)
+    end
+
+    scenario "I can onboard an accredited provider" do
+      onboarding_request.update!(
+        accredited_provider: true,
+        provider_type: "university",
+        accredited_provider_number: "1234",
+        urn: nil,
+      )
+
+      when_i_click_onboard_provider
+
+      then_i_am_on_the_new_provider_organisation_page(onboarding_request)
+      then_i_see_the_onboarded_success_banner(onboarding_request)
+      then_the_accredited_provider_is_created(onboarding_request)
     end
 
     scenario "I can reject an onboarding request" do

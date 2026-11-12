@@ -22,13 +22,29 @@ FactoryBot.define do
       contact_email_address { Faker::Internet.email }
       website { Faker::Internet.url }
       ukprn { Faker::Number.within(range: 10_000_000..19_999_999).to_s }
-      accredited_provider { [true, false].sample }
+      accredited_provider { false }
+      provider_type { "lead_school" }
       urn { Faker::Number.number(digits: 6).to_s }
     end
 
     trait :submitted do
       status { "submitted" }
       with_form_details
+    end
+
+    trait :ready_to_onboard do
+      submitted
+      accredited_provider { false }
+      provider_name { "Northshore Training" }
+      telephone { "01632 960001" }
+      postcode { "BN1 1AA" }
+      website { "https://www.example.com" }
+      ukprn { "12345678" }
+      urn { "123456" }
+      contact_email_address { "contact@example.com" }
+      address_line_1 { "1 Example Street" }
+      town_or_city { "Brighton" }
+      county { "East Sussex" }
     end
 
     trait :closed do
