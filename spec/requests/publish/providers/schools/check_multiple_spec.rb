@@ -37,6 +37,32 @@ RSpec.describe "Publish provider multiple schools check", service: :publish do
       expect(provider.schools.map(&:gias_school)).to match_array(gias_schools)
     end
 
+    context "when returning to support" do
+      let(:user) { create(:user, :admin) }
+      let(:provider) { create(:provider) }
+
+      before { login_user(user) }
+
+      def add_schools(urns = gias_schools.map(&:urn))
+        stash_urns(urns)
+
+        put publish_provider_recruitment_cycle_schools_multiple_check_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          return_to: "support",
+        )
+      end
+
+      it "redirects to the support schools list with a success flash" do
+        expect { add_schools }.to change { provider.schools.count }.by(2)
+
+        expect(response).to redirect_to(
+          support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider),
+        )
+        expect(flash[:success]).to eq("2 schools added")
+      end
+    end
+
     # The API serves every one of the provider's schools as the locations of a
     # course that is allowed to publish without schools, so adding schools
     # changes that course's payload. Bumping changed_at is what tells API

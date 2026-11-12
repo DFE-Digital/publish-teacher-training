@@ -27,6 +27,32 @@ RSpec.describe "Publish provider schools check", service: :publish do
       expect(response).to redirect_to(publish_provider_recruitment_cycle_schools_path(provider.provider_code, recruitment_cycle.year))
     end
 
+    context "when returning to support" do
+      let(:user) { create(:user, :admin) }
+      let(:provider) { create(:provider) }
+
+      before { login_user(user) }
+
+      def add_school
+        put publish_provider_recruitment_cycle_schools_check_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          school_id: gias_school.id,
+          return_to: "support",
+        )
+      end
+
+      it "redirects to the support schools list with a success flash" do
+        expect { add_school }
+          .to change { provider.schools.where(gias_school:).count }.by(1)
+
+        expect(response).to redirect_to(
+          support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider),
+        )
+        expect(flash[:success]).to eq("1 school added")
+      end
+    end
+
     it "does not add a school the provider already has" do
       create(:provider_school, provider:, gias_school:)
 

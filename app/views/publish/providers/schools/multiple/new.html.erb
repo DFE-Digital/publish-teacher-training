@@ -1,10 +1,10 @@
 <%= render PageTitle.new(title: t(".page_title")) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_recruitment_cycle_schools_path) %>
+  <%= govuk_back_link_to(publish_or_support_schools_path) %>
 <% end %>
 
-<%= form_with(model: @urn_form, url: publish_provider_recruitment_cycle_schools_multiple_path, local: true) do |f| %>
+<%= form_with(model: @urn_form, url: publish_provider_recruitment_cycle_schools_multiple_path(**support_return_params), local: true) do |f| %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <%= f.govuk_error_summary %>
@@ -15,7 +15,7 @@
           :values,
           hint: {
             text: t(".hint_html",
-                    url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year)),
+                    url: search_publish_provider_recruitment_cycle_schools_path(@provider.provider_code, @recruitment_cycle.year, **support_return_params)),
           },
           value: @urn_form.values&.join("\n").presence,
           label: { text: t(".title"), class: "govuk-label--l" },
@@ -24,7 +24,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_schools_path, no_visited_state: true) %>
+      <%= govuk_link_to(t("cancel"), publish_or_support_schools_path, no_visited_state: true) %>
     </p>
 
     <%= govuk_details(summary_text: "How to copy URNs from a CSV or spreadsheet") do %>

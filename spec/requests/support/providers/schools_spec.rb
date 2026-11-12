@@ -58,6 +58,23 @@ RSpec.describe "Support provider schools" do
           return_to: :support,
         ),
       )
+
+      expect(response.body).to include("Add school in Publish")
+      expect(response.body).to include("Add multiple schools in Publish")
+      expect(response.body).to include(
+        search_publish_provider_recruitment_cycle_schools_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          return_to: "support",
+        ),
+      )
+      expect(response.body).to include(
+        new_publish_provider_recruitment_cycle_schools_multiple_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          return_to: "support",
+        ),
+      )
     end
   end
 end

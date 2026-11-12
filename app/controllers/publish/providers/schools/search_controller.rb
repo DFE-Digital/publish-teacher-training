@@ -4,6 +4,8 @@ module Publish
   module Providers
     module Schools
       class SearchController < ApplicationController
+        include ReturningToSupport
+
         helper_method :query, :search_result_title_component
 
         before_action :authorize_provider
@@ -42,7 +44,11 @@ module Publish
           @school_select_form = SelectForm.new(school_id: school_select_params[:school_id])
 
           if @school_select_form.valid?
-            redirect_to publish_provider_recruitment_cycle_schools_check_path(provider_code: provider.provider_code, school_id: @school_select_form.school_id)
+            redirect_to publish_provider_recruitment_cycle_schools_check_path(
+              provider_code: provider.provider_code,
+              school_id: @school_select_form.school_id,
+              **support_return_params,
+            )
           else
             @school_search = Publish::Schools::SearchService.call(query:)
             render :results
@@ -85,7 +91,7 @@ module Publish
             query:,
             results_limit: @school_search.limit,
             results_count: @school_search.schools.unscope(:limit).count,
-            return_path: search_publish_provider_recruitment_cycle_schools_path,
+            return_path: search_publish_provider_recruitment_cycle_schools_path(**support_return_params),
             search_resource: "school",
           )
         end
@@ -94,6 +100,7 @@ module Publish
           redirect_to publish_provider_recruitment_cycle_schools_check_path(
             provider_code: provider.provider_code,
             school_id:,
+            **support_return_params,
           )
         end
       end

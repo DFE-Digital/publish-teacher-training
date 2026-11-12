@@ -56,24 +56,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
         resource :revert_withdrawal, only: %i[edit update], path: "revert-withdrawal", controller: "revert_withdrawal"
       end
 
-      namespace :schools, module: "providers/schools" do
-        resource :check, only: %i[show update]
-      end
-      resources :schools, only: :index, module: "providers" do
-        collection do
-          get "/search", to: "schools/search#new"
-          post "/search", to: "schools/search#create"
-          put "/search", to: "schools/search#update"
-        end
-      end
-
-      namespace :schools, module: "providers/schools" do
-        resource :multiple, only: %i[new create], on: :member, controller: "multiple" do
-          resource :check, only: %i[show update], controller: "check_multiple" do
-            get "remove_school/:urn", action: "remove_school", as: :remove_school
-          end
-        end
-      end
+      resources :schools, only: :index, module: "providers"
 
       scope module: :providers do
         resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index destroy], path: "accredited-partnerships" do
