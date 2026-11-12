@@ -323,6 +323,7 @@ erDiagram
 	}
 	ProvidersOnboardingFormRequest {
 		boolean accredited_provider
+		string accredited_provider_number
 		text address_line_1
 		text address_line_2
 		text address_line_3
@@ -334,8 +335,10 @@ erDiagram
 		integer id PK
 		string last_name
 		string postcode
+		integer provider_id FK
 		jsonb provider_metadata
 		string provider_name
+		string provider_type
 		string status
 		integer support_agent_id FK
 		string telephone
@@ -589,7 +592,7 @@ erDiagram
 	Site o|--}o "Audited::Audit" : ""
 	SiteStatus o|--}o "Audited::Audit" : ""
 	User o|--}o "Audited::Audit" : ""
-	User o|--}o APIKey : ""
+	User ||--}o APIKey : ""
 	User ||--}o Authentication : ""
 	User o|--}o "Blazer::Audit" : ""
 	"Blazer::Query" o|--}o "Blazer::Audit" : ""
@@ -643,6 +646,7 @@ erDiagram
 	GiasSchool ||--}o "Provider::School" : ""
 	"Provider::School" o|..}o Course : ""
 	User o|--}o ProvidersOnboardingFormRequest : ""
+	Provider ||--}o ProvidersOnboardingFormRequest : ""
 	RecruitmentCycle o|..}o Course : ""
 	RecruitmentCycle o|..}o Site : ""
 	RecruitmentCycle o|..}o "Provider::School" : ""

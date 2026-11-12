@@ -46,12 +46,30 @@
                        href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-accredited-provider-field"),
                        visually_hidden_text: "accredited provider status") %>
   <% end %>
+  <% if @onboarding_request.accredited_provider? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { t(".accredited_provider_number") } %>
+      <% row.with_value { @onboarding_request.accredited_provider_number } %>
+      <% row.with_action(text: t(".change"),
+                         href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-accredited-provider-number-field"),
+                         visually_hidden_text: "accredited provider number") %>
+    <% end %>
+  <% end %>
   <% summary_list.with_row do |row| %>
-    <% row.with_key { t(".urn") } %>
-    <% row.with_value { @onboarding_request.urn } %>
+    <% row.with_key { t(".provider_type") } %>
+    <% row.with_value { @onboarding_request.provider_type_label } %>
     <% row.with_action(text: t(".change"),
-                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-urn-field"),
-                       visually_hidden_text: "URN") %>
+                       href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-provider-type-field"),
+                       visually_hidden_text: "provider type") %>
+  <% end %>
+  <% if @onboarding_request.lead_school? %>
+    <% summary_list.with_row do |row| %>
+      <% row.with_key { t(".urn") } %>
+      <% row.with_value { @onboarding_request.urn } %>
+      <% row.with_action(text: t(".change"),
+                         href: publish_provider_onboarding_path(@onboarding_request.uuid, anchor: "providers-onboarding-form-request-urn-field"),
+                         visually_hidden_text: "URN") %>
+    <% end %>
   <% end %>
 <% end %>
 <!-- Contact Details -->

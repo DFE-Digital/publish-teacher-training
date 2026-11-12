@@ -38,3 +38,12 @@ en:
         view_zendesk_ticket: View Zendesk ticket
         not_available: Not available
         cancel: Cancel
+    providers:
+      onboard_from_form_request:
+        success: "%{provider_name} (%{provider_code}) has been onboarded"
+        already_onboarded: This provider has already been onboarded
+        not_submitted: This onboarding form has not been submitted, so the provider cannot be onboarded
+        no_recruitment_cycle: This provider could not be onboarded because there is no current recruitment cycle
+        code_generation_failed: A unique provider code could not be generated for this recruitment cycle, so the provider cannot be onboarded
+        provider_invalid: "This provider could not be onboarded. Organisation details:"
+        user_invalid: "This provider could not be onboarded. User details:"

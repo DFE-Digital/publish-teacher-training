@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_06_155631) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_12_082000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "btree_gin"
   enable_extension "btree_gist"
@@ -545,6 +545,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_155631) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "support_agent_id"
+    t.bigint "provider_id"
+    t.string "provider_type"
+    t.string "accredited_provider_number"
+    t.index ["provider_id"], name: "index_providers_onboarding_form_request_on_provider_id", unique: true
     t.index ["support_agent_id"], name: "index_providers_onboarding_form_request_on_support_agent_id"
     t.index ["uuid"], name: "index_providers_onboarding_form_request_on_uuid", unique: true
   end
@@ -884,6 +888,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_155631) do
   add_foreign_key "provider_school", "gias_school", on_delete: :cascade
   add_foreign_key "provider_school", "provider", on_delete: :cascade
   add_foreign_key "provider_ucas_preference", "provider", name: "fk_provider_ucas_preference__provider"
+  add_foreign_key "providers_onboarding_form_request", "provider"
   add_foreign_key "providers_onboarding_form_request", "user", column: "support_agent_id", name: "FK_onboarding_request_user_support_agent_id"
   add_foreign_key "saved_course", "candidate"
   add_foreign_key "saved_course", "course"
