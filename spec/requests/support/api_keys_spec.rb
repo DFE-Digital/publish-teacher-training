@@ -47,7 +47,7 @@ RSpec.describe "Support::APIKeysController" do
     2.times { post support_api_keys_path, params: api_key_params }
 
     expect(response).to have_http_status(:conflict)
-    expect(response.body).to include("This API key was already created")
+    expect(response.body).to include("API key already created")
     expect(APIKey.count).to eq(1)
   end
 
