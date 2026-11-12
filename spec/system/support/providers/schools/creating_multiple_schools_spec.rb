@@ -10,7 +10,7 @@ RSpec.describe "Multiple schools" do
 
   scenario "submitting an empty form" do
     when_i_visit_a_provider_schools_page
-    then_i_click_add_multiple_schools
+    then_i_click_add_multiple_schools_in_publish
 
     given_i_submit_an_empty_form
     then_i_should_see_the_validation_error_message
@@ -68,13 +68,13 @@ RSpec.describe "Multiple schools" do
     when_i_click_back
     then_i_am_on_the_schools_index_page
 
-    when_i_click_add_multiple_schools
+    when_i_click_add_multiple_schools_in_publish
     then_i_see_the_textarea_is_empty
 
     when_i_click_cancel
     then_i_am_on_the_schools_index_page
 
-    when_i_click_add_multiple_schools
+    when_i_click_add_multiple_schools_in_publish
     then_i_see_the_textarea_is_empty
   end
 
@@ -98,6 +98,13 @@ RSpec.describe "Multiple schools" do
 
     when_i_click_enter_new_urns
     then_i_am_on_the_enter_urns_page
+  end
+
+  scenario "cancel from multiple schools new page" do
+    when_i_visit_the_multiple_schools_new_page
+
+    when_i_click_cancel
+    then_i_should_be_on_the_provider_schools_page
   end
 
   def and_some_gias_schools_exist
@@ -149,11 +156,6 @@ RSpec.describe "Multiple schools" do
     end
   end
 
-  def and_i_enter_only_nonexisting_urns
-    input = "invalid_urn,another"
-    fill_in "Enter URNs", with: input
-  end
-
   def then_the_submit_button_is_gone
     expect(page).to have_no_content("Add schools")
   end
@@ -196,28 +198,27 @@ RSpec.describe "Multiple schools" do
     end
   end
 
-  scenario "remove all schools" do
-    when_i_visit_the_multiple_schools_new_page
-  end
-
-  scenario "cancel from multiple schools new page" do
-    when_i_visit_the_multiple_schools_new_page
-
-    when_i_click_cancel
-    then_i_should_be_on_the_provider_schools_page
-  end
-
   def and_i_see_the_success_message
     expect(page).to have_text("3 schools added")
   end
 
   def and_i_am_redirected_to_the_multiple_school_check_page
-    expect(page).to have_current_path support_recruitment_cycle_provider_schools_multiple_check_path(recruitment_cycle_year: provider.recruitment_cycle_year, provider_id: provider.id)
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_schools_multiple_check_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        return_to: "support",
+      ),
+    )
     expect(page).to have_text "Check your answers"
   end
 
   def when_i_visit_the_multiple_schools_new_page
-    visit new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: provider.recruitment_cycle_year, provider_id: provider.id)
+    visit new_publish_provider_recruitment_cycle_schools_multiple_path(
+      provider_code: provider.provider_code,
+      recruitment_cycle_year: provider.recruitment_cycle_year,
+      return_to: "support",
+    )
   end
 
   def when_i_visit_a_provider_schools_page
@@ -264,8 +265,8 @@ RSpec.describe "Multiple schools" do
     @provider ||= create(:provider, sites: [build(:site)])
   end
 
-  def then_i_click_add_multiple_schools
-    click_link_or_button "Add multiple schools"
+  def then_i_click_add_multiple_schools_in_publish
+    click_link_or_button "Add multiple schools in Publish"
   end
 
   def given_i_submit_an_empty_form
@@ -295,7 +296,13 @@ RSpec.describe "Multiple schools" do
   end
 
   def and_i_am_on_the_enter_urns_page
-    expect(page).to have_current_path new_support_recruitment_cycle_provider_schools_multiple_path(recruitment_cycle_year: provider.recruitment_cycle_year, provider_id: provider.id)
+    expect(page).to have_current_path(
+      new_publish_provider_recruitment_cycle_schools_multiple_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        return_to: "support",
+      ),
+    )
   end
 
   alias_method :and_i_click_add_schools, :when_i_click_add_schools
@@ -306,7 +313,7 @@ RSpec.describe "Multiple schools" do
   alias_method :and_i_click_continue, :given_i_submit_an_empty_form
   alias_method :when_i_click_continue, :given_i_submit_an_empty_form
   alias_method :and_i_submit_the_form, :given_i_submit_an_empty_form
-  alias_method :when_i_click_add_multiple_schools, :then_i_click_add_multiple_schools
+  alias_method :when_i_click_add_multiple_schools_in_publish, :then_i_click_add_multiple_schools_in_publish
   alias_method :then_i_am_on_the_enter_urns_page, :and_i_am_on_the_enter_urns_page
-  alias_method :and_i_click_add_multiple_schools, :then_i_click_add_multiple_schools
+  alias_method :and_i_click_add_multiple_schools_in_publish, :then_i_click_add_multiple_schools_in_publish
 end

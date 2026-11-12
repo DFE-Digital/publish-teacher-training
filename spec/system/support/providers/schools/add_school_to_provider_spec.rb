@@ -12,8 +12,8 @@ RSpec.describe "Adding school to provider as an admin" do
   describe "Adding school to organisation" do
     scenario "With valid details" do
       given_i_visit_the_support_provider_schools_index_page
-      and_i_click_add_school
-      then_i_am_on_the_school_search_page
+      and_i_click_add_school_in_publish
+      then_i_am_on_the_publish_school_search_page
 
       when_i_search_with_an_empty_query
       then_i_see_an_error_message
@@ -30,14 +30,15 @@ RSpec.describe "Adding school to provider as an admin" do
 
       when_i_click_add_school
       then_i_see_a_confirmation_message
+      and_i_am_back_on_the_support_schools_index
       and_the_school_is_in_the_database
       and_no_legacy_site_is_created
     end
 
     scenario "i can select a school using the autocomplete", :js do
       given_i_visit_the_support_provider_schools_index_page
-      and_i_click_add_school
-      then_i_am_on_the_school_search_page
+      and_i_click_add_school_in_publish
+      then_i_am_on_the_publish_school_search_page
 
       and_i_type_a_school_name_into_the_autocomplete
       then_i_see_the_school_in_the_autocomplete_suggestions
@@ -50,8 +51,8 @@ RSpec.describe "Adding school to provider as an admin" do
     scenario "attempting to add a school with duplicate URN" do
       given_the_provider_already_has_a_school_with_the_same_urn
       given_i_visit_the_support_provider_schools_index_page
-      and_i_click_add_school
-      then_i_am_on_the_school_search_page
+      and_i_click_add_school_in_publish
+      then_i_am_on_the_publish_school_search_page
 
       when_i_search_with_an_partial_query
       then_i_see_school_options
@@ -70,7 +71,7 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def and_i_type_a_school_name_into_the_autocomplete
-    fill_in "support-providers-schools-search-form-query-field", with: "Dist"
+    fill_in "publish-providers-schools-search-form-query-field", with: "Dist"
   end
 
   def then_i_see_the_school_in_the_autocomplete_suggestions
@@ -82,7 +83,7 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def autocomplete_listbox_selector
-    "#support-providers-schools-search-form-query-field__listbox li"
+    "#publish-providers-schools-search-form-query-field__listbox li"
   end
 
   def then_i_am_on_the_confirmation_page_for_the_chosen_school
@@ -108,12 +109,18 @@ RSpec.describe "Adding school to provider as an admin" do
     support_provider_schools_index_page.load(recruitment_cycle_year: @provider.recruitment_cycle_year, provider_id: @provider.id)
   end
 
-  def then_i_am_on_the_school_search_page
-    expect(page).to have_current_path(search_support_recruitment_cycle_provider_schools_path(recruitment_cycle_year: @provider.recruitment_cycle_year, provider_id: @provider.id))
+  def then_i_am_on_the_publish_school_search_page
+    expect(page).to have_current_path(
+      search_publish_provider_recruitment_cycle_schools_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        return_to: "support",
+      ),
+    )
   end
 
   def when_i_search_with_an_empty_query
-    fill_in "support-providers-schools-search-form-query-field", with: ""
+    fill_in "Enter URN or school", with: ""
     click_continue
   end
 
@@ -125,7 +132,7 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def when_i_search_with_an_unmatched_query
-    fill_in "support-providers-schools-search-form-query-field", with: "zzz"
+    fill_in "Enter URN or school", with: "zzz"
     click_continue
   end
 
@@ -134,7 +141,7 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def when_i_search_with_an_partial_query
-    fill_in "support-providers-schools-search-form-query-field", with: "Dis"
+    fill_in "Enter URN or school", with: "Dis"
     click_continue
   end
 
@@ -152,21 +159,33 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def then_i_see_the_confirmation_page
-    expect(page).to have_content("Add school - School of Cats (V01)")
+    expect(page).to have_content("Add school")
     expect(page).to have_content("Check your answers")
     expect(page).to have_content("URN123456")
-    expect(page).to have_content("Address123 Fake StreetNewtownRD9 0AN")
+    expect(page).to have_content("Address 123 Fake Street Newtown RD9 0AN", normalize_ws: true)
   end
 
-  def and_i_click_add_school
+  def and_i_click_add_school_in_publish
+    click_link_or_button "Add school in Publish"
+  end
+
+  def when_i_click_add_school
     click_link_or_button "Add school"
   end
-  alias_method :when_i_click_add_school, :and_i_click_add_school
 
   def then_i_see_a_confirmation_message
     within(".govuk-notification-banner--success") do
-      expect(page).to have_content("School added")
+      expect(page).to have_content("1 school added")
     end
+  end
+
+  def and_i_am_back_on_the_support_schools_index
+    expect(page).to have_current_path(
+      support_recruitment_cycle_provider_schools_path(
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        provider_id: @provider.id,
+      ),
+    )
   end
 
   def click_continue
@@ -179,7 +198,6 @@ RSpec.describe "Adding school to provider as an admin" do
   end
 
   def then_i_see_a_duplicate_urn_error
-    # Check for validation error on the page
     expect(page).to have_content("This school has already been added")
   end
 

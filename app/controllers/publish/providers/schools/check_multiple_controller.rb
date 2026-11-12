@@ -5,6 +5,8 @@ module Publish
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
+        include ReturningToSupport
+
         before_action :set_urns_and_schools, only: %i[show]
 
         def show; end
@@ -14,7 +16,7 @@ module Publish
 
           schools_added_message(result.saved, result.unsaved)
 
-          redirect_to publish_provider_recruitment_cycle_schools_path
+          redirect_to publish_or_support_schools_path
         end
 
         def remove_school
