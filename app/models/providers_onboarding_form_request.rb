@@ -69,6 +69,14 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     PROVIDER_TYPES[provider_type]
   end
 
+  # Support-facing label. The stored status values stay the same.
+  def status_label
+    I18n.t(
+      "support.providers_onboarding_form_requests.statuses.#{status}",
+      default: status.to_s.titleize,
+    )
+  end
+
   def lead_school?
     provider_type == "lead_school"
   end
