@@ -65,8 +65,11 @@ module Support
                       ),
                     }
       else
-        redirect_to support_providers_onboarding_form_request_path(@onboarding_request),
-                    flash: { error: { id: "onboard-provider", message: result.error_message } }
+        result.errors.each do |error|
+          @onboarding_request.errors.add(error[:attribute] || :base, error[:message])
+        end
+        @onboarding_request = @onboarding_request.decorate
+        render :show, status: :unprocessable_entity
       end
     end
 

@@ -176,6 +176,25 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       then_the_accredited_provider_is_created(onboarding_request)
     end
 
+    scenario "I see each onboard error on its own line, linked to the field" do
+      onboarding_request.update_columns(
+        accredited_provider: true,
+        provider_type: "scitt",
+        accredited_provider_number: "1234",
+        urn: nil,
+      )
+
+      when_i_click_onboard_provider
+
+      expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-error-summary__list li", count: 1)
+      expect(page).to have_link(
+        "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5",
+        href: "#providers-onboarding-form-request-accredited-provider-number-field-error",
+      )
+      expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error", text: "1234")
+    end
+
     scenario "I can reject an onboarding request" do
       when_i_click_reject
 
