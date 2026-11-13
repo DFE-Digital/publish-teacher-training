@@ -4,6 +4,8 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
+        include ReturningToSupport
+
         before_action :check_form
 
         def show; end
@@ -12,8 +14,13 @@ module Publish
           if @check_form.valid?
             ::ProviderSchools::Creator.call(provider:, gias_school_id: gias_school.id)
 
-            redirect_to publish_provider_recruitment_cycle_schools_path,
-                        flash: { success_with_body: { title: t(".added"), body: gias_school.name } }
+            if returning_to_support?
+              schools_added_message([gias_school])
+              redirect_to publish_or_support_schools_path
+            else
+              redirect_to publish_provider_recruitment_cycle_schools_path,
+                          flash: { success_with_body: { title: t(".added"), body: gias_school.name } }
+            end
           else
             render :show, status: :unprocessable_entity
           end

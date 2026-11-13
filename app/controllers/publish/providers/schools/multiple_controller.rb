@@ -4,6 +4,8 @@ module Publish
   module Providers
     module Schools
       class MultipleController < ApplicationController
+        include ReturningToSupport
+
         def new
           @urn_form = URNForm.new(provider)
         end
@@ -14,7 +16,7 @@ module Publish
           @urn_form = URNForm.new(provider, params: { values: parsed_urns.presence })
 
           if @urn_form.stash
-            redirect_to publish_provider_recruitment_cycle_schools_multiple_check_path
+            redirect_to publish_provider_recruitment_cycle_schools_multiple_check_path(**support_return_params)
           else
             render(:new)
           end

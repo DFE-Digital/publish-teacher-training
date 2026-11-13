@@ -6,7 +6,7 @@ module PageObjects
       class SchoolsIndex < PageObjects::Base
         set_url "/support/{recruitment_cycle_year}/providers/{provider_id}/schools"
 
-        element :add_school, ".govuk-button", text: "Add school"
+        element :add_school, ".govuk-button", text: "Add school in Publish"
 
         sections :schools, Sections::School, "tbody tr"
       end

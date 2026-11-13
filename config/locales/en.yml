@@ -449,9 +449,6 @@ en:
             edit: "Edit course details"
           schools:
             index: "Schools"
-            new: "Add school"
-            edit: "Edit school details"
-            check: "Check your answers"
           users:
             new: "Add user"
             check: "Check your answers"
@@ -1046,22 +1043,11 @@ en:
             urn:
               blank: "Enter a unique reference number (URN)"
               invalid: "Enter a valid unique reference number (URN)"
-        support/providers/schools/select_form:
-          attributes:
-            school_id:
-              blank: "Select the school to continue. If this school is not correct you can change your search."
         provider_schools/check_form:
           attributes:
             gias_school:
               already_added: "This school has already been added"
               incomplete_address: "The address we hold for this school is incomplete. Ask the school to update its details on Get Information About Schools (GIAS)."
-        support/providers/schools/search_form:
-          attributes:
-            school:
-              school_already_exists: "This school has already been added"
-            query:
-              blank: Enter a URN (unique reference number) or school name
-              too_short: Enter at least two characters
         urn_form:
           attributes:
             values:
