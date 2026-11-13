@@ -18,14 +18,14 @@ class CourseWizard
       graph.flow :course_details
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
       graph.add_edge from: :check_answers, to: :courses_index
-
-      # A change from check answers shows only the steps it affects, and the
-      # steps its row shows, then goes back to check answers. Back retraces
-      # the steps it showed.
-      graph.before_next_step { next_step_in_review(show: review_row_steps) if return_to_review }
-      graph.before_previous_step { previous_step_in_review(return_to_review) }
     end
   end
+
+  # A change from check answers asks only the steps it affects, and the
+  # steps its row shows, then goes back to check answers. Back retraces the
+  # steps it showed. The gem tracks the change and clears the answers it
+  # takes off the path.
+  def review_navigation? = true
 
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
@@ -50,7 +50,6 @@ class CourseWizard
             recruitment_cycle_year:,
             state_key:,
             step: step_id,
-            **review_path_options(step_id),
             **options,
           )
         end
@@ -112,26 +111,9 @@ class CourseWizard
     end
   end
 
-  # Route options for a step during a change from check answers: every path
-  # carries the step whose Change link was followed, except the path to check
-  # answers itself
-  def review_path_options(step_id)
-    return {} if return_to_review.blank? || step_id == check_answers_step
-
-    { return_to_review: }
-  end
-
-  # Steps the row of the followed Change link shows besides its own step.
-  # Compared as a string: return_to_review is a request param.
-  def review_row_steps
-    return_to_review.to_s == "secondary_subjects" ? SUBJECTS_ROW_STEPS : []
-  end
-
-  # The step whose Change link was followed on check answers
-  def return_to_review
-    # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
-    # so we need raw request params for return_to_review callback routing.
-    @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
+  # Steps the row of the followed Change link shows besides its own step
+  def review_asks_again(origin)
+    origin == :secondary_subjects ? SUBJECTS_ROW_STEPS : []
   end
 
 private

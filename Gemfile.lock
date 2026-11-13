@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-wizard.git
-  revision: 7af17eb51aae6f15456f5b07694dc38d7692c093
+  revision: 4dc648be2fefbf100a363bc739bf4f5d3c3130e7
   branch: check-answers-review-navigation
   specs:
     dfe-wizard (1.0.0)

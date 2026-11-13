@@ -32,6 +32,10 @@ class EditCourseWizard < CourseWizard
     entry == :visa || VISA_STEPS.include?(entry) ? :visa : :funding_type
   end
 
+  # The edit wires the review itself: its callbacks, and the controller
+  # tracking each step and clearing answers
+  def review_navigation? = false
+
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
       graph.flow :course_details
