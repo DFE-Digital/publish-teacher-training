@@ -1,4 +1,4 @@
-<% details = capture do %>
+<% details = content? ? content : capture do %>
   <h3 class="govuk-heading-s govuk-!-margin-bottom-0"><%= course_link %></h3>
   <% if application_status_tag %>
     <div class="app-saved-course__status-tag govuk-!-margin-bottom-1"><%= application_status_tag %></div>

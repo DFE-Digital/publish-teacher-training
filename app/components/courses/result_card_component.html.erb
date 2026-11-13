@@ -1,0 +1,14 @@
+<% if courses.one? %>
+  <%= render card %>
+<% else %>
+  <%= render card do %>
+    <% courses.each_with_index do |course, index| %>
+      <% if index.positive? %>
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      <% end %>
+      <div class="app-search-result__course">
+        <%= render course_details(course) %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
