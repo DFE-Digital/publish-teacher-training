@@ -195,6 +195,37 @@ RSpec.describe "Public API key authentication", service: :api do
     expect(statuses).to eq(statuses.transform_values { 401 })
   end
 
+  describe "recording use" do
+    let(:api_key) { create(:api_key) }
+
+    it "stamps the key's last use without bumping updated_at" do
+      api_key
+      travel 1.hour
+
+      expect { get path, headers: bearer(api_key.secret) }.not_to(change { api_key.reload.updated_at })
+
+      expect(response).to have_http_status(:ok)
+      expect(api_key.last_used_at).to eq(Time.current)
+    end
+
+    it "stamps the key when the endpoint then fails" do
+      year = find_or_create(:recruitment_cycle).year
+
+      get "/api/public/v1/recruitment_cycles/#{year}/providers/ZZZ", headers: bearer(api_key.secret)
+
+      expect(response).to have_http_status(:not_found)
+      expect(api_key.reload.last_used_at).to be_present
+    end
+
+    it "leaves a revoked key unstamped" do
+      api_key.revoke!
+
+      get path, headers: bearer(api_key.secret)
+
+      expect(api_key.reload.last_used_at).to be_nil
+    end
+  end
+
   context "on the internal API", service: :publish do
     it "reaches the suggestion endpoints with an unknown key" do
       year = find_or_create(:recruitment_cycle).year

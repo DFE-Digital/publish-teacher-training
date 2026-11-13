@@ -38,6 +38,10 @@ class APIKey < ApplicationRecord
     touch(:revoked_at) unless revoked_at?
   end
 
+  def record_use!
+    update_columns(last_used_at: Time.current)
+  end
+
 private
 
   def active_limit_not_reached
