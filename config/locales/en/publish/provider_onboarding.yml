@@ -53,6 +53,27 @@ en:
         contact_support_html: If you have any questions about the provider onboarding process, please contact the Publish support team at %{support_email}.
         support_email: becomingateacher@digital.education.gov.uk
         close_window: You can close this window or tab.
+      update:
+        updated: "%{fields} updated"
+        fields:
+          provider_name: Provider name
+          ukprn: UKPRN
+          accredited_provider: Accredited provider
+          accredited_provider_number: Accredited provider number
+          provider_type: Provider type
+          urn: URN
+          contact_email_address: Contact email address
+          telephone: Telephone
+          website: Website
+          address_line_1: Address line 1
+          address_line_2: Address line 2
+          address_line_3: Address line 3
+          town_or_city: Town or city
+          county: County
+          postcode: Postcode
+          email_address: Email address
+          first_name: First name
+          last_name: Last name
       check_answers:
         title: Check your answers before submitting
         caption: Onboard a provider

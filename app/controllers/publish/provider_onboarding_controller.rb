@@ -19,7 +19,7 @@ module Publish
       # Update the onboarding request with submitted form details and validate provider fields.
       # Support users who came from the request page return there. Everyone else goes to check your answers.
       if @onboarding_request.update_form_details(onboarding_request_params)
-        redirect_to after_update_path
+        redirect_to after_update_path, flash: support_update_flash
       else
         render :show
       end
@@ -86,6 +86,32 @@ module Publish
       else
         check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       end
+    end
+
+    def support_update_flash
+      message = support_update_message
+      message.present? ? { success: message } : {}
+    end
+
+    def support_update_message
+      return unless return_to_support?
+
+      labels = t("publish.provider_onboarding.update.fields").filter_map do |attribute, label|
+        label if meaningful_support_update?(attribute)
+      end
+      return if labels.empty?
+
+      t("publish.provider_onboarding.update.updated", fields: labels.to_sentence)
+    end
+
+    # The form posts every field. A blank input saved over a nil value is not a change the support user made.
+    def meaningful_support_update?(attribute)
+      return false unless @onboarding_request.saved_change_to_attribute?(attribute)
+
+      before, after = @onboarding_request.saved_change_to_attribute(attribute)
+      return false if before.blank? && after.blank?
+
+      true
     end
 
     def show_already_submitted_notice?
