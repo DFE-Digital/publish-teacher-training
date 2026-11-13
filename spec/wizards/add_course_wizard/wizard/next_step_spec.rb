@@ -120,20 +120,29 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
       end
     end
 
-    context "when returning from check answers and subjects now require a specialism page" do
-      let(:request_params) { { current_step => current_step_params, return_to_review: :secondary_subjects } }
-
-      before do
-        state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s)
+    context "when a change from check answers now needs a specialism page" do
+      let(:current_step_params) do
+        { secondary_master_subject_id: find_or_create(:secondary_subject, :physics).id.to_s }
       end
 
-      it "continues through the specialism flow instead of jumping to check answers" do
-        expect(wizard).to have_next_step(:physics_specialisms)
+      before do
+        state_store.write(secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s)
+        start_change_journey(:secondary_subjects)
+      end
+
+      it "shows the specialism page next" do
+        expect(wizard.save_current_step).to be(true)
+        expect(wizard.next_step).to eq(:physics_specialisms)
       end
     end
 
-    context "when returning from check answers and subjects do not require specialism pages" do
-      let(:request_params) { { current_step => current_step_params, return_to_review: :secondary_subjects } }
+    context "when a change from check answers needs no specialism page" do
+      let(:current_step_params) do
+        {
+          secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
+          subordinate_subject_id: find_or_create(:secondary_subject, :religious_education).id.to_s,
+        }
+      end
 
       before do
         study_site = provider.study_sites.first || create(:site, :study_site, provider:)
@@ -141,8 +150,7 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
 
         state_store.write(
           is_send: "false",
-          secondary_master_subject_id: find_or_create(:secondary_subject, :business_studies).id.to_s,
-          subordinate_subject_id: find_or_create(:secondary_subject, :religious_education).id.to_s,
+          secondary_master_subject_id: find_or_create(:secondary_subject, :mathematics).id.to_s,
           age_range_in_years: "11_to_16",
           qualification: "pgce_with_qts",
           funding_type: "fee",
@@ -152,10 +160,12 @@ RSpec.describe "CourseWizard#next_step", type: :wizard do
           can_sponsor_student_visa: false,
           start_date: "July 2027",
         )
+        start_change_journey(:secondary_subjects)
       end
 
-      it "returns to check answers for a complete valid path" do
-        expect(wizard).to have_next_step(:check_answers)
+      it "returns to check answers" do
+        expect(wizard.save_current_step).to be(true)
+        expect(wizard.next_step).to eq(:check_answers)
       end
     end
 
