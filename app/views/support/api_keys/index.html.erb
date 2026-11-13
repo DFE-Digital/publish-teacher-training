@@ -1,0 +1,52 @@
+<% content_for :page_title, t(".page_title") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+
+    <p class="govuk-body"><%= t(".explanation", count: APIKey::MAXIMUM_ACTIVE) %></p>
+    <p class="govuk-body"><%= t(".shown_once") %></p>
+
+    <%= govuk_button_link_to t(".create"), new_support_api_key_path %>
+
+    <%= form_with url: support_api_keys_path, method: :get do |form| %>
+      <%= form.govuk_text_field :text_search,
+                                value: @text_search,
+                                label: { text: t(".search_label"), size: "s" },
+                                spellcheck: false %>
+      <%= form.govuk_submit t(".search"), secondary: true, name: nil %>
+    <% end %>
+  </div>
+</div>
+
+<% if @api_keys.any? %>
+  <%= govuk_table do |table| %>
+    <% table.with_head do |head| %>
+      <% head.with_row do |row| %>
+        <% row.with_cell(text: APIKey.human_attribute_name(:name)) %>
+        <% row.with_cell(text: APIKey.human_attribute_name(:email)) %>
+        <% row.with_cell(text: APIKey.human_attribute_name(:prefix)) %>
+        <% row.with_cell(text: APIKey.human_attribute_name(:created_at)) %>
+        <% row.with_cell(text: tag.span(t(".revoke"), class: "govuk-visually-hidden")) %>
+      <% end %>
+    <% end %>
+
+    <% table.with_body do |body| %>
+      <% @api_keys.each do |api_key| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(text: api_key.name) %>
+          <% row.with_cell(text: api_key.email) %>
+          <% row.with_cell(text: tag.code(api_key.prefix)) %>
+          <% row.with_cell(text: api_key.created_at.to_fs(:govuk_date)) %>
+          <% row.with_cell(text: govuk_link_to(t(".revoke"), revoke_support_api_key_path(api_key), visually_hidden_suffix: api_key.name, no_visited_state: true)) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= govuk_pagination(pagy: @pagy) %>
+<% elsif @text_search.present? %>
+  <p class="govuk-body"><%= t(".no_matching_keys", text_search: @text_search) %></p>
+<% else %>
+  <p class="govuk-body"><%= t(".no_keys") %></p>
+<% end %>

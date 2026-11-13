@@ -1,6 +1,11 @@
 en:
   activerecord:
     attributes:
+      api_key:
+        name: Key name
+        email: Email address
+        prefix: Key prefix
+        created_at: Date created
       recruitment_cycle:
         year: Year
         start_date: Start date
@@ -28,10 +33,11 @@ en:
           attributes:
             email:
               blank: "Enter an email address"
+              limit_reached: "This email address already has %{count} active API keys. Revoke one before creating another"
             name:
-              blank: "Enter a name for your API key"
-            base:
-              limit_reached: "You can only have %{count} active API keys. Revoke a key before creating another"
+              blank: "Enter a name for the API key"
+            submission_token:
+              taken: "This API key was already created"
         user:
           attributes:
             first_name:

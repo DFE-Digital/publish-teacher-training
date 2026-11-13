@@ -18,6 +18,7 @@ class APIKey < ApplicationRecord
   validates :email, presence: true, email_address: { allow_blank: true }, on: :create
   validates :name, presence: true
   validate :active_limit_not_reached, on: :create
+  validates :submission_token, uniqueness: true, allow_nil: true, on: :create
 
   scope :active, -> { where(revoked_at: nil) }
 
@@ -27,6 +28,13 @@ class APIKey < ApplicationRecord
 
   def self.find_active_by_secret(secret)
     active.find_by(key_digest: digest(secret))
+  end
+
+  def self.search(query)
+    return all if query.blank?
+
+    pattern = "%#{sanitize_sql_like(query.strip)}%"
+    where("name ILIKE :pattern OR email ILIKE :pattern", pattern:)
   end
 
   def self.lock_email(email)
@@ -43,6 +51,6 @@ private
   def active_limit_not_reached
     return if self.class.active.where(email:).count < MAXIMUM_ACTIVE
 
-    errors.add(:base, :limit_reached, count: MAXIMUM_ACTIVE)
+    errors.add(:email, :limit_reached, count: MAXIMUM_ACTIVE)
   end
 end

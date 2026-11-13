@@ -5,6 +5,7 @@ module SupportNavigationHelper
     [
       onboarding_navigation_item,
       providers_navigation_item,
+      api_keys_navigation_item,
       candidates_navigation_item,
       users_navigation_item,
       feedback_navigation_item,
@@ -21,6 +22,12 @@ private
 
   def providers_navigation_item
     support_navigation_item("layouts.support.providers", support_recruitment_cycle_providers_path(recruitment_cycle_year))
+  end
+
+  def api_keys_navigation_item
+    return unless FeatureFlag.active?(:api_keys)
+
+    support_navigation_item("layouts.support.api_keys", support_api_keys_path)
   end
 
   def candidates_navigation_item

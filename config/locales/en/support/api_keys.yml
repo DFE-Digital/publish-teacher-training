@@ -1,0 +1,36 @@
+en:
+  support:
+    api_keys:
+      index:
+        page_title: API keys
+        explanation: API keys allow providers’ integrations to securely access the Publish teacher training courses API. You can create up to %{count} active keys for each email address.
+        shown_once: A key is shown only once when it is created. The provider should save it in a secure location. If a key is lost or exposed, revoke it and create a new one.
+        create: Create a new key
+        search_label: Search by key name or email address
+        search: Search
+        revoke: Revoke key
+        no_keys: There are no active API keys.
+        no_matching_keys: No active API keys match ‘%{text_search}’.
+      new:
+        page_title: Create a new key
+        page_caption: API keys
+        name_hint: The organisation or integration that will use the key
+        email_hint: The person or team responsible for the key
+        submit: Create key
+      show:
+        page_title: API key created
+        warning: This is the only time the key will be shown. Copy it now and share it securely with the provider.
+        key: API key
+        back: Back to API keys
+      already_created:
+        page_title: API key already created
+        not_shown_again: The API key cannot be shown again.
+        revoke_if_lost: If nobody copied the key, revoke it and create a new one.
+        back: Back to API keys
+      revoke:
+        page_title: Are you sure you want to revoke this API key?
+        page_caption: API keys
+        explanation: Any integration using this key will stop working. This action cannot be undone.
+        confirm: Revoke key
+      destroy:
+        revoked: API key revoked

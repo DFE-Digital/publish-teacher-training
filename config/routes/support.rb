@@ -145,6 +145,13 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       get :expired, controller: "banners", action: :index, defaults: { status: :expired }
     end
   end
+  constraints ->(_req) { FeatureFlag.active?(:api_keys) } do
+    resources :api_keys, path: "api-keys", only: %i[index new create destroy] do
+      member do
+        get :revoke
+      end
+    end
+  end
   resources :candidates, only: %i[index] do
     member do
       get :details, to: "candidate/details#show"

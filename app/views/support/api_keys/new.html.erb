@@ -1,0 +1,30 @@
+<% content_for :page_title, title_with_error_prefix(t(".page_title"), @api_key.errors.any?) %>
+
+<%= content_for(:before_content) do %>
+  <%= govuk_back_link(href: support_api_keys_path) %>
+<% end %>
+
+<%= form_with(model: @api_key, url: support_api_keys_path) do |form| %>
+  <%= form.govuk_error_summary(order: %i[name email]) %>
+  <%= hidden_field_tag :submission_token, @api_key.submission_token %>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-l"><%= t(".page_caption") %></span>
+      <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+
+      <%= form.govuk_text_field :name,
+                                label: { text: APIKey.human_attribute_name(:name), size: "s" },
+                                hint: { text: t(".name_hint") } %>
+
+      <%= form.govuk_email_field :email,
+                                 label: { text: APIKey.human_attribute_name(:email), size: "s" },
+                                 hint: { text: t(".email_hint") },
+                                 spellcheck: false %>
+
+      <%= form.govuk_submit t(".submit") do %>
+        <%= govuk_link_to t("cancel"), support_api_keys_path, no_visited_state: true %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

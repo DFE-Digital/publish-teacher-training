@@ -23,6 +23,17 @@ RSpec.describe SupportNavigationHelper, type: :helper do
       expect(item("Subjects")[:active_when]).to include(support_financial_incentives_path)
     end
 
+    it "hides API keys while the api_keys flag is inactive" do
+      expect(item("API keys")).to be_nil
+    end
+
+    it "shows API keys after Providers once the api_keys flag is active" do
+      FeatureFlag.activate(:api_keys)
+
+      expect(items.pluck(:text)).to eq(["Onboarding", "Providers", "API keys", "Users", "Feedback", "Subjects", "Settings"])
+      expect(item("API keys")).to eq(text: "API keys", href: support_api_keys_path, active_when: support_api_keys_path)
+    end
+
     it "treats settings pages that live outside /settings as part of Settings" do
       expect(item("Settings")[:active_when]).to include(
         support_feature_flags_path,
