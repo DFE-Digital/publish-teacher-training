@@ -2,6 +2,10 @@
 
 module Publish
   class ProviderOnboardingController < ApplicationController
+    # Fixed token for support Change links. The redirect target is built from the
+    # onboarding request, so this value cannot be used as an open redirect.
+    SUPPORT_RETURN_TO = "support"
+
     # Public link: skip authentication and authorisation for provider onboarding form
     skip_before_action :authenticate, only: %i[show update submitted check_answers confirm], raise: false
     skip_after_action :verify_authorized, only: %i[show update submitted check_answers confirm]
@@ -12,10 +16,10 @@ module Publish
 
     # Handles the submission of the onboarding form by the provider
     def update
-      # Update the onboarding request with submitted form details and validate provider fields
-      # If successful, redirect to the check your answers page; otherwise, re-render the form with errors
+      # Update the onboarding request with submitted form details and validate provider fields.
+      # Support users who came from the request page return there. Everyone else goes to check your answers.
       if @onboarding_request.update_form_details(onboarding_request_params)
-        redirect_to check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+        redirect_to after_update_path, flash: support_update_flash
       else
         render :show
       end
@@ -24,8 +28,8 @@ module Publish
     def check_answers; end
 
     def confirm
-      # Submit the onboarding request and change its status to 'submitted' if valid (and not an admin user)
-      if @onboarding_request.submit(admin_user?)
+      # Confirm the onboarding form and mark the request as submitted
+      if @onboarding_request.submit
         redirect_to submitted_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
       else
         # if submission fails (e.g. validations), re-render the check your answers page with errors
@@ -36,7 +40,7 @@ module Publish
     # Page displayed after successful submission of the onboarding form by the provider
     def submitted; end
 
-    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?
+    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?, :return_to_support?
 
   private
 
@@ -70,6 +74,46 @@ module Publish
       current_user&.admin?
     end
 
+    # Support users who opened the form from the request page return there after a
+    # successful save. Anyone else, and any other return_to value, continues to check your answers.
+    def return_to_support?
+      admin_user? && params[:return_to] == SUPPORT_RETURN_TO
+    end
+
+    def after_update_path
+      if return_to_support?
+        support_providers_onboarding_form_request_path(@onboarding_request)
+      else
+        check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
+      end
+    end
+
+    def support_update_flash
+      message = support_update_message
+      message.present? ? { success: message } : {}
+    end
+
+    def support_update_message
+      return unless return_to_support?
+
+      labels = t("publish.provider_onboarding.update.fields").filter_map do |attribute, label|
+        label if meaningful_support_update?(attribute)
+      end
+      return if labels.empty?
+
+      t("publish.provider_onboarding.update.updated", fields: labels.to_sentence)
+    end
+
+    # The form posts every field. A blank input saved over a nil value is not a change the support user made.
+    def meaningful_support_update?(attribute)
+      return false unless @onboarding_request.saved_change_to_attribute?(attribute)
+
+      before, after = @onboarding_request.saved_change_to_attribute(attribute)
+      return false if before.blank? && after.blank?
+
+      true
+    end
+
     def show_already_submitted_notice?
       flash[:info].blank? &&
         @onboarding_request.errors.empty? &&
@@ -81,7 +125,7 @@ module Publish
       params.require(:providers_onboarding_form_request).permit(
         :provider_name, :email_address, :first_name, :last_name,
         :address_line_1, :address_line_2, :address_line_3, :town_or_city, :county, :postcode, :telephone, :contact_email_address,
-        :website, :ukprn, :accredited_provider, :urn
+        :website, :ukprn, :accredited_provider, :accredited_provider_number, :provider_type, :urn
       )
     end
   end

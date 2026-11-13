@@ -235,6 +235,7 @@ shared:
     - status
     - form_name
     - support_agent_id
+    - provider_id
     - zendesk_link
     - uuid
     - provider_metadata
@@ -253,6 +254,8 @@ shared:
     - website
     - ukprn
     - accredited_provider
+    - accredited_provider_number
+    - provider_type
     - urn
     - created_at
     - updated_at

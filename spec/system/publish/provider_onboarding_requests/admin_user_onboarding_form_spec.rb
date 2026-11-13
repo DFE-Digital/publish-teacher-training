@@ -52,6 +52,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
   def then_i_see_the_completed_form_fields
     expect(page).to have_field("Organisation name", with: onboarding_request.provider_name)
     expect(page).to have_field("UK provider reference number (UKPRN)", with: onboarding_request.ukprn)
+    expect(page).to have_checked_field("School")
     expect(page).to have_field("Unique reference number (URN)", with: onboarding_request.urn)
     expect(page).to have_field("Contact email address", with: onboarding_request.contact_email_address)
     expect(page).to have_field("Telephone", with: onboarding_request.telephone)
@@ -94,6 +95,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
     expect(page).to have_content(onboarding_request.ukprn)
     accredited_text = onboarding_request.accredited_provider ? "Yes" : "No"
     expect(page).to have_content(accredited_text)
+    expect(page).to have_content("School")
     expect(page).to have_content(onboarding_request.urn)
 
     expect(page).to have_content(onboarding_request.contact_email_address)

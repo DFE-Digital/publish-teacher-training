@@ -20,6 +20,9 @@
               url: publish_provider_onboarding_path(onboarding_request.uuid),
               method: :patch,
               local: true do |f| %>
+  <% if return_to_support? %>
+    <%= hidden_field_tag :return_to, Publish::ProviderOnboardingController::SUPPORT_RETURN_TO %>
+  <% end %>
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -44,24 +47,36 @@
       <%= f.govuk_radio_buttons_fieldset :accredited_provider, legend: { text: t(".accredited_provider") }, hint: {
         text: t(".accredited_provider_hint_html"),
 }, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
-        <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit %>
+        <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit do %>
+          <%= f.govuk_text_field :accredited_provider_number,
+            label: { text: t(".accredited_provider_number"), size: "s" },
+            hint: { text: t(".accredited_provider_number_hint") },
+            width: 10,
+            disabled: !can_edit %>
+        <% end %>
         <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" }, disabled: !can_edit %>
       <% end %>
-      <%= f.govuk_text_field :urn,
-        label: { text: t(".urn"), size: "s" },
-        width: 10,
-        hint: {
-          text: t(
-            ".urn_hint_html",
-            get_information_schools_link: link_to(
-              "Get information about schools (opens in new tab)",
-              "https://www.get-information-schools.service.gov.uk",
-              class: "govuk-link",
-              target: "_blank",
-              rel: "noopener",
-            ),
-          ),
-        }, disabled: !can_edit %>
+      <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: t(".provider_type"), size: "s" } do %>
+        <%= f.govuk_radio_button :provider_type, "university", label: { text: t(".provider_type_university") }, link_errors: true, disabled: !can_edit %>
+        <%= f.govuk_radio_button :provider_type, "scitt", label: { text: t(".provider_type_scitt") }, disabled: !can_edit %>
+        <%= f.govuk_radio_button :provider_type, "lead_school", label: { text: t(".provider_type_school") }, disabled: !can_edit do %>
+          <%= f.govuk_text_field :urn,
+            label: { text: t(".urn"), size: "s" },
+            width: 10,
+            hint: {
+              text: t(
+                ".urn_hint_html",
+                get_information_schools_link: link_to(
+                  "Get information about schools (opens in new tab)",
+                  "https://www.get-information-schools.service.gov.uk",
+                  class: "govuk-link",
+                  target: "_blank",
+                  rel: "noopener",
+                ),
+              ),
+            }, disabled: !can_edit %>
+        <% end %>
+      <% end %>
       <!-- Contact Details -->
       <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-0"><%= t(".contact_details") %></h2>
       <p class="govuk-hint govuk-!-margin-top-2"><%= t(".contact_details_hint") %></p>

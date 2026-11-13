@@ -58,7 +58,17 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_content("Are you an accredited provider?")
     expect(page).to have_field("Yes", type: "radio")
     expect(page).to have_field("No", type: "radio")
-    expect(page).to have_field("Unique reference number (URN)")
+    expect(page).to have_field("Accredited provider number", visible: :all)
+    expect(page).to have_css(
+      ".govuk-hint",
+      text: "Enter your Accredited Provider number. If you don't know it, leave this blank and our support team find this for you.",
+      visible: :all,
+    )
+    expect(page).to have_content("Provider type")
+    expect(page).to have_field("Higher education institution (HEI)")
+    expect(page).to have_field("School centred initial teacher training (SCITT)")
+    expect(page).to have_field("School")
+    expect(page).to have_field("Unique reference number (URN)", visible: :all)
     expect(page).to have_field("Contact email address")
     expect(page).to have_field("Telephone")
     expect(page).to have_field("Organisation website")
@@ -78,7 +88,8 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     fill_in "Organisation name", with: form_data[:provider_name]
     fill_in "UK provider reference number (UKPRN)", with: form_data[:ukprn]
 
-    choose(form_data[:accredited_provider] ? "Yes" : "No")
+    choose "No"
+    choose "School"
     fill_in "Unique reference number (URN)", with: form_data[:urn]
 
     # Contact details
@@ -112,8 +123,8 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   def then_i_see_the_onboarding_form_fields_with_completed_details_and_change_links
     expect(page).to have_content(form_data[:provider_name])
     expect(page).to have_content(form_data[:ukprn])
-    accredited_text = form_data[:accredited_provider] ? "Yes" : "No"
-    expect(page).to have_content(accredited_text)
+    expect(page).to have_content("No")
+    expect(page).to have_content("School")
     expect(page).to have_content(form_data[:urn])
 
     expect(page).to have_content(form_data[:contact_email_address])
@@ -132,7 +143,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_content(form_data[:last_name])
 
     # Check for presence of change links
-    expect(page).to have_link("Change", count: 11)
+    expect(page).to have_link("Change", count: 12)
   end
 
   def and_i_submit_the_onboarding_form
@@ -155,7 +166,8 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
 
     expect(onboarding_request.provider_name).to eq(form_data[:provider_name])
     expect(onboarding_request.ukprn).to eq(form_data[:ukprn])
-    expect(onboarding_request.accredited_provider).to eq(form_data[:accredited_provider])
+    expect(onboarding_request.accredited_provider).to be false
+    expect(onboarding_request.provider_type).to eq("lead_school")
     expect(onboarding_request.urn).to eq(form_data[:urn])
 
     expect(onboarding_request.contact_email_address).to eq(form_data[:contact_email_address])
@@ -210,6 +222,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   def then_i_see_the_read_only_form_fields
     expect(page).to have_field("Organisation name", disabled: true)
     expect(page).to have_field("UK provider reference number (UKPRN)", disabled: true)
+    expect(page).to have_checked_field("School", disabled: true)
     expect(page).to have_field("Unique reference number (URN)", disabled: true)
     expect(page).to have_field("Contact email address", disabled: true)
     expect(page).to have_field("Telephone", disabled: true)

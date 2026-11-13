@@ -26,7 +26,7 @@ module ProvidersOnboardingFormRequestsHelper
       expect(page).to have_content(request.id)
       expect(page).to have_content(request.form_name)
       expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
-      expect(page).to have_content(request.status.titleize)
+      expect(page).to have_content(request.status_label)
       expect(page).to have_content(request.created_at.strftime("%-d %B %Y"))
     end
   end
@@ -152,12 +152,34 @@ module ProvidersOnboardingFormRequestsHelper
     # Organisation details
     expect(page).to have_content("Provider name")
     expect(page).to have_content(onboarding_request.provider_name)
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-provider-name-field"))
     expect(page).to have_content("UK provider reference number (UKPRN)")
     expect(page).to have_content(onboarding_request.ukprn)
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-ukprn-field"))
     expect(page).to have_content("Is the organisation an accredited provider?")
     expect(page).to have_content(onboarding_request.accredited_provider ? "Yes" : "No")
-    expect(page).to have_content("Unique reference number (URN)")
-    expect(page).to have_content(onboarding_request.urn)
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-accredited-provider-field-error"))
+    expect(page).to have_content("Provider type")
+    expect(page).to have_content(onboarding_request.provider_type_label)
+    expect(page).to have_link(
+      "Change",
+      href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-provider-type-field"),
+    )
+    if onboarding_request.accredited_provider?
+      expect(page).to have_content("Accredited provider number")
+      accredited_provider_number_path = support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-accredited-provider-number-field")
+      if onboarding_request.accredited_provider_number.present?
+        expect(page).to have_content(onboarding_request.accredited_provider_number)
+        expect(page).to have_link("Change", href: accredited_provider_number_path)
+      else
+        expect(page).to have_link("Enter accredited provider number", href: accredited_provider_number_path)
+      end
+    end
+    if onboarding_request.lead_school?
+      expect(page).to have_content("Unique reference number (URN)")
+      expect(page).to have_content(onboarding_request.urn)
+      expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-urn-field"))
+    end
     # Contact details
     expect(page).to have_content("Contact email address")
     expect(page).to have_content(onboarding_request.contact_email_address)
@@ -180,22 +202,98 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_see_action_buttons_and_cancel_link
-    expect(page).to have_button("Accept")
-    expect(page).to have_button("Reject")
+    expect(page).to have_content(
+      "Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.",
+    )
+    expect(page).to have_button("Onboard provider", class: "govuk-button")
+    expect(page).to have_css(
+      "button.govuk-link.app-link--destructive.app-button-link",
+      text: "Reject provider",
+    )
     expect(page).to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
   end
 
-  def when_i_click_accept
-    click_button "Accept"
+  def then_i_do_not_see_onboard_or_reject_actions
+    expect(page).not_to have_button("Onboard provider")
+    expect(page).not_to have_button("Reject provider")
+    expect(page).not_to have_content("Click Onboard provider to approve the request")
+    expect(page).not_to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
+  end
+
+  def support_onboarding_change_path(onboarding_request, anchor)
+    publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor:)
+  end
+
+  def when_i_click_onboard_provider
+    click_button "Onboard provider"
   end
 
   def when_i_click_reject
-    click_button "Reject"
+    click_button "Reject provider"
   end
 
   def then_status_should_be(updated_status, onboarding_request)
     within("tr", text: onboarding_request.form_name) do
       expect(page).to have_content(updated_status)
     end
+  end
+
+  def then_i_am_on_the_new_provider_organisation_page(onboarding_request)
+    provider = provider_created_for(onboarding_request)
+
+    expect(page).to have_current_path(
+      support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider),
+    )
+  end
+
+  def then_i_see_the_onboarded_success_banner(onboarding_request)
+    provider = provider_created_for(onboarding_request)
+
+    expect(page).to have_content("#{provider.provider_name} (#{provider.provider_code}) has been onboarded")
+  end
+
+  def then_the_accredited_provider_is_created(onboarding_request)
+    provider = provider_created_for(onboarding_request)
+
+    expect(provider).to have_attributes(
+      provider_type: onboarding_request.provider_type,
+      accredited: true,
+      accredited_provider_number: onboarding_request.accredited_provider_number.to_i,
+    )
+    expect(onboarding_request.reload).to be_onboarded
+    expect(onboarding_request.provider).to eq(provider)
+  end
+
+  def then_the_provider_and_first_user_are_created(onboarding_request)
+    provider = provider_created_for(onboarding_request)
+
+    expect(provider.provider_code).to match(Support::ProviderForm::PROVIDER_CODE_FORMAT)
+    expect(provider).to be_lead_school
+    expect(provider.email).to eq(onboarding_request.contact_email_address)
+    expect(provider.users.find_by(email: onboarding_request.email_address.downcase)).to have_attributes(
+      first_name: onboarding_request.first_name,
+      last_name: onboarding_request.last_name,
+    )
+    expect(onboarding_request.reload).to be_onboarded
+    expect(onboarding_request.provider).to eq(provider)
+  end
+
+  def then_i_see_the_onboarding_error(message)
+    expect(page).to have_content("There is a problem")
+    expect(page).to have_content(message)
+  end
+
+  def then_only_one_provider_exists_for(onboarding_request)
+    expect(Provider.where(provider_name: onboarding_request.provider_name).count).to eq(1)
+    expect(onboarding_request.reload).to be_onboarded
+  end
+
+  def then_the_request_has_not_created_a_provider(onboarding_request)
+    expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
+    expect(onboarding_request.reload).to be_submitted
+  end
+
+  def provider_created_for(onboarding_request)
+    Provider.find_by!(provider_name: onboarding_request.provider_name)
   end
 end

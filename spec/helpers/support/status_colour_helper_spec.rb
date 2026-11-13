@@ -22,6 +22,10 @@ RSpec.describe Support::StatusColourHelper, type: :helper do
       expect(helper.status_colour("rejected")).to eq("red")
     end
 
+    it "returns 'green' for 'onboarded' status" do
+      expect(helper.status_colour("onboarded")).to eq("green")
+    end
+
     it "returns 'grey' for unknown status" do
       expect(helper.status_colour("unknown_status")).to eq("grey")
     end
