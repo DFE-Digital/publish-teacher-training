@@ -4,8 +4,9 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    # With card: false, only the course's details render, so a grouped result
-    # card can list several courses under one provider heading.
+    # With card: false, only the course's details render. Given content, the
+    # card shows it in place of the course's details. Together they let a
+    # grouped result card list several courses under one provider heading.
     def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new, card: true)
       @course = course
       @candidate = candidate
