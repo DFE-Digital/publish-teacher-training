@@ -133,4 +133,21 @@ RSpec.describe Courses::ResultCardComponent, type: :component do
       end
     end
   end
+
+  # The search's accredited provider conflicts leave out self-accredited
+  # courses, so a group can mix the two without being one of them.
+  context "when only some of the provider's courses have an accredited provider" do
+    let(:accredited_provider) { create(:provider, :accredited_provider, provider_name: "Newman University") }
+    let(:options) { { accredited_provider_names: { accredited_provider.provider_code => "Newman University" } } }
+
+    let(:courses) { [salaried_course, fee_course] }
+
+    before { salaried_course.update!(accredited_provider_code: accredited_provider.provider_code) }
+
+    it "shows the accredited provider only under its course" do
+      expect(result_card).not_to have_css(".govuk-summary-card__title", text: "Accredited by")
+      expect(course_details("M001")).not_to have_text("accredited by")
+      expect(course_details("M002")).to have_text("accredited by Newman University")
+    end
+  end
 end
