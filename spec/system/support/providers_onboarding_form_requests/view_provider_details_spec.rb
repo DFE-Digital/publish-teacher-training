@@ -57,7 +57,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
-      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "UKPRN updated")
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "UK provider reference number (UKPRN) updated")
       expect(page).to have_content("12345679")
       expect(onboarding_request.reload.ukprn).to eq("12345679")
     end
@@ -79,7 +79,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
-      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Accredited provider updated")
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Is the organisation an accredited provider? updated")
       expect(page).to have_content("No")
       expect(onboarding_request.reload.accredited_provider).to be(false)
     end
@@ -93,7 +93,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
-      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "URN updated")
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Unique reference number (URN) updated")
       expect(page).to have_content("654321")
       expect(onboarding_request.reload.urn).to eq("654321")
     end

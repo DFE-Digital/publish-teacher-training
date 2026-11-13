@@ -26,7 +26,7 @@ module ProvidersOnboardingFormRequestsHelper
       expect(page).to have_content(request.id)
       expect(page).to have_content(request.form_name)
       expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
-      expect(page).to have_content(request.status.titleize)
+      expect(page).to have_content(request.status_label)
       expect(page).to have_content(request.created_at.strftime("%-d %B %Y"))
     end
   end

@@ -39,7 +39,7 @@ module Support
       if params[:status] == "accept"
         onboard_provider
       elsif updated_status && @onboarding_request.update(status: updated_status)
-        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".updated_status_message_html", updated_status: updated_status.humanize, form_name: @onboarding_request.form_name) }
+        redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".updated_status_message_html", updated_status: @onboarding_request.status_label, form_name: @onboarding_request.form_name) }
       else
         redirect_to support_providers_onboarding_form_requests_path, flash: { error: t(".error_message_html", form_name: @onboarding_request.form_name) }
       end
