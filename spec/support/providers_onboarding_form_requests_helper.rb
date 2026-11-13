@@ -152,19 +152,22 @@ module ProvidersOnboardingFormRequestsHelper
     # Organisation details
     expect(page).to have_content("Provider name")
     expect(page).to have_content(onboarding_request.provider_name)
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-provider-name-field"))
     expect(page).to have_content("UK provider reference number (UKPRN)")
     expect(page).to have_content(onboarding_request.ukprn)
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-ukprn-field"))
     expect(page).to have_content("Is the organisation an accredited provider?")
     expect(page).to have_content(onboarding_request.accredited_provider ? "Yes" : "No")
+    expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-accredited-provider-field-error"))
     expect(page).to have_content("Provider type")
     expect(page).to have_content(onboarding_request.provider_type_label)
     expect(page).to have_link(
       "Change",
-      href: publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor: "providers-onboarding-form-request-provider-type-field"),
+      href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-provider-type-field"),
     )
     if onboarding_request.accredited_provider?
       expect(page).to have_content("Accredited provider number")
-      accredited_provider_number_path = publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor: "providers-onboarding-form-request-accredited-provider-number-field")
+      accredited_provider_number_path = support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-accredited-provider-number-field")
       if onboarding_request.accredited_provider_number.present?
         expect(page).to have_content(onboarding_request.accredited_provider_number)
         expect(page).to have_link("Change", href: accredited_provider_number_path)
@@ -175,6 +178,7 @@ module ProvidersOnboardingFormRequestsHelper
     if onboarding_request.lead_school?
       expect(page).to have_content("Unique reference number (URN)")
       expect(page).to have_content(onboarding_request.urn)
+      expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-urn-field"))
     end
     # Contact details
     expect(page).to have_content("Contact email address")
@@ -214,6 +218,10 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).not_to have_button("Reject provider")
     expect(page).not_to have_content("Click Onboard provider to approve the request")
     expect(page).not_to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
+  end
+
+  def support_onboarding_change_path(onboarding_request, anchor)
+    publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor:)
   end
 
   def when_i_click_onboard_provider
