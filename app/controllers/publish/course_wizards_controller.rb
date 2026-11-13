@@ -26,7 +26,9 @@ module Publish
       )
     end
 
-    def show; end
+    def show
+      @wizard.clear_review if current_step_name == @wizard.check_answers_step
+    end
 
     def create
       update
@@ -34,9 +36,10 @@ module Publish
 
     def update
       if @wizard.save_current_step
-        @wizard.clear_stale_specialism_answers
         return complete_course if @wizard.final_step?
 
+        @wizard.track_review_step if @wizard.return_to_review.present?
+        clear_off_path_answers
         redirect_to @wizard.next_step_path
       else
         render :show, status: :unprocessable_entity
@@ -44,6 +47,13 @@ module Publish
     end
 
   private
+
+    # Answers that the saved step took off the path are cleared, so they are
+    # asked again if a later change brings their step back. A step opened
+    # off the path (from a bookmark, say) says nothing about the path.
+    def clear_off_path_answers
+      @wizard.clear_off_path_answers if @wizard.in_flow?(current_step_name)
+    end
 
     def complete_course
       flash[:success_with_body] = t("publish.course_wizards.flash.success_with_body").to_h
