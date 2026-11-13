@@ -4,7 +4,9 @@ module Courses
   class SummaryCardComponent < ViewComponent::Base
     attr_reader :course, :location, :visa_sponsorship, :short_address
 
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new)
+    # With card: false, only the course's details render, so a grouped result
+    # card can list several courses under one provider heading.
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new, card: true)
       @course = course
       @candidate = candidate
       @location = location
@@ -13,6 +15,7 @@ module Courses
       @centre_of_location = centre_of_location
       @accredited_provider_names = accredited_provider_names
       @accredited_provider_conflicts = accredited_provider_conflicts
+      @card = card
 
       super()
     end
