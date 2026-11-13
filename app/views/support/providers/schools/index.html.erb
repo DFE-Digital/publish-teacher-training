@@ -20,7 +20,7 @@
     search_publish_provider_recruitment_cycle_schools_path(
       @provider.provider_code,
       @provider.recruitment_cycle_year,
-      return_to: "support",
+      { return_to: "support", page: params[:page].presence }.compact,
     ),
     class: "govuk-button govuk-!-margin-bottom-3",
   ) %>
@@ -30,7 +30,7 @@
     new_publish_provider_recruitment_cycle_schools_multiple_path(
       @provider.provider_code,
       @provider.recruitment_cycle_year,
-      return_to: "support",
+      { return_to: "support", page: params[:page].presence }.compact,
     ),
     class: "govuk-button govuk-button--secondary govuk",
   ) %>

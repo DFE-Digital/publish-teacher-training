@@ -76,5 +76,30 @@ RSpec.describe "Support provider schools" do
         ),
       )
     end
+
+    it "keeps the list page on the add school links" do
+      get support_recruitment_cycle_provider_schools_path(recruitment_cycle.year, provider, page: 2)
+
+      links = response.parsed_body.css("a")
+      add_school_link = links.find { |link| link.text.strip == "Add school in Publish" }
+      add_multiple_link = links.find { |link| link.text.strip == "Add multiple schools in Publish" }
+
+      expect(add_school_link["href"]).to eq(
+        search_publish_provider_recruitment_cycle_schools_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          return_to: "support",
+          page: 2,
+        ),
+      )
+      expect(add_multiple_link["href"]).to eq(
+        new_publish_provider_recruitment_cycle_schools_multiple_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          return_to: "support",
+          page: 2,
+        ),
+      )
+    end
   end
 end
