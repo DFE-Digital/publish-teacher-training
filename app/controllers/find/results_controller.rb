@@ -19,7 +19,7 @@ module Find
       @accredited_provider_names = @courses_query.accredited_provider_names
       @filter_counts = @search_courses_form.filter_counts
 
-      @pagy, @results = paginate_results
+      @pagy, @results, @cards = paginate_results
 
       respond_to do |format|
         format.html do
@@ -53,14 +53,18 @@ module Find
       end
     end
 
-    # With grouped results, a page holds 10 cards rather than 10 courses.
-    # @courses_count still counts courses for the heading.
+    # With grouped results, a page holds 10 cards rather than 10 courses, and a
+    # card lists a provider's courses of a subject. Without, each course is its
+    # own card. @courses_count still counts courses for the heading.
     def paginate_results
-      return pagy(@courses, count: @courses_count, page:) unless FeatureFlag.active?(:group_search_results)
+      unless FeatureFlag.active?(:group_search_results)
+        pagy, results = pagy(@courses, count: @courses_count, page:)
+        return [pagy, results, results.map { |course| [course] }]
+      end
 
-      @result_cards = ::Courses::ResultCards.new(query: @courses_query, page:, per_page: Pagy::DEFAULT[:limit])
+      result_cards = ::Courses::ResultCards.new(query: @courses_query, page:, per_page: Pagy::DEFAULT[:limit])
 
-      [Pagy.new(count: @result_cards.count, page:), @result_cards.courses]
+      [Pagy.new(count: result_cards.count, page:), result_cards.courses, result_cards.cards]
     end
 
     def send_analytics_event
