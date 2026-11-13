@@ -84,7 +84,12 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       onboarding_request.update_column(:telephone, "bad")
 
       expect(result).not_to be_success
-      expect(result.error_message).to include("Organisation details:").and include("Telephone")
+      expect(result.errors).to include(
+        hash_including(
+          attribute: :telephone,
+          message: "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192",
+        ),
+      )
       expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
       expect(onboarding_request.reload).to be_submitted
     end
@@ -126,7 +131,12 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       onboarding_request.update_columns(accredited_provider: true, accredited_provider_number: "1234")
 
       expect(result).not_to be_success
-      expect(result.error_message).to include("Provider type school")
+      expect(result.errors).to include(
+        hash_including(
+          attribute: :provider_type,
+          message: "Accredited provider must not have Provider type school",
+        ),
+      )
       expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
       expect(onboarding_request.reload).to be_submitted
     end

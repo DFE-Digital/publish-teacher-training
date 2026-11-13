@@ -1,6 +1,9 @@
-<% content_for :page_title, "Provider details" %>
+<% content_for :page_title, title_with_error_prefix("Provider details", @onboarding_request.errors.any?) %>
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_providers_onboarding_form_requests_path) %>
+<% end %>
+<%= fields model: @onboarding_request.object do |f| %>
+  <%= f.govuk_error_summary %>
 <% end %>
 <span class="govuk-caption-l"><%= t(".caption") %></span>
 <h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
@@ -25,24 +28,24 @@
 <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
 <% support_change_path = ->(anchor) { publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor:) } %>
 <%= govuk_summary_list do |summary_list| %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-provider-name-field-error" }) do |row| %>
     <% row.with_key { "Provider name" } %>
     <% row.with_value { @onboarding_request.provider_name } %>
     <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-provider-name-field"), visually_hidden_text: "Provider name") %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-ukprn-field-error" }) do |row| %>
     <% row.with_key { "UK provider reference number (UKPRN)" } %>
     <% row.with_value { @onboarding_request.ukprn } %>
     <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-ukprn-field"), visually_hidden_text: "UK provider reference number (UKPRN)") %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-accredited-provider-field-error" }) do |row| %>
     <% row.with_key { "Is the organisation an accredited provider?" } %>
     <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %>
     <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-accredited-provider-field-error"), visually_hidden_text: "Is the organisation an accredited provider?") %>
   <% end %>
   <% if @onboarding_request.accredited_provider? %>
     <% accredited_provider_number_path = support_change_path.call("providers-onboarding-form-request-accredited-provider-number-field") %>
-    <% summary_list.with_row do |row| %>
+    <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-accredited-provider-number-field-error" }) do |row| %>
       <% row.with_key { "Accredited provider number" } %>
       <% if @onboarding_request.accredited_provider_number.present? %>
         <% row.with_value { @onboarding_request.accredited_provider_number } %>
@@ -58,7 +61,7 @@
       <% end %>
     <% end %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-provider-type-field-error" }) do |row| %>
     <% row.with_key { "Provider type" } %>
     <% row.with_value { @onboarding_request.provider_type_label } %>
     <% row.with_action(
@@ -68,7 +71,7 @@
        ) %>
   <% end %>
   <% if @onboarding_request.lead_school? %>
-    <% summary_list.with_row do |row| %>
+    <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-urn-field-error" }) do |row| %>
       <% row.with_key { "Unique reference number (URN)" } %>
       <% row.with_value { @onboarding_request.urn } %>
       <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-urn-field"), visually_hidden_text: "Unique reference number (URN)") %>
@@ -78,19 +81,19 @@
 <!-- Contact Details -->
 <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".contact_details") %></h2>
 <%= govuk_summary_list(actions: false) do |summary_list| %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-contact-email-address-field-error" }) do |row| %>
     <% row.with_key { "Contact email address" } %>
     <% row.with_value { @onboarding_request.contact_email_address } %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-telephone-field-error" }) do |row| %>
     <% row.with_key { "Telephone" } %>
     <% row.with_value { @onboarding_request.telephone } %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-website-field-error" }) do |row| %>
     <% row.with_key { "Website" } %>
     <% row.with_value { @onboarding_request.website } %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-address-line-1-field-error" }) do |row| %>
     <% row.with_key { "Address" } %>
     <% row.with_value(text: simple_format(@onboarding_request.full_address_on_separate_lines, {}, wrapper_tag: :div)) %>
   <% end %>
@@ -98,15 +101,15 @@
 <!-- User Details -->
 <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".user_details") %></h2>
 <%= govuk_summary_list(actions: false) do |summary_list| %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-email-address-field-error" }) do |row| %>
     <% row.with_key { "Email address" } %>
     <% row.with_value { @onboarding_request.email_address } %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-first-name-field-error" }) do |row| %>
     <% row.with_key { "First name" } %>
     <% row.with_value { @onboarding_request.first_name } %>
   <% end %>
-  <% summary_list.with_row do |row| %>
+  <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-last-name-field-error" }) do |row| %>
     <% row.with_key { "Last name" } %>
     <% row.with_value { @onboarding_request.last_name } %>
   <% end %>
@@ -117,13 +120,15 @@
   </p>
   <div class="govuk-button-group" id="onboard-provider">
     <%= button_to "Onboard provider",
-        support_providers_onboarding_form_request_path(@onboarding_request, status: "accept"),
+        support_providers_onboarding_form_request_path(@onboarding_request),
         method: :patch,
+        params: { status: "accept" },
         class: "govuk-button",
         form_class: "inline-form" %>
     <%= button_to "Reject provider",
-        support_providers_onboarding_form_request_path(@onboarding_request, status: "reject"),
+        support_providers_onboarding_form_request_path(@onboarding_request),
         method: :patch,
+        params: { status: "reject" },
         class: "govuk-link app-link--destructive app-button-link",
         form_class: "inline-form" %>
   </div>
