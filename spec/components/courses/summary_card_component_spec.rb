@@ -644,4 +644,29 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
       expect(summary_card).not_to have_css(".govuk-summary-list")
     end
   end
+
+  describe "rendering the course details without the card" do
+    let(:course) do
+      create(
+        :course,
+        :with_salary,
+        name: "Mathematics",
+        course_code: "37CP",
+        provider: build(:provider, provider_name: "University"),
+      )
+    end
+
+    let(:summary_card) { render_inline(described_class.new(course:, card: false)) }
+
+    it "renders the course's details" do
+      expect(summary_card).to have_css("h3 a.app-search-result__course-name", text: "Mathematics (37CP) at University")
+      expect(summary_card).to have_text("Salary")
+    end
+
+    it "leaves out the card and its provider heading" do
+      expect(summary_card).not_to have_css("li")
+      expect(summary_card).not_to have_css(".govuk-summary-card")
+      expect(summary_card).not_to have_css("h2")
+    end
+  end
 end

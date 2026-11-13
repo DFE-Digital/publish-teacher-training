@@ -1,30 +1,38 @@
-<li class="app-search-results__item">
-  <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
-    <h3 class="govuk-heading-s govuk-!-margin-bottom-0"><%= course_link %></h3>
-    <% if application_status_tag %>
-      <div class="app-saved-course__status-tag govuk-!-margin-bottom-1"><%= application_status_tag %></div>
-    <% end %>
-    <% if course_hint.present? %>
-      <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= course_hint %></p>
-    <% end %>
-
-    <% if no_employing_schools? %>
-      <p class="govuk-body"><%= t(".location_value.no_employing_schools") %></p>
-    <% elsif search_by_location? %>
-      <p class="govuk-body govuk-!-margin-bottom-0"><%= nearest_school_distance %></p>
-      <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= nearest_school_from %></p>
-    <% end %>
-
-    <p class="govuk-body"><%= funding_text %></p>
-
-    <p class="govuk-body"><%= qualification_and_study_mode %></p>
-
-    <%= save_toggle_button %>
-
-    <% if course.show_school_experience? %>
-      <div class="app-search-result__school-experience">
-        <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".school_experience") %></p>
-      </div>
-    <% end %>
+<% details = capture do %>
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-0"><%= course_link %></h3>
+  <% if application_status_tag %>
+    <div class="app-saved-course__status-tag govuk-!-margin-bottom-1"><%= application_status_tag %></div>
   <% end %>
-</li>
+  <% if course_hint.present? %>
+    <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= course_hint %></p>
+  <% end %>
+
+  <% if no_employing_schools? %>
+    <p class="govuk-body"><%= t(".location_value.no_employing_schools") %></p>
+  <% elsif search_by_location? %>
+    <p class="govuk-body govuk-!-margin-bottom-0"><%= nearest_school_distance %></p>
+    <p class="govuk-hint govuk-!-font-size-16 govuk-!-margin-top-0"><%= nearest_school_from %></p>
+  <% end %>
+
+  <p class="govuk-body"><%= funding_text %></p>
+
+  <p class="govuk-body"><%= qualification_and_study_mode %></p>
+
+  <%= save_toggle_button %>
+
+  <% if course.show_school_experience? %>
+    <div class="app-search-result__school-experience">
+      <p class="govuk-body govuk-!-margin-bottom-0"><%= t(".school_experience") %></p>
+    </div>
+  <% end %>
+<% end %>
+
+<% if @card %>
+  <li class="app-search-results__item">
+    <%= govuk_summary_card(classes: %w[course-summary-card], title:) do %>
+      <%= details %>
+    <% end %>
+  </li>
+<% else %>
+  <%= details %>
+<% end %>
