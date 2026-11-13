@@ -5,11 +5,47 @@ module Support
     class OnboardFromFormRequest
       include ServicePattern
 
-      class Error < StandardError; end
+      PROVIDER_ATTRIBUTES = {
+        "provider_name" => :provider_name,
+        "provider_type" => :provider_type,
+        "accredited" => :provider_type,
+        "ukprn" => :ukprn,
+        "urn" => :urn,
+        "accredited_provider_number" => :accredited_provider_number,
+        "email" => :contact_email_address,
+        "telephone" => :telephone,
+        "website" => :website,
+        "address1" => :address_line_1,
+        "address2" => :address_line_1,
+        "address3" => :address_line_1,
+        "town" => :address_line_1,
+        "address4" => :address_line_1,
+        "postcode" => :address_line_1,
+      }.freeze
 
-      Result = Data.define(:provider, :error_message) do
+      USER_ATTRIBUTES = {
+        "email" => :email_address,
+        "first_name" => :first_name,
+        "last_name" => :last_name,
+      }.freeze
+
+      class Error < StandardError
+        attr_reader :errors
+
+        def initialize(errors)
+          items = errors.is_a?(Array) ? errors : [errors]
+          @errors = items.map { |error| error.is_a?(Hash) ? error : { message: error.to_s } }
+          super(@errors.pluck(:message).join(" "))
+        end
+      end
+
+      Result = Data.define(:provider, :errors) do
         def success?
-          error_message.blank?
+          errors.blank?
+        end
+
+        def error_message
+          errors.pluck(:message).join(" ")
         end
       end
 
@@ -27,9 +63,9 @@ module Support
           onboarding_request.update!(status: :onboarded, provider:)
         end
 
-        Result.new(provider:, error_message: nil)
+        Result.new(provider:, errors: [])
       rescue Error => e
-        Result.new(provider: nil, error_message: e.message)
+        Result.new(provider: nil, errors: e.errors)
       end
 
     private
@@ -38,30 +74,30 @@ module Support
 
       def ensure_can_onboard!
         if onboarding_request.onboarded? || onboarding_request.provider_id.present?
-          raise Error, t("already_onboarded")
+          raise Error, { attribute: :base, message: onboarding_error("already_onboarded") }
         end
 
-        raise Error, t("not_submitted") unless onboarding_request.submitted?
+        raise Error, { attribute: :base, message: onboarding_error("not_submitted") } unless onboarding_request.submitted?
       end
 
       def create_provider!
         recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
-        raise Error, t("no_recruitment_cycle") if recruitment_cycle.nil?
+        raise Error, { attribute: :base, message: onboarding_error("no_recruitment_cycle") } if recruitment_cycle.nil?
 
         5.times do
           code = ProviderCode.call(recruitment_cycle:)
-          raise Error, t("code_generation_failed") if code.blank?
+          raise Error, { attribute: :base, message: onboarding_error("code_generation_failed") } if code.blank?
 
           provider = recruitment_cycle.providers.new(provider_attributes(code))
           return provider if save_provider(provider)
         end
 
-        raise Error, t("code_generation_failed")
+        raise Error, { attribute: :base, message: onboarding_error("code_generation_failed") }
       end
 
       def save_provider(provider)
         unless provider.valid?
-          raise Error, provider_error_message(provider) unless provider.errors.of_kind?(:provider_code, :taken)
+          raise Error, field_errors(provider, PROVIDER_ATTRIBUTES) unless provider.errors.of_kind?(:provider_code, :taken)
 
           return false
         end
@@ -74,7 +110,7 @@ module Support
       rescue ActiveRecord::RecordNotUnique
         false
       rescue ActiveRecord::RecordInvalid => e
-        raise Error, provider_error_message(e.record) unless e.record.errors.of_kind?(:provider_code, :taken)
+        raise Error, field_errors(e.record, PROVIDER_ATTRIBUTES) unless e.record.errors.of_kind?(:provider_code, :taken)
 
         false
       end
@@ -107,7 +143,7 @@ module Support
         if user.new_record?
           user.first_name = onboarding_request.first_name
           user.last_name = onboarding_request.last_name
-          raise Error, user_error_message(user) unless user.save
+          raise Error, field_errors(user, USER_ATTRIBUTES) unless user.save
         end
 
         UserAssociationsService::Create.call(user:, provider:)
@@ -123,15 +159,18 @@ module Support
         onboarding_request.email_address.to_s.strip.downcase
       end
 
-      def provider_error_message(provider)
-        "#{t('provider_invalid')} #{provider.errors.full_messages.join('. ')}"
+      def field_errors(record, attributes)
+        record.errors.attribute_names.flat_map do |attribute|
+          record.errors.messages_for(attribute).map do |message|
+            {
+              attribute: attributes[attribute.to_s] || :base,
+              message: message.delete_prefix("^"),
+            }
+          end
+        end
       end
 
-      def user_error_message(user)
-        "#{t('user_invalid')} #{user.errors.full_messages.join('. ')}"
-      end
-
-      def t(key)
+      def onboarding_error(key)
         I18n.t("support.providers.onboard_from_form_request.#{key}")
       end
     end
