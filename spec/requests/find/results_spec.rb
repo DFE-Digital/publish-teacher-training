@@ -36,9 +36,20 @@ describe "/results" do
         get "/results"
       end
 
-      it "shows every course on the page's 10 cards" do
-        expect(page.css(".app-search-results__item").size).to eq(12)
+      it "shows one card per provider, with each course listed on it" do
+        expect(page.css(".app-search-results__item").size).to eq(6)
+        expect(page.css(".app-search-results__item h2.govuk-summary-card__title").size).to eq(6)
+        expect(page.css(".app-search-results__item h3 a.app-search-result__course-name").size).to eq(12)
         expect(page.css(".govuk-pagination__next")).to be_empty
+      end
+
+      it "lists each provider's own courses on its card" do
+        page.css(".app-search-results__item").each do |card|
+          provider = Provider.find_by!(provider_name: card.at_css("h2").text.strip)
+          course_names = card.css("h3 a").map { |link| link.text.squish }
+
+          expect(course_names).to match_array(provider.courses.map { |course| "#{course.name_and_code} at #{provider.provider_name}" })
+        end
       end
 
       it "handles a search with a question mark" do
@@ -49,6 +60,19 @@ describe "/results" do
 
       it "still counts courses" do
         expect(page.text).to include("12 results")
+      end
+
+      context "when candidates can save courses" do
+        before do
+          FeatureFlag.activate(:candidate_accounts)
+          get "/results"
+        end
+
+        it "gives each course on a card its own Save" do
+          course_ids = page.css("a[href*='saved-courses/sign_in']").map { |link| Rack::Utils.parse_query(URI(link["href"]).query)["course_id"].to_i }
+
+          expect(course_ids.uniq).to match_array(courses.map(&:id))
+        end
       end
 
       it "sends the courses on the page to analytics" do
