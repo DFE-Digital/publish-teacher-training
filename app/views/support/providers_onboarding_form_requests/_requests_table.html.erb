@@ -19,7 +19,7 @@
         <% end %>
         <% row.with_cell(text: request.support_agent.present? ? "#{request.support_agent.first_name} #{request.support_agent.last_name}" : t(".unassigned")) %>
         <% row.with_cell do %>
-          <%= govuk_tag(text: request.status.titleize, colour: status_colour(request.status)) %>
+          <%= govuk_tag(text: request.status_label, colour: status_colour(request.status)) %>
         <% end %>
         <% row.with_cell(text: l(request.created_at, format: :last_event)) %>
       <% end %>

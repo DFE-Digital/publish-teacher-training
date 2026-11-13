@@ -20,6 +20,15 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
       expect(request.errors[:provider]).to be_present
     end
 
+    it "shows support labels without changing the stored status" do
+      expect(build(:providers_onboarding_form_request, status: "pending").status_label).to eq("Sent")
+      expect(build(:providers_onboarding_form_request, status: "submitted").status_label).to eq("Ready for review")
+      expect(build(:providers_onboarding_form_request, status: "closed").status_label).to eq("Onboarded")
+      expect(build(:providers_onboarding_form_request, status: "rejected").status_label).to eq("Rejected")
+      expect(build(:providers_onboarding_form_request, status: "expired").status_label).to eq("Expired")
+      expect(build(:providers_onboarding_form_request, status: "onboarded").status_label).to eq("Onboarded")
+    end
+
     it "raises an error when status is not in the enum keys" do
       expect {
         described_class.new(status: "invalid_status")

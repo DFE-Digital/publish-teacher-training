@@ -57,11 +57,11 @@ en:
         updated: "%{fields} updated"
         fields:
           provider_name: Provider name
-          ukprn: UKPRN
-          accredited_provider: Accredited provider
+          ukprn: UK provider reference number (UKPRN)
+          accredited_provider: Is the organisation an accredited provider?
           accredited_provider_number: Accredited provider number
           provider_type: Provider type
-          urn: URN
+          urn: Unique reference number (URN)
           contact_email_address: Contact email address
           telephone: Telephone
           website: Website
