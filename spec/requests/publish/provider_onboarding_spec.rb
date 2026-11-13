@@ -26,6 +26,7 @@ RSpec.describe "PATCH /provider-onboarding/:uuid", type: :request do
     patch publish_provider_onboarding_path(onboarding_request.uuid), params: form_params(provider_name: "Updated Training").merge(return_to: "support")
 
     expect(response).to redirect_to(support_providers_onboarding_form_request_path(onboarding_request))
+    expect(flash[:success]).to eq("Provider name updated")
     expect(onboarding_request.reload.provider_name).to eq("Updated Training")
   end
 
