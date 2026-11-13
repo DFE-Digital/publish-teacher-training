@@ -29,8 +29,73 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Provider type updated")
       expect(page).to have_content("Higher education institution (HEI)")
       expect(onboarding_request.reload.provider_type).to eq("university")
+    end
+
+    scenario "I can change the provider name from the details page" do
+      click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-provider-name-field")
+
+      expect(page).to have_field("Organisation name", with: "Northshore Training")
+
+      fill_in "Organisation name", with: "Updated Northshore"
+      click_button "Continue"
+
+      expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Provider name updated")
+      expect(page).to have_content("Updated Northshore")
+      expect(onboarding_request.reload.provider_name).to eq("Updated Northshore")
+    end
+
+    scenario "I can change the UKPRN from the details page" do
+      click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-ukprn-field")
+
+      expect(page).to have_field("UK provider reference number (UKPRN)", with: "12345678")
+
+      fill_in "UK provider reference number (UKPRN)", with: "12345679"
+      click_button "Continue"
+
+      expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "UKPRN updated")
+      expect(page).to have_content("12345679")
+      expect(onboarding_request.reload.ukprn).to eq("12345679")
+    end
+
+    scenario "I can change whether the organisation is an accredited provider" do
+      onboarding_request.update!(
+        accredited_provider: true,
+        provider_type: "university",
+        accredited_provider_number: "1234",
+        urn: nil,
+      )
+      when_i_visit_the_show_page_for(onboarding_request)
+
+      click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-accredited-provider-field-error")
+
+      expect(page).to have_checked_field("Yes")
+
+      choose "No"
+      click_button "Continue"
+
+      expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Accredited provider updated")
+      expect(page).to have_content("No")
+      expect(onboarding_request.reload.accredited_provider).to be(false)
+    end
+
+    scenario "I can change the URN from the details page" do
+      click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-urn-field")
+
+      expect(page).to have_field("Unique reference number (URN)", with: "123456")
+
+      fill_in "Unique reference number (URN)", with: "654321"
+      click_button "Continue"
+
+      expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "URN updated")
+      expect(page).to have_content("654321")
+      expect(onboarding_request.reload.urn).to eq("654321")
     end
 
     scenario "I can change an accredited provider number from the details page" do
@@ -48,6 +113,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Accredited provider number updated")
       expect(page).to have_content("1567")
       expect(onboarding_request.reload.accredited_provider_number).to eq("1567")
     end
@@ -67,6 +133,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "Accredited provider number updated")
       expect(page).to have_content("1234")
       expect(onboarding_request.reload.accredited_provider_number).to eq("1234")
     end

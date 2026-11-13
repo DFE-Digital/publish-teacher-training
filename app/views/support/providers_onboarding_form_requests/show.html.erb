@@ -23,21 +23,25 @@
 <% end %>
 <!-- Organisation Details -->
 <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
+<% support_change_path = ->(anchor) { publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor:) } %>
 <%= govuk_summary_list do |summary_list| %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Provider name" } %>
     <% row.with_value { @onboarding_request.provider_name } %>
+    <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-provider-name-field"), visually_hidden_text: "provider name") %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "UK provider reference number (UKPRN)" } %>
     <% row.with_value { @onboarding_request.ukprn } %>
+    <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-ukprn-field"), visually_hidden_text: "UKPRN") %>
   <% end %>
   <% summary_list.with_row do |row| %>
     <% row.with_key { "Is the organisation an accredited provider?" } %>
     <% row.with_value { @onboarding_request.accredited_provider ? "Yes" : "No" } %>
+    <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-accredited-provider-field-error"), visually_hidden_text: "accredited provider") %>
   <% end %>
   <% if @onboarding_request.accredited_provider? %>
-    <% accredited_provider_number_path = publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor: "providers-onboarding-form-request-accredited-provider-number-field") %>
+    <% accredited_provider_number_path = support_change_path.call("providers-onboarding-form-request-accredited-provider-number-field") %>
     <% summary_list.with_row do |row| %>
       <% row.with_key { "Accredited provider number" } %>
       <% if @onboarding_request.accredited_provider_number.present? %>
@@ -59,7 +63,7 @@
     <% row.with_value { @onboarding_request.provider_type_label } %>
     <% row.with_action(
          text: "Change",
-         href: publish_provider_onboarding_path(@onboarding_request.uuid, return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO, anchor: "providers-onboarding-form-request-provider-type-field"),
+         href: support_change_path.call("providers-onboarding-form-request-provider-type-field"),
          visually_hidden_text: "provider type",
        ) %>
   <% end %>
@@ -67,6 +71,7 @@
     <% summary_list.with_row do |row| %>
       <% row.with_key { "Unique reference number (URN)" } %>
       <% row.with_value { @onboarding_request.urn } %>
+      <% row.with_action(text: "Change", href: support_change_path.call("providers-onboarding-form-request-urn-field"), visually_hidden_text: "URN") %>
     <% end %>
   <% end %>
 <% end %>
