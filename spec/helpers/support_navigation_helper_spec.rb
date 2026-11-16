@@ -23,10 +23,10 @@ RSpec.describe SupportNavigationHelper, type: :helper do
       expect(item("API keys")).to be_nil
     end
 
-    it "shows API keys after Providers once the api_keys flag is active" do
+    it "shows API keys after Users once the api_keys flag is active" do
       FeatureFlag.activate(:api_keys)
 
-      expect(items.pluck(:text)).to eq(["Onboarding", "Providers", "API keys", "Users", "Settings"])
+      expect(items.pluck(:text)).to eq(["Onboarding", "Providers", "Users", "API keys", "Settings"])
       expect(item("API keys")).to eq(text: "API keys", href: support_api_keys_path, active_when: support_api_keys_path)
     end
 

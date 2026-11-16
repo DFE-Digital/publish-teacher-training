@@ -5,8 +5,8 @@ module SupportNavigationHelper
     [
       onboarding_navigation_item,
       providers_navigation_item,
-      api_keys_navigation_item,
       users_navigation_item,
+      api_keys_navigation_item,
       candidates_navigation_item,
       settings_navigation_item,
     ].compact
