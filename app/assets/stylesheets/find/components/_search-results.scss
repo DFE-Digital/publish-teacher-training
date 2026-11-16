@@ -62,6 +62,13 @@
   }
 }
 
+// Courses grouped on one result card, with a divider between them
+.app-search-result__course + .app-search-result__course {
+  @include govuk-responsive-margin(4, "top");
+  @include govuk-responsive-padding(4, "top");
+  border-top: 1px solid $govuk-border-colour;
+}
+
 .app-search-result__school-experience {
   @include govuk-responsive-margin(3, "top");
   padding: govuk-spacing(3);

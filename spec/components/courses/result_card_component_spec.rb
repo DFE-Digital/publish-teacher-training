@@ -71,8 +71,10 @@ RSpec.describe Courses::ResultCardComponent, type: :component do
       expect(links.map(&:text)).to eq(["Mathematics (M001) at Bishop Challoner", "Mathematics (M002) at Bishop Challoner"])
     end
 
-    it "puts a divider between the courses only" do
-      expect(result_card).to have_css(".govuk-summary-card__content hr.govuk-section-break--visible", count: 1)
+    # The stylesheet draws the divider between courses, so no rule is needed.
+    it "wraps each course so the stylesheet can divide them" do
+      expect(result_card).to have_css(".govuk-summary-card__content > .app-search-result__course", count: 2)
+      expect(result_card).to have_no_css("hr")
     end
 
     it "shows each course's own status, funding, qualification and study mode" do
