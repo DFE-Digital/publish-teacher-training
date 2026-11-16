@@ -5,12 +5,13 @@ require "rails_helper"
 RSpec.describe "Support::APIKeysController" do
   include DfESignInUserHelper
 
+  let(:admin) { create(:user, :admin) }
   let(:submission_token) { SecureRandom.uuid }
   let(:api_key_params) { { submission_token:, api_key: { name: "Teacher Vacancies", email: "vacancies@example.org" } } }
 
   before do
     host! URI(Settings.base_url).host
-    login_user(create(:user, :admin))
+    login_user(admin)
   end
 
   it "forbids caching the page that shows the new key" do
@@ -20,6 +21,23 @@ RSpec.describe "Support::APIKeysController" do
 
     expect(response).to have_http_status(:created)
     expect(response.headers["Cache-Control"]).to eq("no-store")
+  end
+
+  it "forbids caching the form so Back fetches a fresh submission token" do
+    FeatureFlag.activate(:api_keys)
+
+    get new_support_api_key_path
+
+    expect(response.headers["Cache-Control"]).to eq("no-store")
+  end
+
+  it "records the signed-in admin against creating and revoking a key" do
+    FeatureFlag.activate(:api_keys)
+
+    post support_api_keys_path, params: api_key_params
+    delete support_api_key_path(APIKey.sole)
+
+    expect(APIKey.sole.audits.map { [it.action, it.user] }).to eq([["create", admin], ["update", admin]])
   end
 
   it "ignores a search that is not a single string" do
