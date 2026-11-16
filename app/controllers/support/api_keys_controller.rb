@@ -10,6 +10,7 @@ module Support
     end
 
     def new
+      no_store
       @api_key = APIKey.new(submission_token: SecureRandom.uuid)
     end
 
