@@ -23,7 +23,20 @@
       }
     }
   ],
+  "security": [
+    {},
+    {
+      "bearerAuth": []
+    }
+  ],
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Optional. Send an API key in the Authorization header. Requests without a key are still supported. Never send a key in the URL."
+      }
+    },
     "schemas": {
       "400ErrorResponse": {
         "description": "This schema is used to return a 400 application error",
@@ -51,6 +64,38 @@
                   "type": "string",
                   "description": "A more detailed description of what could have caused the error.",
                   "example": "The request could not be fulfilled due to some incorrect syntax of the request."
+                }
+              }
+            }
+          }
+        }
+      },
+      "401ErrorResponse": {
+        "description": "This schema is used to return a 401 application error",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "description": "Returns the http status code associated with the error.",
+                  "example": 401
+                },
+                "title": {
+                  "type": "string",
+                  "description": "A generic title for the type of error.",
+                  "example": "UNAUTHORIZED"
+                },
+                "detail": {
+                  "type": "string",
+                  "description": "A more detailed description of what could have caused the error.",
+                  "example": "The API key was not accepted. Send an active key in the Authorization header using the Bearer scheme, and never in the URL"
                 }
               }
             }
@@ -2169,6 +2214,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2215,6 +2279,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/400ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
                 }
               }
             }
@@ -2290,6 +2373,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CourseLocationListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
                 }
               }
             }
@@ -2406,6 +2508,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2480,6 +2601,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2534,6 +2674,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProviderLocationListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
                 }
               }
             }
@@ -2634,6 +2793,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2706,6 +2884,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2748,6 +2945,25 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2786,6 +3002,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SubjectListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The API key was not accepted.",
+            "headers": {
+              "WWW-Authenticate": {
+                "schema": {
+                  "type": "string",
+                  "example": "Bearer"
+                },
+                "description": "The authentication scheme to use."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/401ErrorResponse"
                 }
               }
             }

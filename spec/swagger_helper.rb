@@ -46,6 +46,16 @@ if defined?(Rswag)
           metadata[:operation]["x-curl-examples"] ||= []
           metadata[:operation]["x-curl-examples"] << hash
         end
+
+        def unauthorized_response(&)
+          response "401", "The API key was not accepted." do
+            schema({ '$ref': "#/components/schemas/401ErrorResponse" })
+            header "WWW-Authenticate", schema: { type: :string, example: "Bearer" }, description: "The authentication scheme to use."
+
+            it "is documented by swaggerize" if RSpec.configuration.dry_run?
+            class_exec(&) if block_given?
+          end
+        end
       end
     end
   end
