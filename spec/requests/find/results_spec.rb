@@ -52,6 +52,18 @@ describe "/results" do
         end
       end
 
+      it "shows a provider with one course as today's card" do
+        provider = create(:provider, provider_name: "Solo SCITT")
+        create(:course, :secondary, :with_full_time_sites, :published, provider:, name: "Mathematics", subjects: [mathematics], master_subject_id: mathematics.id)
+
+        get "/results"
+        card = page.css("li.app-search-results__item").find { |item| item.at_css("h2")&.text&.include?("Solo SCITT") }
+
+        expect(card.css("> .govuk-summary-card h2.govuk-summary-card__title").text).to include("Solo SCITT")
+        expect(card.css(".govuk-summary-card__content > h3 > a.app-search-result__course-name").size).to eq(1)
+        expect(card.css(".app-search-result__course")).to be_empty
+      end
+
       it "handles a search with a question mark" do
         get "/results", params: { provider_name: "Who?" }
 
