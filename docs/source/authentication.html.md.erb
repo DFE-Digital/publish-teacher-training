@@ -1,0 +1,83 @@
+---
+title: Authentication
+weight: 2
+---
+
+# Authentication
+
+Authentication is optional. Requests without an API key are still supported and
+return the same data as requests with one.
+
+## Getting an API key
+
+To get an API key, [contact us](./support.html) with:
+
+- the name of the organisation or integration that will use the key
+- the email address of the person or team responsible for it
+
+A DfE support user creates the key through "API keys" in the support interface
+and shares it with you securely. We can create up to 5 active keys for each
+email address.
+
+The complete key is shown only once, when it is created, so save it somewhere
+secure. We cannot show it again or recover it. If a key is lost or exposed,
+contact us to revoke it and we will create a new one.
+
+## Making a request with a key
+
+Send the key in the `Authorization` header using the `Bearer` scheme:
+
+```
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.publish-teacher-training-courses.service.gov.uk/api/public/v1/subjects
+```
+
+Replace `YOUR_API_KEY` with your key.
+
+Never put a key in the URL, either in the path or as a query parameter. Any
+request with an API key in its URL is rejected, even if it also sends a valid
+`Authorization` header.
+
+## 401 Unauthorized responses
+
+If you send an `Authorization` header, it must contain an active key. A request
+with a header that is not accepted is rejected, not served anonymously.
+
+The API returns `401 Unauthorized` with a `WWW-Authenticate: Bearer` header
+when:
+
+- the key is not recognised
+- the key has been revoked
+- the `Authorization` header is empty
+- the `Authorization` header is malformed, for example it uses a scheme other
+  than `Bearer`, has no key, or has more than one value after the scheme
+- an API key appears anywhere in the URL
+
+The response body is the same in every case:
+
+```json
+{
+  "errors": [
+    {
+      "status": 401,
+      "title": "UNAUTHORIZED",
+      "detail": "The API key was not accepted. Send an active key in the Authorization header using the Bearer scheme, and never in the URL"
+    }
+  ]
+}
+```
+
+## Usage limits
+
+There are currently no usage limits or rate limits, for requests with or
+without a key. This may change in future, so do not rely on unlimited access.
+
+## Who a key belongs to
+
+Each key belongs to the email address it was created for. If the user with that
+email address is deleted from our service, all of their keys are deleted and
+stop working immediately. Any integration using those keys will stop being able
+to authenticate.
+
+If the user's email address changes, their keys move to the new address and
+keep working.

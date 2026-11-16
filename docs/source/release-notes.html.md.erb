@@ -1,9 +1,16 @@
 ---
 title: Release notes
-weight: 2
+weight: 3
 ---
 
 # Release Notes
+
+## 16 November 2026
+
+We have added optional API key authentication. Requests without a key are still supported and return the same data.
+
+- Send a key in the `Authorization` header using the `Bearer` scheme. See [authentication](./authentication.html) for how to get a key.
+- Any request that sends an `Authorization` header is now checked. If the header does not contain an active key, or a key appears in the URL, the API returns `401 Unauthorized` rather than serving the request anonymously. Every operation now documents this response.
 
 ## 21 August 2026
 
