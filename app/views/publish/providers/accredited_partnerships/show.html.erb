@@ -1,10 +1,7 @@
 <% content_for :page_title, "#{@accredited_provider.provider_name} (#{@accredited_provider.provider_code})" %>
 <% content_for :before_content do %>
   <%= render GovukComponent::BackLinkComponent.new(
-        href: publish_provider_recruitment_cycle_accredited_partnerships_path(
-          provider_code: @training_provider.provider_code,
-          recruitment_cycle_year: @training_provider.recruitment_cycle_year,
-        ),
+        href: publish_or_support_accredited_partnerships_path,
       ) %>
 <% end %>
 <h1 class="govuk-heading-l">
@@ -17,6 +14,7 @@
           accredited_provider_code: @accredited_provider.provider_code,
           provider_code: @training_provider.provider_code,
           recruitment_cycle_year: @training_provider.recruitment_cycle_year,
+          **support_return_params,
         ),
         class: "app-link--destructive govuk-!-font-weight-regular" %>
 </p>

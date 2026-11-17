@@ -58,12 +58,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       resources :schools, only: :index, module: "providers"
 
       scope module: :providers do
-        resources :accredited_partnerships, param: :accredited_provider_code, only: %i[index destroy], path: "accredited-partnerships" do
-          member do
-            get :delete
-            delete :delete, to: "accredited_partnerships#destroy"
-          end
-        end
+        resources :accredited_partnerships, only: %i[index], path: "accredited-partnerships"
 
         resources :copy_courses, only: %i[new create]
       end

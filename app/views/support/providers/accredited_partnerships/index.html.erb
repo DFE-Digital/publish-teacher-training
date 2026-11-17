@@ -26,10 +26,40 @@
 <% if @partnerships.none? %>
   <p class="govuk-body"><%= t(".no_providers", provider_name: @provider.provider_name) %>.</p>
 <% else %>
-  <% @partnerships.each do |partnership| %>
-    <%= render AccreditedProviderComponent.new(
-      provider: partnership.accredited_provider,
-      remove_path: delete_support_recruitment_cycle_provider_accredited_partnership_path(accredited_provider_code: partnership.accredited_provider.provider_code),
-    ) %>
-  <% end %>
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header"><%= t(".name") %></th>
+        <th scope="col" class="govuk-table__header govuk-!-text-align-right"><%= t(".view_in_publish") %></th>
+      </tr>
+    </thead>
+
+    <tbody class="govuk-table__body">
+      <% @partnerships.each do |partnership| %>
+        <% accredited_provider = partnership.accredited_provider %>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <%= govuk_link_to(
+              accredited_provider.name_and_code,
+              support_recruitment_cycle_provider_path(accredited_provider.recruitment_cycle_year, accredited_provider),
+            ) %>
+          </td>
+          <td class="govuk-table__cell govuk-!-text-align-right">
+            <%= govuk_link_to(
+              safe_join([
+                t(".view_accredited_provider"),
+                content_tag(:span, accredited_provider.name_and_code, class: "govuk-visually-hidden"),
+              ], " "),
+              publish_provider_recruitment_cycle_accredited_partnership_path(
+                @provider.provider_code,
+                @provider.recruitment_cycle_year,
+                accredited_provider.provider_code,
+                return_to: "support",
+              ),
+            ) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
