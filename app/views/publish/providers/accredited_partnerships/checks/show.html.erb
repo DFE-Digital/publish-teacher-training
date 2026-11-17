@@ -3,13 +3,13 @@
 ) %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(search_publish_provider_recruitment_cycle_accredited_providers_path) %>
+  <%= govuk_back_link_to(search_publish_provider_recruitment_cycle_accredited_providers_path(**support_return_params)) %>
 <% end %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    <%= form_with(url: check_publish_provider_recruitment_cycle_accredited_partnerships_path, method: :put, local: true) do |f| %>
+    <%= form_with(url: check_publish_provider_recruitment_cycle_accredited_partnerships_path(**support_return_params), method: :put, local: true) do |f| %>
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l"><%= t(".caption") %></span>
         <%= t(".check_answers") %>
@@ -19,18 +19,20 @@
             component.with_row do |row|
               row.with_key { t(".accredited_provider") }
               row.with_value { @accredited_provider.provider_name }
-              row.with_action(text: t("change"), href: search_publish_provider_recruitment_cycle_accredited_providers_path(accredited_provider_id: @accredited_provider.id, goto_confirmation: true), visually_hidden_text: "accredited provider name")
+              row.with_action(text: t("change"), href: search_publish_provider_recruitment_cycle_accredited_providers_path(accredited_provider_id: @accredited_provider.id, goto_confirmation: true, **support_return_params), visually_hidden_text: "accredited provider name")
             end
           end %>
 
-      <%= govuk_warning_text(text: t(".warning", provider_name: @accredited_provider.provider_name)) %>
+      <p class="govuk-body">
+        <%= t(".warning", provider_name: @accredited_provider.provider_name) %>
+      </p>
 
       <%= f.hidden_field :accredited_provider_id, value: @accredited_provider.id %>
       <%= f.govuk_submit(t(".add")) %>
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year)) %>
+      <%= govuk_link_to(t("cancel"), publish_or_support_accredited_partnerships_path) %>
     </p>
   </div>
 </div>

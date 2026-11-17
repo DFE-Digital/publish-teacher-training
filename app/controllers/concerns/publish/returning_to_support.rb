@@ -7,7 +7,8 @@ module Publish
     included do
       helper_method :returning_to_support?,
                     :support_return_params,
-                    :publish_or_support_schools_path
+                    :publish_or_support_schools_path,
+                    :publish_or_support_accredited_partnerships_path
     end
 
   private
@@ -39,6 +40,24 @@ module Publish
         support_schools_path
       else
         publish_provider_recruitment_cycle_schools_path
+      end
+    end
+
+    def support_accredited_partnerships_path
+      support_recruitment_cycle_provider_accredited_partnerships_path(
+        provider.recruitment_cycle_year,
+        provider,
+      )
+    end
+
+    def publish_or_support_accredited_partnerships_path
+      if returning_to_support?
+        support_accredited_partnerships_path
+      else
+        publish_provider_recruitment_cycle_accredited_partnerships_path(
+          provider.provider_code,
+          provider.recruitment_cycle_year,
+        )
       end
     end
   end

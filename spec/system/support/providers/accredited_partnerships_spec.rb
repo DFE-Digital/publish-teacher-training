@@ -22,8 +22,10 @@ RSpec.describe "Accredited partnership flow" do
     then_i_am_on_the_accredited_providers_page
   end
 
-  scenario "i can create a new provider partnership" do
-    when_i_click_add_accredited_provider
+  scenario "i can create a new provider partnership in Publish" do
+    when_i_click_add_accredited_provider_in_publish
+    then_i_am_on_the_publish_accredited_provider_search_page
+
     and_i_search_with_an_invalid_query
     then_i_see_an_error_message("Enter a provider name")
 
@@ -44,7 +46,9 @@ RSpec.describe "Accredited partnership flow" do
   end
 
   scenario "i can select an accredited provider using the autocomplete", :js do
-    when_i_click_add_accredited_provider
+    when_i_click_add_accredited_provider_in_publish
+    then_i_am_on_the_publish_accredited_provider_search_page
+
     and_i_type_a_provider_name_into_the_autocomplete
     then_i_see_the_provider_in_the_autocomplete_suggestions
     when_i_choose_the_provider_from_the_autocomplete_suggestions
@@ -63,7 +67,7 @@ RSpec.describe "Accredited partnership flow" do
 
   scenario "i can delete accredited partnerships not attached to a course" do
     and_i_click_on_the_accredited_provider_tab
-    and_i_click_add_accredited_provider
+    and_i_click_add_accredited_provider_in_publish
     and_i_search_for_an_accredited_provider_with_a_valid_query
     and_i_select_the_provider
     and_i_confirm_the_changes
@@ -140,10 +144,20 @@ private
   end
   alias_method :then_i_still_see_the_provider_i_searched_for, :then_i_see_the_provider_i_searched_for
 
-  def and_i_click_add_accredited_provider
-    click_link_or_button "Add accredited provider"
+  def when_i_click_add_accredited_provider_in_publish
+    click_link_or_button "Add accredited provider in Publish"
   end
-  alias_method :when_i_click_add_accredited_provider, :and_i_click_add_accredited_provider
+  alias_method :and_i_click_add_accredited_provider_in_publish, :when_i_click_add_accredited_provider_in_publish
+
+  def then_i_am_on_the_publish_accredited_provider_search_page
+    expect(page).to have_current_path(
+      search_publish_provider_recruitment_cycle_accredited_providers_path(
+        provider_code: @provider.provider_code,
+        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        return_to: "support",
+      ),
+    )
+  end
 
   def and_i_click_remove
     click_link_or_button "Remove"
@@ -176,14 +190,6 @@ private
       recruitment_cycle_year: Find::CycleTimetable.current_year,
       provider_id: @provider.id,
     )
-  end
-
-  def and_i_click_change
-    click_link_or_button("Change")
-  end
-
-  def when_i_click_the_back_link
-    click_link_or_button "Back"
   end
 
   def and_i_see_an_error_message(error_message = form_title)

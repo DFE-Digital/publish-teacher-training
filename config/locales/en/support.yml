@@ -32,10 +32,6 @@ en:
         email: "Email address"
         edit: "Update user"
         check: "Check your answers"
-      accredited_provider_search:
-        new:
-          title: Enter a provider name, UKPRN or postcode
-          caption: Add accredited provider - %{provider_name} (%{code})
       provider_type:
         lead_school: "School"
         scitt: "School centred initial teacher training (SCITT)"
