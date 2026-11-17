@@ -100,6 +100,17 @@ RSpec.describe "Solid Queue configuration" do
     expect(Rake::Task.task_defined?("solid_queue:start_when_ready")).to be(true)
   end
 
+  it "keeps the Solid Queue worker at zero replicas during first-setup db prepare" do
+    application_tf = Rails.root.join("terraform/aks/application.tf").read
+    deploy_action = Rails.root.join(".github/actions/deploy/action.yml").read
+
+    expect(application_tf).to match(
+      /replicas\s*=\s*var\.use_db_setup_command\s*\?\s*0\s*:\s*var\.solid_queue_worker_replicas/,
+    )
+    expect(deploy_action).to include("Enable Solid Queue after first-setup restore")
+    expect(deploy_action).to include("USE_DB_SETUP_COMMAND: false")
+  end
+
   it "derives Mission Control filter_arguments from filter_parameters" do
     expect(MissionControl::Jobs.filter_arguments).to include("email", "token", "email_address", "headers")
   end
