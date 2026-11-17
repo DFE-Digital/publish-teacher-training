@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "View provider users" do
+RSpec.describe "View provider users", :publish_features do
   let(:user) { create(:user, :admin) }
 
   scenario "i can view users belong to a provider" do
