@@ -74,4 +74,26 @@ namespace :sandbox do
       puts "Nothing was imported"
     end
   end
+
+  desc <<~DESC
+    Copies a provider's courses for a recruitment cycle from production, through the
+    public Publish API, keeping production's course and site codes. Courses are created
+    or updated and published; nothing is deleted.
+
+    It is a dry run unless the third argument is "true":
+
+    bin/rails "sandbox:import_provider_courses[C55,2027]"       # report only, rolls back
+    bin/rails "sandbox:import_provider_courses[C55,2027,true]"  # commit
+  DESC
+  task :import_provider_courses, %i[provider_code year confirm] => [:environment] do |_task, args|
+    raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
+
+    Sandbox::ImportProviderCourses.call(
+      provider_code: args.fetch(:provider_code).upcase,
+      year: Integer(args.fetch(:year)),
+      confirm: args[:confirm] == "true",
+    )
+  rescue Sandbox::ImportProviderCourses::Abort => e
+    abort e.message
+  end
 end
