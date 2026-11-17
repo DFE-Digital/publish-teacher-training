@@ -454,6 +454,16 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
         expect(summary_card_content).not_to include("Ages")
       end
     end
+
+    context "when the age range is hidden" do
+      let(:age_range_in_years) { "11_to_16" }
+      let(:summary_card) { render_inline(described_class.new(course:, show_age_range: false)) }
+
+      it "does not render the age range or an empty hint" do
+        expect(summary_card_content).not_to include("Ages")
+        expect(summary_card).to have_no_css(".govuk-summary-card__content h3 + p.govuk-hint")
+      end
+    end
   end
 
   describe "when displaying the accredited provider" do
@@ -523,6 +533,27 @@ RSpec.describe Courses::SummaryCardComponent, type: :component do
             ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
             text: /\AAccredited by Manchester Metropolitan University\z/,
           )
+        end
+      end
+
+      context "when the age range is hidden" do
+        let(:summary_card) do
+          render_inline(
+            described_class.new(
+              course:,
+              accredited_provider_names:,
+              accredited_provider_conflicts: Set[[course.provider_id, course.master_subject_id]],
+              show_age_range: false,
+            ),
+          )
+        end
+
+        it "renders the accredited provider on its own under the course name" do
+          expect(summary_card).to have_css(
+            ".govuk-summary-card__content .govuk-hint.govuk-\\!-font-size-16",
+            text: /\AAccredited by Manchester Metropolitan University\z/,
+          )
+          expect(summary_card_content).not_to include("Ages")
         end
       end
     end
