@@ -65,6 +65,63 @@ RSpec.describe "Publish provider accredited partnerships check", service: :publi
           { "title" => "Accredited provider added", "body" => "UCL" },
         )
       end
+
+      it "keeps return_to=support on check back, change and cancel links" do
+        get check_publish_provider_recruitment_cycle_accredited_partnerships_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          accredited_provider_id: accredited_provider.id,
+          return_to: "support",
+        )
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+          search_publish_provider_recruitment_cycle_accredited_providers_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            return_to: "support",
+          ),
+        )
+
+        change_link = response.parsed_body.at_css(".govuk-summary-list__actions a")
+        expect(change_link["href"]).to eq(
+          search_publish_provider_recruitment_cycle_accredited_providers_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            accredited_provider_id: accredited_provider.id,
+            goto_confirmation: true,
+            return_to: "support",
+          ),
+        )
+        expect(response.body).to include(
+          support_recruitment_cycle_provider_accredited_partnerships_path(
+            recruitment_cycle.year,
+            provider,
+          ),
+        )
+      end
+
+      it "keeps return_to=support when the partnership already exists" do
+        provider.accredited_partnerships.create!(accredited_provider:)
+
+        get check_publish_provider_recruitment_cycle_accredited_partnerships_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          accredited_provider_id: accredited_provider.id,
+          return_to: "support",
+        )
+
+        expect(response).to redirect_to(
+          search_publish_provider_recruitment_cycle_accredited_providers_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            return_to: "support",
+          ),
+        )
+        expect(flash[:error]).to eq(
+          { message: "#{accredited_provider.name_and_code} partnership already exists" },
+        )
+      end
     end
   end
 end
