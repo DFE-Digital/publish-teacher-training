@@ -92,6 +92,7 @@
             visa_sponsorship: @search_params[:can_sponsor_visa],
             accredited_provider_names: @accredited_provider_names,
             accredited_provider_conflicts: @accredited_provider_conflicts,
+            provider_search: @courses_query.applied_scopes.key?(:provider),
           ) %>
 
           <% courses.each do |course| %>

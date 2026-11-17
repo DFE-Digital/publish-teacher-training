@@ -151,5 +151,52 @@ RSpec.describe Courses::ResultCardComponent, type: :component do
       expect(course_details("M001")).not_to have_text("accredited by")
       expect(course_details("M002")).to have_text("accredited by Newman University")
     end
+
+    context "when not searching by provider" do
+      let(:options) { { accredited_provider_names: { accredited_provider.provider_code => "Newman University" }, provider_search: false } }
+
+      it "still shows the accredited provider under its course" do
+        expect(course_details("M001")).not_to have_text("accredited by")
+        expect(course_details("M002")).to have_text("accredited by Newman University")
+      end
+    end
+  end
+
+  context "when not searching by provider" do
+    let(:newman) { create(:provider, :accredited_provider, provider_name: "Newman University") }
+    let(:birmingham) { create(:provider, :accredited_provider, provider_name: "Birmingham City University") }
+    let(:names) { { newman.provider_code => "Newman University", birmingham.provider_code => "Birmingham City University" } }
+    let(:options) { { accredited_provider_names: names, provider_search: false } }
+
+    context "when the courses share an accredited provider" do
+      before { courses.each { |course| course.update!(accredited_provider_code: newman.provider_code) } }
+
+      it "doesn't show it" do
+        expect(result_card).not_to have_text(/accredited by/i)
+      end
+    end
+
+    context "with one course" do
+      let(:courses) { [fee_course] }
+
+      before { fee_course.update!(accredited_provider_code: newman.provider_code) }
+
+      it "doesn't show its accredited provider" do
+        expect(result_card).not_to have_text(/accredited by/i)
+      end
+    end
+
+    context "when the courses have different accredited providers" do
+      before do
+        fee_course.update!(accredited_provider_code: newman.provider_code)
+        salaried_course.update!(accredited_provider_code: birmingham.provider_code)
+      end
+
+      it "shows each course's under its name" do
+        expect(result_card).not_to have_css(".govuk-summary-card__title", text: "Accredited by")
+        expect(course_details("M001")).to have_text("accredited by Newman University")
+        expect(course_details("M002")).to have_text("accredited by Birmingham City University")
+      end
+    end
   end
 end
