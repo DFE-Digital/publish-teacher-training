@@ -1,0 +1,76 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe Sandbox::ImportCourseSchools do
+  subject(:import) { described_class.call(course:, locations:) }
+
+  let(:provider) { create(:provider) }
+  let(:course) { create(:course, provider:) }
+  let(:locations) { JSON.parse(file_fixture("publish_public_api/course_locations.json").read) }
+
+  context "when the GIAS school is already in this environment" do
+    let!(:gias_school) { create(:gias_school, urn: "133802", name: "University of Chester") }
+
+    it "adds the school to the provider with the production code and links the course" do
+      expect { import }.not_to change(GiasSchool, :count)
+
+      provider_school = provider.schools.sole
+      expect(provider_school).to have_attributes(gias_school:, site_code: "-")
+      expect(course.schools.map(&:provider_school)).to eq([provider_school])
+      expect(import).to have_attributes(schools_created: ["- (133802)"], gias_stubs: [], conflicts: [])
+    end
+
+    it "does nothing new when run again" do
+      described_class.call(course:, locations:)
+
+      expect { import }.not_to change(Provider::School, :count)
+      expect(course.schools.count).to eq(1)
+      expect(import).to have_attributes(schools_created: [], gias_stubs: [], conflicts: [])
+    end
+  end
+
+  context "when the GIAS school is missing" do
+    it "creates it from the production location" do
+      expect { import }.to change(GiasSchool, :count).by(1)
+
+      expect(GiasSchool.find_by(urn: "133802")).to have_attributes(
+        name: "University of Chester",
+        address1: "Parkgate Road",
+        town: "Chester",
+        county: "Cheshire",
+        postcode: "CH1 4BJ",
+        region_code: "north_west",
+        latitude: 53.1986567225753,
+        longitude: -2.898062705941234,
+        status_code: "open",
+      )
+      expect(provider.schools.sole.site_code).to eq("-")
+      expect(import.gias_stubs).to eq(%w[133802])
+    end
+  end
+
+  context "when the provider already has a different main site" do
+    before { create(:provider_school, :main_site, provider:) }
+
+    it "reports the conflict and leaves the course without that school" do
+      expect { import }.not_to change(Provider::School, :count)
+
+      expect(course.schools).to be_empty
+      expect(import.conflicts).to eq(["- (133802): the provider already has a school with code -"])
+    end
+  end
+
+  context "when the provider already has the school under another code" do
+    before do
+      create(:provider_school, provider:, site_code: "A", gias_school: create(:gias_school, urn: "133802"))
+    end
+
+    it "reports the conflict and leaves the course without that school" do
+      expect { import }.not_to change(Provider::School, :count)
+
+      expect(course.schools).to be_empty
+      expect(import.conflicts).to eq(["- (133802): the provider already has this school with code A"])
+    end
+  end
+end
