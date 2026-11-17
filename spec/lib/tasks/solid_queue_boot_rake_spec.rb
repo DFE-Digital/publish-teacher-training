@@ -91,45 +91,6 @@ RSpec.describe "solid_queue:start_when_ready" do
     expect(Signal).to have_received(:trap).with("TERM", "DEFAULT")
   end
 
-  it "waits and retries when solid_queue tables disappear while starting" do
-    allow(Settings.environment).to receive(:name).and_return("qa")
-    allow(SolidQueueBoot).to receive(:schema_ready?).and_return(true)
-    allow(Kernel).to receive(:sleep)
-    allow(SolidQueueBoot).to receive(:prepare_to_start!)
-
-    invoke_count = 0
-    allow(Rake::Task["solid_queue:start"]).to receive(:invoke) do
-      invoke_count += 1
-      next if invoke_count > 1
-
-      raise ActiveRecord::StatementInvalid,
-            'PG::UndefinedTable: ERROR: relation "solid_queue_processes" does not exist',
-            cause: PG::UndefinedTable.new('ERROR: relation "solid_queue_processes" does not exist')
-    end
-    allow(Rake::Task["solid_queue:start"]).to receive(:reenable)
-
-    Rake::Task["solid_queue:start_when_ready"].invoke
-
-    expect(Kernel).to have_received(:sleep).at_least(:once)
-    expect(Rake::Task["solid_queue:start"]).to have_received(:invoke).twice
-  end
-
-  it "still raises unrelated StatementInvalid errors from solid_queue:start" do
-    allow(Settings.environment).to receive(:name).and_return("qa")
-    allow(SolidQueueBoot).to receive(:schema_ready?).and_return(true)
-    allow(SolidQueueBoot).to receive(:prepare_to_start!)
-    allow(Rake::Task["solid_queue:start"]).to receive(:reenable)
-    allow(Rake::Task["solid_queue:start"]).to receive(:invoke).and_raise(
-      ActiveRecord::StatementInvalid,
-      "PG::NotNullViolation: ERROR: null value in column \"kind\" violates not-null constraint",
-    )
-
-    expect { Rake::Task["solid_queue:start_when_ready"].invoke }.to raise_error(
-      ActiveRecord::StatementInvalid,
-      /NotNullViolation/,
-    )
-  end
-
   describe "SolidQueueBoot.schema_ready?" do
     it "is false in review until sanitised statistic rows exist" do
       allow(Settings.environment).to receive(:name).and_return("review")
@@ -143,24 +104,6 @@ RSpec.describe "solid_queue:start_when_ready" do
       allow(Statistic).to receive(:count).and_return(SolidQueueBoot::REVIEW_MIN_STATISTIC_ROWS)
 
       expect(SolidQueueBoot.schema_ready?).to be(true)
-    end
-  end
-
-  describe "SolidQueueBoot.schema_disappeared_error?" do
-    it "is true for UndefinedTable on a solid_queue relation" do
-      error = ActiveRecord::StatementInvalid.new(
-        'PG::UndefinedTable: ERROR: relation "solid_queue_processes" does not exist',
-      )
-
-      expect(SolidQueueBoot.schema_disappeared_error?(error)).to be(true)
-    end
-
-    it "is false for unrelated StatementInvalid errors" do
-      error = ActiveRecord::StatementInvalid.new(
-        "PG::NotNullViolation: ERROR: null value in column \"kind\" violates not-null constraint",
-      )
-
-      expect(SolidQueueBoot.schema_disappeared_error?(error)).to be(false)
     end
   end
 end

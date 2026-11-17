@@ -89,6 +89,8 @@ runs:
 
     # The restore drops and recreates every table (pg_dump --clean). Solid Queue must
     # not be running meanwhile or it hits UndefinedTable / UnknownPrimaryKey.
+    # Review first-setup already deploys this worker at 0; this scale-down still
+    # matters for QA/staging restores and for review redeploys that are not setup.
     - name: Stop solid-queue-worker before restore
       shell: bash
       run: |
