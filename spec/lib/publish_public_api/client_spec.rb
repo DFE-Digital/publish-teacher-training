@@ -1,0 +1,85 @@
+# frozen_string_literal: true
+
+require "rails_helper"
+
+RSpec.describe PublishPublicAPI::Client do
+  subject(:client) { described_class.new(base_url: "https://publish.test/api/public/v1/") }
+
+  let(:courses_url) { "https://publish.test/api/public/v1/recruitment_cycles/2027/providers/C55/courses" }
+
+  def course(code)
+    {
+      "id" => code.downcase,
+      "type" => "courses",
+      "attributes" => { "code" => code },
+      "relationships" => { "recruitment_cycle" => { "data" => { "type" => "recruitment_cycles", "id" => "73" } } },
+    }
+  end
+
+  def courses_page(codes, count:, year: 2027)
+    {
+      "data" => codes.map { |code| course(code) },
+      "included" => [{ "id" => "73", "type" => "recruitment_cycles", "attributes" => { "year" => year } }],
+      "meta" => { "count" => count },
+    }.to_json
+  end
+
+  def stub_courses_page(page, body)
+    stub_request(:get, courses_url)
+      .with(query: { "include" => "recruitment_cycle", "page" => page.to_s, "per_page" => "500" })
+      .to_return(status: 200, body:, headers: { "Content-Type" => "application/json" })
+  end
+
+  describe "#courses" do
+    it "returns the courses for the provider and cycle" do
+      stub_courses_page(1, courses_page(%w[RX41 2B9P], count: 2))
+
+      courses = client.courses(year: 2027, provider_code: "C55")
+
+      expect(courses.map { |c| c.dig("attributes", "code") }).to eq(%w[RX41 2B9P])
+    end
+
+    it "follows pages until it has every course" do
+      stub_courses_page(1, courses_page(%w[RX41], count: 2))
+      stub_courses_page(2, courses_page(%w[2B9P], count: 2))
+
+      courses = client.courses(year: 2027, provider_code: "C55")
+
+      expect(courses.map { |c| c.dig("attributes", "code") }).to eq(%w[RX41 2B9P])
+    end
+
+    it "raises when the API answers with a different cycle" do
+      stub_courses_page(1, courses_page(%w[RX41], count: 1, year: 2026))
+
+      expect { client.courses(year: 2027, provider_code: "C55") }
+        .to raise_error(PublishPublicAPI::Client::Error, /2026.*2027|2027.*2026/)
+    end
+
+    it "returns no courses when the provider has none" do
+      stub_courses_page(1, { "data" => [], "included" => [], "meta" => { "count" => 0 } }.to_json)
+
+      expect(client.courses(year: 2027, provider_code: "C55")).to eq([])
+    end
+
+    it "raises when the API errors" do
+      stub_request(:get, courses_url).with(query: hash_including({})).to_return(status: 500)
+
+      expect { client.courses(year: 2027, provider_code: "C55") }.to raise_error(Faraday::ServerError)
+    end
+  end
+
+  describe "#course_locations" do
+    it "returns the locations for the course" do
+      stub_request(:get, "#{courses_url}/RX41/locations")
+        .to_return(
+          status: 200,
+          body: { "data" => [{ "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } }] }.to_json,
+          headers: { "Content-Type" => "application/json" },
+        )
+
+      locations = client.course_locations(year: 2027, provider_code: "C55", course_code: "RX41")
+
+      expect(locations).to eq([{ "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } }])
+    end
+  end
+end
