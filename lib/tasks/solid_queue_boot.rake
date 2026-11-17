@@ -79,10 +79,9 @@ namespace :solid_queue do
         break if SolidQueueBoot.schema_ready?
 
         if Time.zone.now >= deadline
-          # Review workers start during terraform, before db:setup and the
-          # sanitised restore. This pod exits so Kubernetes starts another one;
-          # an exception here is an expected wait showing up as an unhandled
-          # rake error.
+          # Safety net if the schema still is not ready. This pod exits so
+          # Kubernetes starts another one; an exception here is an expected wait
+          # showing up as an unhandled rake error.
           message = "[solid_queue] timed out waiting for Solid Queue schema to be ready"
           if SolidQueueBoot.review_environment?
             Rails.logger.error(message)
