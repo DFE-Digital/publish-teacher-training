@@ -4,11 +4,17 @@ module Publish
   module Providers
     module AccreditedPartnerships
       class ChecksController < ApplicationController
+        include ReturningToSupport
+
         def show
           @partnership = provider.accredited_partnerships.build(accredited_provider:)
 
           if @partnership.invalid?
-            redirect_to search_publish_provider_recruitment_cycle_accredited_providers_path(provider.provider_code, recruitment_cycle.year), flash: { error: { message: "#{accredited_provider.name_and_code} partnership already exists" } }
+            redirect_to search_publish_provider_recruitment_cycle_accredited_providers_path(
+              provider.provider_code,
+              recruitment_cycle.year,
+              **support_return_params,
+            ), flash: { error: { message: "#{accredited_provider.name_and_code} partnership already exists" } }
           end
         end
 
@@ -19,7 +25,7 @@ module Publish
             notify_accredited_provider_users
 
             flash[:success_with_body] = { "title" => t(".added"), "body" => accredited_provider.provider_name }
-            redirect_to publish_provider_recruitment_cycle_accredited_partnerships_path(@provider.provider_code, @provider.recruitment_cycle_year)
+            redirect_to publish_or_support_accredited_partnerships_path
           else
             flash[:error] = { "message" => @partnership.errors[:accredited_provider].first }
             render :show

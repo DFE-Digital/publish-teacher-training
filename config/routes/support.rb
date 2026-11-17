@@ -63,14 +63,6 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
             get :delete
             delete :delete, to: "accredited_partnerships#destroy"
           end
-          get "/check", on: :collection, to: "accredited_partnerships/checks#show"
-          put "/check", on: :collection, to: "accredited_partnerships/checks#update"
-        end
-
-        resources :accredited_providers, param: :accredited_provider_code, only: %i[], path: "accredited-providers" do
-          get "/search", on: :collection, to: "accredited_provider_search#new"
-          post "/search", on: :collection, to: "accredited_provider_search#create"
-          put "/search", on: :collection, to: "accredited_provider_search#update"
         end
 
         resources :copy_courses, only: %i[new create]
