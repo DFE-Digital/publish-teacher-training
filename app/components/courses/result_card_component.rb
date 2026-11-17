@@ -23,14 +23,22 @@ module Courses
     end
 
     def card
-      SummaryCardComponent.new(course: courses.first, **@options)
+      SummaryCardComponent.new(course: courses.first, **@options, show_age_range: show_age_range?(courses.first))
     end
 
     def course_details(course)
-      SummaryCardComponent.new(course:, **@options, card: false)
+      SummaryCardComponent.new(course:, **@options, card: false, show_age_range: show_age_range?(course))
     end
 
   private
+
+    # Secondary age ranges are nearly all 11 to 16 or 11 to 18, so with grouped
+    # results they only show when they tell a card's courses apart.
+    def show_age_range?(course)
+      return true unless FeatureFlag.active?(:group_search_results) && course.secondary_course?
+
+      courses.many? && courses.map(&:age_range_in_years).uniq.many?
+    end
 
     # The search's conflicts leave out self-accredited courses, so a group can
     # mix them with accredited ones. The heading can only name one accredited

@@ -130,8 +130,9 @@ RSpec.describe "Search results show the accredited provider when searching by pr
 
   def and_each_course_shows_its_own_accredited_provider
     expect(page).not_to have_css(".govuk-summary-card__title", text: "Accredited by")
-    expect(course_on_card("Biology (OAK1)")).to have_content("Ages 11 to 18, accredited by Manchester Metropolitan University")
-    expect(course_on_card("Biology (OAK2)")).to have_content("Ages 11 to 18, accredited by Edge Hill University")
+    expect(course_on_card("Biology (OAK1)")).to have_css("p.govuk-hint", exact_text: "Accredited by Manchester Metropolitan University")
+    expect(course_on_card("Biology (OAK2)")).to have_css("p.govuk-hint", exact_text: "Accredited by Edge Hill University")
+    expect(page.find(".app-search-results__item")).to have_no_content("Ages")
   end
 
   def and_the_accredited_provider_shows_once_in_the_header
