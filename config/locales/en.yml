@@ -451,7 +451,6 @@ en:
             index: "Schools"
           users:
             show: "User overview"
-            delete: "Are you sure you want to remove this user?"
           history:
             index: History
           accredited_providers:
