@@ -5,6 +5,7 @@
         provider_code: @provider_partnership.training_provider.provider_code,
         recruitment_cycle_year: @provider_partnership.accredited_provider.recruitment_cycle_year,
         accredited_provider_code: @provider_partnership.accredited_provider.provider_code,
+        **support_return_params,
       ),
       ) %>
 <% end %>
@@ -21,7 +22,7 @@
       <%= t(".need_to_change_html", email: bat_contact_mail_to) %>
     </p>
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_recruitment_cycle_accredited_partnerships_path) %>
+      <%= govuk_link_to(t("cancel"), return_path) %>
     </p>
   </div>
 </div>
