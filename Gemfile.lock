@@ -7,16 +7,16 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-analytics.git
-  revision: df1c6f6e3befab6e2eb600a1a64731dc83d863a6
-  tag: v1.16.3
+  revision: de07679100599a18d758ed65e7bb4e9c679c3a34
+  tag: v1.16.4
   specs:
-    dfe-analytics (1.16.3)
+    dfe-analytics (1.16.4)
       google-cloud-bigquery (~> 1.38)
       googleauth (~> 1.17)
       httparty (~> 0.24)
       json (< 3)
       multi_xml (~> 0.6.0)
-      request_store_rails (~> 2)
+      request_store_rails (>= 2, < 4)
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-autocomplete.git
@@ -632,7 +632,8 @@ GEM
       uber (< 0.2.0)
     request_store (1.7.0)
       rack (>= 1.4)
-    request_store_rails (2.0.0)
+    request_store_rails (3.0.0)
+      activesupport (>= 7.0)
       concurrent-ruby (~> 1.0)
     retriable (4.2.0)
     rexml (3.4.4)
