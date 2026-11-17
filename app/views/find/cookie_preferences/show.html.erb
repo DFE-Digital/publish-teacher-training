@@ -1,7 +1,13 @@
-<% content_for :page_title, "Cookies" %>
+<% content_for :page_title, title_with_error_prefix("Cookies", @cookie_preferences_form.errors.any?) %>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
+    <% if analytics_consent_required? && flash[:analytics_consent] %>
+      <%= govuk_notification_banner(title_text: t("notification_banner.success"), success: true) do |banner| %>
+        <% banner.with_heading(text: t(".success_heading")) %>
+      <% end %>
+    <% end %>
+
     <h1 class="govuk-heading-l">Cookies on <%= t("service_name.find") %></h1>
 
     <p class="govuk-body">Cookies are small files saved on your phone, tablet or computer when you visit a website.</p>
@@ -32,8 +38,48 @@
           <td class="govuk-table__cell ">Stores encrypted session data specifically for Candidates</td>
           <td class="govuk-table__cell ">When you close your browser</td>
         </tr>
+        <% if analytics_consent_required? %>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><span class="break-word"><%= Settings.cookies.analytics.name %></span></td>
+            <td class="govuk-table__cell"><%= t(".consent_cookie_purpose") %></td>
+            <td class="govuk-table__cell"><%= t(".one_year") %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
+
+    <% if analytics_consent_required? %>
+      <h2 class="govuk-heading-m"><%= t(".analytics_heading") %></h2>
+
+      <p class="govuk-body"><%= t(".analytics_intro") %></p>
+
+      <p class="govuk-body"><%= t(".analytics_stores") %></p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <% t(".analytics_stored").each do |item| %>
+          <li><%= item %></li>
+        <% end %>
+      </ul>
+
+      <%= govuk_table(head: [t(".name"), t(".purpose"), t(".expires")],
+                      rows: t(".clarity_cookies").map { |cookie| cookie.values_at(:name, :purpose, :expires) }) do |table|
+                        table.with_caption(text: t(".clarity_caption"), size: "s")
+                      end %>
+
+      <h2 class="govuk-heading-m"><%= t(".change_heading") %></h2>
+
+      <%= form_with model: @cookie_preferences_form, scope: :find_cookie_preferences_form, url: find_cookies_path, method: :patch do |f| %>
+        <%= f.govuk_error_summary %>
+
+        <%= f.govuk_collection_radio_buttons :analytics_consent,
+                                             [%w[granted Yes], %w[denied No]],
+                                             :first,
+                                             :last,
+                                             legend: { text: t(".legend"), size: "s" } %>
+
+        <%= f.govuk_submit t(".save") %>
+      <% end %>
+    <% end %>
 
     <p class="govuk-body">Read more about who we are, how you can contact us and how we process personal data in our <%= govuk_link_to("privacy notice", find_privacy_path) %>.</p>
   </div>

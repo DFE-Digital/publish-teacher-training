@@ -10,3 +10,7 @@
   y = l.getElementsByTagName(r)[0]
   y.parentNode.insertBefore(t, y)
 })(window, document, 'clarity', 'script', 'vpgdaotw79')
+
+if (document.currentScript.dataset.analyticsConsent === 'granted') {
+  window.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'granted' })
+}
