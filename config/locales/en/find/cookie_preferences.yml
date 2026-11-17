@@ -1,0 +1,31 @@
+en:
+  find:
+    cookie_preferences:
+      show:
+        success_heading: You’ve set your cookie preferences.
+        consent_cookie_purpose: Saves your cookie consent settings
+        one_year: 1 year
+        analytics_heading: Analytics cookies (optional)
+        analytics_intro: With your permission, we use Microsoft Clarity to collect data about how you use Find. This information helps us improve our service.
+        analytics_stores: "Microsoft Clarity stores anonymised information about:"
+        analytics_stored:
+          - how you got to Find
+          - the pages you visit on Find and how long you spend on them
+          - how you scroll, move and click on each page
+        clarity_caption: Microsoft Clarity cookies
+        name: Name
+        purpose: Purpose
+        expires: Expires
+        clarity_cookies:
+          - name: _clck
+            purpose: Remembers your Clarity user ID and preferences, so your visits to Find are linked to the same ID
+            expires: 1 year
+          - name: _clsk
+            purpose: Connects the pages you view into a single Clarity session recording
+            expires: 1 day
+          - name: MUID
+            purpose: Identifies unique web browsers visiting Microsoft sites, for site analytics and other operational purposes
+            expires: 1 year
+        change_heading: Change your cookie settings
+        legend: Do you want to accept analytics cookies?
+        save: Save cookie settings
