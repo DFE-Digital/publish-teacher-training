@@ -177,6 +177,102 @@ RSpec.describe "Publish provider users", type: :request do
     end
   end
 
+  describe "remove user return to support" do
+    let(:admin) { create(:user, :admin) }
+    let!(:provider_user) { create(:user, first_name: "Ada", last_name: "Lovelace", providers: [provider]) }
+
+    before { login_user(admin) }
+
+    it "keeps return_to=support on the delete page and remove button" do
+      get delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+        return_to: "support",
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(
+        "Are you sure you want to remove #{provider_user.full_name} from #{provider.provider_name}?",
+      )
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_user_path(
+          provider.recruitment_cycle_year,
+          provider,
+          provider_user,
+        ),
+      )
+      expect(response.body).to include("return_to=support")
+    end
+
+    it "links back to the support users list when opened from the index" do
+      get delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+        return_to: "support",
+        from: "index",
+        page: 2,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          page: 2,
+        ),
+      )
+    end
+
+    it "returns to the support users list after removal" do
+      delete delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+        return_to: "support",
+        page: 2,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response).to redirect_to(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          page: 2,
+        ),
+      )
+      expect(flash[:success]).to eq(
+        "#{provider_user.full_name} has been removed from #{provider.provider_name}",
+      )
+      expect(provider.users.reload).not_to include(provider_user)
+    end
+
+    it "still redirects to the publish users index without return_to" do
+      delete delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+      )
+
+      expect(response).to redirect_to(publish_provider_users_path(provider.provider_code))
+      expect(flash[:success]).to eq(I18n.t("success.user_removed"))
+    end
+
+    it "ignores return_to=support for non-admin users" do
+      login_user(user)
+
+      get delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+        return_to: "support",
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        publish_provider_user_path(provider_code: provider.provider_code, id: provider_user.id),
+      )
+      expect(response.body).not_to include("return_to=support")
+    end
+  end
+
   def stash_new_user_form(current_user)
     Publish::UserForm.new(
       current_user,

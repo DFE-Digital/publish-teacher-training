@@ -47,7 +47,16 @@
         end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Remove user", delete_support_recruitment_cycle_provider_user_path, class: "app-link--destructive") %>
+      <%= govuk_link_to(
+        t("support.providers.users.remove_user_in_publish"),
+        delete_publish_provider_user_path(
+          provider_code: @provider.provider_code,
+          id: @provider_user.id,
+          return_to: "support",
+          recruitment_cycle_year: @provider.recruitment_cycle_year,
+        ),
+        class: "app-link--destructive",
+      ) %>
     </p>
   </div>
 </div>

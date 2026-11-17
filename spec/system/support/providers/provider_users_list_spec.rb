@@ -21,7 +21,7 @@ RSpec.describe "View provider users" do
     when_i_visit_the_support_provider_show_page
     and_click_on_the_users_tab
     and_i_click_remove_user_for_the_user_who_has_signed_in
-    then_i_am_taken_to_the_support_provider_user_delete_page
+    then_i_am_taken_to_the_publish_user_delete_page
   end
 
   def and_there_is_a_provider
@@ -54,11 +54,10 @@ RSpec.describe "View provider users" do
     click_link_or_button "Remove user for #{@signed_in_user.full_name}"
   end
 
-  def then_i_am_taken_to_the_support_provider_user_delete_page
-    expect(support_provider_user_delete_page).to be_displayed(
-      recruitment_cycle_year: @provider.recruitment_cycle_year,
-      provider_id: @provider.id,
-      id: @signed_in_user.id,
+  def then_i_am_taken_to_the_publish_user_delete_page
+    expect(publish_users_delete_page).to be_displayed(
+      provider_code: @provider.provider_code,
+      user_id: @signed_in_user.id,
     )
   end
 end
