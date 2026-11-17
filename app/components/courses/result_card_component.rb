@@ -9,10 +9,15 @@ module Courses
   class ResultCardComponent < ViewComponent::Base
     attr_reader :courses
 
-    def initialize(courses:, accredited_provider_conflicts: Set.new, **options)
+    # Off a provider search, the accredited provider only shows when it tells
+    # the card's courses apart.
+    def initialize(courses:, accredited_provider_conflicts: Set.new, provider_search: true, **options)
       @courses = courses
       @options = options
-      @options[:accredited_provider_conflicts] = with_mixed_accredited_providers(accredited_provider_conflicts)
+
+      mixed = mixed_accredited_providers?
+      @options[:accredited_provider_names] = {} unless provider_search || mixed
+      @options[:accredited_provider_conflicts] = mixed ? with_this_card(accredited_provider_conflicts) : accredited_provider_conflicts
 
       super()
     end
@@ -30,10 +35,11 @@ module Courses
     # The search's conflicts leave out self-accredited courses, so a group can
     # mix them with accredited ones. The heading can only name one accredited
     # provider, so a mixed group shows each course's under its name instead.
-    def with_mixed_accredited_providers(conflicts)
-      names = courses.map { |course| SummaryCardComponent.new(course:, **@options).accredited_provider_name }
-      return conflicts if names.uniq.size == 1
+    def mixed_accredited_providers?
+      courses.map { |course| SummaryCardComponent.new(course:, **@options).accredited_provider_name }.uniq.many?
+    end
 
+    def with_this_card(conflicts)
       conflicts | Set[[courses.first.provider_id, courses.first.master_subject_id]]
     end
   end

@@ -43,6 +43,26 @@ RSpec.describe "Search results show the accredited provider when searching by pr
       then_each_training_partner_has_its_own_card_naming_the_accredited_provider
       and_i_do_not_see_it_on_the_accredited_providers_own_card
     end
+
+    scenario "searching by subject when a training partner offers it through 2 accredited providers" do
+      given_a_training_partner_offers_biology_through_two_accredited_providers
+      when_i_search_for_biology
+      then_the_training_partner_has_one_card
+      and_each_course_shows_its_own_accredited_provider
+    end
+
+    scenario "searching by subject when a training partner offers it through 1 accredited provider" do
+      given_a_training_partner_offers_biology_twice_through_one_accredited_provider
+      when_i_search_for_biology
+      then_the_training_partner_has_one_card
+      and_i_do_not_see_an_accredited_provider
+    end
+  end
+
+  scenario "searching by subject without grouped results" do
+    given_a_training_partner_offers_biology_through_two_accredited_providers
+    when_i_search_for_biology
+    then_i_do_not_see_an_accredited_provider
   end
 
   def given_an_accredited_provider_with_a_training_partner
@@ -68,6 +88,16 @@ RSpec.describe "Search results show the accredited provider when searching by pr
   def when_i_search_by_provider(provider_name)
     visit find_results_path(provider_name:)
   end
+
+  def when_i_search_for_biology
+    visit find_results_path(subjects: [biology.subject_code])
+  end
+
+  def then_i_do_not_see_an_accredited_provider
+    expect(page).to have_css(".app-search-results__item")
+    expect(page).to have_no_content(/accredited by/i)
+  end
+  alias_method :and_i_do_not_see_an_accredited_provider, :then_i_do_not_see_an_accredited_provider
 
   def then_i_see_the_accredited_provider_under_the_training_partner_name
     within(result_card("Biology (OAK1)")) do
