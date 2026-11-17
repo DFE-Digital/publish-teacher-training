@@ -6,11 +6,9 @@
 
 <h1 class="govuk-heading-l"><%= @candidate.email_address %></h1>
 
-<%= render TabNavigation.new(items: [
-  { name: t(".details"), url: details_support_candidate_path(@candidate) },
-  { name: t(".saved_courses"), url: saved_courses_support_candidate_path(@candidate) },
-  { name: t(".email_alerts"), url: support_candidate_email_alerts_path(@candidate), current: true },
-]) %>
+<%= render "support/candidate/tabs",
+           candidate: @candidate,
+           current_tab: :email_alerts %>
 
 <% if @email_alerts.present? %>
   <%= govuk_table do |table| %>

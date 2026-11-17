@@ -12,7 +12,7 @@ RSpec.describe "Support console deleting a candidate" do
 
     visit details_support_candidate_path(candidate)
     click_link_or_button "Delete this candidate"
-    click_link_or_button "Remove candidate"
+    click_link_or_button "Delete candidate"
 
     expect(page).to have_current_path(support_candidates_path)
     expect(page).to have_content("Candidate deleted")
@@ -28,7 +28,7 @@ RSpec.describe "Support console deleting a candidate" do
 
     visit details_support_candidate_path(candidate)
     click_link_or_button "Delete this candidate"
-    click_link_or_button "Remove candidate"
+    click_link_or_button "Delete candidate"
 
     expect(page).to have_current_path(support_candidates_path)
     expect(page).to have_content("Candidate deleted")
@@ -45,7 +45,7 @@ RSpec.describe "Support console deleting a candidate" do
 
     visit details_support_candidate_path(candidate)
     click_link_or_button "Delete this candidate"
-    click_link_or_button "Remove candidate"
+    click_link_or_button "Delete candidate"
 
     expect(page).to have_current_path(support_candidates_path)
     expect(page).to have_content("This candidate could not be deleted")

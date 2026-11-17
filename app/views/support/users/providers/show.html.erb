@@ -17,9 +17,9 @@
 <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider name</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Provider code</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Action</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Provider name</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Provider code</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-third">Remove provider</th>
     </tr>
   </thead>
 
@@ -41,11 +41,18 @@
         <td class="govuk-table__cell">
           <span class="govuk-!-display-block govuk-!-margin-bottom-1">
             <%= govuk_link_to(
-                  "Remove provider",
-                  delete_provider_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user, provider_id: provider.id),
-                  id: "remove-provider",
-                  class: "govuk-button govuk-button--warning govuk-!-margin-bottom-0",
-                ) %>
+              safe_join([
+                "Remove",
+                tag.span(" provider #{provider.provider_name}", class: "govuk-visually-hidden"),
+              ]),
+              delete_provider_support_recruitment_cycle_user_path(
+                params[:recruitment_cycle_year],
+                @user,
+                provider_id: provider.id,
+              ),
+              id: "remove-provider",
+              class: "govuk-link app-link--destructive",
+            ) %>
           </span>
         </td>
       </tr>

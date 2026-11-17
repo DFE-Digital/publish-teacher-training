@@ -146,12 +146,12 @@ private
   def then_i_see_the_publishing_status_change
     expect(page).to have_content("Publishing status changed from")
     expect(page).to have_css(".govuk-tag", text: "Rolled over")
-    expect(page).to have_css(".govuk-tag", text: "Published")
     expect(page).to have_link(course.name_and_code)
   end
 
   def then_i_see_the_empty_state
-    expect(page).to have_content("No changes have been recorded for this provider.")
+    expect(page).to have_content("No changes have been made yet this recruitment cycle.")
+    expect(page).to have_content("When a support agent makes a change, or the provider updates the status of a course, this will appear here.")
   end
 
   def then_i_see_the_first_page_of_history

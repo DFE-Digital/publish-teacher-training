@@ -7,7 +7,7 @@ en:
           time: Time
           user: User
           admin: Admin
-          no_changes: No changes have been recorded for this provider.
+          no_changes_html: <p class="govuk-body"> No changes have been made yet this recruitment cycle. </p> <p class="govuk-body"> When a support agent makes a change, or the provider updates the status of a course, this will appear here. </p>
           system_user: System
           deleted_user: Deleted user
         status_labels:

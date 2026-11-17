@@ -34,20 +34,22 @@
       end
 
       component.with_row do |row|
-        row.with_key { "Admin?" }
-        row.with_value(text: @user.admin?.to_s.capitalize, html_attributes: { id: "admin_status" })
+        row.with_key { "This user is in admin" }
+        row.with_value(text: (@user.admin? ? "Yes" : "No"), html_attributes: { id: "admin_status" })
         row.with_action(text: "Change", href: edit_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user), visually_hidden_text: "admin")
       end
 
       component.with_row do |row|
-        row.with_key { "Last login date" }
+        row.with_key { "Last signed in" }
         row.with_value { @user.last_login_date_utc.to_s }
         row.with_action
       end
     end %>
 
-<%= govuk_link_to(
-      "Delete this user",
-      delete_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
-      class: "govuk-button govuk-button--warning",
-    ) %>
+<p class="govuk-body">
+  <%= govuk_link_to(
+        "Delete this user",
+        delete_support_recruitment_cycle_user_path(params[:recruitment_cycle_year], @user),
+        class: "govuk-link app-link--destructive",
+      ) %>
+</p>
