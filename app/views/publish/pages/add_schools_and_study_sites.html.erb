@@ -38,10 +38,6 @@
       </strong>
     </div>
 
-    <p class="govuk-body">We automatically upload all schools you are working with to your account. These are schools that are on the <a href="https://www.register-trainee-teachers.service.gov.uk/">Register trainee teachers service</a>.</p>
-
-    <p class="govuk-body">If needed, you can still manually add schools to your account.</p>
-
     <p class="govuk-body">By default, school locations are hidden from candidates. If you would like candidates to see the list of placement school locations, you can change the settings under the 'Organisation details' tab.</p>
 
     <%= image_tag("show-placement-schools.png", class: "govuk-!-margin-bottom-8") %>
@@ -53,7 +49,7 @@
     <%= image_tag("add-schools.png", class: "govuk-!-margin-bottom-3") %>
 
     <p class="govuk-body">
-      Select ‘Add school’ or ‘Add multiple schools’. You can add schools using their unique reference numbers (URNs). You can only add schools that are on <a href="https://get-information-schools.service.gov.uk/">Get Information About Schools</a> (GIAS). You’ll see a list of all schools you’ve added, and you’ll be able to select the name of the school to remove it.
+      Select ‘Add school’ or ‘Add multiple schools’. You can add schools using their unique reference numbers (URNs). You can only add schools that are on <a href="https://get-information-schools.service.gov.uk/" class="govuk-link">Get Information About Schools</a> (GIAS). You’ll see a list of all schools you’ve added, and you’ll be able to select the name of the school to remove it.
     </p>
 
     <p class="govuk-body govuk-inset-text">You will not be able to remove a school if it has been attached to a course. You’ll need to <%= govuk_link_to "detach it from the course", "#detaching-schools-and-study-sites-from-a-course" %> first before you can remove it.</p>
