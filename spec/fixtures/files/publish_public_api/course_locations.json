@@ -1,0 +1,21 @@
+[
+  {
+    "id": "740039",
+    "type": "locations",
+    "attributes": {
+      "code": "-",
+      "urn": "133802",
+      "latitude": 53.1986567225753,
+      "longitude": -2.898062705941234,
+      "postcode": "CH1 4BJ",
+      "region_code": "north_west",
+      "uuid": "9118a484-d2b3-4b3d-a03a-d262cb451c01",
+      "name": "University of Chester (Main site)",
+      "city": "Chester",
+      "county": "Cheshire",
+      "street_address_1": "Parkgate Road",
+      "street_address_2": "",
+      "street_address_3": ""
+    }
+  }
+]
