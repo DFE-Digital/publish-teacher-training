@@ -150,8 +150,10 @@ runs:
         bin/konduit.sh -n ${NAMESPACE} -i "${ATOMIC_RESTORE_FILE}" -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
+    # Only scale back up after a successful restore. always() brought the worker
+    # back on cancel/failure against a half-dropped schema (UndefinedTable flood).
     - name: Restore solid-queue-worker replica count
-      if: ${{ always() && env.SQ_WORKER_REPLICAS != '' }}
+      if: ${{ success() && env.SQ_WORKER_REPLICAS != '' }}
       shell: bash
       run: |
         kubectl -n "${NAMESPACE}" scale "${SQ_WORKER_DEPLOYMENT}" --replicas="${SQ_WORKER_REPLICAS}"

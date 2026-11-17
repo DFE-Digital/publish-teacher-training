@@ -7,6 +7,10 @@
 # Waiting only for solid_queue_* is not enough on review: db:setup creates those
 # tables quickly, the worker starts, then sanitised restore rewrites the DB
 # underneath it. On review we also wait until real sanitised data is present.
+#
+# schema_ready? can also pass and then lose the tables before solid_queue:start
+# finishes registering processes (cancelled restore, overlapping DDL). Those
+# failures return to the wait loop instead of raising to Sentry.
 module SolidQueueBoot
   REQUIRED_TABLES = %w[
     solid_queue_jobs
@@ -51,6 +55,28 @@ module_function
   def review_environment?
     Settings.environment.name == "review"
   end
+
+  def schema_disappeared_error?(error)
+    detail = error.message.to_s
+    detail = "#{detail}: #{error.cause.message}" if error.cause
+
+    case error
+    when ActiveRecord::UnknownPrimaryKey
+      REQUIRED_TABLES.any? { |table| detail.include?(table) }
+    when ActiveRecord::StatementInvalid
+      undefined_table = error.cause.is_a?(PG::UndefinedTable) ||
+        detail.match?(/relation ["'].+["'] does not exist/i)
+      undefined_table && detail.include?("solid_queue_")
+    else
+      false
+    end
+  end
+
+  def prepare_to_start!
+    ActiveRecord::Base.connection_handler.clear_active_connections!
+    SolidQueue::Job.reset_column_information
+    SolidQueue::Process.reset_column_information
+  end
 end
 
 namespace :solid_queue do
@@ -62,7 +88,35 @@ namespace :solid_queue do
     # Pods are routinely replaced (new review deploy, teardown) while still waiting.
     # Without a trap, SIGTERM surfaces as an unhandled SignalException in Sentry.
     shutdown_requested = false
-    previous_traps = %w[TERM INT].index_with { |signal| Signal.trap(signal) { shutdown_requested = true } }
+    wait_traps = %w[TERM INT].index_with { |signal| Signal.trap(signal) { shutdown_requested = true } }
+
+    restore_wait_traps = lambda do
+      wait_traps&.each { |signal, handler| Signal.trap(signal, handler) }
+      wait_traps = nil
+    end
+
+    install_wait_traps = lambda do
+      wait_traps = %w[TERM INT].index_with { |signal| Signal.trap(signal) { shutdown_requested = true } }
+    end
+
+    handle_not_ready = lambda do
+      if Time.zone.now >= deadline
+        # Review workers start during terraform, before db:setup and the
+        # sanitised restore. This pod exits so Kubernetes starts another one;
+        # an exception here is an expected wait showing up as an unhandled
+        # rake error.
+        message = "[solid_queue] timed out waiting for Solid Queue schema to be ready"
+        if SolidQueueBoot.review_environment?
+          Rails.logger.error(message)
+          exit 1
+        else
+          raise message
+        end
+      end
+
+      Rails.logger.warn("[solid_queue] waiting for Solid Queue schema to be ready")
+      Kernel.sleep(poll_interval)
+    end
 
     begin
       loop do
@@ -71,33 +125,31 @@ namespace :solid_queue do
           exit
         end
 
-        break if SolidQueueBoot.schema_ready?
-
-        if Time.zone.now >= deadline
-          # Review workers start during terraform, before db:setup and the
-          # sanitised restore. This pod exits so Kubernetes starts another one;
-          # an exception here is an expected wait showing up as an unhandled
-          # rake error.
-          message = "[solid_queue] timed out waiting for Solid Queue schema to be ready"
-          if SolidQueueBoot.review_environment?
-            Rails.logger.error(message)
-            exit 1
-          else
-            raise message
-          end
+        unless SolidQueueBoot.schema_ready?
+          handle_not_ready.call
+          next
         end
 
-        Rails.logger.warn("[solid_queue] waiting for Solid Queue schema to be ready")
-        Kernel.sleep(poll_interval)
+        # Solid Queue installs its own signal handlers; drop the wait traps first.
+        restore_wait_traps.call
+        SolidQueueBoot.prepare_to_start!
+
+        begin
+          Rake::Task["solid_queue:start"].reenable
+          Rake::Task["solid_queue:start"].invoke
+          break
+        rescue ActiveRecord::UnknownPrimaryKey, ActiveRecord::StatementInvalid => e
+          raise unless SolidQueueBoot.schema_disappeared_error?(e)
+
+          Rails.logger.warn(
+            "[solid_queue] schema disappeared while starting Solid Queue (#{e.class}: #{e.message}); waiting again",
+          )
+          install_wait_traps.call
+          handle_not_ready.call
+        end
       end
     ensure
-      previous_traps.each { |signal, handler| Signal.trap(signal, handler) }
+      restore_wait_traps.call
     end
-
-    ActiveRecord::Base.connection_handler.clear_active_connections!
-    SolidQueue::Job.reset_column_information
-    SolidQueue::Process.reset_column_information
-
-    Rake::Task["solid_queue:start"].invoke
   end
 end
