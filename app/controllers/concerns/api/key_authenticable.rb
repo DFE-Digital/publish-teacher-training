@@ -14,7 +14,7 @@ module API
 
     def authenticate_api_key
       header = request.headers["Authorization"]
-      return if header.nil?
+      return unless header && APIKeySecret.present_in?(header)
 
       token = header.b[BEARER_KEY, 1]
       api_key = APIKey.find_active_by_secret(token) if token

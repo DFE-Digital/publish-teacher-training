@@ -54,12 +54,9 @@ RSpec.describe "Public API key authentication", service: :api do
   end
 
   {
-    "an empty header" => ->(_secret) { "" },
-    "a Bearer scheme with no token" => ->(_secret) { "Bearer " },
     "a real key under the Token scheme" => ->(secret) { "Token #{secret}" },
     "a real key with no scheme" => ->(secret) { secret },
     "a real key followed by a second token" => ->(secret) { "Bearer #{secret} extra" },
-    "bytes that are not valid UTF-8" => ->(_secret) { "Bearer \xFF" },
   }.each do |description, credential|
     it "rejects #{description}" do
       get path, headers: { "Authorization" => credential.call(secret) }
@@ -68,13 +65,21 @@ RSpec.describe "Public API key authentication", service: :api do
     end
   end
 
-  it "does not look up a token that is not key-shaped" do
-    allow(APIKey).to receive(:find_active_by_secret)
+  {
+    "an empty header" => "",
+    "a Bearer scheme with no token" => "Bearer ",
+    "a bearer token from another service" => "Bearer eyJhbGciOiJIUzI1NiJ9.e30.c2lnbmF0dXJl",
+    "a Basic credential" => "Basic dXNlcjpwYXNzd29yZA==",
+    "bytes that are not valid UTF-8" => "Bearer \xFF",
+  }.each do |description, credential|
+    it "serves #{description} anonymously, without looking up a key" do
+      allow(APIKey).to receive(:find_active_by_secret)
 
-    get path, headers: bearer("nope")
+      get path, headers: { "Authorization" => credential }
 
-    expect(response).to have_http_status(:unauthorized)
-    expect(APIKey).not_to have_received(:find_active_by_secret)
+      expect(response).to have_http_status(:ok)
+      expect(APIKey).not_to have_received(:find_active_by_secret)
+    end
   end
 
   describe "a key-shaped value in the query string" do
