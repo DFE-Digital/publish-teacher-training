@@ -24,7 +24,7 @@ gem "mission_control-jobs", "~> 1.3"
 gem "pundit"
 
 # Use Puma as the app server
-gem "puma", "~> 8.0"
+gem "puma", "~> 8.1"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
