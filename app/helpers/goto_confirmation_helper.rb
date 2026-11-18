@@ -19,6 +19,7 @@ module GotoConfirmationHelper
     end
   end
 
+  # Needs ReturningToSupport in the controller (support_return_params etc.).
   def publish_back_link_for_adding_provider_partnership_path(param_form_key:, params:, recruitment_cycle_year:, provider:)
     if goto_confirmation?(param_form_key:, params:)
       check_publish_provider_recruitment_cycle_accredited_partnerships_path(

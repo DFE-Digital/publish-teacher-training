@@ -27,7 +27,8 @@ RSpec.describe "Publish provider accredited provider search", service: :publish 
           provider,
         ),
       )
-      expect(response.body).to include(
+      cancel_link = response.parsed_body.at_xpath("//a[normalize-space()='Cancel']")
+      expect(cancel_link["href"]).to eq(
         support_recruitment_cycle_provider_accredited_partnerships_path(
           recruitment_cycle.year,
           provider,
