@@ -11,8 +11,7 @@ RSpec.describe "Public API key authentication", service: :api do
   def bearer(token) = { "Authorization" => "Bearer #{token}" }
 
   before do
-    allow(FeatureService).to receive(:enabled?).and_call_original
-    allow(FeatureService).to receive(:enabled?).with(:api_key_authentication).and_return(api_key_authentication_enabled)
+    FeatureFlag.activate(:api_key_authentication) if api_key_authentication_enabled
   end
 
   it "serves a request with no header, and a valid key exactly the same" do
@@ -140,6 +139,7 @@ RSpec.describe "Public API key authentication", service: :api do
 
     context "with request analytics on" do
       before do
+        allow(FeatureService).to receive(:enabled?).and_call_original
         allow(FeatureService).to receive(:enabled?).with(:send_request_data_to_bigquery).and_return(true)
       end
 
@@ -233,6 +233,29 @@ RSpec.describe "Public API key authentication", service: :api do
 
   context "with API key authentication disabled" do
     let(:api_key_authentication_enabled) { false }
+
+    it "is disabled when no flag state has been created" do
+      expect(FeatureFlagState.find_by(name: "api_key_authentication")).to be_nil
+
+      get path, headers: unknown_key_header
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "can be activated and deactivated between requests" do
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:ok)
+
+      FeatureFlag.activate(:api_key_authentication)
+
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:unauthorized)
+
+      FeatureFlag.deactivate(:api_key_authentication)
+
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:ok)
+    end
 
     ["", "Basic legacy-credentials", "Bearer unknown"].each do |header|
       it "serves the same data anonymously with Authorization #{header.inspect}" do
