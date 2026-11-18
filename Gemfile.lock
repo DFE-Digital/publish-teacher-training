@@ -542,7 +542,7 @@ GEM
       pry (>= 0.13.0)
     pstore (0.3.0)
     public_suffix (7.0.5)
-    puma (8.0.3)
+    puma (8.1.0)
       nio4r (~> 2.0)
     pundit (2.5.2)
       activesupport (>= 3.0.0)
@@ -896,7 +896,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
-  puma (~> 8.0)
+  puma (~> 8.1)
   pundit
   rack-cors
   rails (= 8.1.4.1)
