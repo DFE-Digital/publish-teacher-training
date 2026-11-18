@@ -53,7 +53,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
     expect(page).to have_css("h2.govuk-heading-m", text: "Organisation details")
     expect(page).to have_css("h2.govuk-heading-m", text: "Contact details")
     expect(page).to have_css("h2.govuk-heading-m", text: "User details")
-    expect(page).to have_field("Organisation name")
+    expect(page).to have_field("Provider name")
     expect(page).to have_field("UK provider reference number (UKPRN)")
     expect(page).to have_content("Are you an accredited provider?")
     expect(page).to have_field("Yes", type: "radio")
@@ -85,7 +85,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
 
   def and_i_fill_in_valid_onboarding_details
     # Organisation details
-    fill_in "Organisation name", with: form_data[:provider_name]
+    fill_in "Provider name", with: form_data[:provider_name]
     fill_in "UK provider reference number (UKPRN)", with: form_data[:ukprn]
 
     choose "No"
@@ -220,7 +220,7 @@ RSpec.describe "Provider facing onboarding form (publish side)", type: :system d
   end
 
   def then_i_see_the_read_only_form_fields
-    expect(page).to have_field("Organisation name", disabled: true)
+    expect(page).to have_field("Provider name", disabled: true)
     expect(page).to have_field("UK provider reference number (UKPRN)", disabled: true)
     expect(page).to have_checked_field("School", disabled: true)
     expect(page).to have_field("Unique reference number (URN)", disabled: true)
