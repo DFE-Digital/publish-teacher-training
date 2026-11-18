@@ -10,7 +10,7 @@ weight: 3
 We have added optional API key authentication. Requests without a key are still supported and return the same data.
 
 - Send a key in the `Authorization` header using the `Bearer` scheme. See [authentication](./authentication.html) for how to get a key.
-- Any request that sends an `Authorization` header is now checked. If the header does not contain an active key, or a key appears in the URL, the API returns `401 Unauthorized` rather than serving the request anonymously. Every operation now documents this response.
+- An `Authorization` header that does not contain an API key is ignored. If it does contain one, the key must be active and sent using the `Bearer` scheme. Otherwise, or if a key appears in the URL, the API returns `401 Unauthorized`. Every operation now documents this response.
 
 ## 21 August 2026
 

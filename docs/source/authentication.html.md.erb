@@ -40,17 +40,17 @@ request with an API key in its URL is rejected, even if it also sends a valid
 
 ## 401 Unauthorized responses
 
-If you send an `Authorization` header, it must contain an active key. A request
-with a header that is not accepted is rejected, not served anonymously.
+An `Authorization` header that does not contain an API key is ignored, and the
+request is served anonymously. If the header does contain an API key, that key
+must be active and sent correctly.
 
 The API returns `401 Unauthorized` with a `WWW-Authenticate: Bearer` header
 when:
 
 - the key is not recognised
 - the key has been revoked
-- the `Authorization` header is empty
-- the `Authorization` header is malformed, for example it uses a scheme other
-  than `Bearer`, has no key, or has more than one value after the scheme
+- the key is sent with a scheme other than `Bearer`, with no scheme, or with
+  anything after it
 - an API key appears anywhere in the URL
 
 The response body is the same in every case:
