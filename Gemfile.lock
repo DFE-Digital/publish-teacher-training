@@ -31,7 +31,7 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-wizard.git
-  revision: a5d7d3dd384903337b6831a8dd552d76dc1cb57b
+  revision: 91e6ceaeda60c4b80a419bc5c0ab6e5a2d4ee26e
   branch: journeys
   specs:
     dfe-wizard (1.0.0)
