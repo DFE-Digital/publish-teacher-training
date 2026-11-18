@@ -8,6 +8,11 @@ weight: 2
 Authentication is optional. Requests without an API key are still supported and
 return the same data as requests with one.
 
+API key header validation is currently disabled to give providers and third-party
+services time to adapt their requests. While disabled, `Authorization` headers
+are ignored and key usage is not recorded. The header validation behaviour
+described below applies when it is enabled. Keys in URLs are always rejected.
+
 ## Getting an API key
 
 To get an API key, [contact us](./support.html) with:
@@ -40,18 +45,21 @@ request with an API key in its URL is rejected, even if it also sends a valid
 
 ## 401 Unauthorized responses
 
-If you send an `Authorization` header, it must contain an active key. A request
-with a header that is not accepted is rejected, not served anonymously.
+When header validation is enabled, an `Authorization` header must contain an
+active key. A request with a header that is not accepted is rejected, not served
+anonymously.
 
 The API returns `401 Unauthorized` with a `WWW-Authenticate: Bearer` header
-when:
+when header validation is enabled and:
 
 - the key is not recognised
 - the key has been revoked
 - the `Authorization` header is empty
 - the `Authorization` header is malformed, for example it uses a scheme other
   than `Bearer`, has no key, or has more than one value after the scheme
-- an API key appears anywhere in the URL
+
+An API key appearing anywhere in the URL always results in this response, even
+when header validation is disabled.
 
 The response body is the same in every case:
 

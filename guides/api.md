@@ -2,6 +2,21 @@
 
 Our API is documented using [OpenAPI](https://swagger.io/specification/). You can view the documentation at [https://api.publish-teacher-training-courses.service.gov.uk/api-docs](https://api.publish-teacher-training-courses.service.gov.uk/api-docs). We use a few gems to write specs for the API which are then used to generate the documentation. The specs can be found in `/spec/docs`.
 
+## API key authentication rollout
+
+`features.api_key_authentication` in `config/settings.yml` defaults to `false`
+and is inherited by every environment. While disabled, the public API ignores
+`Authorization` headers: it neither looks up keys nor records their use. This
+avoids unexpected 401 responses while providers and third-party services adapt
+their requests.
+
+Set `features.api_key_authentication: true` in the relevant environment's settings
+to enable header validation and usage recording. Requests without a header remain
+anonymous; headers without a valid active key receive a 401 response.
+
+The separate safeguard rejecting API keys in URLs remains active regardless of
+this flag.
+
 ## Documentation
 
 We use [Tech Docs](https://github.com/alphagov/tech-docs-gem) to build documentation. To update documentation, run the command below which will generate an open api specification file. The docker build will then take these files to generate the static site.

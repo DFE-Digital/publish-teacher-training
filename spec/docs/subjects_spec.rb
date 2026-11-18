@@ -29,6 +29,11 @@ describe "API" do
       end
 
       unauthorized_response do
+        before do
+          allow(FeatureService).to receive(:enabled?).and_call_original
+          allow(FeatureService).to receive(:enabled?).with(:api_key_authentication).and_return(true)
+        end
+
         let(:Authorization) { "Bearer YOUR_API_KEY" } # rubocop:disable RSpec/VariableName
 
         run_test!
