@@ -33,6 +33,7 @@ module Publish
         permitted[:return_to] = "support" if returning_to_support?
         permitted[:from] = params[:from] if params[:from].present?
         permitted[:page] = params[:page] if params[:page].present?
+        permitted[:sort] = params[:sort] if params[:sort].present?
         if params[:recruitment_cycle_year].present?
           permitted[:recruitment_cycle_year] = params[:recruitment_cycle_year]
         end
@@ -74,14 +75,18 @@ module Publish
     end
 
     def support_list_page_params(clamp: false)
-      return {} if params[:page].blank?
+      {}.tap do |permitted|
+        if params[:page].present?
+          if clamp
+            page = [params[:page].to_i, last_support_users_page].min
+            permitted[:page] = page if page > 1
+          else
+            permitted[:page] = params[:page]
+          end
+        end
 
-      return { page: params[:page] } unless clamp
-
-      page = [params[:page].to_i, last_support_users_page].min
-      return {} if page <= 1
-
-      { page: page }
+        permitted[:sort] = params[:sort] if params[:sort].present?
+      end
     end
 
     def last_support_users_page
