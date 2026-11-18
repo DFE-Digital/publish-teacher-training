@@ -61,20 +61,36 @@ module Publish
       end
     end
 
-    def users_return_path
+    def users_return_path(clamp_page: false)
       if returning_to_support?
         support_recruitment_cycle_provider_users_path(
           provider.recruitment_cycle_year,
           provider,
-          **support_list_page_params,
+          **support_list_page_params(clamp: clamp_page),
         )
       else
         publish_provider_users_path(params[:provider_code])
       end
     end
 
-    def support_list_page_params
-      params[:page].present? ? { page: params[:page] } : {}
+    def support_list_page_params(clamp: false)
+      return {} if params[:page].blank?
+
+      return { page: params[:page] } unless clamp
+
+      page = [params[:page].to_i, last_support_users_page].min
+      return {} if page <= 1
+
+      { page: page }
+    end
+
+    def last_support_users_page
+      # Association may already be loaded (e.g. via provider_user); reload so the
+      # post-removal count is accurate when clamping the return page.
+      total = provider.users.reload.count
+      return 1 if total.zero?
+
+      (total.to_f / Support::Providers::UsersController::USERS_PER_PAGE).ceil
     end
   end
 end

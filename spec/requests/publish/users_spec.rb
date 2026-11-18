@@ -225,6 +225,9 @@ RSpec.describe "Publish provider users", type: :request do
     end
 
     it "returns to the support users list after removal" do
+      # Outer `user` is also on the provider; 20 more => 22 before removal, 21 after (page 2 remains).
+      create_list(:user, 20, providers: [provider])
+
       delete delete_publish_provider_user_path(
         provider_code: provider.provider_code,
         id: provider_user.id,
@@ -242,6 +245,27 @@ RSpec.describe "Publish provider users", type: :request do
       )
       expect(flash[:success]).to eq(
         "#{provider_user.full_name} has been removed from #{provider.provider_name}",
+      )
+      expect(provider.users.reload).not_to include(provider_user)
+    end
+
+    it "clamps the support return page when removal empties that page" do
+      # Outer `user` + provider_user + 19 => 21 before removal, 20 after (page 2 is empty).
+      create_list(:user, 19, providers: [provider])
+
+      delete delete_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        id: provider_user.id,
+        return_to: "support",
+        page: 2,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+      )
+
+      expect(response).to redirect_to(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+        ),
       )
       expect(provider.users.reload).not_to include(provider_user)
     end

@@ -52,7 +52,7 @@ module Publish
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
       flash[:success] = user_removal_success_message
-      redirect_to users_return_path
+      redirect_to users_return_path(clamp_page: returning_to_support?)
     end
 
   private
