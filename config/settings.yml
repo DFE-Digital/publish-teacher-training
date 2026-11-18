@@ -107,6 +107,7 @@ fauapi:
   api_key: replace_me
 
 features:
+  api_key_authentication: false
   send_request_data_to_bigquery: false
   rollover:
     # Normally a short period of time between rollover and the next cycle

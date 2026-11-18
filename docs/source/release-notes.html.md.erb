@@ -5,6 +5,16 @@ weight: 3
 
 # Release Notes
 
+## 18 November 2026
+
+API key header validation is now disabled by default after providers reported
+unexpected 401 responses. `Authorization` headers are ignored and key usage is
+not recorded while validation is disabled, giving providers and third-party
+services time to adapt their requests before it is enabled again.
+
+Requests with API keys in their URLs are still rejected. See
+[authentication](./authentication.html) for details.
+
 ## 16 November 2026
 
 We have added optional API key authentication. Requests without a key are still supported and return the same data.
