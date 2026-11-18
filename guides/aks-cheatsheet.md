@@ -183,6 +183,20 @@ Example of loading test:
 bin/konduit.sh -n bat-qa publish-loadtest -- psql
 ```
 
+## Stuck Terraform state lock
+
+If a deploy fails with `Error acquiring the state lock` / `state blob is already locked`, a previous plan or apply left a lease on the remote state blob.
+
+1. Confirm nothing is mid plan/apply for that environment (no in-progress Deploy / Build and Deploy production job / Validate Infra).
+2. Copy the lock **ID** from the failed job log (`Lock Info` → `ID`).
+3. Run the [Force unlock Terraform state](https://github.com/DFE-Digital/publish-teacher-training/actions/workflows/terraform-force-unlock.yml) workflow:
+   - Choose the environment
+   - Paste the lock ID
+   - Type the environment name again in `confirm` (e.g. `production`)
+4. Re-run the failed deploy (or use the Deploy workflow).
+
+The workflow uses the same GitHub Environment protection and deploy concurrency group as normal deploys. Do not unlock while a real apply is running.
+
 ## More info
 
 For more info see
