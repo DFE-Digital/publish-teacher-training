@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe EditCourseWizard, type: :wizard do
+RSpec.describe "CourseWizard edit journey", type: :wizard do
   include_context "edit_course_wizard"
 
   let(:deadline) { (provider.recruitment_cycle.application_end_date - 1.day).end_of_day }

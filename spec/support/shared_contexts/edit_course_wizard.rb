@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# An edit of a saved course through EditCourseWizard, on an in-memory
+# An edit of a saved course through CourseWizard's edit journey, on an in-memory
 # repository: `start_edit_of(entry)` is the request that opens the edit, and
 # `edit_request(step, params)` builds the wizard for a later request.
 RSpec.shared_context "edit_course_wizard" do
@@ -8,10 +8,11 @@ RSpec.shared_context "edit_course_wizard" do
   let(:provider) { create(:provider) }
 
   def edit_request(step = nil, params = {})
-    EditCourseWizard.new(
+    CourseWizard.new(
       state_store: CourseWizard::StateStores::CourseWizardStore.new(repository:),
       current_step: step,
       current_step_params: params,
+      journey: :edit,
     ).tap do |wizard|
       wizard.provider_code = provider.provider_code
       wizard.recruitment_cycle_year = provider.recruitment_cycle_year

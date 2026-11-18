@@ -6,6 +6,7 @@ RSpec.shared_context "add_course_wizard" do
       state_store:,
       current_step:,
       current_step_params: request_params,
+      journey: :create,
     ).tap do |course_wizard|
       course_wizard.provider_code = provider_code
       course_wizard.recruitment_cycle_year = recruitment_cycle_year

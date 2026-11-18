@@ -72,6 +72,7 @@ module Publish
         current_step: current_step_name,
         current_step_params: step_params,
         state_store:,
+        journey: :create,
       ).tap do |wizard|
         wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
         wizard.provider_code = params[:provider_code]

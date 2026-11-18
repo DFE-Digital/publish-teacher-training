@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+# Adds a course (the :create journey) or edits a saved one (the :edit
+# journey, see CourseWizard::Editing). Both ask the course questions of the
+# course_details flow, and each has its own ending.
 class CourseWizard
   include DfE::Wizard
+  include Editing
 
   TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern skilled_worker_visa].freeze
 
@@ -16,45 +20,41 @@ class CourseWizard
   def steps_processor
     DfE::Wizard::StepsProcessor::Graph.draw(self, predicate_caller: state_store) do |graph|
       graph.flow :course_details
-      graph.add_node :courses_index, DfE::Wizard::Core::Redirect
-      graph.add_edge from: :check_answers, to: :courses_index
+
+      graph.journey :create do
+        graph.add_node :courses_index, DfE::Wizard::Core::Redirect
+        graph.add_edge from: :check_answers, to: :courses_index
+      end
+
+      graph.journey :edit do
+        graph.add_node :confirm_changes, Steps::ConfirmChanges
+        graph.add_node :course_page, DfE::Wizard::Core::Redirect
+        graph.before_next_step :next_step_in_edit
+        graph.before_previous_step :previous_step_in_edit
+      end
     end
   end
 
-  # A change from check answers asks only the steps it affects, and the
-  # steps its row shows, then goes back to check answers. Back retraces the
-  # steps it showed. The gem tracks the change and clears the answers it
-  # takes off the path.
-  def review_navigation? = true
+  # When creating, a change from check answers asks only the steps it
+  # affects, and the steps its row shows, then goes back to check answers.
+  # Back retraces the steps it showed. The gem tracks the change and clears
+  # the answers it takes off the path. The edit wires the review itself: its
+  # callbacks, and the controller tracking each step and clearing answers.
+  def review_navigation? = journey == :create
 
+  # Creating saves the course from check answers. The edit saves its
+  # questions to the state store, and the course when it reaches the course
+  # page (see Operations::UpdateCourse).
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
-      builder.on_step(:check_answers, use: [DfE::Wizard::Operations::Validate, Operations::CreateCourse])
+      if journey == :create
+        builder.on_step(:check_answers, use: [DfE::Wizard::Operations::Validate, Operations::CreateCourse])
+      end
     end
   end
 
   def route_strategy
-    DfE::Wizard::RouteStrategy::DynamicRoutes.new(
-      state_store:,
-      path_builder: lambda { |step_id, _state_store, helpers, options|
-        case step_id
-        when :courses_index
-          helpers.publish_provider_recruitment_cycle_courses_path(
-            provider_code:,
-            recruitment_cycle_year:,
-            **options.except(:state_key),
-          )
-        else
-          helpers.publish_provider_recruitment_cycle_course_wizard_path(
-            provider_code:,
-            recruitment_cycle_year:,
-            state_key:,
-            step: step_id,
-            **options,
-          )
-        end
-      },
-    )
+    journey == :edit ? edit_route_strategy : create_route_strategy
   end
 
   def provider
@@ -118,8 +118,8 @@ class CourseWizard
 
 private
 
-  # Flow: the questions about a course, up to check answers. Creating a
-  # course and editing a saved one (EditCourseWizard) both draw it.
+  # Flow: the questions about a course, up to check answers. Both journeys
+  # draw it.
   def course_details(graph)
     graph.root :level
 
@@ -257,6 +257,30 @@ private
     graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
 
     graph.add_edge from: :start_date, to: :check_answers
+  end
+
+  def create_route_strategy
+    DfE::Wizard::RouteStrategy::DynamicRoutes.new(
+      state_store:,
+      path_builder: lambda { |step_id, _state_store, helpers, options|
+        case step_id
+        when :courses_index
+          helpers.publish_provider_recruitment_cycle_courses_path(
+            provider_code:,
+            recruitment_cycle_year:,
+            **options.except(:state_key),
+          )
+        else
+          helpers.publish_provider_recruitment_cycle_course_wizard_path(
+            provider_code:,
+            recruitment_cycle_year:,
+            state_key:,
+            step: step_id,
+            **options,
+          )
+        end
+      },
+    )
   end
 
   def ensure_review_step(steps, step_id)

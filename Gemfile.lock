@@ -31,8 +31,8 @@ GIT
 
 GIT
   remote: https://github.com/DFE-Digital/dfe-wizard.git
-  revision: 4dc648be2fefbf100a363bc739bf4f5d3c3130e7
-  branch: check-answers-review-navigation
+  revision: a5d7d3dd384903337b6831a8dd552d76dc1cb57b
+  branch: journeys
   specs:
     dfe-wizard (1.0.0)
       activemodel (>= 7.1, < 9)

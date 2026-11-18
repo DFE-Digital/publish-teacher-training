@@ -2,11 +2,12 @@
 
 module Publish
   module Courses
-    # Edits a saved course's funding type or visa sponsorship through
-    # EditCourseWizard. The entry point (new) seeds the edit under a new
-    # state_key. Each step then asks only the questions that need an answer,
-    # and when the edit reaches the course page its answers are saved to the
-    # course. An edit of a published course asks the user to confirm first.
+    # Edits a saved course's funding type or visa sponsorship through the
+    # edit journey of CourseWizard. The entry point (new) seeds the edit under
+    # a new state_key. Each step then asks only the questions that need an
+    # answer, and when the edit reaches the course page its answers are saved
+    # to the course. An edit of a published course asks the user to confirm
+    # first.
     #
     # Behind the course_edit_wizard setting. A funding type edit is only for
     # draft or rolled over courses.
@@ -70,7 +71,7 @@ module Publish
       # Only a visa edit leaves the funding type alone. Any other edit gets
       # the funding type check.
       def authorize_funding_type
-        unit = action_name == "new" ? EditCourseWizard.unit_for(params[:unit]) : @wizard.unit
+        unit = action_name == "new" ? CourseWizard.unit_for(params[:unit]) : @wizard.unit
         authorize(course, :can_update_funding_type?) unless unit == :visa
       end
 
@@ -108,10 +109,11 @@ module Publish
           expires_in: CACHE_EXPIRY,
         )
 
-        @wizard = EditCourseWizard.new(
+        @wizard = CourseWizard.new(
           current_step: action_name == "new" ? nil : current_step_name,
           current_step_params: action_name == "new" ? {} : params,
           state_store: CourseWizard::StateStores::CourseWizardStore.new(repository:),
+          journey: :edit,
         ).tap do |wizard|
           wizard.recruitment_cycle_year = provider.recruitment_cycle_year
           wizard.provider_code = provider.provider_code

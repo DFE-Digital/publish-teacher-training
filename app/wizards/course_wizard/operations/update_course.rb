@@ -2,10 +2,10 @@
 
 class CourseWizard
   module Operations
-    # Saves an edit of a saved course (see EditCourseWizard): its answers
-    # mapped to the course, then the funding and visa rules. The course and
-    # its draft enrichment are saved together. Nothing is saved when the
-    # answers do not change the course.
+    # Saves an edit of a saved course (the edit journey, see
+    # CourseWizard::Editing): its answers mapped to the course, then the
+    # funding and visa rules. The course and its draft enrichment are saved
+    # together. Nothing is saved when the answers do not change the course.
     class UpdateCourse
       # repository is part of the DfE::Wizard operation interface
       # rubocop:disable Lint/UnusedMethodArgument
