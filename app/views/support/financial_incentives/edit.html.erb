@@ -1,7 +1,7 @@
 <% content_for :page_title, t(".page_title") %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(support_financial_incentives_path(year: @year)) %>
+  <%= govuk_back_link_to(year_support_financial_incentives_path(@year)) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -40,7 +40,7 @@
     <% end %>
 
     <p class="govuk-body">
-      <%= govuk_link_to t("cancel"), support_financial_incentives_path(year: @year) %>
+      <%= govuk_link_to t("cancel"), year_support_financial_incentives_path(@year) %>
     </p>
   </div>
 </div>
