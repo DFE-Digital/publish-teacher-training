@@ -70,6 +70,7 @@ RSpec.describe "Public API key authentication", service: :api do
     "a Bearer scheme with no token" => "Bearer ",
     "a bearer token from another service" => "Bearer eyJhbGciOiJIUzI1NiJ9.e30.c2lnbmF0dXJl",
     "a Basic credential" => "Basic dXNlcjpwYXNzd29yZA==",
+    "a key one character short" => "Bearer #{APIKey::SECRET_PREFIX}#{'0' * 63}",
     "bytes that are not valid UTF-8" => "Bearer \xFF",
   }.each do |description, credential|
     it "serves #{description} anonymously, without looking up a key" do

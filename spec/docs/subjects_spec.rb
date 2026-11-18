@@ -29,7 +29,7 @@ describe "API" do
       end
 
       unauthorized_response do
-        let(:Authorization) { "Bearer ptt_#{'0' * 64}" } # rubocop:disable RSpec/VariableName
+        let(:Authorization) { "Bearer #{APIKey::SECRET_PREFIX}#{'0' * 64}" } # rubocop:disable RSpec/VariableName
 
         run_test!
       end
