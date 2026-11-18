@@ -56,7 +56,7 @@
         <% end %>
         <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" }, disabled: !can_edit %>
       <% end %>
-      <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: t(".provider_type"), size: "s" } do %>
+      <%= f.govuk_radio_buttons_fieldset :provider_type, legend: { text: t(".provider_type"), size: "s" }, id: "providers-onboarding-form-request-provider-type-field" do %>
         <%= f.govuk_radio_button :provider_type, "university", label: { text: t(".provider_type_university") }, link_errors: true, disabled: !can_edit %>
         <%= f.govuk_radio_button :provider_type, "scitt", label: { text: t(".provider_type_scitt") }, disabled: !can_edit %>
         <%= f.govuk_radio_button :provider_type, "lead_school", label: { text: t(".provider_type_school") }, disabled: !can_edit do %>

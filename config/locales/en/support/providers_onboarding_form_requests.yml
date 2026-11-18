@@ -23,7 +23,7 @@ en:
       create:
         success_message_html: "Onboarding form generated successfully for %{form_name}"
       update:
-        updated_status_message_html: "Status updated to %{updated_status} for %{form_name}"
+        rejected: "%{provider_name} rejected"
         error_message_html: "Failed to update status for %{form_name}"
       statuses:
         pending: Sent
@@ -47,7 +47,7 @@ en:
         cancel: Cancel
     providers:
       onboard_from_form_request:
-        success: "%{provider_name} (%{provider_code}) has been onboarded"
+        success: "%{provider_name} onboarded"
         already_onboarded: This provider has already been onboarded
         not_submitted: This onboarding form has not been submitted, so the provider cannot be onboarded
         no_recruitment_cycle: This provider could not be onboarded because there is no current recruitment cycle

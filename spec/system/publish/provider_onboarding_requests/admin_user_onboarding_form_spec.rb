@@ -50,7 +50,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
   end
 
   def then_i_see_the_completed_form_fields
-    expect(page).to have_field("Organisation name", with: onboarding_request.provider_name)
+    expect(page).to have_field("Provider name", with: onboarding_request.provider_name)
     expect(page).to have_field("UK provider reference number (UKPRN)", with: onboarding_request.ukprn)
     expect(page).to have_checked_field("School")
     expect(page).to have_field("Unique reference number (URN)", with: onboarding_request.urn)
@@ -74,7 +74,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
 
   def and_i_can_edit_the_form_if_needed
     @updated_name = "Updated #{onboarding_request.provider_name}"
-    fill_in "Organisation name", with: @updated_name
+    fill_in "Provider name", with: @updated_name
   end
 
   def then_i_click_the_continue_button
