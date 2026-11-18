@@ -3,8 +3,11 @@ en:
     financial_incentives:
       index:
         page_title: Financial incentives
-        financial_incentive_year: Financial incentive year
-        apply: Apply
+        intro: Financial incentives are only visible to candidates when the bursaries and scholarships feature flag is active. Incentives marked as published will be visible on Find.
+        published_tag: Published
+        create: Create financial incentives for %{year_range}
+      show:
+        page_title: Financial incentives %{year_range}
         important: Important
         statuses:
           hidden: Hidden

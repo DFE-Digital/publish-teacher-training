@@ -24,6 +24,17 @@ module Support
       govuk_tag(text: t(".statuses.#{status}"), colour: STATUS_COLOURS.fetch(status))
     end
 
+    def financial_incentive_year_published?(year)
+      FinancialIncentive.for_year(year).displayed.exists?
+    end
+
+    def financial_incentive_year_label(year)
+      label = Find::CycleTimetable.cycle_year_range(year)
+      return label unless year == FinancialIncentive.current_year
+
+      "#{label} - current"
+    end
+
   private
 
     def financial_incentive_status(financial_incentive)
