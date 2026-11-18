@@ -10,7 +10,7 @@ en:
         caption: Onboard a provider
         heading: Enter your provider details
         organisation_details: Organisation details
-        organisation_name: Organisation name
+        organisation_name: Provider name
         organisation_name_hint: Enter your organisation name, ideally your operating name. The name you enter here will be shown on Find teacher training courses (Find)
         ukprn: UK provider reference number (UKPRN)
         ukprn_hint_html: You can find your UKPRN on the %{ukrlp_link}

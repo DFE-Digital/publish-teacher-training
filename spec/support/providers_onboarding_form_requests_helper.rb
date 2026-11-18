@@ -249,7 +249,7 @@ module ProvidersOnboardingFormRequestsHelper
   def then_i_see_the_onboarded_success_banner(onboarding_request)
     provider = provider_created_for(onboarding_request)
 
-    expect(page).to have_content("#{provider.provider_name} (#{provider.provider_code}) has been onboarded")
+    expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "#{provider.provider_name} onboarded")
   end
 
   def then_the_accredited_provider_is_created(onboarding_request)

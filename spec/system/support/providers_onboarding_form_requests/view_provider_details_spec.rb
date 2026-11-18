@@ -23,6 +23,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-provider-type-field")
 
       expect(page).to have_current_path(publish_provider_onboarding_path(onboarding_request.uuid), ignore_query: true)
+      expect(page).to have_css("#providers-onboarding-form-request-provider-type-field", text: "School")
       expect(page).to have_checked_field("School")
 
       choose "Higher education institution (HEI)"
@@ -37,9 +38,9 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
     scenario "I can change the provider name from the details page" do
       click_link "Change", href: support_return_path(anchor: "providers-onboarding-form-request-provider-name-field")
 
-      expect(page).to have_field("Organisation name", with: "Northshore Training")
+      expect(page).to have_field("Provider name", with: "Northshore Training")
 
-      fill_in "Organisation name", with: "Updated Northshore"
+      fill_in "Provider name", with: "Updated Northshore"
       click_button "Continue"
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
@@ -176,7 +177,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       then_the_accredited_provider_is_created(onboarding_request)
     end
 
-    scenario "I see each onboard error on its own line, linked to the field" do
+    scenario "I see each onboard error on its own line" do
       onboarding_request.update_columns(
         accredited_provider: true,
         provider_type: "scitt",
@@ -187,18 +188,16 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       when_i_click_onboard_provider
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
-      expect(page).to have_css(".govuk-error-summary__list li", count: 1)
-      expect(page).to have_link(
-        "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5",
-        href: "#providers-onboarding-form-request-accredited-provider-number-field-error",
-      )
+      expect(page).to have_css(".govuk-error-summary__list li", count: 1, text: "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5")
+      expect(page).not_to have_link("Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5")
       expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error", text: "1234")
     end
 
     scenario "I can reject an onboarding request" do
       when_i_click_reject
 
-      then_i_am_on_the_providers_onboarding_form_requests_page
+      expect(page).to have_current_path(support_providers_onboarding_form_requests_path)
+      expect(page).to have_css(".govuk-notification-banner__heading", exact_text: "#{onboarding_request.provider_name} rejected")
       then_status_should_be("Rejected", onboarding_request)
 
       when_i_visit_the_show_page_for(onboarding_request)
