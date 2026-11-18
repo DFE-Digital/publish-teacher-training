@@ -4,15 +4,22 @@ Our API is documented using [OpenAPI](https://swagger.io/specification/). You ca
 
 ## API key authentication rollout
 
-`features.api_key_authentication` in `config/settings.yml` defaults to `false`
-and is inherited by every environment. While disabled, the public API ignores
+The database-backed `api_key_authentication` feature flag is off by default
+when no state exists. While disabled, the public API ignores
 `Authorization` headers: it neither looks up keys nor records their use. This
 avoids unexpected 401 responses while providers and third-party services adapt
 their requests.
 
-Set `features.api_key_authentication: true` in the relevant environment's settings
-to enable header validation and usage recording. Requests without a header remain
-anonymous; headers without a valid active key receive a 401 response.
+Activate or deactivate it through the support feature flags page, or run
+`FeatureFlag.activate(:api_key_authentication)` /
+`FeatureFlag.deactivate(:api_key_authentication)` in the Rails console for the
+relevant environment. Changes take effect on subsequent requests without an
+application restart. When active, requests without a header remain anonymous;
+headers without a valid active key receive a 401 response and valid keys have
+their use recorded.
+
+This is separate from the `api_keys` flag, which controls API key management in
+the support interface.
 
 The separate safeguard rejecting API keys in URLs remains active regardless of
 this flag.

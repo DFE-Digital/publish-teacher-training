@@ -13,7 +13,7 @@ module API
   private
 
     def authenticate_api_key
-      return unless FeatureService.enabled?(:api_key_authentication)
+      return unless FeatureFlag.active?(:api_key_authentication)
 
       header = request.headers["Authorization"]
       return if header.nil?
