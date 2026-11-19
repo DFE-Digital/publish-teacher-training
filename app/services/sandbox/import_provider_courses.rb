@@ -22,6 +22,7 @@ module Sandbox
       :missing_accredited_providers,
       :sandbox_only,
       :uuid_clashes,
+      :schools_unlinked,
       keyword_init: true,
     )
 
@@ -44,6 +45,7 @@ module Sandbox
         missing_accredited_providers: [],
         sandbox_only: [],
         uuid_clashes: [],
+        schools_unlinked: [],
       )
     end
 
@@ -187,6 +189,7 @@ module Sandbox
       @result.gias_stubs.concat(schools_result.gias_stubs)
       @result.conflicts.concat(schools_result.conflicts)
       @result.uuid_clashes.concat(schools_result.uuid_clashes)
+      @result.schools_unlinked.concat(schools_result.schools_unlinked)
     end
 
     def skip(mapper, reason)
@@ -200,6 +203,7 @@ module Sandbox
       line("Skipped", "course", @result.skipped, separator: "\n  ")
       line("Created", "provider school", @result.schools_created)
       line("Created", "GIAS school", @result.gias_stubs)
+      line("Unlinked", "school", @result.schools_unlinked)
       line("Conflicting", "school", @result.conflicts, separator: "\n  ")
       line("Generated a new uuid for", "record", @result.uuid_clashes, separator: "\n  ")
       line("Missing", "accredited provider", @result.missing_accredited_providers)

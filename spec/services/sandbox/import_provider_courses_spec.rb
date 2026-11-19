@@ -133,6 +133,23 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
   end
 
+  context "when the course has a school production no longer has" do
+    let!(:existing) { create(:course, provider:, course_code: "RX41") }
+
+    before do
+      old_school = create(:provider_school, provider:, site_code: "Z", gias_school: create(:gias_school, urn: "999999"))
+      existing.schools.create!(provider_school: old_school, gias_school: old_school.gias_school)
+    end
+
+    it "unlinks it and reports it" do
+      result = import
+
+      expect(existing.schools.reload.map(&:site_code)).to eq(["-"])
+      expect(result.schools_unlinked).to eq(["Z (999999)"])
+      expect(out.string).to include("Unlinked 1 school: Z (999999)")
+    end
+  end
+
   it "gives the same result when run again" do
     described_class.call(provider_code: "C55", year:, confirm: true, client:, out: StringIO.new)
 

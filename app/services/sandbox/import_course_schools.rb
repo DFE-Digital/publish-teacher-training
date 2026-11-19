@@ -7,21 +7,23 @@ module Sandbox
   # A GIAS school that this environment doesn't have is created from the
   # location's details. A location that clashes with a school the provider
   # already has here is reported as a conflict and skipped: sandbox codes
-  # are never rewritten.
+  # are never rewritten. Schools the course has here but not in production
+  # are unlinked from the course; the provider keeps them.
   class ImportCourseSchools
     include ServicePattern
 
-    Result = Struct.new(:schools_created, :gias_stubs, :conflicts, :uuid_clashes, keyword_init: true)
+    Result = Struct.new(:schools_created, :gias_stubs, :conflicts, :uuid_clashes, :schools_unlinked, keyword_init: true)
 
     def initialize(course:, locations:)
       @course = course
       @provider = course.provider
       @locations = locations
-      @result = Result.new(schools_created: [], gias_stubs: [], conflicts: [], uuid_clashes: [])
+      @result = Result.new(schools_created: [], gias_stubs: [], conflicts: [], uuid_clashes: [], schools_unlinked: [])
     end
 
     def call
-      @locations.each { |location| import(location["attributes"]) }
+      provider_schools = @locations.filter_map { |location| import(location["attributes"]) }
+      unlink_schools_not_in(provider_schools)
       @result
     end
 
@@ -34,6 +36,16 @@ module Sandbox
 
       @course.schools.find_or_create_by!(provider_school:) do |course_school|
         course_school.gias_school = gias_school
+      end
+      provider_school
+    end
+
+    def unlink_schools_not_in(provider_schools)
+      extra = @course.schools.where.not(provider_school_id: provider_schools.map(&:id)).includes(:gias_school, :provider_school)
+
+      extra.each do |course_school|
+        @result.schools_unlinked << "#{course_school.site_code} (#{course_school.gias_school.urn})"
+        course_school.destroy!
       end
     end
 
