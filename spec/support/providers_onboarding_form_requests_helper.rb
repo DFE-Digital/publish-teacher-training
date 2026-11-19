@@ -212,6 +212,8 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content(
       "Click Reject provider to reject the request. The request will be marked as rejected in the onboarding table and you will not be able to onboard the provider.",
     )
+    expect(page).to have_css("p strong", exact_text: "Onboard provider")
+    expect(page).to have_css("p strong", exact_text: "Reject provider")
     expect(page).to have_button("Onboard provider", class: "govuk-button")
     expect(page).to have_css(
       "button.govuk-link.app-link--destructive.app-button-link",

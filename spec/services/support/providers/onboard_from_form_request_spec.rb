@@ -71,6 +71,32 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       expect(result.provider.recruitment_cycle).to eq(recruitment_cycle)
     end
 
+    it "does not grant the first user access to an unrelated next-cycle provider with the same code" do
+      next_cycle = create(:recruitment_cycle, :next, available_in_publish_from: 1.day.ago)
+      unrelated_provider = create(:provider, recruitment_cycle: next_cycle, provider_code: "A1B")
+      accredited_provider = create(:provider, :accredited_provider, recruitment_cycle:)
+      user = create(:user, email: onboarding_request.email_address.downcase)
+      accredited_provider.users << user
+      create(:user_notification, user:, provider: accredited_provider, course_publish: true, course_update: true)
+      onboarding_request.update!(
+        accredited_provider: true,
+        provider_type: "university",
+        accredited_provider_number: "1234",
+        urn: nil,
+      )
+      allow(Support::Providers::ProviderCode).to receive(:call).and_return("A1B")
+      mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      allow(NewUserAddedBySupportTeamMailer).to receive(:user_added_to_provider_email).and_return(mailer)
+
+      expect(result).to be_success
+      expect(result.provider.users).to contain_exactly(user)
+      expect(unrelated_provider.reload.users).to be_empty
+      expect(NewUserAddedBySupportTeamMailer).to have_received(:user_added_to_provider_email).with(recipient: user)
+      expect(mailer).to have_received(:deliver_later)
+      expect(UserNotification.where(user:, provider_code: "A1B", course_publish: true, course_update: true)).to exist
+      expect(UserNotification.where(user:, provider_code: accredited_provider.provider_code, course_publish: true, course_update: true)).to exist
+    end
+
     it "adds an existing user instead of creating another account" do
       existing_user = create(:user, email: "already.here@example.com", first_name: "Existing", last_name: "User")
       onboarding_request.update!(email_address: "already.here@example.com", first_name: "New", last_name: "Name")

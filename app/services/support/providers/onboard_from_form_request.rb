@@ -146,7 +146,7 @@ module Support
           raise Error, field_errors(user, USER_ATTRIBUTES) unless user.save
         end
 
-        UserAssociationsService::Create.call(user:, provider:)
+        UserAssociationsService::Create.call(user:, provider:, limit_to_provider: true)
       end
 
       def accredited_provider_number
