@@ -99,6 +99,19 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
   end
 
+  context "when the course was deleted in this environment" do
+    let!(:discarded) do
+      create(:course, provider:, course_code: "RX41", discarded_at: 1.day.ago)
+    end
+
+    it "restores it and updates it to match production" do
+      expect { import }.not_to change(Course.with_discarded, :count)
+
+      expect(discarded.reload).to have_attributes(discarded_at: nil, name: "Modern languages (Spanish, French)")
+      expect(import).to have_attributes(created: [], updated: ["RX41 (restored)"])
+    end
+  end
+
   it "gives the same result when run again" do
     described_class.call(provider_code: "C55", year:, confirm: true, client:, out: StringIO.new)
 
