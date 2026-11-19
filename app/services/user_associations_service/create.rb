@@ -3,7 +3,7 @@
 module UserAssociationsService
   class Create
     include RecruitmentCycleHelper
-    attr_reader :provider, :user, :all_providers
+    attr_reader :provider, :user, :all_providers, :limit_to_provider
 
     class << self
       def call(**args)
@@ -11,10 +11,11 @@ module UserAssociationsService
       end
     end
 
-    def initialize(user:, provider: nil, all_providers: false)
+    def initialize(user:, provider: nil, all_providers: false, limit_to_provider: false)
       @provider = provider
       @user = user
       @all_providers = all_providers
+      @limit_to_provider = limit_to_provider
     end
 
     def call
@@ -47,7 +48,7 @@ module UserAssociationsService
     end
 
     def add_user_to_a_single_provider
-      if rollover_active?
+      if rollover_active? && !limit_to_provider
         add_user_to_provider_in_both_cycles
       else
         add_user_to_provider

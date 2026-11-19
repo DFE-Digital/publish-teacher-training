@@ -195,7 +195,7 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       expect(page).to have_css(".govuk-error-summary__list li", count: 1)
       expect(page).to have_link(
         "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5",
-        href: support_return_path(anchor: "providers-onboarding-form-request-accredited-provider-number-field"),
+        href: accredited_provider_number_error_path,
       )
       expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error", text: "1234")
     end
@@ -210,10 +210,16 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
 
       when_i_click_onboard_provider
 
-      expect(page).to have_link(
+      click_link(
         "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
-        href: support_return_path(anchor: "providers-onboarding-form-request-accredited-provider-number-field"),
+        href: accredited_provider_number_error_path,
       )
+
+      expect(page).to have_css(
+        ".govuk-form-group--error .govuk-error-message",
+        text: "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
+      )
+      expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error.govuk-input--error")
     end
 
     scenario "I can reject an onboarding request" do
@@ -236,6 +242,15 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
 
     def support_return_path(anchor:)
       publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor:)
+    end
+
+    def accredited_provider_number_error_path
+      publish_provider_onboarding_path(
+        onboarding_request.uuid,
+        return_to: "support",
+        display_errors: "accredited_provider_number",
+        anchor: "providers-onboarding-form-request-accredited-provider-number-field-error",
+      )
     end
   end
 end

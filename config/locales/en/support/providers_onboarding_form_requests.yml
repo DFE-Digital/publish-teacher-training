@@ -33,17 +33,41 @@ en:
         rejected: Rejected
         onboarded: Onboarded
       show:
+        title: Provider details
         caption: Onboard a provider
         provider_details: Provider details for %{form_name}
+        error_summary_title: There is a problem
         onboarding_details: Onboarding details
         organisation_details: Organisation details
         contact_details: Contact details
         user_details: User details
         form_link: Form link
         view_provider_form: View provider form
+        copy_link: Copy link
         zendesk_link: Zendesk link
         view_zendesk_ticket: View Zendesk ticket
         not_available: Not available
+        change: Change
+        "yes": "Yes"
+        "no": "No"
+        provider_name: Provider name
+        ukprn: UK provider reference number (UKPRN)
+        accredited_provider: Is the organisation an accredited provider?
+        accredited_provider_number: Accredited provider number
+        enter_accredited_provider_number: Enter accredited provider number
+        provider_type: Provider type
+        urn: Unique reference number (URN)
+        contact_email_address: Contact email address
+        telephone: Telephone
+        website: Website
+        address: Address
+        email_address: Email address
+        first_name: First name
+        last_name: Last name
+        onboard_explanation_html: Click <strong>Onboard provider</strong> to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.
+        reject_explanation_html: Click <strong>Reject provider</strong> to reject the request. The request will be marked as rejected in the onboarding table and you will not be able to onboard the provider.
+        onboard_provider: Onboard provider
+        reject_provider: Reject provider
         cancel: Cancel
     providers:
       onboard_from_form_request:
