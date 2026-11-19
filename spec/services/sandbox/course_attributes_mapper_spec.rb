@@ -136,6 +136,18 @@ RSpec.describe Sandbox::CourseAttributesMapper do
     end
   end
 
+  describe "#enrichment_version" do
+    it "is 2 when production leaves the version 1 fields out" do
+      expect(mapper.enrichment_version).to eq(2)
+    end
+
+    it "is 1 when production has version 1 content" do
+      mapper = described_class.new(fixture.merge("about_course" => "About the course"))
+
+      expect(mapper.enrichment_version).to eq(1)
+    end
+  end
+
   describe "#subject_codes" do
     it "keeps the order production lists them in" do
       expect(mapper.subject_codes).to eq(%w[15 22])

@@ -88,6 +88,18 @@ RSpec.describe Sandbox::ImportProviderCourses do
     )
   end
 
+  context "when the course is published here with version 1 content" do
+    let!(:existing) do
+      create(:course, provider:, course_code: "RX41", enrichments: [build(:course_enrichment, :published, :v1)])
+    end
+
+    it "publishes production's content as version 2" do
+      import
+
+      expect(existing.reload.enrichments.published.sole).to have_attributes(course_length: "OneYear", version: 2)
+    end
+  end
+
   it "gives the course production's school" do
     import
 
@@ -261,12 +273,22 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
 
     context "when the course is already published here" do
-      let!(:existing) { create(:course, :published, provider:, course_code: "RX41") }
+      let!(:existing) do
+        create(:course, provider:, course_code: "RX41",
+                        enrichments: [build(:course_enrichment, :published, course_length: "TwoYears")])
+      end
 
-      it "leaves it published" do
+      it "leaves it published, with its content as it was" do
         import
 
         expect(existing.reload).to be_is_published
+        expect(existing.enrichments.published.sole.course_length).to eq("TwoYears")
+      end
+
+      it "puts production's content in a draft" do
+        import
+
+        expect(existing.reload.enrichments.draft.sole).to have_attributes(course_length: "OneYear", version: 2)
       end
     end
   end
