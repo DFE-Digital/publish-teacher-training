@@ -172,6 +172,10 @@ module ProvidersOnboardingFormRequestsHelper
         expect(page).to have_content(onboarding_request.accredited_provider_number)
         expect(page).to have_link("Change", href: accredited_provider_number_path)
       else
+        expect(page).to have_css(
+          ".govuk-inset-text.app-inset-text--narrow-border.app-inset-text--important",
+          text: "Enter accredited provider number",
+        )
         expect(page).to have_link("Enter accredited provider number", href: accredited_provider_number_path)
       end
     end
@@ -205,6 +209,9 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content(
       "Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.",
     )
+    expect(page).to have_content(
+      "Click Reject provider to reject the request. The request will be marked as rejected in the onboarding table and you will not be able to onboard the provider.",
+    )
     expect(page).to have_button("Onboard provider", class: "govuk-button")
     expect(page).to have_css(
       "button.govuk-link.app-link--destructive.app-button-link",
@@ -217,6 +224,7 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).not_to have_button("Onboard provider")
     expect(page).not_to have_button("Reject provider")
     expect(page).not_to have_content("Click Onboard provider to approve the request")
+    expect(page).not_to have_content("Click Reject provider to reject the request")
     expect(page).not_to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
   end
 
