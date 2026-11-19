@@ -65,6 +65,10 @@ module Sandbox
       mapper = CourseAttributesMapper.new(prod_course["attributes"])
       course_report = ImportReport.new
 
+      # The client only asks for findable courses; this is in case that filter changes.
+      state = prod_course.dig("attributes", "state")
+      return skip(mapper, "not published in production (#{state})") unless state == "published"
+
       # A savepoint per course, so one that fails leaves nothing half-written.
       Course.transaction(requires_new: true) do
         subjects = find_subjects(mapper)
