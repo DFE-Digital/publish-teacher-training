@@ -26,12 +26,13 @@ RSpec.describe PublishPublicAPI::Client do
 
   def stub_courses_page(page, body)
     stub_request(:get, courses_url)
-      .with(query: { "include" => "recruitment_cycle", "page" => page.to_s, "per_page" => "500" })
+      .with(query: { "filter" => { "findable" => "true" }, "include" => "recruitment_cycle", "page" => page.to_s, "per_page" => "500" })
       .to_return(status: 200, body:, headers: { "Content-Type" => "application/json" })
   end
 
   describe "#courses" do
-    it "returns the courses for the provider and cycle" do
+    # Only courses findable in production: the stubs only answer when the filter is sent.
+    it "returns the provider's findable courses for the cycle" do
       stub_courses_page(1, courses_page(%w[RX41 2B9P], count: 2))
 
       courses = client.courses(year: 2027, provider_code: "C55")

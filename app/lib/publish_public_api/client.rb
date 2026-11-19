@@ -19,7 +19,7 @@ module PublishPublicAPI
     def courses(year:, provider_code:)
       path = "recruitment_cycles/#{year}/providers/#{provider_code}/courses"
 
-      fetch_all_pages(path, year:, include: "recruitment_cycle")
+      fetch_all_pages(path, year:, include: "recruitment_cycle", filter: { findable: true })
     end
 
     def course_locations(year:, provider_code:, course_code:)
