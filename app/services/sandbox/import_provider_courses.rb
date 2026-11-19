@@ -117,7 +117,9 @@ module Sandbox
     end
 
     def save_course(course, mapper, subjects, course_report)
-      course.uuid = production_uuid(mapper, course_report) if course.new_record?
+      if course.new_record?
+        course.uuid = ProductionUuid.keep(mapper.uuid, unless_used_by: Course.with_discarded, label: mapper.course_code, report: course_report)
+      end
       course.assign_attributes(mapper.course_attributes)
       course.discarded_at = nil
 
@@ -127,9 +129,7 @@ module Sandbox
         subjects.each_with_index { |subject, position| course.course_subjects.build(subject:, position:) }
       end
 
-      # As Courses::AssignSubjectsService works out the main and second subject.
-      master_ids = course.assignable_master_subjects&.pluck(:id) || []
-      course.master_subject_id, course.subordinate_subject_id = subjects.map(&:id).select { |id| master_ids.include?(id) }
+      Courses::AssignSubjectsService.assign_master_and_subordinate_subjects(course, subjects.map(&:id))
 
       course.save!
     end
@@ -157,16 +157,6 @@ module Sandbox
       enrichment.save!
 
       course.update!(first_published_at: Time.zone.now) if publish && course.first_published_at.blank?
-    end
-
-    # Keeps production's uuid unless something here already has it. Existing
-    # courses keep theirs, which Apply sandbox may already hold.
-    def production_uuid(mapper, course_report)
-      return if mapper.uuid.blank?
-      return mapper.uuid unless Course.with_discarded.exists?(uuid: mapper.uuid)
-
-      course_report.uuid_clashes << "#{mapper.course_code}: uuid #{mapper.uuid} is already used here"
-      nil
     end
 
     # Returns the accredited provider's code when it isn't here.
