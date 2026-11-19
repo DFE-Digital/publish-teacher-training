@@ -22,8 +22,13 @@ module PublishPublicAPI
       fetch_all_pages(path, year:, include: "recruitment_cycle", filter: { findable: true })
     end
 
+    # For a course published without schools of its own, the API returns the
+    # provider's schools instead and says so with meta.has_course_schools.
     def course_locations(year:, provider_code:, course_code:)
-      get("recruitment_cycles/#{year}/providers/#{provider_code}/courses/#{course_code}/locations")["data"]
+      body = get("recruitment_cycles/#{year}/providers/#{provider_code}/courses/#{course_code}/locations")
+      return [] if body.dig("meta", "has_course_schools") == false
+
+      body["data"]
     end
 
   private

@@ -78,17 +78,28 @@ RSpec.describe PublishPublicAPI::Client do
   end
 
   describe "#course_locations" do
-    it "returns the locations for the course" do
+    let(:location) { { "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } } }
+
+    def stub_locations(has_course_schools:)
       stub_request(:get, "#{courses_url}/RX41/locations")
         .to_return(
           status: 200,
-          body: { "data" => [{ "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } }] }.to_json,
+          body: { "data" => [location], "meta" => { "has_course_schools" => has_course_schools } }.to_json,
           headers: { "Content-Type" => "application/json" },
         )
+    end
 
-      locations = client.course_locations(year: 2027, provider_code: "C55", course_code: "RX41")
+    it "returns the course's schools" do
+      stub_locations(has_course_schools: true)
 
-      expect(locations).to eq([{ "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } }])
+      expect(client.course_locations(year: 2027, provider_code: "C55", course_code: "RX41")).to eq([location])
+    end
+
+    # A course published without schools gets the provider's schools back instead.
+    it "returns none when the course has no schools of its own" do
+      stub_locations(has_course_schools: false)
+
+      expect(client.course_locations(year: 2027, provider_code: "C55", course_code: "RX41")).to eq([])
     end
   end
 end
