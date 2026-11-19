@@ -192,6 +192,18 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
   end
 
+  context "when a course fails after its schools were added" do
+    let(:prod_courses) { [prod_course.deep_merge("attributes" => { "fee_domestic" => 200_000 })] }
+
+    it "reports only that it was skipped" do
+      result = import
+
+      expect(result.skipped).to contain_exactly(a_string_starting_with("RX41: "))
+      expect(result).to have_attributes(created: [], schools_created: [], not_published: [])
+      expect(Provider::School.count).to eq(0)
+    end
+  end
+
   context "when the provider has courses that production doesn't" do
     before { create(:course, provider:, course_code: "ZZ99") }
 

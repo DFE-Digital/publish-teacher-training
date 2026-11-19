@@ -12,21 +12,6 @@ module Sandbox
 
     Abort = Class.new(StandardError)
 
-    Result = Struct.new(
-      :created,
-      :updated,
-      :skipped,
-      :schools_created,
-      :gias_stubs,
-      :conflicts,
-      :missing_accredited_providers,
-      :sandbox_only,
-      :uuid_clashes,
-      :schools_unlinked,
-      :not_published,
-      keyword_init: true,
-    )
-
     # Errors that mean production's data doesn't fit this course here.
     COURSE_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError, KeyError, Date::Error].freeze
 
@@ -36,19 +21,7 @@ module Sandbox
       @confirm = confirm
       @client = client
       @out = out
-      @result = Result.new(
-        created: [],
-        updated: [],
-        skipped: [],
-        schools_created: [],
-        gias_stubs: [],
-        conflicts: [],
-        missing_accredited_providers: [],
-        sandbox_only: [],
-        uuid_clashes: [],
-        schools_unlinked: [],
-        not_published: [],
-      )
+      @report = ImportReport.new
     end
 
     def call
@@ -59,13 +32,13 @@ module Sandbox
 
       ActiveRecord::Base.transaction do
         prod_courses.each { |prod_course, locations| import_course(provider, prod_course, locations) }
-        @result.sandbox_only = provider.courses.where.not(course_code: prod_courses.map { |c, _| c.dig("attributes", "code") }).pluck(:course_code)
+        @report.sandbox_only = provider.courses.where.not(course_code: prod_courses.map { |c, _| c.dig("attributes", "code") }).pluck(:course_code)
 
         raise ActiveRecord::Rollback unless @confirm
       end
 
       report
-      @result
+      @report
     end
 
   private
@@ -90,6 +63,7 @@ module Sandbox
 
     def import_course(provider, prod_course, locations)
       mapper = CourseAttributesMapper.new(prod_course["attributes"])
+      course_report = ImportReport.new
 
       # A savepoint per course, so one that fails leaves nothing half-written.
       Course.transaction(requires_new: true) do
@@ -102,24 +76,26 @@ module Sandbox
         created = course.new_record?
         restored = course.discarded?
 
-        save_course(course, mapper, subjects)
-        schools_result = ImportCourseSchools.call(course:, locations:)
-        collect(schools_result)
-        missing_accredited_provider = add_partnership(provider, course)
+        save_course(course, mapper, subjects, course_report)
+        ImportCourseSchools.call(course:, locations:, report: course_report)
+        missing_accredited_provider = add_partnership(provider, course, course_report)
 
         reasons = []
-        reasons << "school conflict" if schools_result.conflicts.any?
+        reasons << "school conflict" if course_report.conflicts.any?
         reasons << "accredited provider #{missing_accredited_provider} missing" if missing_accredited_provider
-        @result.not_published << "#{course.course_code}: #{reasons.join(', ')}" if reasons.any?
+        course_report.not_published << "#{course.course_code}: #{reasons.join(', ')}" if reasons.any?
 
         save_enrichment(course, mapper, publish: reasons.empty?)
 
         if created
-          @result.created << course.course_code
+          course_report.created << course.course_code
         else
-          @result.updated << (restored ? "#{course.course_code} (restored)" : course.course_code)
+          course_report.updated << (restored ? "#{course.course_code} (restored)" : course.course_code)
         end
       end
+
+      # Only once the course's savepoint has been released.
+      @report.merge!(course_report)
     rescue *COURSE_ERRORS => e
       skip(mapper, e.message)
     end
@@ -140,8 +116,8 @@ module Sandbox
       [SecondarySubject.modern_languages, *subjects].uniq
     end
 
-    def save_course(course, mapper, subjects)
-      course.uuid = production_uuid(mapper) if course.new_record?
+    def save_course(course, mapper, subjects, course_report)
+      course.uuid = production_uuid(mapper, course_report) if course.new_record?
       course.assign_attributes(mapper.course_attributes)
       course.discarded_at = nil
 
@@ -177,23 +153,23 @@ module Sandbox
 
     # Keeps production's uuid unless something here already has it. Existing
     # courses keep theirs, which Apply sandbox may already hold.
-    def production_uuid(mapper)
+    def production_uuid(mapper, course_report)
       return if mapper.uuid.blank?
       return mapper.uuid unless Course.with_discarded.exists?(uuid: mapper.uuid)
 
-      @result.uuid_clashes << "#{mapper.course_code}: uuid #{mapper.uuid} is already used here"
+      course_report.uuid_clashes << "#{mapper.course_code}: uuid #{mapper.uuid} is already used here"
       nil
     end
 
     # Returns the accredited provider's code when it isn't here.
-    def add_partnership(provider, course)
+    def add_partnership(provider, course, course_report)
       code = course.accredited_provider_code
       return if code.blank? || code == provider.provider_code
 
       accredited_provider = provider.recruitment_cycle.providers.find_by(provider_code: code)
 
       if accredited_provider.nil?
-        @result.missing_accredited_providers |= [code]
+        course_report.missing_accredited_providers << code
         return code
       end
 
@@ -201,31 +177,23 @@ module Sandbox
       nil
     end
 
-    def collect(schools_result)
-      @result.schools_created.concat(schools_result.schools_created)
-      @result.gias_stubs.concat(schools_result.gias_stubs)
-      @result.conflicts.concat(schools_result.conflicts)
-      @result.uuid_clashes.concat(schools_result.uuid_clashes)
-      @result.schools_unlinked.concat(schools_result.schools_unlinked)
-    end
-
     def skip(mapper, reason)
-      @result.skipped << "#{mapper.course_code}: #{reason}"
+      @report.skipped << "#{mapper.course_code}: #{reason}"
     end
 
     def report
       @out.puts "#{@confirm ? 'COMMITTED' : 'DRY RUN - rolled back, run again with confirm to commit'}: #{@provider_code} #{@year}"
-      line("Created", "course", @result.created)
-      line("Updated", "course", @result.updated)
-      line("Skipped", "course", @result.skipped, separator: "\n  ")
-      line("Created", "provider school", @result.schools_created)
-      line("Created", "GIAS school", @result.gias_stubs)
-      line("Unlinked", "school", @result.schools_unlinked)
-      line("Conflicting", "school", @result.conflicts, separator: "\n  ")
-      line("Generated a new uuid for", "record", @result.uuid_clashes, separator: "\n  ")
-      line("Missing", "accredited provider", @result.missing_accredited_providers)
-      line("Not published", "course", @result.not_published, separator: "\n  ")
-      line("Only in this environment (left alone),", "course", @result.sandbox_only)
+      line("Created", "course", @report.created)
+      line("Updated", "course", @report.updated)
+      line("Skipped", "course", @report.skipped, separator: "\n  ")
+      line("Created", "provider school", @report.schools_created)
+      line("Created", "GIAS school", @report.gias_stubs)
+      line("Unlinked", "school", @report.schools_unlinked)
+      line("Conflicting", "school", @report.conflicts, separator: "\n  ")
+      line("Generated a new uuid for", "record", @report.uuid_clashes, separator: "\n  ")
+      line("Missing", "accredited provider", @report.missing_accredited_providers)
+      line("Not published", "course", @report.not_published, separator: "\n  ")
+      line("Only in this environment (left alone),", "course", @report.sandbox_only)
     end
 
     def line(verb, noun, items, separator: ", ")

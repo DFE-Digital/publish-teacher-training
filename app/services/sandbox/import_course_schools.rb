@@ -12,19 +12,17 @@ module Sandbox
   class ImportCourseSchools
     include ServicePattern
 
-    Result = Struct.new(:schools_created, :gias_stubs, :conflicts, :uuid_clashes, :schools_unlinked, keyword_init: true)
-
-    def initialize(course:, locations:)
+    def initialize(course:, locations:, report: ImportReport.new)
       @course = course
       @provider = course.provider
       @locations = locations
-      @result = Result.new(schools_created: [], gias_stubs: [], conflicts: [], uuid_clashes: [], schools_unlinked: [])
+      @report = report
     end
 
     def call
       provider_schools = @locations.filter_map { |location| import(location["attributes"]) }
       unlink_schools_not_in(provider_schools)
-      @result
+      @report
     end
 
   private
@@ -44,7 +42,7 @@ module Sandbox
       extra = @course.schools.where.not(provider_school_id: provider_schools.map(&:id)).includes(:gias_school, :provider_school)
 
       extra.each do |course_school|
-        @result.schools_unlinked << "#{course_school.site_code} (#{course_school.gias_school.urn})"
+        @report.schools_unlinked << "#{course_school.site_code} (#{course_school.gias_school.urn})"
         course_school.destroy!
       end
     end
@@ -66,12 +64,12 @@ module Sandbox
         return conflict(location, "the provider already has a school with code #{site_code}")
       end
 
-      @result.schools_created << label(location)
+      @report.schools_created << label(location)
       @provider.schools.create!(gias_school:, site_code:, uuid: production_uuid(location))
     end
 
     def create_gias_school(location)
-      @result.gias_stubs << location["urn"]
+      @report.gias_stubs << location["urn"]
 
       GiasSchool.create!(
         urn: location["urn"],
@@ -95,12 +93,12 @@ module Sandbox
       return if uuid.blank?
       return uuid unless Provider::School.exists?(uuid:)
 
-      @result.uuid_clashes << "#{label(location)}: uuid #{uuid} is already used here"
+      @report.uuid_clashes << "#{label(location)}: uuid #{uuid} is already used here"
       nil
     end
 
     def conflict(location, reason)
-      @result.conflicts << "#{label(location)}: #{reason}"
+      @report.conflicts << "#{label(location)}: #{reason}"
       nil
     end
 
