@@ -17,6 +17,7 @@ RSpec.describe "Financial incentives support" do
     given_i_visit_the_support_settings_page
     when_i_click_financial_incentives
     then_i_see_the_financial_incentives_landing_page
+    and_i_see_the_current_year_link
     and_i_see_the_create_button_for_the_next_year
 
     when_i_create_financial_incentives_for_the_next_year
@@ -120,6 +121,10 @@ private
     expect(page).to have_current_path(support_financial_incentives_path)
     expect(page).to have_css("h1", text: "Financial incentives")
     expect(page).to have_content("bursaries and scholarships feature flag")
+  end
+
+  def and_i_see_the_current_year_link
+    expect(page).to have_link(current_year_label, href: year_support_financial_incentives_path(current_year))
   end
 
   def and_i_see_the_create_button_for_the_next_year

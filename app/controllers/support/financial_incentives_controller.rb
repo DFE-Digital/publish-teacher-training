@@ -7,7 +7,7 @@ module Support
     before_action :set_financial_incentive, only: %i[edit update]
 
     def index
-      @years = existing_years
+      @years = landing_years
       @create_year = create_target_year
     end
 
@@ -127,6 +127,10 @@ module Support
 
     def existing_years
       @existing_years ||= FinancialIncentive.distinct.order(year: :desc).pluck(:year)
+    end
+
+    def landing_years
+      (existing_years + [FinancialIncentive.current_year]).compact.uniq.sort.reverse
     end
 
     def create_target_year
