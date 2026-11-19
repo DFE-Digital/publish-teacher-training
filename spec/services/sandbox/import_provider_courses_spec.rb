@@ -215,9 +215,13 @@ RSpec.describe Sandbox::ImportProviderCourses do
       expect(provider.accredited_partners).to eq([accredited])
     end
 
-    it "reports the accredited provider when it isn't here" do
-      expect(import.missing_accredited_providers).to eq(%w[A01])
+    it "reports the accredited provider when it isn't here, and doesn't publish the course" do
+      result = import
+
+      expect(result.missing_accredited_providers).to eq(%w[A01])
       expect(imported_course.accredited_provider_code).to eq("A01")
+      expect(imported_course).not_to be_is_published
+      expect(result.not_published).to eq(["RX41: accredited provider A01 missing"])
     end
   end
 
@@ -229,6 +233,29 @@ RSpec.describe Sandbox::ImportProviderCourses do
     it "refuses to run" do
       expect { import }.to raise_error(described_class::Abort, "Can only be run in sandbox or development")
       expect(client).not_to have_received(:courses)
+    end
+  end
+
+  context "when one of the course's schools conflicts with one here" do
+    before { create(:provider_school, :main_site, provider:) }
+
+    it "saves the course as a draft and reports it" do
+      result = import
+
+      expect(imported_course.enrichments.sole).to have_attributes(status: "draft", course_length: "OneYear")
+      expect(imported_course.first_published_at).to be_nil
+      expect(result.not_published).to eq(["RX41: school conflict"])
+      expect(out.string).to include("Not published 1 course: RX41: school conflict")
+    end
+
+    context "when the course is already published here" do
+      let!(:existing) { create(:course, :published, provider:, course_code: "RX41") }
+
+      it "leaves it published" do
+        import
+
+        expect(existing.reload).to be_is_published
+      end
     end
   end
 

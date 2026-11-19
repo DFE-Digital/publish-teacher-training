@@ -23,6 +23,7 @@ module Sandbox
       :sandbox_only,
       :uuid_clashes,
       :schools_unlinked,
+      :not_published,
       keyword_init: true,
     )
 
@@ -46,6 +47,7 @@ module Sandbox
         sandbox_only: [],
         uuid_clashes: [],
         schools_unlinked: [],
+        not_published: [],
       )
     end
 
@@ -101,9 +103,16 @@ module Sandbox
         restored = course.discarded?
 
         save_course(course, mapper, subjects)
-        publish(course, mapper)
-        collect(ImportCourseSchools.call(course:, locations:))
-        add_partnership(provider, course)
+        schools_result = ImportCourseSchools.call(course:, locations:)
+        collect(schools_result)
+        missing_accredited_provider = add_partnership(provider, course)
+
+        reasons = []
+        reasons << "school conflict" if schools_result.conflicts.any?
+        reasons << "accredited provider #{missing_accredited_provider} missing" if missing_accredited_provider
+        @result.not_published << "#{course.course_code}: #{reasons.join(', ')}" if reasons.any?
+
+        save_enrichment(course, mapper, publish: reasons.empty?)
 
         if created
           @result.created << course.course_code
@@ -149,16 +158,21 @@ module Sandbox
       course.save!
     end
 
-    # Marks the course's enrichment published directly: Courses::PublishService
+    # Publishes by marking the enrichment published directly: Courses::PublishService
     # would email subscribers and checks fields the public API doesn't expose.
-    def publish(course, mapper)
-      enrichment = course.enrichments.max_by(&:created_at) || course.enrichments.build
+    # A course that didn't import cleanly isn't published: a new one stays a
+    # draft and an existing one keeps its status.
+    def save_enrichment(course, mapper, publish:)
+      enrichment = course.enrichments.max_by(&:created_at) || course.enrichments.build(status: :draft)
       enrichment.assign_attributes(mapper.enrichment_attributes)
-      enrichment.status = :published
-      enrichment.last_published_timestamp_utc ||= Time.zone.now
+
+      if publish
+        enrichment.status = :published
+        enrichment.last_published_timestamp_utc ||= Time.zone.now
+      end
       enrichment.save!
 
-      course.update!(first_published_at: Time.zone.now) if course.first_published_at.blank?
+      course.update!(first_published_at: Time.zone.now) if publish && course.first_published_at.blank?
     end
 
     # Keeps production's uuid unless something here already has it. Existing
@@ -171,6 +185,7 @@ module Sandbox
       nil
     end
 
+    # Returns the accredited provider's code when it isn't here.
     def add_partnership(provider, course)
       code = course.accredited_provider_code
       return if code.blank? || code == provider.provider_code
@@ -179,9 +194,11 @@ module Sandbox
 
       if accredited_provider.nil?
         @result.missing_accredited_providers |= [code]
-      else
-        ProviderPartnership.find_or_create_by!(training_provider: provider, accredited_provider:)
+        return code
       end
+
+      ProviderPartnership.find_or_create_by!(training_provider: provider, accredited_provider:)
+      nil
     end
 
     def collect(schools_result)
@@ -207,6 +224,7 @@ module Sandbox
       line("Conflicting", "school", @result.conflicts, separator: "\n  ")
       line("Generated a new uuid for", "record", @result.uuid_clashes, separator: "\n  ")
       line("Missing", "accredited provider", @result.missing_accredited_providers)
+      line("Not published", "course", @result.not_published, separator: "\n  ")
       line("Only in this environment (left alone),", "course", @result.sandbox_only)
     end
 
