@@ -13,6 +13,9 @@ module Sandbox
   class ImportCourseSchools
     include ServicePattern
 
+    # The inverse of region_code_from, which the API applies to GIAS region codes.
+    API_TO_GIAS_REGION_CODES = { "eastern" => "east_of_england", "no_region" => "not_applicable" }.freeze
+
     def initialize(course:, locations:, report: ImportReport.new)
       @course = course
       @provider = course.provider
@@ -80,7 +83,7 @@ module Sandbox
         town: location["city"].presence || "Unknown",
         county: location["county"].presence,
         postcode: location["postcode"],
-        region_code: location["region_code"],
+        region_code: gias_region_code(location["region_code"]),
         latitude: location["latitude"],
         longitude: location["longitude"],
         status_code: "open",
@@ -92,6 +95,12 @@ module Sandbox
       @report.conflicts << "#{label(location)}: #{reason}"
       @kept_ids.concat(@provider.schools.where(site_code: location["code"]).or(@provider.schools.where(gias_school:)).ids)
       nil
+    end
+
+    # Blank for a code GIAS doesn't have, rather than failing the course.
+    def gias_region_code(api_region_code)
+      region_code = API_TO_GIAS_REGION_CODES.fetch(api_region_code, api_region_code)
+      region_code if GiasSchool.region_codes.key?(region_code)
     end
 
     def label(location)
