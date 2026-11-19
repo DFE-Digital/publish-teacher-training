@@ -18,7 +18,7 @@ RSpec.describe Sandbox::ImportCourseSchools do
       provider_school = provider.schools.sole
       expect(provider_school).to have_attributes(gias_school:, site_code: "-")
       expect(course.schools.map(&:provider_school)).to eq([provider_school])
-      expect(import).to have_attributes(schools_created: ["- (133802)"], gias_stubs: [], conflicts: [], uuid_clashes: [])
+      expect(import).to have_attributes(schools_created: ["- (133802)"], gias_stubs: [], conflicts: [], uuid_clashes: [], schools_unlinked: [])
     end
 
     it "gives the provider school production's uuid" do
@@ -44,6 +44,34 @@ RSpec.describe Sandbox::ImportCourseSchools do
       expect { import }.not_to change(Provider::School, :count)
       expect(course.schools.count).to eq(1)
       expect(import).to have_attributes(schools_created: [], gias_stubs: [], conflicts: [])
+    end
+  end
+
+  context "when the course has a school production no longer has" do
+    let!(:gias_school) { create(:gias_school, urn: "133802") }
+    let!(:old_school) do
+      create(:provider_school, provider:, site_code: "Z", gias_school: create(:gias_school, urn: "999999"))
+    end
+
+    before { course.schools.create!(provider_school: old_school, gias_school: old_school.gias_school) }
+
+    it "unlinks it from the course and reports it" do
+      import
+
+      expect(course.schools.reload.map(&:site_code)).to eq(["-"])
+      expect(import.schools_unlinked).to eq(["Z (999999)"])
+    end
+
+    it "keeps the provider's school" do
+      import
+
+      expect(Provider::School.exists?(old_school.id)).to be(true)
+    end
+
+    it "unlinks nothing when run again" do
+      described_class.call(course:, locations:)
+
+      expect(import.schools_unlinked).to eq([])
     end
   end
 
