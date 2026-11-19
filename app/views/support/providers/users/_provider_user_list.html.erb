@@ -32,7 +32,7 @@
             delete_publish_provider_user_path(
               provider_code: @provider.provider_code,
               id: user.id,
-              **{ return_to: "support", from: "index", recruitment_cycle_year: @provider.recruitment_cycle_year, page: params[:page].presence }.compact,
+              **{ return_to: "support", from: "index", recruitment_cycle_year: @provider.recruitment_cycle_year, page: params[:page].presence, sort: params[:sort].presence }.compact,
             ),
             class: "app-link--destructive",
           ) do %>

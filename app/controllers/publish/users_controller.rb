@@ -73,6 +73,43 @@ module Publish
       @provider_user ||= provider.users.find(params[:id])
     end
 
+    def user_delete_path_with_return
+      delete_publish_provider_user_path(
+        provider_code: params[:provider_code],
+        id: params[:id],
+        **user_delete_flow_params,
+      )
+    end
+    helper_method :user_delete_path_with_return
+
+    def user_delete_flow_params
+      {}.tap do |permitted|
+        permitted[:return_to] = "support" if returning_to_support?
+        permitted[:from] = params[:from] if params[:from].present?
+        permitted[:page] = params[:page] if params[:page].present?
+        permitted[:sort] = params[:sort] if params[:sort].present?
+        if params[:recruitment_cycle_year].present?
+          permitted[:recruitment_cycle_year] = params[:recruitment_cycle_year]
+        end
+      end
+    end
+    helper_method :user_delete_flow_params
+
+    def user_delete_return_path
+      if returning_to_support?
+        return users_return_path if params[:from] == "index"
+
+        support_recruitment_cycle_provider_user_path(
+          provider.recruitment_cycle_year,
+          provider,
+          provider_user,
+        )
+      else
+        publish_provider_user_path(id: params[:id])
+      end
+    end
+    helper_method :user_delete_return_path
+
     def user_removal_success_message
       if returning_to_support?
         I18n.t(

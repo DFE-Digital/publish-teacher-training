@@ -212,6 +212,7 @@ RSpec.describe "Publish provider users", type: :request do
         return_to: "support",
         from: "index",
         page: 2,
+        sort: "last_signed_in",
         recruitment_cycle_year: provider.recruitment_cycle_year,
       )
 
@@ -220,8 +221,10 @@ RSpec.describe "Publish provider users", type: :request do
           provider.recruitment_cycle_year,
           provider,
           page: 2,
+          sort: "last_signed_in",
         ),
       )
+      expect(response.body).to include("sort=last_signed_in")
     end
 
     it "returns to the support users list after removal" do
@@ -233,6 +236,7 @@ RSpec.describe "Publish provider users", type: :request do
         id: provider_user.id,
         return_to: "support",
         page: 2,
+        sort: "last_signed_in",
         recruitment_cycle_year: provider.recruitment_cycle_year,
       )
 
@@ -241,6 +245,7 @@ RSpec.describe "Publish provider users", type: :request do
           provider.recruitment_cycle_year,
           provider,
           page: 2,
+          sort: "last_signed_in",
         ),
       )
       expect(flash[:success]).to eq(
