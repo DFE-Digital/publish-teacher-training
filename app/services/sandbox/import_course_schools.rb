@@ -5,10 +5,11 @@ module Sandbox
   # site codes. Takes the locations from the public Publish API.
   #
   # A GIAS school that this environment doesn't have is created from the
-  # location's details. A location that clashes with a school the provider
-  # already has here is reported as a conflict and skipped: sandbox codes
-  # are never rewritten. Schools the course has here but not in production
-  # are unlinked from the course; the provider keeps them.
+  # location's details. A location whose site code the provider already uses
+  # here for a different school is reported as a conflict and skipped:
+  # sandbox codes are never rewritten. Schools the course has here but not in
+  # production are unlinked from the course (the provider keeps them), except
+  # those a conflict is about, which are left as they are.
   class ImportCourseSchools
     include ServicePattern
 
@@ -17,11 +18,12 @@ module Sandbox
       @provider = course.provider
       @locations = locations
       @report = report
+      @kept_ids = []
     end
 
     def call
-      provider_schools = @locations.filter_map { |location| import(location["attributes"]) }
-      unlink_schools_not_in(provider_schools)
+      @locations.each { |location| import(location["attributes"]) }
+      unlink_schools_not_kept
       @report
     end
 
@@ -35,11 +37,11 @@ module Sandbox
       @course.schools.find_or_create_by!(provider_school:) do |course_school|
         course_school.gias_school = gias_school
       end
-      provider_school
+      @kept_ids << provider_school.id
     end
 
-    def unlink_schools_not_in(provider_schools)
-      extra = @course.schools.where.not(provider_school_id: provider_schools.map(&:id)).includes(:gias_school, :provider_school)
+    def unlink_schools_not_kept
+      extra = @course.schools.where.not(provider_school_id: @kept_ids).includes(:gias_school, :provider_school)
 
       extra.each do |course_school|
         @report.schools_unlinked << "#{course_school.site_code} (#{course_school.gias_school.urn})"
@@ -56,12 +58,9 @@ module Sandbox
       existing = @provider.schools.find_by(gias_school:, site_code:)
       return existing if existing
 
-      if (other = @provider.schools.find_by(gias_school:))
-        return conflict(location, "the provider already has this school with code #{other.site_code}")
-      end
-
+      # The same school can be under several codes, but a code is one school.
       if @provider.schools.exists?(site_code:)
-        return conflict(location, "the provider already has a school with code #{site_code}")
+        return conflict(location, gias_school, "the provider already has a school with code #{site_code}")
       end
 
       @report.schools_created << label(location)
@@ -97,8 +96,10 @@ module Sandbox
       nil
     end
 
-    def conflict(location, reason)
+    # Leaves the course's links to the code and the school alone.
+    def conflict(location, gias_school, reason)
       @report.conflicts << "#{label(location)}: #{reason}"
+      @kept_ids.concat(@provider.schools.where(site_code: location["code"]).or(@provider.schools.where(gias_school:)).ids)
       nil
     end
 
