@@ -123,6 +123,12 @@ RSpec.describe Sandbox::CourseAttributesMapper do
       expect(enrichment_attributes).not_to have_key("fee_domestic")
     end
 
+    it "copies the salary and fee details" do
+      mapper = described_class.new(fixture.merge("salary_fee_details" => "Paid a salary"))
+
+      expect(mapper.enrichment_attributes).to include("salary_fee_details" => "Paid a salary")
+    end
+
     it "builds an enrichment the model accepts" do
       enrichment = CourseEnrichment.new(enrichment_attributes)
 
