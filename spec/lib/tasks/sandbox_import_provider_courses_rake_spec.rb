@@ -9,11 +9,9 @@ describe "sandbox:import_provider_courses" do
   subject(:run_task) { Rake::Task["sandbox:import_provider_courses"].invoke(*args) }
 
   let(:args) { %w[c55 2027] }
-  let(:environment) { "sandbox" }
 
   before do
     Rake::Task["sandbox:import_provider_courses"].reenable
-    allow(Rails).to receive(:env).and_return(ActiveSupport::EnvironmentInquirer.new(environment))
     allow(Sandbox::ImportProviderCourses).to receive(:call)
   end
 
@@ -62,15 +60,6 @@ describe "sandbox:import_provider_courses" do
       expect { run_task }
         .to raise_error(SystemExit)
         .and output("There is no 2027 recruitment cycle here\n").to_stderr
-    end
-  end
-
-  context "when in production" do
-    let(:environment) { "production" }
-
-    it "refuses to run" do
-      expect { run_task }.to raise_error("Can only be run in sandbox or development")
-      expect(Sandbox::ImportProviderCourses).not_to have_received(:call)
     end
   end
 end

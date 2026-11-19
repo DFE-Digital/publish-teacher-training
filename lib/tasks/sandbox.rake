@@ -86,8 +86,6 @@ namespace :sandbox do
     bin/rails "sandbox:import_provider_courses[C55,2027,true]"  # commit
   DESC
   task :import_provider_courses, %i[provider_code year confirm] => [:environment] do |_task, args|
-    raise "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.development?
-
     Sandbox::ImportProviderCourses.call(
       provider_code: args.fetch(:provider_code).upcase,
       year: Integer(args.fetch(:year)),

@@ -183,6 +183,17 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
   end
 
+  context "when in production" do
+    before do
+      allow(Rails).to receive(:env).and_return(ActiveSupport::EnvironmentInquirer.new("production"))
+    end
+
+    it "refuses to run" do
+      expect { import }.to raise_error(described_class::Abort, "Can only be run in sandbox or development")
+      expect(client).not_to have_received(:courses)
+    end
+  end
+
   context "when there is no cycle for the year" do
     let(:year) { 1999 }
 
