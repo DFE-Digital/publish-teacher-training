@@ -46,6 +46,7 @@ module Sandbox
       placement_school_activities
       placement_selection_criteria
       salary_details
+      salary_fee_details
       support_and_mentorship
       theoretical_training_activities
       theoretical_training_duration
