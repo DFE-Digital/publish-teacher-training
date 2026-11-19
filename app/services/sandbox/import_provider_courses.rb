@@ -46,6 +46,8 @@ module Sandbox
     end
 
     def call
+      raise Abort, "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.local?
+
       provider = find_provider
       prod_courses = fetch_prod_courses
 
