@@ -11,13 +11,13 @@ module Sandbox
   class ImportCourseSchools
     include ServicePattern
 
-    Result = Struct.new(:schools_created, :gias_stubs, :conflicts, keyword_init: true)
+    Result = Struct.new(:schools_created, :gias_stubs, :conflicts, :uuid_clashes, keyword_init: true)
 
     def initialize(course:, locations:)
       @course = course
       @provider = course.provider
       @locations = locations
-      @result = Result.new(schools_created: [], gias_stubs: [], conflicts: [])
+      @result = Result.new(schools_created: [], gias_stubs: [], conflicts: [], uuid_clashes: [])
     end
 
     def call
@@ -55,7 +55,7 @@ module Sandbox
       end
 
       @result.schools_created << label(location)
-      @provider.schools.create!(gias_school:, site_code:)
+      @provider.schools.create!(gias_school:, site_code:, uuid: production_uuid(location))
     end
 
     def create_gias_school(location)
@@ -75,6 +75,16 @@ module Sandbox
         longitude: location["longitude"],
         status_code: "open",
       )
+    end
+
+    # Keeps production's uuid unless something here already has it.
+    def production_uuid(location)
+      uuid = location["uuid"]
+      return if uuid.blank?
+      return uuid unless Provider::School.exists?(uuid:)
+
+      @result.uuid_clashes << "#{label(location)}: uuid #{uuid} is already used here"
+      nil
     end
 
     def conflict(location, reason)

@@ -21,6 +21,7 @@ module Sandbox
       :conflicts,
       :missing_accredited_providers,
       :sandbox_only,
+      :uuid_clashes,
       keyword_init: true,
     )
 
@@ -42,6 +43,7 @@ module Sandbox
         conflicts: [],
         missing_accredited_providers: [],
         sandbox_only: [],
+        uuid_clashes: [],
       )
     end
 
@@ -128,6 +130,7 @@ module Sandbox
     end
 
     def save_course(course, mapper, subjects)
+      course.uuid = production_uuid(mapper) if course.new_record?
       course.assign_attributes(mapper.course_attributes)
       course.discarded_at = nil
 
@@ -156,6 +159,16 @@ module Sandbox
       course.update!(first_published_at: Time.zone.now) if course.first_published_at.blank?
     end
 
+    # Keeps production's uuid unless something here already has it. Existing
+    # courses keep theirs, which Apply sandbox may already hold.
+    def production_uuid(mapper)
+      return if mapper.uuid.blank?
+      return mapper.uuid unless Course.with_discarded.exists?(uuid: mapper.uuid)
+
+      @result.uuid_clashes << "#{mapper.course_code}: uuid #{mapper.uuid} is already used here"
+      nil
+    end
+
     def add_partnership(provider, course)
       code = course.accredited_provider_code
       return if code.blank? || code == provider.provider_code
@@ -173,6 +186,7 @@ module Sandbox
       @result.schools_created.concat(schools_result.schools_created)
       @result.gias_stubs.concat(schools_result.gias_stubs)
       @result.conflicts.concat(schools_result.conflicts)
+      @result.uuid_clashes.concat(schools_result.uuid_clashes)
     end
 
     def skip(mapper, reason)
@@ -187,6 +201,7 @@ module Sandbox
       line("Created", "provider school", @result.schools_created)
       line("Created", "GIAS school", @result.gias_stubs)
       line("Conflicting", "school", @result.conflicts, separator: "\n  ")
+      line("Generated a new uuid for", "record", @result.uuid_clashes, separator: "\n  ")
       line("Missing", "accredited provider", @result.missing_accredited_providers)
       line("Only in this environment (left alone),", "course", @result.sandbox_only)
     end
