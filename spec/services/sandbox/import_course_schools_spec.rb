@@ -96,7 +96,7 @@ RSpec.describe Sandbox::ImportCourseSchools do
   end
 
   context "when the provider already has a different main site" do
-    before { create(:provider_school, :main_site, provider:) }
+    let!(:other_main_site) { create(:provider_school, :main_site, provider:) }
 
     it "reports the conflict and leaves the course without that school" do
       expect { import }.not_to change(Provider::School, :count)
@@ -104,18 +104,46 @@ RSpec.describe Sandbox::ImportCourseSchools do
       expect(course.schools).to be_empty
       expect(import.conflicts).to eq(["- (133802): the provider already has a school with code -"])
     end
+
+    context "when the course is linked to that main site" do
+      before { course.schools.create!(provider_school: other_main_site, gias_school: other_main_site.gias_school) }
+
+      it "keeps the link" do
+        import
+
+        expect(course.schools.reload.map(&:provider_school)).to eq([other_main_site])
+        expect(import.schools_unlinked).to eq([])
+      end
+    end
   end
 
   context "when the provider already has the school under another code" do
-    before do
-      create(:provider_school, provider:, site_code: "A", gias_school: create(:gias_school, urn: "133802"))
+    let!(:gias_school) { create(:gias_school, urn: "133802") }
+    let!(:school_a) { create(:provider_school, provider:, site_code: "A", gias_school:) }
+
+    before { course.schools.create!(provider_school: school_a, gias_school:) }
+
+    it "adds it under production's code too and moves the course onto it" do
+      import
+
+      expect(provider.schools.pluck(:site_code)).to contain_exactly("A", "-")
+      expect(course.schools.reload.map(&:site_code)).to eq(["-"])
+      expect(import).to have_attributes(conflicts: [], schools_created: ["- (133802)"], schools_unlinked: ["A (133802)"])
+    end
+  end
+
+  context "when production has the same school under two codes" do
+    let!(:gias_school) { create(:gias_school, urn: "133802") }
+    let(:locations) do
+      location = JSON.parse(file_fixture("publish_public_api/course_locations.json").read).first
+      [location, location.deep_merge("id" => "2", "attributes" => { "code" => "B", "uuid" => SecureRandom.uuid })]
     end
 
-    it "reports the conflict and leaves the course without that school" do
-      expect { import }.not_to change(Provider::School, :count)
+    it "adds both" do
+      import
 
-      expect(course.schools).to be_empty
-      expect(import.conflicts).to eq(["- (133802): the provider already has this school with code A"])
+      expect(course.schools.reload.map(&:site_code)).to contain_exactly("-", "B")
+      expect(import.conflicts).to eq([])
     end
   end
 end
