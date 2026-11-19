@@ -95,6 +95,28 @@ RSpec.describe Sandbox::ImportCourseSchools do
     end
   end
 
+  # The API turns some GIAS region codes into others (region_code_from).
+  {
+    "eastern" => "east_of_england",
+    "no_region" => "not_applicable",
+    "north_west" => "north_west",
+    "somewhere_else" => nil,
+  }.each do |api_region, gias_region|
+    context "when a missing GIAS school's region is #{api_region}" do
+      let(:locations) do
+        JSON.parse(file_fixture("publish_public_api/course_locations.json").read)
+          .map { |location| location.deep_merge("attributes" => { "region_code" => api_region }) }
+      end
+
+      it "creates it in the #{gias_region.inspect} region and links the course" do
+        import
+
+        expect(GiasSchool.find_by(urn: "133802").region_code).to eq(gias_region)
+        expect(course.schools.map(&:site_code)).to eq(["-"])
+      end
+    end
+  end
+
   context "when the provider already has a different main site" do
     let!(:other_main_site) { create(:provider_school, :main_site, provider:) }
 
