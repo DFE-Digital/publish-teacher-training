@@ -48,6 +48,10 @@ module PublishPublicAPI
         .select { |resource| resource["type"] == "recruitment_cycles" }
         .map { |resource| resource.dig("attributes", "year").to_i }
 
+      if years.empty? && body["data"].any?
+        raise Error, "Asked for the #{year} cycle but the API didn't say which cycle it returned"
+      end
+
       return if years.all?(year)
 
       raise Error, "Asked for the #{year} cycle but the API returned #{years.uniq.join(', ')}"

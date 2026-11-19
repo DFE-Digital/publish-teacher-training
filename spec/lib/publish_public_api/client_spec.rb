@@ -55,6 +55,14 @@ RSpec.describe PublishPublicAPI::Client do
         .to raise_error(PublishPublicAPI::Client::Error, /2026.*2027|2027.*2026/)
     end
 
+    it "raises when courses come back without their cycle" do
+      body = JSON.parse(courses_page(%w[RX41], count: 1)).merge("included" => []).to_json
+      stub_courses_page(1, body)
+
+      expect { client.courses(year: 2027, provider_code: "C55") }
+        .to raise_error(PublishPublicAPI::Client::Error, "Asked for the 2027 cycle but the API didn't say which cycle it returned")
+    end
+
     it "returns no courses when the provider has none" do
       stub_courses_page(1, { "data" => [], "included" => [], "meta" => { "count" => 0 } }.to_json)
 
