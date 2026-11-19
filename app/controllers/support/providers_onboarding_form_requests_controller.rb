@@ -38,10 +38,10 @@ module Support
     def update
       if params[:status] == "accept"
         onboard_provider
-      elsif updated_status && @onboarding_request.update(status: updated_status)
+      elsif updated_status && apply_rejection
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".rejected", provider_name: @onboarding_request.provider_name) }
       else
-        redirect_to support_providers_onboarding_form_requests_path, flash: { error: t(".error_message_html", form_name: @onboarding_request.form_name) }
+        redirect_to support_providers_onboarding_form_requests_path, flash: { error: rejection_error_message }
       end
     end
 
@@ -50,6 +50,26 @@ module Support
     def set_request
       # Finds the request by id param for show and update actions
       @onboarding_request = ProvidersOnboardingFormRequest.find(params[:id])
+    end
+
+    # Reject from a page opened before onboarding must not overwrite it. with_lock
+    # reloads the row under the same lock onboarding holds while it commits.
+    def apply_rejection
+      @onboarding_request.with_lock do
+        if @onboarding_request.onboarded? || @onboarding_request.provider_id.present?
+          false
+        else
+          @onboarding_request.update(status: updated_status)
+        end
+      end
+    end
+
+    def rejection_error_message
+      if @onboarding_request.onboarded? || @onboarding_request.provider_id.present?
+        t("support.providers.onboard_from_form_request.already_onboarded")
+      else
+        t(".error_message_html", form_name: @onboarding_request.form_name)
+      end
     end
 
     def onboard_provider

@@ -81,6 +81,18 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     provider_type == "lead_school"
   end
 
+  # The form allows a blank accredited provider number. Onboarding does not, so
+  # the support error-summary link asks the form to show that failure on the field.
+  def add_accredited_provider_number_onboarding_error
+    return unless accredited_provider?
+
+    if accredited_provider_number.blank?
+      errors.add(:accredited_provider_number, blank_accredited_provider_number_error)
+    else
+      accredited_provider_number_format
+    end
+  end
+
   def university?
     provider_type == "university"
   end
@@ -104,6 +116,13 @@ private
     return unless accredited_provider? && lead_school?
 
     errors.add(:provider_type, :school_is_an_invalid_accredited_provider)
+  end
+
+  def blank_accredited_provider_number_error
+    return :university_format if university?
+    return :scitt_format if scitt?
+
+    :blank
   end
 
   def accredited_provider_number_format
