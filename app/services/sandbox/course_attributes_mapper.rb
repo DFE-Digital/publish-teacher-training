@@ -98,6 +98,13 @@ module Sandbox
       @attributes.slice(*ENRICHMENT_FIELDS).merge("fee_uk_eu" => @attributes["fee_domestic"])
     end
 
+    # The API sends these as nil for version 2 content (SerializableCourse).
+    VERSION_1_FIELDS = %w[about_course fee_details how_school_placements_work].freeze
+
+    def enrichment_version
+      VERSION_1_FIELDS.any? { |field| @attributes[field].present? } ? 1 : 2
+    end
+
   private
 
     def qualification

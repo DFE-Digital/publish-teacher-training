@@ -136,11 +136,19 @@ module Sandbox
 
     # Publishes by marking the enrichment published directly: Courses::PublishService
     # would email subscribers and checks fields the public API doesn't expose.
-    # A course that didn't import cleanly isn't published: a new one stays a
-    # draft and an existing one keeps its status.
+    #
+    # A course that didn't import cleanly isn't published: production's content
+    # goes into a draft, leaving any published content here as it was.
     def save_enrichment(course, mapper, publish:)
-      enrichment = course.enrichments.max_by(&:created_at) || course.enrichments.build(status: :draft)
+      enrichments = course.enrichments
+      enrichment = if publish
+                     enrichments.find_or_initialize_draft
+                   else
+                     enrichments.select(&:draft?).last || enrichments.build(enrichments.new_draft_attributes)
+                   end
+
       enrichment.assign_attributes(mapper.enrichment_attributes)
+      enrichment.version = mapper.enrichment_version
 
       if publish
         enrichment.status = :published
