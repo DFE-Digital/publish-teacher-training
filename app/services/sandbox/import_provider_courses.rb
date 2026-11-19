@@ -89,15 +89,21 @@ module Sandbox
         unknown_codes = mapper.subject_codes - subjects.map(&:subject_code)
         return skip(mapper, "unknown subject codes #{unknown_codes.join(', ')}") if unknown_codes.any?
 
-        course = provider.courses.find_or_initialize_by(course_code: mapper.course_code)
+        # with_discarded: course codes are unique per provider, deleted courses included.
+        course = Course.with_discarded.find_or_initialize_by(provider:, course_code: mapper.course_code)
         created = course.new_record?
+        restored = course.discarded?
 
         save_course(course, mapper, subjects)
         publish(course, mapper)
         collect(ImportCourseSchools.call(course:, locations:))
         add_partnership(provider, course)
 
-        (created ? @result.created : @result.updated) << course.course_code
+        if created
+          @result.created << course.course_code
+        else
+          @result.updated << (restored ? "#{course.course_code} (restored)" : course.course_code)
+        end
       end
     rescue *COURSE_ERRORS => e
       skip(mapper, e.message)
