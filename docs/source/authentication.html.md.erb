@@ -10,8 +10,17 @@ return the same data as requests with one.
 
 API key header validation is currently disabled to give providers and third-party
 services time to adapt their requests. While disabled, `Authorization` headers
-are ignored and key usage is not recorded. The header validation behaviour
-described below applies when it is enabled. Keys in URLs are always rejected.
+are not enforced and key usage is not recorded. A request whose `Authorization`
+header is not an active API key is still served, but the response includes:
+
+- an `API-Auth-Notice` header explaining that such requests will be rejected
+  with `401 Unauthorized` in future
+- a `Link` header with `rel="deprecation"` pointing to this page
+
+If you see these headers, remove the `Authorization` header from your requests or
+send an active API key. Requests without an `Authorization` header, or with an
+active key, receive no notice. The header validation behaviour described below
+applies when it is enabled. Keys in URLs are always rejected.
 
 ## Getting an API key
 
