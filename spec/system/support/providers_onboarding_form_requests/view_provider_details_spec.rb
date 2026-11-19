@@ -128,6 +128,10 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       )
       when_i_visit_the_show_page_for(onboarding_request)
 
+      expect(page).to have_css(
+        ".govuk-inset-text.app-inset-text--narrow-border.app-inset-text--important",
+        text: "Enter accredited provider number",
+      )
       click_link "Enter accredited provider number"
 
       fill_in "Accredited provider number", with: "1234"
@@ -188,9 +192,28 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       when_i_click_onboard_provider
 
       expect(page).to have_current_path(support_providers_onboarding_form_request_path(onboarding_request))
-      expect(page).to have_css(".govuk-error-summary__list li", count: 1, text: "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5")
-      expect(page).not_to have_link("Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5")
+      expect(page).to have_css(".govuk-error-summary__list li", count: 1)
+      expect(page).to have_link(
+        "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5",
+        href: support_return_path(anchor: "providers-onboarding-form-request-accredited-provider-number-field"),
+      )
       expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error", text: "1234")
+    end
+
+    scenario "I can follow a missing accredited provider number error to the form" do
+      onboarding_request.update_columns(
+        accredited_provider: true,
+        provider_type: "university",
+        accredited_provider_number: nil,
+        urn: nil,
+      )
+
+      when_i_click_onboard_provider
+
+      expect(page).to have_link(
+        "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
+        href: support_return_path(anchor: "providers-onboarding-form-request-accredited-provider-number-field"),
+      )
     end
 
     scenario "I can reject an onboarding request" do
