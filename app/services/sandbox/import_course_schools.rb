@@ -64,7 +64,8 @@ module Sandbox
       end
 
       @report.schools_created << label(location)
-      @provider.schools.create!(gias_school:, site_code:, uuid: production_uuid(location))
+      uuid = ProductionUuid.keep(location["uuid"], unless_used_by: Provider::School, label: label(location), report: @report)
+      @provider.schools.create!(gias_school:, site_code:, uuid:)
     end
 
     def create_gias_school(location)
@@ -84,16 +85,6 @@ module Sandbox
         longitude: location["longitude"],
         status_code: "open",
       )
-    end
-
-    # Keeps production's uuid unless something here already has it.
-    def production_uuid(location)
-      uuid = location["uuid"]
-      return if uuid.blank?
-      return uuid unless Provider::School.exists?(uuid:)
-
-      @report.uuid_clashes << "#{label(location)}: uuid #{uuid} is already used here"
-      nil
     end
 
     # Leaves the course's links to the code and the school alone.
