@@ -18,7 +18,24 @@ RSpec.describe Sandbox::ImportCourseSchools do
       provider_school = provider.schools.sole
       expect(provider_school).to have_attributes(gias_school:, site_code: "-")
       expect(course.schools.map(&:provider_school)).to eq([provider_school])
-      expect(import).to have_attributes(schools_created: ["- (133802)"], gias_stubs: [], conflicts: [])
+      expect(import).to have_attributes(schools_created: ["- (133802)"], gias_stubs: [], conflicts: [], uuid_clashes: [])
+    end
+
+    it "gives the provider school production's uuid" do
+      import
+
+      expect(provider.schools.sole.uuid).to eq("9118a484-d2b3-4b3d-a03a-d262cb451c01")
+    end
+
+    context "when production's uuid is already used here" do
+      before { create(:provider_school, uuid: "9118a484-d2b3-4b3d-a03a-d262cb451c01") }
+
+      it "gives the provider school a new uuid and reports it" do
+        import
+
+        expect(provider.schools.sole.uuid).not_to eq("9118a484-d2b3-4b3d-a03a-d262cb451c01")
+        expect(import.uuid_clashes).to eq(["- (133802): uuid 9118a484-d2b3-4b3d-a03a-d262cb451c01 is already used here"])
+      end
     end
 
     it "does nothing new when run again" do

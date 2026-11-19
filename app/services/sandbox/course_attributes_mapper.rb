@@ -70,6 +70,10 @@ module Sandbox
       @attributes["code"]
     end
 
+    def uuid
+      @attributes["uuid"]
+    end
+
     def subject_codes
       Array(@attributes["subject_codes"])
     end

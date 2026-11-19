@@ -50,6 +50,24 @@ RSpec.describe Sandbox::ImportProviderCourses do
     expect(client).to have_received(:courses).with(year:, provider_code: "C55")
   end
 
+  it "gives a new course production's uuid" do
+    import
+
+    expect(imported_course.uuid).to eq("030a7eef-dba0-4365-a62b-1252401114a0")
+  end
+
+  context "when production's course uuid is already used here" do
+    before { create(:course, uuid: "030a7eef-dba0-4365-a62b-1252401114a0") }
+
+    it "gives the course a new uuid and reports it" do
+      result = import
+
+      expect(imported_course.uuid).not_to eq("030a7eef-dba0-4365-a62b-1252401114a0")
+      expect(result.uuid_clashes).to eq(["RX41: uuid 030a7eef-dba0-4365-a62b-1252401114a0 is already used here"])
+      expect(out.string).to include("RX41: uuid 030a7eef-dba0-4365-a62b-1252401114a0 is already used here")
+    end
+  end
+
   # The Modern Languages subject has no code, so the API leaves it out.
   it "adds the Modern Languages subject to a course with languages" do
     import
@@ -89,8 +107,11 @@ RSpec.describe Sandbox::ImportProviderCourses do
       create(:course, provider:, course_code: "RX41", name: "Old name", level: :primary, age_range_in_years: "3_to_7")
     end
 
-    it "updates it to match production" do
+    it "updates it to match production, keeping its own uuid" do
+      original_uuid = existing.uuid
       result = import
+
+      expect(existing.reload.uuid).to eq(original_uuid)
 
       expect(provider.courses.count).to eq(1)
       expect(existing.reload).to have_attributes(name: "Modern languages (Spanish, French)", level: "secondary")

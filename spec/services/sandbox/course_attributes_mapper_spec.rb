@@ -14,6 +14,12 @@ RSpec.describe Sandbox::CourseAttributesMapper do
     end
   end
 
+  describe "#uuid" do
+    it "is the uuid from production" do
+      expect(mapper.uuid).to eq("030a7eef-dba0-4365-a62b-1252401114a0")
+    end
+  end
+
   describe "#course_attributes" do
     subject(:course_attributes) { mapper.course_attributes }
 
