@@ -180,6 +180,17 @@ RSpec.describe Sandbox::ImportProviderCourses do
     end
   end
 
+  # The client asks for findable courses only; this guards against that filter changing.
+  context "when a course isn't published in production" do
+    let(:prod_courses) { [prod_course.deep_merge("attributes" => { "state" => "rolled_over" })] }
+
+    it "skips it" do
+      expect { import }.not_to change(Course, :count)
+
+      expect(import.skipped).to eq(["RX41: not published in production (rolled_over)"])
+    end
+  end
+
   context "when a course has a subject this environment doesn't know" do
     let(:prod_courses) do
       [prod_course.deep_merge("attributes" => { "subject_codes" => %w[15 ZZ] })]
