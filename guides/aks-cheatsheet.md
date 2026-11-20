@@ -195,7 +195,7 @@ If a deploy fails with `Error acquiring the state lock` / `state blob is already
    - Type the environment name again in `confirm` (e.g. `production`)
 4. Re-run the failed deploy (or use the Deploy workflow).
 
-The workflow uses the same GitHub Environment protection and deploy concurrency group as normal deploys. Do not unlock while a real apply is running.
+The workflow uses the same GitHub Environment protection and `deploy-or-database-restore-<env>` concurrency group as Deploy, Build and Deploy (including production and sandbox), database restore, and Validate Infra. Do not unlock while a real apply is running.
 
 ## More info
 

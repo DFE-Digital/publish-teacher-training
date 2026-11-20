@@ -40,19 +40,22 @@ jobs:
       name: ${{ inputs.environment }}
     steps:
       - name: Confirm environment name
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+          LOCK_ID_INPUT: ${{ inputs.lock_id }}
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
-          if [ "${{ inputs.confirm }}" != "${{ inputs.environment }}" ]; then
-            echo "::error::confirm must exactly match the environment name (${{ inputs.environment }})"
+          if [ "$CONFIRM" != "$ENVIRONMENT" ]; then
+            echo "::error::confirm must exactly match the environment name ($ENVIRONMENT)"
             exit 1
           fi
 
-          lock_id="${{ inputs.lock_id }}"
-          if [[ ! "$lock_id" =~ ^[0-9a-fA-F-]{36}$ ]]; then
+          if [[ ! "$LOCK_ID_INPUT" =~ ^[0-9a-fA-F-]{36}$ ]]; then
             echo "::error::lock_id does not look like a Terraform lock UUID"
             exit 1
           fi
 
-          echo "LOCK_ID=$lock_id" >> "$GITHUB_ENV"
+          echo "LOCK_ID=$LOCK_ID_INPUT" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@v7
@@ -99,7 +102,7 @@ jobs:
             exit 0
           fi
 
-          if echo "$output" | grep -qiE 'state not locked|Failed to unlock state:.*not locked'; then
+          if echo "$output" | grep -qiE 'state not locked|Failed to unlock state:.*not locked|terraformlockid[" ]*was empty|blob metadata.*terraformlockid'; then
             echo "result=already_unlocked" >> "$GITHUB_OUTPUT"
             echo "State was already unlocked for ${{ inputs.environment }}"
             exit 0
