@@ -4,9 +4,12 @@ module Sandbox
   # Copies a provider's courses for a cycle from production (through the
   # public Publish API) into this environment, keeping production's course
   # and site codes so providers can test their integrations against them.
+  # The courses it accredits for its partners are copied too, under each
+  # partner.
   #
   # Courses are created or updated and published; nothing is deleted. Unless
   # confirmed, everything is rolled back and only the report is printed.
+  # Running it again changes nothing that already matches production.
   class ImportProviderCourses
     include ServicePattern
 
@@ -28,10 +31,13 @@ module Sandbox
       raise Abort, "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.local?
 
       provider = find_provider
-      prod_courses = fetch_prod_courses
+      prod_courses = with_locations(@provider_code, @client.courses(year: @year, provider_code: @provider_code))
+      partner_courses = @client.accredited_courses(year: @year, accredited_provider_code: @provider_code)
+        .to_h { |partner_code, courses| [partner_code, with_locations(partner_code, courses)] }
 
       ActiveRecord::Base.transaction do
         import_provider(provider, prod_courses, provider.courses)
+        partner_courses.each { |partner_code, courses| import_partner(provider, partner_code, courses) }
 
         raise ActiveRecord::Rollback unless @confirm
       end
@@ -53,11 +59,19 @@ module Sandbox
     end
 
     # Fetched before the transaction opens, so no transaction waits on the API.
-    def fetch_prod_courses
-      @client.courses(year: @year, provider_code: @provider_code).map do |prod_course|
+    def with_locations(provider_code, prod_courses)
+      prod_courses.map do |prod_course|
         course_code = prod_course.dig("attributes", "code")
-        [prod_course, @client.course_locations(year: @year, provider_code: @provider_code, course_code:)]
+        [prod_course, @client.course_locations(year: @year, provider_code:, course_code:)]
       end
+    end
+
+    # Only the partner's courses the provider accredits are in scope.
+    def import_partner(provider, partner_code, prod_courses)
+      partner = provider.recruitment_cycle.providers.find_by(provider_code: partner_code)
+      return if partner.nil?
+
+      import_provider(partner, prod_courses, partner.courses.where(accredited_provider_code: provider.provider_code))
     end
 
     # Courses in scope here that production doesn't have are listed, not deleted.
