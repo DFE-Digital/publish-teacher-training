@@ -21,7 +21,7 @@ module Sandbox
       @confirm = confirm
       @client = client
       @out = out
-      @report = ImportReport.new
+      @reports = {}
     end
 
     def call
@@ -31,14 +31,13 @@ module Sandbox
       prod_courses = fetch_prod_courses
 
       ActiveRecord::Base.transaction do
-        prod_courses.each { |prod_course, locations| import_course(provider, prod_course, locations) }
-        @report.sandbox_only = provider.courses.where.not(course_code: prod_courses.map { |c, _| c.dig("attributes", "code") }).pluck(:course_code)
+        import_provider(provider, prod_courses, provider.courses)
 
         raise ActiveRecord::Rollback unless @confirm
       end
 
       report
-      @report
+      @reports
     end
 
   private
@@ -61,19 +60,30 @@ module Sandbox
       end
     end
 
-    def import_course(provider, prod_course, locations)
+    # Courses in scope here that production doesn't have are listed, not deleted.
+    def import_provider(provider, prod_courses, courses_in_scope)
+      report = @reports[provider.provider_code] = ImportReport.new
+      report.provider_name = provider.provider_name
+
+      prod_courses.each { |prod_course, locations| import_course(provider, prod_course, locations, report) }
+
+      prod_codes = prod_courses.map { |prod_course, _| prod_course.dig("attributes", "code") }
+      report.sandbox_only = courses_in_scope.where.not(course_code: prod_codes).pluck(:course_code)
+    end
+
+    def import_course(provider, prod_course, locations, report)
       mapper = CourseAttributesMapper.new(prod_course["attributes"])
       course_report = ImportReport.new
 
       # The client only asks for findable courses; this is in case that filter changes.
       state = prod_course.dig("attributes", "state")
-      return skip(mapper, "not published in production (#{state})") unless state == "published"
+      return skip(report, mapper, "not published in production (#{state})") unless state == "published"
 
       # A savepoint per course, so one that fails leaves nothing half-written.
       Course.transaction(requires_new: true) do
         subjects = find_subjects(mapper)
         unknown_codes = mapper.subject_codes - subjects.map(&:subject_code)
-        return skip(mapper, "unknown subject codes #{unknown_codes.join(', ')}") if unknown_codes.any?
+        return skip(report, mapper, "unknown subject codes #{unknown_codes.join(', ')}") if unknown_codes.any?
 
         # with_discarded: course codes are unique per provider, deleted courses included.
         course = Course.with_discarded.find_or_initialize_by(provider:, course_code: mapper.course_code)
@@ -99,9 +109,9 @@ module Sandbox
       end
 
       # Only once the course's savepoint has been released.
-      @report.merge!(course_report)
+      report.merge!(course_report)
     rescue *COURSE_ERRORS => e
-      skip(mapper, e.message)
+      skip(report, mapper, e.message)
     end
 
     def find_subjects(mapper)
@@ -179,23 +189,29 @@ module Sandbox
       nil
     end
 
-    def skip(mapper, reason)
-      @report.skipped << "#{mapper.course_code}: #{reason}"
+    def skip(report, mapper, reason)
+      report.skipped << "#{mapper.course_code}: #{reason}"
     end
 
     def report
       @out.puts "#{@confirm ? 'COMMITTED' : 'DRY RUN - rolled back, run again with confirm to commit'}: #{@provider_code} #{@year}"
-      line("Created", "course", @report.created)
-      line("Updated", "course", @report.updated)
-      line("Skipped", "course", @report.skipped, separator: "\n  ")
-      line("Created", "provider school", @report.schools_created)
-      line("Created", "GIAS school", @report.gias_stubs)
-      line("Unlinked", "school", @report.schools_unlinked)
-      line("Conflicting", "school", @report.conflicts, separator: "\n  ")
-      line("Generated a new uuid for", "record", @report.uuid_clashes, separator: "\n  ")
-      line("Missing", "accredited provider", @report.missing_accredited_providers)
-      line("Not published", "course", @report.not_published, separator: "\n  ")
-      line("Only in this environment (left alone),", "course", @report.sandbox_only)
+      @reports.each { |provider_code, report| provider_report(provider_code, report) }
+    end
+
+    def provider_report(provider_code, report)
+      status = "(#{report.provider_status})" if report.provider_status
+      @out.puts ["==", provider_code, report.provider_name, status].compact.join(" ")
+      line("Created", "course", report.created)
+      line("Updated", "course", report.updated)
+      line("Skipped", "course", report.skipped, separator: "\n  ")
+      line("Created", "provider school", report.schools_created)
+      line("Created", "GIAS school", report.gias_stubs)
+      line("Unlinked", "school", report.schools_unlinked)
+      line("Conflicting", "school", report.conflicts, separator: "\n  ")
+      line("Generated a new uuid for", "record", report.uuid_clashes, separator: "\n  ")
+      line("Missing", "accredited provider", report.missing_accredited_providers)
+      line("Not published", "course", report.not_published, separator: "\n  ")
+      line("Only in this environment (left alone),", "course", report.sandbox_only)
     end
 
     def line(verb, noun, items, separator: ", ")
