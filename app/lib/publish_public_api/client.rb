@@ -60,16 +60,19 @@ module PublishPublicAPI
 
   private
 
+    # Follows links.next rather than meta.count: the cycle's /courses caches
+    # its count per year whatever the filter, so the count can be wrong.
     def each_page(path, year:, **params)
-      fetched = 0
+      body = get(path, **params, page: 1, per_page: PER_PAGE)
 
-      (1..).each do |page|
-        body = get(path, **params, page:, per_page: PER_PAGE)
+      loop do
         assert_cycle!(body, year)
         yield body
-        fetched += body["data"].size
 
-        break if body["data"].empty? || fetched >= body.dig("meta", "count").to_i
+        next_page = body.dig("links", "next")
+        break if next_page.blank?
+
+        body = @connection.get(next_page).body
       end
     end
 
