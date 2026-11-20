@@ -44,6 +44,7 @@ RSpec.describe "Support provider users" do
 
       expect(response.body).to include("<strong>Most recently signed in</strong>")
       expect(user_names).to eq([recent.full_name, never.full_name])
+      expect(response.body).to include("sort=last_signed_in")
     end
 
     it "shows 20 users on the first page" do
