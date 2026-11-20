@@ -109,6 +109,15 @@ RSpec.describe CourseWizard::Draft, type: :wizard do
       expect(draft.study_modes).to eq(%w[full_time])
       expect(draft).to be_employment_based
     end
+
+    it "ignores funding, study pattern and visa answers given before TDA was chosen" do
+      state_store.write(funding_type: "fee", study_pattern: %w[part_time], can_sponsor_skilled_worker_visa: true)
+
+      expect(draft.funding).to eq("apprenticeship")
+      expect(draft.study_patterns_for_display).to eq(%w[full_time])
+      expect(draft.study_modes).to eq(%w[full_time])
+      expect(draft.can_sponsor_skilled_worker_visa).to be(false)
+    end
   end
 
   describe "funding and study modes for non-TDA" do

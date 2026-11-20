@@ -23,25 +23,30 @@ class CourseWizard
       graph.add_node :secondary_subjects, Steps::SecondarySubjects
 
       # Secondary Subject specialist flows
-      graph.add_node :design_technology_specialisms, Steps::DesignTechnologySpecialisms
-      graph.add_node :physics_specialisms, Steps::PhysicsSpecialisms
-      graph.add_node :modern_languages_specialisms, Steps::ModernLanguagesSpecialisms
+      graph.add_node :design_technology_specialisms, Steps::DesignTechnologySpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
+      graph.add_node :physics_specialisms, Steps::PhysicsSpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
+      graph.add_node :modern_languages_specialisms, Steps::ModernLanguagesSpecialisms,
+                     depends_on: %i[secondary_master_subject_id subordinate_subject_id]
 
       graph.add_node :age_range, Steps::AgeRange
       graph.add_node :qualifications, Steps::Qualifications
-      graph.add_node :funding_type, Steps::FundingType
-      graph.add_node :study_pattern, Steps::StudyPattern
+      graph.add_node :funding_type, Steps::FundingType, depends_on: %i[qualification]
+      graph.add_node :study_pattern, Steps::StudyPattern, depends_on: %i[qualification]
       graph.add_node :schools, Steps::Schools
       graph.add_node :study_sites, Steps::StudySites, skip_when: -> { skip_study_sites? }
       graph.add_node :accredited_provider, Steps::AccreditedProvider
       graph.add_node :start_date, Steps::StartDate
-      graph.add_node :visa_sponsorship, Steps::VisaSponsorship
-      graph.add_node :skilled_worker_visa, Steps::SkilledWorkerVisa
-      graph.add_node :visa_sponsorship_application_deadline_required, Steps::VisaSponsorshipApplicationDeadlineRequired
-      graph.add_node :visa_sponsorship_application_deadline_at, Steps::VisaSponsorshipApplicationDeadlineAt
+      graph.add_sub_wizard :visa, VisaSubWizard, exit_to: :start_date, depends_on: %i[qualification funding_type]
 
       graph.add_node :check_answers, Steps::CheckAnswers
       graph.add_node :courses_index, DfE::Wizard::Core::Redirect
+      graph.check_answers :check_answers
+
+      # Edits of a published course end here, before they are saved
+      graph.add_node :confirm_changes, Steps::ConfirmChanges, skip_when: -> { skip_confirm_changes? }
+      graph.edit_review :confirm_changes
 
       graph.add_multiple_conditional_edges(
         from: :level,
@@ -126,44 +131,21 @@ class CourseWizard
         default: :start_date,
       )
 
-      graph.add_multiple_conditional_edges(
-        from: :visa_sponsorship,
-        branches: [
-          { when: :visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_multiple_conditional_edges(
-        from: :skilled_worker_visa,
-        branches: [
-          { when: :skilled_worker_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_required },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_multiple_conditional_edges(
-        from: :visa_sponsorship_application_deadline_required,
-        branches: [
-          { when: :deadline_for_application_visa_sponsorship_required?, then: :visa_sponsorship_application_deadline_at },
-        ],
-        default: :start_date,
-      )
-
-      graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
-
       graph.add_edge from: :start_date, to: :check_answers
       graph.add_edge from: :check_answers, to: :courses_index
-
-      graph.before_next_step(:handle_return_to_review)
-      graph.before_previous_step(:handle_back_to_review)
     end
   end
 
   def steps_operator
     DfE::Wizard::StepsOperator::Builder.draw(wizard: self, callable: state_store) do |builder|
       builder.on_step(:check_answers, use: [DfE::Wizard::Operations::Validate, Operations::CreateCourse])
+      builder.on_commit(use: [Operations::UpdateCourse])
     end
+  end
+
+  # Seeds an edit of a saved course (built with record:)
+  def mapper
+    Mapper.new
   end
 
   def route_strategy
@@ -178,6 +160,8 @@ class CourseWizard
             **options.except(:state_key),
           )
         else
+          next edit_step_path(helpers, step_id, options) if editing?
+
           helpers.publish_provider_recruitment_cycle_course_wizard_path(
             provider_code:,
             recruitment_cycle_year:,
@@ -200,6 +184,12 @@ class CourseWizard
 
   def skip_study_sites?
     provider.study_sites.none?
+  end
+
+  # Only an edit of a published course asks the user to confirm, because
+  # its changes go live when they are saved
+  def skip_confirm_changes?
+    !record&.is_published?
   end
 
   def accredited_provider_selection_required?
@@ -257,25 +247,18 @@ class CourseWizard
     nil
   end
 
-  def handle_return_to_review
-    return if return_to_review_param.blank?
-
-    handle_return_to_check_your_answers(:check_answers)
-  end
-
-  def handle_back_to_review
-    return if return_to_review_param.blank?
-
-    handle_back_in_check_your_answers(:check_answers, return_to_review_param)
-  end
-
-  def return_to_review_param
-    # dfe-wizard's current pinned version of current_step_params only returns permitted step attributes,
-    # so we need raw request params for return_to_review callback routing.
-    @current_step_params&.[](:return_to_review) || @current_step_params&.[]("return_to_review")
-  end
-
 private
+
+  def edit_step_path(helpers, step_id, options)
+    helpers.edit_wizard_publish_provider_recruitment_cycle_course_path(
+      provider_code:,
+      recruitment_cycle_year:,
+      code: record.course_code,
+      state_key:,
+      step: step_id,
+      **options,
+    )
+  end
 
   def ensure_review_step(steps, step_id)
     return steps if steps.any? { |step| step.step_id == step_id }
