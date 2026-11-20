@@ -80,6 +80,10 @@ namespace :sandbox do
     public Publish API, keeping production's course and site codes. Courses are created
     or updated and published; nothing is deleted.
 
+    The courses the provider accredits for its partners are copied too, under each
+    partner. A partner that isn't here is created from production's details, with no
+    users or organisation. Running it again changes nothing that already matches.
+
     It is a dry run unless the third argument is "true":
 
     bin/rails "sandbox:import_provider_courses[C55,2027]"       # report only, rolls back
