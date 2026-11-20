@@ -80,7 +80,7 @@ module Publish
       end
 
       def change_path_for(step_id)
-        wizard.route_strategy.resolve(step_id:, options: { return_to_review: step_id })
+        wizard.change_path(step_id)
       end
 
       def t_label(key, **options)

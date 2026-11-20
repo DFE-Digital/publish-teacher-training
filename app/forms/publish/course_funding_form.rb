@@ -62,42 +62,12 @@ module Publish
 
   private
 
-    def reset_enrichment_attributes
-      {
-        skilled_worker: {
-          fee_international: nil,
-          fee_uk_eu: nil,
-          financial_support: nil,
-        },
-        student: {
-          salary_details: nil,
-        },
-      }[visa_type]
-    end
-
-    def reset_course_attributes
-      {
-        skilled_worker: {
-          can_sponsor_student_visa: false,
-        },
-        student: {
-          can_sponsor_skilled_worker_visa: false,
-        },
-      }[visa_type]
-    end
-
     def after_save
       return unless funding_updated?
 
-      enrichment = course.enrichments.find_or_initialize_draft
-
-      if enrichment.persisted?
-        enrichment.assign_attributes(reset_enrichment_attributes)
-
-        enrichment.save!
-      end
-
-      course.assign_attributes(reset_course_attributes)
+      rules = ::Courses::FundingAndVisaRules.new(course)
+      rules.reset_enrichment&.save!
+      rules.reset_opposite_visa
 
       ::Courses::AssignProgramTypeService.new.execute(course.funding, course)
 

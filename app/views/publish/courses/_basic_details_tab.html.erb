@@ -79,8 +79,13 @@
        if course.cannot_change_funding_type?
          row.with_action
        else
+         funding_type_path = if FeatureService.enabled?(:course_edit_wizard)
+                               new_edit_wizard_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, unit: :funding_type)
+                             else
+                               funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code)
+                             end
          row.with_action(
-           href: course.draft_or_rolled_over? ? funding_type_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code) : nil,
+           href: course.draft_or_rolled_over? ? funding_type_path : nil,
            visually_hidden_text: "funding type",
          )
        end
@@ -169,6 +174,12 @@
        end
      end
 
+     # CourseWizard has no visa questions for a further education course.
+     # Each row's edit opens on its own question.
+     visa_edit_path = if FeatureService.enabled?(:course_edit_wizard) && !course.further_education_course?
+                        ->(step) { new_edit_wizard_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, unit: step) }
+                      end
+
      if course.fee_based?
        summary_list.with_row(html_attributes: { data: { qa: "course__can_sponsor_student_visa" } }) do |row|
          row.with_key { "Student visas" }
@@ -177,7 +188,7 @@
            row.with_action
          else
            row.with_action(
-             href: student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
+             href: visa_edit_path&.call(:visa_sponsorship) || student_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
              visually_hidden_text: "can sponsor student visa",
            )
          end
@@ -190,7 +201,7 @@
            row.with_action
          else
            row.with_action(
-             href: skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
+             href: visa_edit_path&.call(:skilled_worker_visa) || skilled_worker_visa_sponsorship_publish_provider_recruitment_cycle_course_path(@provider.provider_code, course.recruitment_cycle_year, course.course_code, back_to_basic_details: true),
              visually_hidden_text: "can sponsor skilled_worker visa",
            )
          end
@@ -202,7 +213,7 @@
          row.with_key { t(".is_there_a_visa_sponsorship_deadline") }
          row.with_value { course.visa_sponsorship_deadline_required }
          row.with_action(
-           href: visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
+           href: visa_edit_path&.call(:visa_sponsorship_application_deadline_required) || visa_sponsorship_application_deadline_required_publish_provider_recruitment_cycle_course_path(
              @provider.provider_code,
              course.recruitment_cycle_year,
              course.course_code,
@@ -217,7 +228,7 @@
          row.with_key { t(".visa_sponsorship_deadline") }
          row.with_value { course.visa_sponsorship_application_deadline_at.to_fs(:govuk_date) }
          row.with_action(
-           href: visa_sponsorship_application_deadline_date_publish_provider_recruitment_cycle_course_path(
+           href: visa_edit_path&.call(:visa_sponsorship_application_deadline_at) || visa_sponsorship_application_deadline_date_publish_provider_recruitment_cycle_course_path(
              course.provider_code,
              course.recruitment_cycle_year,
              course.course_code,
