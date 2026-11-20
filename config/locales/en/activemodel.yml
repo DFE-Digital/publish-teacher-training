@@ -25,6 +25,10 @@ en:
           blank: "Select at least one type of secondary course"
         find/subjects/primary_form:
           blank: "Select at least one type of primary course"
+        find/cookie_preferences_form:
+          attributes:
+            analytics_consent:
+              inclusion: Select yes if you want to accept analytics cookies
         find/change_cycle_form:
           attributes:
             cycle_schedule_name:
@@ -67,3 +71,7 @@ en:
             environment:
               invalid_environment: &rollover_environment_message "You must type the environment name to proceed."
               blank: *rollover_environment_message
+        support/confirm_environment:
+          attributes:
+            environment:
+              invalid_environment: "That's not %{environment}"

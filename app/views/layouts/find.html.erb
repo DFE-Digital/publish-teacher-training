@@ -27,12 +27,13 @@
     <%= stylesheet_link_tag "find/application" %>
     <%= javascript_include_tag "find/application", "data-turbo-track": "reload", defer: true %>
 
-    <% if Rails.env.production? %>
-      <%= javascript_include_tag "find/clarity", "data-turbo-track": "reload", defer: true %>
+    <% if load_clarity? %>
+      <%= javascript_include_tag "find/clarity", "data-turbo-track": "reload", "data-analytics-consent": ("granted" if analytics_consent_required?), defer: true %>
     <% end %>
   </head>
 
   <body class="govuk-template__body">
+    <%= render "layouts/find_cookie_banner" if show_cookie_banner? %>
     <%= govuk_skip_link %>
 
     <% if FeatureFlag.candidate_authentication_active? %>

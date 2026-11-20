@@ -9,3 +9,14 @@ en:
         recent_searches_html: "<strong>Recent searches</strong>"
         email_alerts_html: "<strong>Email alerts</strong>"
         applications_html: "<strong>Applications</strong>"
+    find_cookie_banner:
+      heading: Cookies on %{service_name}
+      essential: We use some essential cookies to make this service work.
+      analytics: We’d also like to use analytics cookies so we can understand how you use the service and make improvements.
+      accept: Accept analytics cookies
+      reject: Reject analytics cookies
+      view_cookies: View cookies
+      granted_html: You’ve accepted analytics cookies. You can %{link} at any time.
+      denied_html: You’ve rejected analytics cookies. You can %{link} at any time.
+      change_settings: change your cookie settings
+      hide: Hide cookie message

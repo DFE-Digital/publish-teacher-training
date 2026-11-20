@@ -122,5 +122,7 @@ cookies:
     name: candidate_session
   user_session:
     name: user_session
+  analytics:
+    name: _consented_to_analytics_cookies
 
 schools_remodel_cycle_year: 2025

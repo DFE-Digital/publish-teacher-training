@@ -13,6 +13,7 @@ class FeatureFlags
       [:group_search_results, "Group courses of the same subject from the same provider into one card on Find search results", "Find and Publish team"],
       [:api_keys, "Let support users create, search and revoke API keys in the support console", "Find and Publish team"],
       [:api_key_authentication, "Validate public API Authorization headers and record API key use", "Find and Publish team"],
+      [:find_analytics_consent, "Show the cookie banner on Find and only load Clarity after analytics consent", "Find and Publish team"],
     ]
   end
 end

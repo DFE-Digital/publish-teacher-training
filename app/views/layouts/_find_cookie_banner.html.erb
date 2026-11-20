@@ -1,0 +1,18 @@
+<%= form_with scope: :find_cookie_preferences_form, url: find_cookies_path, method: :patch do |f| %>
+  <%= govuk_cookie_banner(aria_label: t(".heading", service_name: t("service_name.find"))) do |banner| %>
+    <% if flash[:analytics_consent] %>
+      <% banner.with_message do |message| %>
+        <p class="govuk-body"><%= t(".#{flash[:analytics_consent]}_html", link: govuk_link_to(t(".change_settings"), find_cookies_path)) %></p>
+        <% message.with_action { f.govuk_submit(t(".hide"), name: "hide", value: "true") } %>
+      <% end %>
+    <% else %>
+      <% banner.with_message(heading_text: t(".heading", service_name: t("service_name.find"))) do |message| %>
+        <p class="govuk-body"><%= t(".essential") %></p>
+        <p class="govuk-body"><%= t(".analytics") %></p>
+        <% message.with_action { f.govuk_submit(t(".accept"), name: f.field_name(:analytics_consent), value: "granted") } %>
+        <% message.with_action { f.govuk_submit(t(".reject"), name: f.field_name(:analytics_consent), value: "denied") } %>
+        <% message.with_action { govuk_link_to(t(".view_cookies"), find_cookies_path) } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
