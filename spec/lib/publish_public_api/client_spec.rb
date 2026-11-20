@@ -16,11 +16,14 @@ RSpec.describe PublishPublicAPI::Client do
     }
   end
 
-  def courses_page(codes, count:, year: 2027)
+  # meta.count is cached per cycle whatever the filter, so pages are followed
+  # through links.next instead.
+  def courses_page(codes, count:, year: 2027, next_page: nil)
     {
       "data" => codes.map { |code| course(code) },
       "included" => [{ "id" => "73", "type" => "recruitment_cycles", "attributes" => { "year" => year } }],
       "meta" => { "count" => count },
+      "links" => { "next" => next_page && "#{courses_url}?filter%5Bfindable%5D=true&include=recruitment_cycle&per_page=500&page=#{next_page}" },
     }.to_json
   end
 
@@ -40,13 +43,29 @@ RSpec.describe PublishPublicAPI::Client do
       expect(courses.map { |c| c.dig("attributes", "code") }).to eq(%w[RX41 2B9P])
     end
 
-    it "follows pages until it has every course" do
-      stub_courses_page(1, courses_page(%w[RX41], count: 2))
+    it "follows the next page links until there are none" do
+      stub_courses_page(1, courses_page(%w[RX41], count: 2, next_page: 2))
       stub_courses_page(2, courses_page(%w[2B9P], count: 2))
 
       courses = client.courses(year: 2027, provider_code: "C55")
 
       expect(courses.map { |c| c.dig("attributes", "code") }).to eq(%w[RX41 2B9P])
+    end
+
+    it "doesn't stop early when the count is too low" do
+      stub_courses_page(1, courses_page(%w[RX41], count: 1, next_page: 2))
+      stub_courses_page(2, courses_page(%w[2B9P], count: 1))
+
+      courses = client.courses(year: 2027, provider_code: "C55")
+
+      expect(courses.map { |c| c.dig("attributes", "code") }).to eq(%w[RX41 2B9P])
+    end
+
+    # Page 2 isn't stubbed, so asking for it would fail.
+    it "doesn't ask past the last page when the count is too high" do
+      stub_courses_page(1, courses_page(%w[RX41], count: 5))
+
+      expect(client.courses(year: 2027, provider_code: "C55").size).to eq(1)
     end
 
     it "raises when the API answers with a different cycle" do
@@ -74,6 +93,100 @@ RSpec.describe PublishPublicAPI::Client do
       stub_request(:get, courses_url).with(query: hash_including({})).to_return(status: 500)
 
       expect { client.courses(year: 2027, provider_code: "C55") }.to raise_error(Faraday::ServerError)
+    end
+  end
+
+  describe "#accredited_courses" do
+    let(:cycle_courses_url) { "https://publish.test/api/public/v1/recruitment_cycles/2027/courses" }
+
+    def cycle_course(code, provider_id:, accredited_body_code:)
+      {
+        "id" => code.downcase,
+        "type" => "courses",
+        "attributes" => { "code" => code, "accredited_body_code" => accredited_body_code },
+        "relationships" => { "provider" => { "data" => { "type" => "providers", "id" => provider_id } } },
+      }
+    end
+
+    def provider(id, code)
+      { "id" => id, "type" => "providers", "attributes" => { "code" => code } }
+    end
+
+    def cycle_page(courses, providers, count:, year: 2027, next_page: nil)
+      {
+        "data" => courses,
+        "included" => [*providers, { "id" => "73", "type" => "recruitment_cycles", "attributes" => { "year" => year } }],
+        "meta" => { "count" => count },
+        "links" => { "next" => next_page && "#{cycle_courses_url}?filter%5Bfindable%5D=true&include=provider%2Crecruitment_cycle&per_page=500&page=#{next_page}" },
+      }.to_json
+    end
+
+    def stub_cycle_page(page, body)
+      stub_request(:get, cycle_courses_url)
+        .with(query: { "filter" => { "findable" => "true" }, "include" => "provider,recruitment_cycle", "page" => page.to_s, "per_page" => "500" })
+        .to_return(status: 200, body:, headers: { "Content-Type" => "application/json" })
+    end
+
+    it "groups the findable courses the provider accredits by the provider that runs them" do
+      stub_cycle_page(1, cycle_page(
+                           [
+                             cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55"),
+                             cycle_course("37L2", provider_id: "2", accredited_body_code: "C55"),
+                             cycle_course("2684", provider_id: "1", accredited_body_code: "C55"),
+                           ],
+                           [provider("1", "1KQ"), provider("2", "1HQ")],
+                           count: 3,
+                         ))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.transform_values { |list| list.map { |c| c.dig("attributes", "code") } })
+        .to eq("1KQ" => %w[2HW2 2684], "1HQ" => %w[37L2])
+    end
+
+    it "leaves out courses accredited by someone else and the provider's own courses" do
+      stub_cycle_page(1, cycle_page(
+                           [
+                             cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55"),
+                             cycle_course("X100", provider_id: "1", accredited_body_code: "A01"),
+                             cycle_course("RX41", provider_id: "3", accredited_body_code: "C55"),
+                           ],
+                           [provider("1", "1KQ"), provider("3", "C55")],
+                           count: 3,
+                         ))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.transform_values { |list| list.map { |c| c.dig("attributes", "code") } }).to eq("1KQ" => %w[2HW2])
+    end
+
+    it "follows the next page links until there are none" do
+      stub_cycle_page(1, cycle_page([cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55")], [provider("1", "1KQ")], count: 2, next_page: 2))
+      stub_cycle_page(2, cycle_page([cycle_course("37L2", provider_id: "2", accredited_body_code: "C55")], [provider("2", "1HQ")], count: 2))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.keys).to eq(%w[1KQ 1HQ])
+    end
+
+    it "raises when the API answers with a different cycle" do
+      stub_cycle_page(1, cycle_page([cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55")], [provider("1", "1KQ")], count: 1, year: 2026))
+
+      expect { client.accredited_courses(year: 2027, accredited_provider_code: "C55") }
+        .to raise_error(PublishPublicAPI::Client::Error, /2026/)
+    end
+  end
+
+  describe "#provider" do
+    it "returns the provider's details" do
+      stub_request(:get, "https://publish.test/api/public/v1/recruitment_cycles/2027/providers/1KQ")
+        .to_return(
+          status: 200,
+          body: { "data" => { "id" => "22944", "type" => "providers", "attributes" => { "code" => "1KQ", "name" => "Wade Deacon Trust" } } }.to_json,
+          headers: { "Content-Type" => "application/json" },
+        )
+
+      expect(client.provider(year: 2027, provider_code: "1KQ")).to eq("code" => "1KQ", "name" => "Wade Deacon Trust")
     end
   end
 

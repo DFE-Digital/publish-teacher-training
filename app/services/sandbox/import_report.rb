@@ -22,6 +22,10 @@ module Sandbox
     attr_reader(*FIELDS)
     attr_writer :sandbox_only
 
+    # Which provider the report is for, and whether the import created or
+    # restored that provider (nil when it was already here).
+    attr_accessor :provider_name, :provider_status
+
     def initialize
       FIELDS.each { |field| instance_variable_set(:"@#{field}", []) }
     end

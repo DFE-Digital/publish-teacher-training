@@ -4,9 +4,12 @@ module Sandbox
   # Copies a provider's courses for a cycle from production (through the
   # public Publish API) into this environment, keeping production's course
   # and site codes so providers can test their integrations against them.
+  # The courses it accredits for its partners are copied too, under each
+  # partner.
   #
   # Courses are created or updated and published; nothing is deleted. Unless
   # confirmed, everything is rolled back and only the report is printed.
+  # Running it again changes nothing that already matches production.
   class ImportProviderCourses
     include ServicePattern
 
@@ -15,30 +18,41 @@ module Sandbox
     # Errors that mean production's data doesn't fit this course here.
     COURSE_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError, KeyError, Date::Error].freeze
 
+    # Errors that mean production's details don't fit a provider here, such
+    # as a value one of its enums doesn't have.
+    PROVIDER_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError].freeze
+
+    CONTACT_FIELDS = %i[email telephone].freeze
+
     def initialize(provider_code:, year:, confirm: false, client: PublishPublicAPI::Client.new, out: $stdout)
       @provider_code = provider_code
       @year = year
       @confirm = confirm
       @client = client
       @out = out
-      @report = ImportReport.new
+      @reports = {}
     end
 
     def call
       raise Abort, "Can only be run in sandbox or development" unless Rails.env.sandbox? || Rails.env.local?
 
       provider = find_provider
-      prod_courses = fetch_prod_courses
+      prod_courses = with_locations(@provider_code, @client.courses(year: @year, provider_code: @provider_code))
+      partner_courses = @client.accredited_courses(year: @year, accredited_provider_code: @provider_code)
+        .to_h { |partner_code, courses| [partner_code, with_locations(partner_code, courses)] }
+      new_partners = fetch_new_partners(provider.recruitment_cycle, partner_courses.keys)
 
       ActiveRecord::Base.transaction do
-        prod_courses.each { |prod_course, locations| import_course(provider, prod_course, locations) }
-        @report.sandbox_only = provider.courses.where.not(course_code: prod_courses.map { |c, _| c.dig("attributes", "code") }).pluck(:course_code)
+        import_provider(provider, prod_courses, provider.courses)
+        partner_courses.each do |partner_code, courses|
+          import_partner(provider, partner_code, courses, new_partners[partner_code])
+        end
 
         raise ActiveRecord::Rollback unless @confirm
       end
 
       report
-      @report
+      @reports
     end
 
   private
@@ -54,26 +68,94 @@ module Sandbox
     end
 
     # Fetched before the transaction opens, so no transaction waits on the API.
-    def fetch_prod_courses
-      @client.courses(year: @year, provider_code: @provider_code).map do |prod_course|
+    def with_locations(provider_code, prod_courses)
+      prod_courses.map do |prod_course|
         course_code = prod_course.dig("attributes", "code")
-        [prod_course, @client.course_locations(year: @year, provider_code: @provider_code, course_code:)]
+        [prod_course, @client.course_locations(year: @year, provider_code:, course_code:)]
       end
     end
 
-    def import_course(provider, prod_course, locations)
+    # Production's details for the partners this environment has never had.
+    def fetch_new_partners(recruitment_cycle, partner_codes)
+      here = Provider.with_discarded.where(recruitment_cycle:, provider_code: partner_codes).pluck(:provider_code)
+
+      (partner_codes - here).index_with { |partner_code| @client.provider(year: @year, provider_code: partner_code) }
+    end
+
+    # Only the partner's courses the provider accredits are in scope.
+    def import_partner(provider, partner_code, prod_courses, details)
+      begin
+        partner, status = find_or_create_partner(provider.recruitment_cycle, partner_code, details)
+      rescue *PROVIDER_ERRORS => e
+        # Only partners never here have production's details fetched.
+        action = details ? "create" : "restore"
+        return skip_partner(partner_code, prod_courses, "couldn't #{action} provider #{partner_code}: #{e.message}")
+      end
+
+      import_provider(partner, prod_courses, partner.courses.where(accredited_provider_code: provider.provider_code))
+      @reports[partner_code].provider_status = status
+    end
+
+    # Production can hold contact details this environment's validators reject,
+    # such as a blank telephone. They're optional, so they're left out rather
+    # than losing the partner's courses. Returns the fields left out.
+    def leave_out_invalid_contact_details(partner)
+      partner.validate
+      invalid = CONTACT_FIELDS.select { |field| partner.errors.include?(field) }
+      invalid.each { |field| partner[field] = nil }
+      invalid
+    end
+
+    def skip_partner(partner_code, prod_courses, reason)
+      report = @reports[partner_code] = ImportReport.new
+      prod_courses.map(&:first).each { |prod_course| report.skipped << "#{prod_course.dig('attributes', 'code')}: #{reason}" }
+    end
+
+    # A partner missing here is created empty: production's details, with no
+    # users, contacts or organisation. A deleted one is restored; deleting it
+    # deleted its courses and sites too, and only the courses in scope come
+    # back, as the import restores them.
+    def find_or_create_partner(recruitment_cycle, partner_code, details)
+      partner = Provider.with_discarded.find_or_initialize_by(recruitment_cycle:, provider_code: partner_code)
+
+      status = if partner.new_record?
+                 partner.assign_attributes(ProviderAttributesMapper.new(details).attributes)
+                 partner.skip_geocoding = true # production's latitude and longitude are copied
+                 left_out = leave_out_invalid_contact_details(partner)
+                 ["created", ("left out invalid #{left_out.join(', ')}" if left_out.any?)].compact.join(", ")
+               elsif partner.discarded?
+                 partner.discarded_at = nil
+                 "restored"
+               end
+      partner.save! if status
+
+      [partner, status]
+    end
+
+    # Courses in scope here that production doesn't have are listed, not deleted.
+    def import_provider(provider, prod_courses, courses_in_scope)
+      report = @reports[provider.provider_code] = ImportReport.new
+      report.provider_name = provider.provider_name
+
+      prod_courses.each { |prod_course, locations| import_course(provider, prod_course, locations, report) }
+
+      prod_codes = prod_courses.map { |prod_course, _| prod_course.dig("attributes", "code") }
+      report.sandbox_only = courses_in_scope.where.not(course_code: prod_codes).pluck(:course_code)
+    end
+
+    def import_course(provider, prod_course, locations, report)
       mapper = CourseAttributesMapper.new(prod_course["attributes"])
       course_report = ImportReport.new
 
       # The client only asks for findable courses; this is in case that filter changes.
       state = prod_course.dig("attributes", "state")
-      return skip(mapper, "not published in production (#{state})") unless state == "published"
+      return skip(report, mapper, "not published in production (#{state})") unless state == "published"
 
       # A savepoint per course, so one that fails leaves nothing half-written.
       Course.transaction(requires_new: true) do
         subjects = find_subjects(mapper)
         unknown_codes = mapper.subject_codes - subjects.map(&:subject_code)
-        return skip(mapper, "unknown subject codes #{unknown_codes.join(', ')}") if unknown_codes.any?
+        return skip(report, mapper, "unknown subject codes #{unknown_codes.join(', ')}") if unknown_codes.any?
 
         # with_discarded: course codes are unique per provider, deleted courses included.
         course = Course.with_discarded.find_or_initialize_by(provider:, course_code: mapper.course_code)
@@ -99,9 +181,9 @@ module Sandbox
       end
 
       # Only once the course's savepoint has been released.
-      @report.merge!(course_report)
+      report.merge!(course_report)
     rescue *COURSE_ERRORS => e
-      skip(mapper, e.message)
+      skip(report, mapper, e.message)
     end
 
     def find_subjects(mapper)
@@ -179,23 +261,29 @@ module Sandbox
       nil
     end
 
-    def skip(mapper, reason)
-      @report.skipped << "#{mapper.course_code}: #{reason}"
+    def skip(report, mapper, reason)
+      report.skipped << "#{mapper.course_code}: #{reason}"
     end
 
     def report
       @out.puts "#{@confirm ? 'COMMITTED' : 'DRY RUN - rolled back, run again with confirm to commit'}: #{@provider_code} #{@year}"
-      line("Created", "course", @report.created)
-      line("Updated", "course", @report.updated)
-      line("Skipped", "course", @report.skipped, separator: "\n  ")
-      line("Created", "provider school", @report.schools_created)
-      line("Created", "GIAS school", @report.gias_stubs)
-      line("Unlinked", "school", @report.schools_unlinked)
-      line("Conflicting", "school", @report.conflicts, separator: "\n  ")
-      line("Generated a new uuid for", "record", @report.uuid_clashes, separator: "\n  ")
-      line("Missing", "accredited provider", @report.missing_accredited_providers)
-      line("Not published", "course", @report.not_published, separator: "\n  ")
-      line("Only in this environment (left alone),", "course", @report.sandbox_only)
+      @reports.each { |provider_code, report| provider_report(provider_code, report) }
+    end
+
+    def provider_report(provider_code, report)
+      status = "(#{report.provider_status})" if report.provider_status
+      @out.puts ["==", provider_code, report.provider_name, status].compact.join(" ")
+      line("Created", "course", report.created)
+      line("Updated", "course", report.updated)
+      line("Skipped", "course", report.skipped, separator: "\n  ")
+      line("Created", "provider school", report.schools_created)
+      line("Created", "GIAS school", report.gias_stubs)
+      line("Unlinked", "school", report.schools_unlinked)
+      line("Conflicting", "school", report.conflicts, separator: "\n  ")
+      line("Generated a new uuid for", "record", report.uuid_clashes, separator: "\n  ")
+      line("Missing", "accredited provider", report.missing_accredited_providers)
+      line("Not published", "course", report.not_published, separator: "\n  ")
+      line("Only in this environment (left alone),", "course", report.sandbox_only)
     end
 
     def line(verb, noun, items, separator: ", ")
