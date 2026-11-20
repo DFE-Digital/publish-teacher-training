@@ -3,9 +3,12 @@
 require "rails_helper"
 
 RSpec.describe Sandbox::ImportProviderCourses do
-  subject(:import) do
+  subject(:reports) do
     described_class.call(provider_code: "C55", year:, confirm:, client:, out:)
   end
+
+  # The report for C55 itself.
+  def import = reports.fetch("C55")
 
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle) }
   let(:year) { recruitment_cycle.year.to_i }
@@ -110,8 +113,9 @@ RSpec.describe Sandbox::ImportProviderCourses do
   it "reports what it did" do
     result = import
 
+    expect(reports.keys).to eq(%w[C55])
     expect(result).to have_attributes(created: %w[RX41], updated: [], skipped: [])
-    expect(out.string).to include("Created 1 course: RX41").and include("COMMITTED")
+    expect(out.string).to include("COMMITTED: C55 #{year}\n== C55 #{provider.provider_name}\nCreated 1 course: RX41")
   end
 
   context "when the course is already in this environment" do
