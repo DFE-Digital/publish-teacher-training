@@ -34,10 +34,13 @@ module Sandbox
       prod_courses = with_locations(@provider_code, @client.courses(year: @year, provider_code: @provider_code))
       partner_courses = @client.accredited_courses(year: @year, accredited_provider_code: @provider_code)
         .to_h { |partner_code, courses| [partner_code, with_locations(partner_code, courses)] }
+      new_partners = fetch_new_partners(provider.recruitment_cycle, partner_courses.keys)
 
       ActiveRecord::Base.transaction do
         import_provider(provider, prod_courses, provider.courses)
-        partner_courses.each { |partner_code, courses| import_partner(provider, partner_code, courses) }
+        partner_courses.each do |partner_code, courses|
+          import_partner(provider, partner_code, courses, new_partners[partner_code])
+        end
 
         raise ActiveRecord::Rollback unless @confirm
       end
@@ -66,12 +69,42 @@ module Sandbox
       end
     end
 
+    # Production's details for the partners this environment has never had.
+    def fetch_new_partners(recruitment_cycle, partner_codes)
+      here = Provider.with_discarded.where(recruitment_cycle:, provider_code: partner_codes).pluck(:provider_code)
+
+      (partner_codes - here).index_with { |partner_code| @client.provider(year: @year, provider_code: partner_code) }
+    end
+
     # Only the partner's courses the provider accredits are in scope.
-    def import_partner(provider, partner_code, prod_courses)
-      partner = provider.recruitment_cycle.providers.find_by(provider_code: partner_code)
-      return if partner.nil?
+    def import_partner(provider, partner_code, prod_courses, details)
+      partner, status = find_or_create_partner(provider.recruitment_cycle, partner_code, details)
 
       import_provider(partner, prod_courses, partner.courses.where(accredited_provider_code: provider.provider_code))
+      @reports[partner_code].provider_status = status
+    rescue ActiveRecord::RecordInvalid => e
+      report = @reports[partner_code] = ImportReport.new
+      prod_courses.map(&:first).each do |prod_course|
+        report.skipped << "#{prod_course.dig('attributes', 'code')}: couldn't create provider #{partner_code}: #{e.message}"
+      end
+    end
+
+    # A partner missing here is created empty: production's details, with no
+    # users, contacts or organisation. A deleted one is restored.
+    def find_or_create_partner(recruitment_cycle, partner_code, details)
+      partner = Provider.with_discarded.find_or_initialize_by(recruitment_cycle:, provider_code: partner_code)
+
+      status = if partner.new_record?
+                 partner.assign_attributes(ProviderAttributesMapper.new(details).attributes)
+                 partner.skip_geocoding = true # production's latitude and longitude are copied
+                 "created"
+               elsif partner.discarded?
+                 partner.discarded_at = nil
+                 "restored"
+               end
+      partner.save! if status
+
+      [partner, status]
     end
 
     # Courses in scope here that production doesn't have are listed, not deleted.
