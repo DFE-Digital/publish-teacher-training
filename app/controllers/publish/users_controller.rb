@@ -52,7 +52,7 @@ module Publish
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
       flash[:success] = user_removal_success_message
-      redirect_to users_return_path(clamp_page: returning_to_support?)
+      redirect_to users_return_path(support_users_list_params_after_removal)
     end
 
   private
@@ -120,6 +120,26 @@ module Publish
       else
         I18n.t("success.user_removed")
       end
+    end
+
+    def support_users_list_params_after_removal
+      {}.tap do |permitted|
+        if params[:page].present?
+          page = [params[:page].to_i, last_support_users_page].min
+          permitted[:page] = page if page > 1
+        end
+
+        permitted[:sort] = params[:sort] if params[:sort].present?
+      end
+    end
+
+    def last_support_users_page
+      # Association may already be loaded (e.g. via provider_user); reload so the
+      # post-removal count is accurate when clamping the return page.
+      total = provider.users.reload.count
+      return 1 if total.zero?
+
+      (total.to_f / Support::Providers::UsersController::USERS_PER_PAGE).ceil
     end
   end
 end
