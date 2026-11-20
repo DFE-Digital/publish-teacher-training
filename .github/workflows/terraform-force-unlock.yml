@@ -89,6 +89,8 @@ jobs:
 
       - name: Force unlock state
         id: unlock
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
           set +e
           output=$(terraform -chdir=terraform/aks force-unlock -force "${LOCK_ID}" 2>&1)
@@ -98,14 +100,59 @@ jobs:
 
           if [ "$code" -eq 0 ]; then
             echo "result=unlocked" >> "$GITHUB_OUTPUT"
-            echo "State unlocked for ${{ inputs.environment }} (lock ${LOCK_ID})"
+            echo "State unlocked for ${ENVIRONMENT} (lock ${LOCK_ID})"
             exit 0
           fi
 
-          if echo "$output" | grep -qiE 'state not locked|Failed to unlock state:.*not locked|terraformlockid[" ]*was empty|blob metadata.*terraformlockid'; then
+          if echo "$output" | grep -qiE 'state not locked|Failed to unlock state:.*not locked'; then
             echo "result=already_unlocked" >> "$GITHUB_OUTPUT"
-            echo "State was already unlocked for ${{ inputs.environment }}"
+            echo "State was already unlocked for ${ENVIRONMENT}"
             exit 0
+          fi
+
+          # Empty terraformlockid metadata can mean either "not locked" or a stuck
+          # blob lease with no lock metadata. force-unlock cannot clear the latter.
+          if echo "$output" | grep -qiE 'terraformlockid[" ]*was empty|blob metadata.*terraformlockid'; then
+            backend_file="terraform/aks/workspace_variables/${ENVIRONMENT}_backend.tfvars"
+            storage_account=$(awk -F'"' '/storage_account_name/{print $2; exit}' "$backend_file")
+            container_name=$(awk -F'"' '/container_name/{print $2; exit}' "$backend_file")
+            blob_name=$(awk -F'"' '/^[[:space:]]*key[[:space:]]*=/{print $2; exit}' "$backend_file")
+
+            set +e
+            lease_state=$(az storage blob show \
+              --account-name "$storage_account" \
+              --container-name "$container_name" \
+              --name "$blob_name" \
+              --auth-mode login \
+              --query "properties.lease.state" -o tsv 2>&1)
+            az_code=$?
+            set -e
+
+            if [ "$az_code" -ne 0 ]; then
+              echo "::error::Could not read state blob lease state: $lease_state"
+              echo "result=failed" >> "$GITHUB_OUTPUT"
+              exit 1
+            fi
+
+            echo "State blob lease.state=${lease_state}"
+
+            case "$lease_state" in
+              available|expired|broken)
+                echo "result=already_unlocked" >> "$GITHUB_OUTPUT"
+                echo "State was already unlocked for ${ENVIRONMENT} (no active lease)"
+                exit 0
+                ;;
+              leased|breaking)
+                echo "::error::State blob has a ${lease_state} lease but no Terraform lock metadata. force-unlock cannot clear it — break the lease (see aks-cheatsheet Stuck Terraform state lock), then re-run the deploy."
+                echo "result=stuck_lease" >> "$GITHUB_OUTPUT"
+                exit 1
+                ;;
+              *)
+                echo "::error::Unexpected state blob lease.state '${lease_state}'"
+                echo "result=failed" >> "$GITHUB_OUTPUT"
+                exit 1
+                ;;
+            esac
           fi
 
           if echo "$output" | grep -qiE 'does not match existing lock|lock id .* does not match'; then
