@@ -32,12 +32,14 @@ RSpec.describe Sandbox::ImportProviderCourses do
   let(:prod_courses) { [prod_course] }
   let(:locations) { JSON.parse(file_fixture("publish_public_api/course_locations.json").read) }
   let(:partner_courses) { {} }
+  let(:partner_details) { JSON.parse(file_fixture("publish_public_api/provider.json").read)["attributes"] }
   let(:client) do
     instance_double(
       PublishPublicAPI::Client,
       courses: prod_courses,
       accredited_courses: partner_courses,
       course_locations: locations,
+      provider: partner_details,
     )
   end
 
@@ -365,6 +367,88 @@ RSpec.describe Sandbox::ImportProviderCourses do
 
       expect { reports }.not_to(change { [Provider.count, Course.count, CourseEnrichment.count, Course::School.count, ProviderPartnership.count] })
       expect(reports.fetch("1KQ")).to have_attributes(created: [], updated: %w[2HW2])
+    end
+
+    context "when the partner isn't here" do
+      let!(:partner) { nil }
+
+      def created_partner
+        recruitment_cycle.providers.find_by(provider_code: "1KQ")
+      end
+
+      before { allow(GeocodeJob).to receive(:perform_later) }
+
+      it "creates it, empty, from production's details" do
+        import
+
+        expect(client).to have_received(:provider).with(year:, provider_code: "1KQ")
+        expect(created_partner).to have_attributes(
+          provider_name: "Wade Deacon Trust",
+          provider_type: "lead_school",
+          urn: "111435",
+          town: "Widnes",
+          accredited: false,
+        )
+        expect(created_partner.users).to be_empty
+        expect(created_partner.organisations).to be_empty
+        expect(GeocodeJob).not_to have_received(:perform_later)
+      end
+
+      it "imports its courses, accredited by the provider" do
+        import
+
+        expect(created_partner.courses.sole).to have_attributes(course_code: "2HW2", accredited_provider_code: "C55")
+        expect(created_partner.accredited_partners).to eq([provider])
+      end
+
+      it "reports that it created it" do
+        import
+
+        expect(reports.fetch("1KQ").provider_status).to eq("created")
+        expect(out.string).to include("== 1KQ Wade Deacon Trust (created)")
+      end
+
+      it "creates it only once when run again" do
+        described_class.call(provider_code: "C55", year:, confirm: true, client:, out: StringIO.new)
+
+        expect { reports }.not_to change(Provider, :count)
+        expect(reports.fetch("1KQ")).to have_attributes(provider_status: nil, updated: %w[2HW2])
+        expect(client).to have_received(:provider).once
+      end
+
+      context "when production's details aren't valid here" do
+        let(:partner_details) { super().merge("name" => nil) }
+
+        it "skips the partner's courses and imports the rest" do
+          expect { import }.not_to change(Provider, :count)
+
+          expect(import.created).to eq(%w[RX41])
+          expect(reports.fetch("1KQ").skipped).to eq(["2HW2: couldn't create provider 1KQ: Validation failed: Provider name Enter a provider name"])
+        end
+      end
+
+      context "when not confirmed" do
+        let(:confirm) { false }
+
+        it "creates nothing" do
+          expect { reports }.not_to change(Provider, :count)
+
+          expect(reports.fetch("1KQ")).to have_attributes(provider_status: "created", created: %w[2HW2])
+        end
+      end
+    end
+
+    context "when the partner was deleted here" do
+      before { partner.discard! }
+
+      it "restores it and imports its courses" do
+        expect { import }.not_to change(Provider.with_discarded, :count)
+
+        expect(partner.reload).not_to be_discarded
+        expect(partner_course_here).to be_present
+        expect(reports.fetch("1KQ").provider_status).to eq("restored")
+        expect(client).not_to have_received(:provider)
+      end
     end
 
     context "when not confirmed" do
