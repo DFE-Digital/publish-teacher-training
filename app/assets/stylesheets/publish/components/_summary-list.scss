@@ -1,3 +1,5 @@
+// Configures GOV.UK Frontend in case this file loads it first.
+@use "../../settings";
 // Loads the GOV.UK Frontend CSS so this file can @extend its selectors.
 @use "govuk-frontend/dist/govuk";
 
