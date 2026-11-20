@@ -51,8 +51,14 @@ module Publish
 
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
-      flash[:success] = I18n.t("success.user_removed")
-      redirect_to publish_provider_users_path(params[:provider_code])
+
+      if removing_yourself?
+        flash[:success] = t(".removed_yourself", provider_name: provider.provider_name)
+        redirect_to publish_root_path
+      else
+        flash[:success] = t(".removed_other", name: provider_user.full_name, provider_name: provider.provider_name)
+        redirect_to publish_provider_users_path(params[:provider_code])
+      end
     end
 
   private
@@ -72,5 +78,10 @@ module Publish
     def provider_user
       @provider_user ||= provider.users.find(params[:id])
     end
+
+    def removing_yourself?
+      provider_user == current_user
+    end
+    helper_method :removing_yourself?
   end
 end
