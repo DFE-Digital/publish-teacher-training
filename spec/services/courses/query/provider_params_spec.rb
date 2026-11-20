@@ -355,5 +355,27 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
         expect(names).to eq({})
       end
     end
+
+    context "when not searching by provider, given a page of courses" do
+      let(:params) { {} }
+
+      it "returns the names of those courses' accredited providers" do
+        query = described_class.new(params:)
+        courses = query.call.select { |course| course.provider == oakwood && course.accredited_provider_code == mmu.provider_code }
+
+        expect(query.accredited_provider_names(courses)).to eq(mmu.provider_code => "Manchester Metropolitan University")
+      end
+    end
+
+    context "when searching by provider, given a page of courses" do
+      let(:params) { { provider_name: "Oakwood Academy" } }
+
+      it "returns the names of the accredited providers in all the results" do
+        query = described_class.new(params:)
+        courses = query.call.first(1)
+
+        expect(query.accredited_provider_names(courses).keys).to contain_exactly(mmu.provider_code, edge_hill.provider_code)
+      end
+    end
   end
 end
