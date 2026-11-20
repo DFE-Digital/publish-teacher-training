@@ -207,7 +207,7 @@ module ProvidersOnboardingFormRequestsHelper
 
   def then_i_see_action_buttons_and_cancel_link
     expect(page).to have_content(
-      "Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.",
+      "Click Onboard provider to approve the request, create an account for this provider on Publish, and generate a unique provider code. The person who submitted the onboarding form will be added as a user of the provider.",
     )
     expect(page).to have_content(
       "Click Reject provider to reject the request. The request will be marked as rejected in the onboarding table and you will not be able to onboard the provider.",

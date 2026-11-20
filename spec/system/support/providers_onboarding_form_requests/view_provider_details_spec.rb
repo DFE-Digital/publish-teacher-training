@@ -158,6 +158,13 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       then_the_provider_and_first_user_are_created(onboarding_request)
     end
 
+    scenario "I do not see onboard or reject actions for a request closed before automatic onboarding" do
+      onboarding_request.update!(status: :closed)
+      when_i_visit_the_show_page_for(onboarding_request)
+
+      then_i_do_not_see_onboard_or_reject_actions
+    end
+
     scenario "I do not see onboard or reject actions once a provider has been onboarded" do
       when_i_click_onboard_provider
       when_i_visit_the_show_page_for(onboarding_request)
