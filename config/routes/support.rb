@@ -19,6 +19,7 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
       post :create_blank, path: "create-blank"
       get :confirm_publish, path: "confirm-publish"
       post :publish
+      get ":year", action: :show, as: :year, constraints: { year: /\d{4}/ }
     end
   end
 

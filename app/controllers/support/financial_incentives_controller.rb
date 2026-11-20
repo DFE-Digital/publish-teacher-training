@@ -2,29 +2,41 @@
 
 module Support
   class FinancialIncentivesController < ApplicationController
-    before_action :set_year
+    before_action :set_year, except: :index
+    before_action :redirect_unless_year_allowed, only: :show
     before_action :set_financial_incentive, only: %i[edit update]
 
     def index
+      @years = landing_years
+      @create_year = create_target_year
+    end
+
+    def show
       @subjects = subjects
       @financial_incentives_by_subject_id = financial_incentives_by_subject_id
       @missing_subjects = missing_subjects
       @financial_incentives = financial_incentives
-      @year_options = year_options
     end
 
     def create_year
-      redirect_to_index(success: t(".success", count: created_year_count, year:))
+      ::FinancialIncentives::CreateYearService.call(year:)
+
+      redirect_to_year(
+        success: t(
+          ".success",
+          year_range: Find::CycleTimetable.cycle_year_range(year),
+        ),
+      )
     rescue ::FinancialIncentives::CreateYearService::YearAlreadyExistsError
-      redirect_to_index(warning: t(".already_exists", year:))
+      redirect_to_year(warning: t(".already_exists", year:))
     end
 
     def create_missing
-      redirect_to_index(create_missing_flash)
+      redirect_to_year(create_missing_flash)
     end
 
     def create_blank
-      redirect_to_index(create_blank_flash)
+      redirect_to_year(create_blank_flash)
     end
 
     def confirm_publish
@@ -32,15 +44,15 @@ module Support
 
       return if @missing_subjects.none?
 
-      redirect_to_index(warning: t(".missing", year:))
+      redirect_to_year(warning: t(".missing", year:))
     end
 
     def publish
       ::FinancialIncentives::PublishYearService.call(year:)
 
-      redirect_to_index(success: t(".success", year:))
+      redirect_to_year(success: t(".success", year:))
     rescue ::FinancialIncentives::PublishYearService::IncompleteYearError => e
-      redirect_to_index(warning: t(".missing", count: e.missing_subjects.size, year:))
+      redirect_to_year(warning: t(".missing", count: e.missing_subjects.size, year:))
     end
 
     def edit
@@ -57,7 +69,7 @@ module Support
         render :confirm_update
       else
         financial_incentive.save!
-        redirect_to_index(success: t(".success", subject_name: financial_incentive.subject.subject_name))
+        redirect_to_year(success: t(".success", subject_name: financial_incentive.subject.subject_name))
       end
     end
 
@@ -89,6 +101,12 @@ module Support
       @year = selected_year
     end
 
+    def redirect_unless_year_allowed
+      return if allowed_years.include?(parsed_requested_year)
+
+      redirect_to support_financial_incentives_path
+    end
+
     def set_financial_incentive
       @financial_incentive = FinancialIncentive.includes(:subject).find(params[:id])
     end
@@ -109,17 +127,22 @@ module Support
 
     def allowed_years
       @allowed_years ||= (
-        FinancialIncentive.distinct.pluck(:year) +
+        existing_years +
         [FinancialIncentive.current_year, Find::CycleTimetable.next_year]
       ).compact.uniq
     end
 
-    def year_options
-      @year_options ||= allowed_years.sort.reverse
+    def existing_years
+      @existing_years ||= FinancialIncentive.distinct.order(year: :desc).pluck(:year)
     end
 
-    def created_year_count
-      @created_year_count ||= ::FinancialIncentives::CreateYearService.call(year:)
+    def landing_years
+      (existing_years + [FinancialIncentive.current_year]).compact.uniq.sort
+    end
+
+    def create_target_year
+      year = Find::CycleTimetable.next_year
+      year unless FinancialIncentive.for_year(year).exists?
     end
 
     def created_missing_count
@@ -156,8 +179,8 @@ module Support
       }
     end
 
-    def redirect_to_index(flash)
-      redirect_to support_financial_incentives_path(year:), flash:
+    def redirect_to_year(flash)
+      redirect_to year_support_financial_incentives_path(year), flash:
     end
 
     def visible_update_needs_confirmation?

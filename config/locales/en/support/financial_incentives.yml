@@ -3,8 +3,15 @@ en:
     financial_incentives:
       index:
         page_title: Financial incentives
-        financial_incentive_year: Financial incentive year
-        apply: Apply
+        intro_lead_html: Financial incentives are only visible to candidates if the %{feature_flag_link} is activated.
+        feature_flag_link_text: financial incentives feature flag
+        intro_published: If the feature flag is activated, the financial incentives in the recruitment cycle marked as 'Published' will be visible to candidates on Find.
+        intro_deactivated: If the feature flag is deactivated, they are hidden from candidates until it is activated.
+        recruitment_cycles: Recruitment cycles
+        published_tag: Published
+        create: Create financial incentives for %{year_range}
+      show:
+        page_title: Financial incentives %{year_range}
         important: Important
         statuses:
           hidden: Hidden
@@ -73,7 +80,7 @@ en:
           none: None
           "yes": "Yes"
       create_year:
-        success: "%{count} financial incentives for %{year} created"
+        success: Financial incentives created for the %{year_range} recruitment cycle. The financial incentives from the previous recruitment cycle have been copied to this cycle.
         already_exists: Financial incentives for %{year} already exist
       create_missing:
         success: "%{count} blank financial incentives for %{year} created"
