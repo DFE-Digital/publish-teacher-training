@@ -44,6 +44,15 @@ RSpec.describe "Support onboarding form requests" do
       expect(provider.reload.users).to be_present
     end
 
+    it "does not reject a request that was closed before automatic onboarding" do
+      onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard, status: "closed")
+
+      patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "reject" }
+
+      expect(flash[:error]).to eq("This provider has already been onboarded")
+      expect(onboarding_request.reload).to be_closed
+    end
+
     it "does not reject a request that already has a provider" do
       provider = create(:provider)
       onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard, provider:)

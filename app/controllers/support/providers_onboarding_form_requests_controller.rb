@@ -56,7 +56,7 @@ module Support
     # reloads the row under the same lock onboarding holds while it commits.
     def apply_rejection
       @onboarding_request.with_lock do
-        if @onboarding_request.onboarded? || @onboarding_request.provider_id.present?
+        if @onboarding_request.onboarded? || @onboarding_request.closed? || @onboarding_request.provider_id.present?
           false
         else
           @onboarding_request.update(status: updated_status)
@@ -65,7 +65,7 @@ module Support
     end
 
     def rejection_error_message
-      if @onboarding_request.onboarded? || @onboarding_request.provider_id.present?
+      if @onboarding_request.onboarded? || @onboarding_request.closed? || @onboarding_request.provider_id.present?
         t("support.providers.onboard_from_form_request.already_onboarded")
       else
         t(".error_message_html", form_name: @onboarding_request.form_name)

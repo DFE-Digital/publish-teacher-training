@@ -51,7 +51,6 @@
           <% if admin_user? %>
             <%= f.govuk_text_field :accredited_provider_number,
               label: { text: t(".accredited_provider_number"), size: "s" },
-              hint: { text: t(".accredited_provider_number_hint") },
               width: 10,
               disabled: !can_edit %>
           <% end %>

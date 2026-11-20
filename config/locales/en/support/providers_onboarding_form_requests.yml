@@ -64,7 +64,7 @@ en:
         email_address: Email address
         first_name: First name
         last_name: Last name
-        onboard_explanation_html: Click <strong>Onboard provider</strong> to approve the request, create an account for this provider on Publish, and generate a provider code. The person who submitted the onboarding form will be added as a user of the provider.
+        onboard_explanation_html: Click <strong>Onboard provider</strong> to approve the request, create an account for this provider on Publish, and generate a unique provider code. The person who submitted the onboarding form will be added as a user of the provider.
         reject_explanation_html: Click <strong>Reject provider</strong> to reject the request. The request will be marked as rejected in the onboarding table and you will not be able to onboard the provider.
         onboard_provider: Onboard provider
         reject_provider: Reject provider
