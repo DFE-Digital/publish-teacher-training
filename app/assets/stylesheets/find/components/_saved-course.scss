@@ -1,3 +1,5 @@
+@use "../../settings" as *;
+
 .app-saved-courses-search {
   @include govuk-responsive-padding(6);
   @include govuk-responsive-margin(6, "bottom");

@@ -1,0 +1,5 @@
+@use "settings" as *;
+
+// dfe-autocomplete is not a Sass module. It uses GOV.UK Frontend members as
+// globals, so it must be imported here.
+@import "dfe-autocomplete/src/dfe-autocomplete";
