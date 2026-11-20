@@ -31,8 +31,14 @@ RSpec.describe Sandbox::ImportProviderCourses do
   end
   let(:prod_courses) { [prod_course] }
   let(:locations) { JSON.parse(file_fixture("publish_public_api/course_locations.json").read) }
+  let(:partner_courses) { {} }
   let(:client) do
-    instance_double(PublishPublicAPI::Client, courses: prod_courses, course_locations: locations)
+    instance_double(
+      PublishPublicAPI::Client,
+      courses: prod_courses,
+      accredited_courses: partner_courses,
+      course_locations: locations,
+    )
   end
 
   def imported_course
@@ -304,6 +310,70 @@ RSpec.describe Sandbox::ImportProviderCourses do
         import
 
         expect(existing.reload.enrichments.draft.sole).to have_attributes(course_length: "OneYear", version: 2)
+      end
+    end
+  end
+
+  context "when partners run courses the provider accredits" do
+    let!(:partner) { create(:provider, provider_code: "1KQ", provider_name: "Wade Deacon Trust", recruitment_cycle:) }
+    let(:partner_course) do
+      prod_course.deep_merge(
+        "id" => "partner",
+        "attributes" => { "code" => "2HW2", "uuid" => "8b7c1f0e-55d5-4a8a-9d55-2a3c4c1d2e3f", "accredited_body_code" => "C55" },
+      )
+    end
+    let(:partner_courses) { { "1KQ" => [partner_course] } }
+
+    before do
+      provider.update!(provider_type: :university, accredited: true, accredited_provider_number: 1234)
+    end
+
+    def partner_course_here
+      partner.reload.courses.find_by(course_code: "2HW2")
+    end
+
+    it "imports them under the partner, accredited by the provider" do
+      import
+
+      expect(client).to have_received(:accredited_courses).with(year:, accredited_provider_code: "C55")
+      expect(client).to have_received(:course_locations).with(year:, provider_code: "1KQ", course_code: "2HW2")
+      expect(partner_course_here).to have_attributes(accredited_provider_code: "C55", uuid: "8b7c1f0e-55d5-4a8a-9d55-2a3c4c1d2e3f")
+      expect(partner_course_here).to be_is_published
+      expect(partner_course_here.schools.map(&:site_code)).to eq(["-"])
+      expect(partner.accredited_partners).to eq([provider])
+    end
+
+    it "reports each partner on its own" do
+      expect(reports.keys).to eq(%w[C55 1KQ])
+      expect(reports.fetch("1KQ")).to have_attributes(created: %w[2HW2], provider_status: nil)
+      expect(out.string).to include("== 1KQ Wade Deacon Trust\nCreated 1 course: 2HW2")
+    end
+
+    it "leaves the partner's other courses alone, listing only those the provider accredits" do
+      other = create(:course, provider: partner, course_code: "X100", accredited_provider_code: "A01")
+      gone = create(:course, provider: partner, course_code: "X200", accredited_provider_code: "C55")
+
+      import
+
+      expect(other.reload).not_to be_discarded
+      expect(gone.reload).not_to be_discarded
+      expect(reports.fetch("1KQ").sandbox_only).to eq(%w[X200])
+    end
+
+    it "gives the same result when run again" do
+      described_class.call(provider_code: "C55", year:, confirm: true, client:, out: StringIO.new)
+
+      expect { reports }.not_to(change { [Provider.count, Course.count, CourseEnrichment.count, Course::School.count, ProviderPartnership.count] })
+      expect(reports.fetch("1KQ")).to have_attributes(created: [], updated: %w[2HW2])
+    end
+
+    context "when not confirmed" do
+      let(:confirm) { false }
+
+      it "changes nothing for the partner either" do
+        expect { reports }.not_to(change { [partner.courses.count, ProviderPartnership.count] })
+
+        expect(reports.fetch("1KQ").created).to eq(%w[2HW2])
       end
     end
   end
