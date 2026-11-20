@@ -460,6 +460,17 @@ RSpec.describe Sandbox::ImportProviderCourses do
         expect(reports.fetch("1KQ").provider_status).to eq("restored")
         expect(client).not_to have_received(:provider)
       end
+
+      context "when it isn't valid here" do
+        before { partner.update_columns(ukprn: "bad") }
+
+        it "says it couldn't restore it, and leaves it deleted" do
+          import
+
+          expect(partner.reload).to be_discarded
+          expect(reports.fetch("1KQ").skipped).to contain_exactly(a_string_starting_with("2HW2: couldn't restore provider 1KQ: Validation failed"))
+        end
+      end
     end
 
     context "when not confirmed" do
