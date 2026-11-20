@@ -18,6 +18,10 @@ module Sandbox
     # Errors that mean production's data doesn't fit this course here.
     COURSE_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError, KeyError, Date::Error].freeze
 
+    # Errors that mean production's details don't fit a provider here, such
+    # as a value one of its enums doesn't have.
+    PROVIDER_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError].freeze
+
     def initialize(provider_code:, year:, confirm: false, client: PublishPublicAPI::Client.new, out: $stdout)
       @provider_code = provider_code
       @year = year
@@ -82,7 +86,7 @@ module Sandbox
 
       import_provider(partner, prod_courses, partner.courses.where(accredited_provider_code: provider.provider_code))
       @reports[partner_code].provider_status = status
-    rescue ActiveRecord::RecordInvalid => e
+    rescue *PROVIDER_ERRORS => e
       report = @reports[partner_code] = ImportReport.new
       prod_courses.map(&:first).each do |prod_course|
         report.skipped << "#{prod_course.dig('attributes', 'code')}: couldn't create provider #{partner_code}: #{e.message}"
