@@ -1,0 +1,24 @@
+<% content_for(:breadcrumbs) do %>
+  <%= render GovukComponent::BackLinkComponent.new(
+    text: "Back",
+    href: wizard.previous_step_path(fallback: wizard.exit_path),
+  ) %>
+<% end %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <%= form_with(
+          model: current_step,
+          scope: current_step_name,
+          url: wizard.current_step_path(return_to_review: params[:return_to_review]),
+          method: :patch,
+        ) do |form| %>
+      <%= form.govuk_error_summary %>
+      <%= render "#{controller_path}/steps/#{current_step_name}", form: %>
+    <% end %>
+
+    <p class="govuk-body">
+      <%= govuk_link_to(t("cancel"), wizard.exit_path) %>
+    </p>
+  </div>
+</div>

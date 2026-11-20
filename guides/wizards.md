@@ -14,6 +14,8 @@ dfe-wizard is a framework for building multi-step forms in Rails with conditiona
 
 See the [gem README](https://github.com/DFE-Digital/dfe-wizard) for full API documentation.
 
+For journeys with steps in a fixed order that end on a check answers page, use `BaseWizard`. It sets up the graph, cache, controller actions, view and routes for you. See [base-wizard.md](base-wizard.md).
+
 ## Directory structure
 
 A wizard implementation follows this layout:
@@ -82,6 +84,10 @@ The largest multi-step flow in the app.
 - **Controllers:** `app/controllers/publish/course_wizards_controller.rb`
 - **Views:** `app/views/publish/course_wizards/`
 - **Routes:** `config/routes/publish.rb` (under `/course_wizard/`)
+
+### BaseWizard journeys
+
+For the wizards that use `BaseWizard`, see "Implemented wizards" in [base-wizard.md](base-wizard.md).
 
 ## Course edit pages
 
