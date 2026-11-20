@@ -273,31 +273,50 @@ RSpec.describe "Public API key authentication", service: :api do
       end
     end
 
-    it "accepts an unknown key without looking it up" do
-      allow(APIKey).to receive(:find_active_by_secret)
-
+    it "accepts an unknown key with a notice that it will be rejected in future" do
       get path, headers: unknown_key_header
 
       expect(response).to have_http_status(:ok)
       expect(response.headers["WWW-Authenticate"]).to be_nil
-      expect(APIKey).not_to have_received(:find_active_by_secret)
+      expect(response.headers["API-Auth-Notice"]).to include("will be rejected with 401 in future")
+      expect(response.headers["Link"]).to eq(%(<#{Settings.api_url}/docs/authentication.html>; rel="deprecation"))
     end
 
-    it "does not record use of a valid key" do
+    it "gives the same notice for malformed and empty headers" do
+      ["", "Bearer ", "Basic legacy-credentials", secret].each do |value|
+        get path, headers: { "Authorization" => value }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.headers["API-Auth-Notice"]).to be_present
+      end
+    end
+
+    it "sends no notice without an Authorization header" do
+      get path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["API-Auth-Notice"]).to be_nil
+      expect(response.headers["Link"]).to be_nil
+    end
+
+    it "sends no notice for a valid key, and does not record its use" do
       api_key = create(:api_key, last_used_at: 1.day.ago)
 
       expect { get path, headers: bearer(api_key.secret) }.not_to(change { api_key.reload.last_used_at })
 
       expect(response).to have_http_status(:ok)
+      expect(response.headers["API-Auth-Notice"]).to be_nil
+      expect(response.headers["Link"]).to be_nil
     end
 
-    it "accepts a revoked key without recording use" do
+    it "accepts a revoked key with a notice, without recording use" do
       api_key = create(:api_key)
       api_key.revoke!
 
       get path, headers: bearer(api_key.secret)
 
       expect(response).to have_http_status(:ok)
+      expect(response.headers["API-Auth-Notice"]).to be_present
       expect(api_key.reload.last_used_at).to be_nil
     end
 
