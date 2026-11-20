@@ -187,25 +187,21 @@ bin/konduit.sh -n bat-qa publish-loadtest -- psql
 
 If a deploy fails with `Error acquiring the state lock` / `state blob is already locked`, a previous plan or apply left a lease on the remote state blob.
 
+You don't need Azure access for this, it all runs in GitHub Actions.
+
 1. Confirm nothing is mid plan/apply for that environment (no in-progress Deploy / Build and Deploy production job / Validate Infra).
-2. Copy the lock **ID** from the failed job log (`Lock Info` → `ID`).
+2. Copy the lock **ID** from the failed job log (`Lock Info` → `ID`). If the error shows no lock ID, leave it blank.
 3. Run the [Force unlock Terraform state](https://github.com/DFE-Digital/publish-teacher-training/actions/workflows/terraform-force-unlock.yml) workflow:
    - Choose the environment
-   - Paste the lock ID
+   - Paste the lock ID (or leave it blank)
    - Type the environment name again in `confirm` (e.g. `production`)
 4. Re-run the failed deploy (or use the Deploy workflow).
 
-If the workflow reports a **stuck lease** (blob leased, but no Terraform lock metadata), `terraform force-unlock` cannot clear it. Break the lease using values from `terraform/aks/workspace_variables/<env>_backend.tfvars`:
+What the workflow reports:
 
-```bash
-az storage blob lease break \
-  --account-name <storage_account_name> \
-  --container-name <container_name> \
-  --blob-name <key> \
-  --auth-mode login
-```
-
-Then re-run the deploy.
+- **unlocked** / **already_unlocked**: you're good, re-run the deploy.
+- **locked**: there's a real Terraform lock and you left the lock ID blank. The log shows the lock's ID, who took it and when. If it's stale, run again with that ID.
+- **stuck_lease**: the state blob is leased but has no Terraform lock on it, so `force-unlock` can't clear it. Run again with `break_stuck_lease` ticked.
 
 The workflow shares the `deploy-or-database-restore-<env>` concurrency group with Deploy, Build and Deploy (including production and sandbox), database restore, and Validate Infra. There is no GitHub Environment approval step on these environments. Do not unlock while a real apply is running.
 
