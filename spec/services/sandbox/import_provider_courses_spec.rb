@@ -427,6 +427,17 @@ RSpec.describe Sandbox::ImportProviderCourses do
         end
       end
 
+      context "when production has a value this environment doesn't know" do
+        let(:partner_details) { super().merge("provider_type" => "new_type") }
+
+        it "skips the partner's courses and imports the rest" do
+          expect { import }.not_to change(Provider, :count)
+
+          expect(import.created).to eq(%w[RX41])
+          expect(reports.fetch("1KQ").skipped).to eq(["2HW2: couldn't create provider 1KQ: 'new_type' is not a valid provider_type"])
+        end
+      end
+
       context "when not confirmed" do
         let(:confirm) { false }
 
