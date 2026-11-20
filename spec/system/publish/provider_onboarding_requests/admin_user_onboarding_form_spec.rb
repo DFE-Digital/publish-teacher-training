@@ -51,6 +51,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
 
   def then_i_see_the_completed_form_fields
     expect(page).to have_field("Provider name", with: onboarding_request.provider_name)
+    expect(page).to have_field("Accredited provider number", visible: :all)
     expect(page).to have_field("UK provider reference number (UKPRN)", with: onboarding_request.ukprn)
     expect(page).to have_checked_field("School")
     expect(page).to have_field("Unique reference number (URN)", with: onboarding_request.urn)

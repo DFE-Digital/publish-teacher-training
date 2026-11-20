@@ -128,11 +128,28 @@ module Publish
 
     # Strong params for provider onboarding form submission
     def onboarding_request_params
-      params.require(:providers_onboarding_form_request).permit(
-        :provider_name, :email_address, :first_name, :last_name,
-        :address_line_1, :address_line_2, :address_line_3, :town_or_city, :county, :postcode, :telephone, :contact_email_address,
-        :website, :ukprn, :accredited_provider, :accredited_provider_number, :provider_type, :urn
-      )
+      permitted = %i[
+        provider_name
+        email_address
+        first_name
+        last_name
+        address_line_1
+        address_line_2
+        address_line_3
+        town_or_city
+        county
+        postcode
+        telephone
+        contact_email_address
+        website
+        ukprn
+        accredited_provider
+        provider_type
+        urn
+      ]
+      permitted << :accredited_provider_number if admin_user?
+
+      params.require(:providers_onboarding_form_request).permit(permitted)
     end
   end
 end

@@ -48,11 +48,13 @@
         text: t(".accredited_provider_hint_html"),
 }, id: "providers-onboarding-form-request-accredited-provider-field-error" do %>
         <%= f.govuk_radio_button :accredited_provider, true, label: { text: "Yes" }, disabled: !can_edit do %>
-          <%= f.govuk_text_field :accredited_provider_number,
-            label: { text: t(".accredited_provider_number"), size: "s" },
-            hint: { text: t(".accredited_provider_number_hint") },
-            width: 10,
-            disabled: !can_edit %>
+          <% if admin_user? %>
+            <%= f.govuk_text_field :accredited_provider_number,
+              label: { text: t(".accredited_provider_number"), size: "s" },
+              hint: { text: t(".accredited_provider_number_hint") },
+              width: 10,
+              disabled: !can_edit %>
+          <% end %>
         <% end %>
         <%= f.govuk_radio_button :accredited_provider, false, label: { text: "No" }, disabled: !can_edit %>
       <% end %>
