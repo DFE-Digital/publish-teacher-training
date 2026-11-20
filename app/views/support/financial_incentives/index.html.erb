@@ -4,28 +4,48 @@
   <%= govuk_back_link_to(support_settings_path) %>
 <% end %>
 
-<h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t(".page_title") %></h1>
 
-<p class="govuk-body"><%= t(".intro") %></p>
+    <p class="govuk-body">
+      <strong>
+        <%= t(
+              ".intro_lead_html",
+              feature_flag_link: govuk_link_to(
+                t(".feature_flag_link_text"),
+                support_feature_flags_path,
+              ),
+            ) %>
+      </strong>
+    </p>
 
-<ul class="govuk-list govuk-list--spaced">
-  <% @years.each do |year| %>
-    <li>
-      <%= govuk_link_to(
-            financial_incentive_year_label(year),
-            year_support_financial_incentives_path(year),
-          ) %>
-      <% if financial_incentive_year_published?(year) %>
-        <%= govuk_tag(text: t(".published_tag"), colour: "green") %>
+    <p class="govuk-body"><%= t(".intro_published") %></p>
+
+    <p class="govuk-body"><%= t(".intro_deactivated") %></p>
+
+    <h2 class="govuk-heading-m"><%= t(".recruitment_cycles") %></h2>
+
+    <ul class="govuk-list govuk-list--spaced">
+      <% @years.each do |year| %>
+        <li>
+          <%= govuk_link_to(
+                financial_incentive_year_label(year),
+                year_support_financial_incentives_path(year),
+              ) %>
+          <% if financial_incentive_year_published?(year) %>
+            <%= govuk_tag(text: t(".published_tag"), colour: "green") %>
+          <% end %>
+        </li>
       <% end %>
-    </li>
-  <% end %>
-</ul>
+    </ul>
 
-<% if @create_year.present? %>
-  <%= govuk_button_to(
-        t(".create", year_range: Find::CycleTimetable.cycle_year_range(@create_year)),
-        create_year_support_financial_incentives_path(year: @create_year),
-        method: :post,
-      ) %>
-<% end %>
+    <% if @create_year.present? %>
+      <%= govuk_button_to(
+            t(".create", year_range: Find::CycleTimetable.cycle_year_range(@create_year)),
+            create_year_support_financial_incentives_path(year: @create_year),
+            method: :post,
+          ) %>
+    <% end %>
+  </div>
+</div>

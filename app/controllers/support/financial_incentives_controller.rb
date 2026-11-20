@@ -19,7 +19,14 @@ module Support
     end
 
     def create_year
-      redirect_to_year(success: t(".success", count: created_year_count, year:))
+      ::FinancialIncentives::CreateYearService.call(year:)
+
+      redirect_to_year(
+        success: t(
+          ".success",
+          year_range: Find::CycleTimetable.cycle_year_range(year),
+        ),
+      )
     rescue ::FinancialIncentives::CreateYearService::YearAlreadyExistsError
       redirect_to_year(warning: t(".already_exists", year:))
     end
@@ -130,16 +137,12 @@ module Support
     end
 
     def landing_years
-      (existing_years + [FinancialIncentive.current_year]).compact.uniq.sort.reverse
+      (existing_years + [FinancialIncentive.current_year]).compact.uniq.sort
     end
 
     def create_target_year
       year = Find::CycleTimetable.next_year
       year unless FinancialIncentive.for_year(year).exists?
-    end
-
-    def created_year_count
-      @created_year_count ||= ::FinancialIncentives::CreateYearService.call(year:)
     end
 
     def created_missing_count

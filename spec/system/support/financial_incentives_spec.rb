@@ -120,7 +120,10 @@ private
   def then_i_see_the_financial_incentives_landing_page
     expect(page).to have_current_path(support_financial_incentives_path)
     expect(page).to have_css("h1", text: "Financial incentives")
-    expect(page).to have_content("bursaries and scholarships feature flag")
+    expect(page).to have_css("h2", text: "Recruitment cycles")
+    expect(page).to have_link("financial incentives feature flag", href: support_feature_flags_path)
+    expect(page).to have_content("recruitment cycle marked as 'Published'")
+    expect(page).to have_content("If the feature flag is deactivated")
   end
 
   def and_i_see_the_current_year_link
@@ -136,7 +139,10 @@ private
   end
 
   def then_financial_incentives_are_created_for_all_active_subjects
-    expect(page).to have_content("financial incentives for #{next_year} created")
+    expect(page).to have_content(
+      "Financial incentives created for the #{next_year_range} recruitment cycle. " \
+      "The financial incentives from the previous recruitment cycle have been copied to this cycle.",
+    )
     expect(page).to have_no_content("translation missing")
     expect(FinancialIncentive.for_year(next_year).where(subject: Subject.active).count).to eq(Subject.active.count)
   end
