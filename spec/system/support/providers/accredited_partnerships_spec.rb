@@ -61,8 +61,14 @@ RSpec.describe "Accredited partnership flow" do
   scenario "i cannot delete accredited partnerships attached to a course" do
     and_my_provider_has_accrediting_providers
     and_i_click_on_the_accredited_provider_tab
-    and_i_click_remove
+    and_i_click_view_accredited_provider
+    then_i_am_on_the_publish_accredited_provider_page(@course.accrediting_provider)
+
+    when_i_click_remove_accredited_provider
     then_i_see_the_cannot_remove_text
+
+    when_i_click_cancel
+    then_i_return_to_the_index_page
   end
 
   scenario "i can delete accredited partnerships not attached to a course" do
@@ -71,24 +77,66 @@ RSpec.describe "Accredited partnership flow" do
     and_i_search_for_an_accredited_provider_with_a_valid_query
     and_i_select_the_provider
     and_i_confirm_the_changes
-    and_i_click_remove
-    and_i_click_remove_ap
+    and_i_click_view_accredited_provider
+    then_i_am_on_the_publish_accredited_provider_page(@accredited_provider)
+
+    when_i_click_remove_accredited_provider
+    and_i_click_remove_accredited_provider
     then_i_return_to_the_index_page
     and_i_see_the_remove_success_message
+    and_the_accredited_partnership_is_removed
+  end
+
+  scenario "i can go back to the Support console from the Publish accredited provider page" do
+    and_my_provider_has_accrediting_providers
+    and_i_click_on_the_accredited_provider_tab
+    and_i_click_view_accredited_provider
+    when_i_click_the_back_link
+    then_i_return_to_the_index_page
   end
 
 private
 
   def and_i_see_the_remove_success_message
     expect(page).to have_content("Accredited provider removed")
+    expect(page).to have_content(@accredited_provider.provider_name)
   end
 
   def and_i_see_the_create_success_message
     expect(page).to have_content("Accredited provider added")
   end
 
-  def and_i_click_remove_ap
+  def and_i_click_remove_accredited_provider
     click_link_or_button "Remove accredited provider"
+  end
+  alias_method :when_i_click_remove_accredited_provider, :and_i_click_remove_accredited_provider
+
+  def and_i_click_view_accredited_provider
+    click_link_or_button "View accredited provider"
+  end
+
+  def when_i_click_cancel
+    click_link_or_button "Cancel"
+  end
+
+  def when_i_click_the_back_link
+    click_link_or_button "Back"
+  end
+
+  def then_i_am_on_the_publish_accredited_provider_page(accredited_provider)
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_accredited_partnership_path(
+        @provider.provider_code,
+        @provider.recruitment_cycle_year,
+        accredited_provider.provider_code,
+        return_to: "support",
+      ),
+    )
+    expect(page).to have_css("h1", text: accredited_provider.provider_name)
+  end
+
+  def and_the_accredited_partnership_is_removed
+    expect(@provider.reload.accredited_partners).to be_empty
   end
 
   def and_i_confirm_the_changes
@@ -145,7 +193,7 @@ private
   alias_method :then_i_still_see_the_provider_i_searched_for, :then_i_see_the_provider_i_searched_for
 
   def when_i_click_add_accredited_provider_in_publish
-    click_link_or_button "Add accredited provider in Publish"
+    click_link_or_button "Add accredited provider on Publish"
   end
   alias_method :and_i_click_add_accredited_provider_in_publish, :when_i_click_add_accredited_provider_in_publish
 
@@ -157,10 +205,6 @@ private
         return_to: "support",
       ),
     )
-  end
-
-  def and_i_click_remove
-    click_link_or_button "Remove"
   end
 
   def then_i_see_the_cannot_remove_text
@@ -223,14 +267,19 @@ private
   end
 
   def then_i_see_the_accredited_provider_name_displayed
-    expect(page).to have_css(
-      "h2.govuk-summary-card__title a.govuk-link",
-      text: "Accrediting provider name",
+    name_and_code = @course.accrediting_provider.name_and_code
+
+    expect(page).to have_table(
+      with_rows: [
+        { "Name" => name_and_code, "View in Publish" => "View accredited provider #{name_and_code}" },
+      ],
     )
+    expect(page).to have_link(name_and_code)
+    expect(page).to have_link("View accredited provider #{name_and_code}")
   end
 
   def when_i_click_the_accredited_provider_link
-    page.click_link_or_button @course.accrediting_provider.provider_name
+    page.click_link_or_button @course.accrediting_provider.name_and_code
   end
 
   def then_i_am_on_the_accredited_providers_page
