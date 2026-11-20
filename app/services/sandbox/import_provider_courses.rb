@@ -22,6 +22,8 @@ module Sandbox
     # as a value one of its enums doesn't have.
     PROVIDER_ERRORS = [ActiveRecord::RecordInvalid, ArgumentError].freeze
 
+    CONTACT_FIELDS = %i[email telephone].freeze
+
     def initialize(provider_code:, year:, confirm: false, client: PublishPublicAPI::Client.new, out: $stdout)
       @provider_code = provider_code
       @year = year
@@ -94,6 +96,16 @@ module Sandbox
       @reports[partner_code].provider_status = status
     end
 
+    # Production can hold contact details this environment's validators reject,
+    # such as a blank telephone. They're optional, so they're left out rather
+    # than losing the partner's courses. Returns the fields left out.
+    def leave_out_invalid_contact_details(partner)
+      partner.validate
+      invalid = CONTACT_FIELDS.select { |field| partner.errors.include?(field) }
+      invalid.each { |field| partner[field] = nil }
+      invalid
+    end
+
     def skip_partner(partner_code, prod_courses, reason)
       report = @reports[partner_code] = ImportReport.new
       prod_courses.map(&:first).each { |prod_course| report.skipped << "#{prod_course.dig('attributes', 'code')}: #{reason}" }
@@ -109,7 +121,8 @@ module Sandbox
       status = if partner.new_record?
                  partner.assign_attributes(ProviderAttributesMapper.new(details).attributes)
                  partner.skip_geocoding = true # production's latitude and longitude are copied
-                 "created"
+                 left_out = leave_out_invalid_contact_details(partner)
+                 ["created", ("left out invalid #{left_out.join(', ')}" if left_out.any?)].compact.join(", ")
                elsif partner.discarded?
                  partner.discarded_at = nil
                  "restored"

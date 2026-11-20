@@ -427,6 +427,18 @@ RSpec.describe Sandbox::ImportProviderCourses do
         end
       end
 
+      context "when production's contact details aren't valid here" do
+        let(:partner_details) { super().merge("email" => "not an email", "telephone" => "") }
+
+        it "creates it without them and says so" do
+          import
+
+          expect(created_partner).to have_attributes(email: nil, telephone: nil, provider_name: "Wade Deacon Trust")
+          expect(created_partner.courses.sole.course_code).to eq("2HW2")
+          expect(reports.fetch("1KQ").provider_status).to eq("created, left out invalid email, telephone")
+        end
+      end
+
       context "when production has a value this environment doesn't know" do
         let(:partner_details) { super().merge("provider_type" => "new_type") }
 
