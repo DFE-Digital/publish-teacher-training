@@ -17,13 +17,18 @@ on:
           - sandbox
           - production
       lock_id:
-        description: Lock ID from the Terraform error (Lock Info → ID)
-        required: true
+        description: Lock ID from the Terraform error (Lock Info → ID). Leave blank if the error shows no lock ID.
+        required: false
         type: string
       confirm:
         description: Type the environment name again to confirm (e.g. production)
         required: true
         type: string
+      break_stuck_lease:
+        description: Break the state blob lease if it is held with no Terraform lock on it
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -39,7 +44,7 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     steps:
-      - name: Confirm environment name
+      - name: Validate inputs
         env:
           CONFIRM: ${{ inputs.confirm }}
           LOCK_ID_INPUT: ${{ inputs.lock_id }}
@@ -50,7 +55,7 @@ jobs:
             exit 1
           fi
 
-          if [[ ! "$LOCK_ID_INPUT" =~ ^[0-9a-fA-F-]{36}$ ]]; then
+          if [ -n "$LOCK_ID_INPUT" ] && [[ ! "$LOCK_ID_INPUT" =~ ^[0-9a-fA-F-]{36}$ ]]; then
             echo "::error::lock_id does not look like a Terraform lock UUID"
             exit 1
           fi
@@ -61,11 +66,13 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Resolve Terraform version
+        if: env.LOCK_ID != ''
         run: |
           terraform_version=$(awk '/{/{f=/^terraform/;next}f' terraform/aks/providers.tf | grep -o '[0-9\.]*')
           echo "TERRAFORM_VERSION=$terraform_version" >> "$GITHUB_ENV"
 
       - name: Setup Terraform ${{ env.TERRAFORM_VERSION }}
+        if: env.LOCK_ID != ''
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
@@ -78,17 +85,20 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
 
       - uses: google-github-actions/auth@v3
+        if: env.LOCK_ID != ''
         with:
           project_id: rugged-abacus-218110
           workload_identity_provider: projects/712009772377/locations/global/workloadIdentityPools/publish-teacher-training/providers/publish-teacher-training
 
       - name: Initialise Terraform backend
+        if: env.LOCK_ID != ''
         run: make ci ${{ inputs.environment }} deploy-init
         env:
           IMAGE_TAG: main
 
       - name: Force unlock state
         id: unlock
+        if: env.LOCK_ID != ''
         env:
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
@@ -110,49 +120,12 @@ jobs:
             exit 0
           fi
 
-          # Empty terraformlockid metadata can mean either "not locked" or a stuck
-          # blob lease with no lock metadata. force-unlock cannot clear the latter.
+          # Empty terraformlockid metadata means either "not locked" or a blob
+          # lease with no lock on it. The next step checks the lease to tell.
           if echo "$output" | grep -qiE 'terraformlockid[" ]*was empty|blob metadata.*terraformlockid'; then
-            backend_file="terraform/aks/workspace_variables/${ENVIRONMENT}_backend.tfvars"
-            storage_account=$(awk -F'"' '/storage_account_name/{print $2; exit}' "$backend_file")
-            container_name=$(awk -F'"' '/container_name/{print $2; exit}' "$backend_file")
-            blob_name=$(awk -F'"' '/^[[:space:]]*key[[:space:]]*=/{print $2; exit}' "$backend_file")
-
-            set +e
-            lease_state=$(az storage blob show \
-              --account-name "$storage_account" \
-              --container-name "$container_name" \
-              --name "$blob_name" \
-              --auth-mode login \
-              --query "properties.lease.state" -o tsv 2>&1)
-            az_code=$?
-            set -e
-
-            if [ "$az_code" -ne 0 ]; then
-              echo "::error::Could not read state blob lease state: $lease_state"
-              echo "result=failed" >> "$GITHUB_OUTPUT"
-              exit 1
-            fi
-
-            echo "State blob lease.state=${lease_state}"
-
-            case "$lease_state" in
-              available|expired|broken)
-                echo "result=already_unlocked" >> "$GITHUB_OUTPUT"
-                echo "State was already unlocked for ${ENVIRONMENT} (no active lease)"
-                exit 0
-                ;;
-              leased|breaking)
-                echo "::error::State blob has a ${lease_state} lease but no Terraform lock metadata. force-unlock cannot clear it — break the lease (see aks-cheatsheet Stuck Terraform state lock), then re-run the deploy."
-                echo "result=stuck_lease" >> "$GITHUB_OUTPUT"
-                exit 1
-                ;;
-              *)
-                echo "::error::Unexpected state blob lease.state '${lease_state}'"
-                echo "result=failed" >> "$GITHUB_OUTPUT"
-                exit 1
-                ;;
-            esac
+            echo "result=check_lease" >> "$GITHUB_OUTPUT"
+            echo "No Terraform lock metadata on the state blob, checking the blob lease"
+            exit 0
           fi
 
           if echo "$output" | grep -qiE 'does not match existing lock|lock id .* does not match'; then
@@ -165,8 +138,120 @@ jobs:
           echo "result=failed" >> "$GITHUB_OUTPUT"
           exit "$code"
 
+      # Uses the storage account key (looked up with the deploy identity, the
+      # same way the Terraform backend does) so no blob data RBAC role is needed.
+      - name: Check state blob lease
+        id: lease
+        if: env.LOCK_ID == '' || steps.unlock.outputs.result == 'check_lease'
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          BREAK_STUCK_LEASE: ${{ inputs.break_stuck_lease }}
+        run: |
+          finish() {
+            echo "result=$1" >> "$GITHUB_OUTPUT"
+            exit "$2"
+          }
+
+          backend_file="terraform/aks/workspace_variables/${ENVIRONMENT}_backend.tfvars"
+          tfvar() { awk -F'"' -v name="$1" '$0 ~ "^[[:space:]]*" name "[[:space:]]*=" {print $2; exit}' "$backend_file"; }
+          resource_group=$(tfvar resource_group_name)
+          export AZURE_STORAGE_ACCOUNT=$(tfvar storage_account_name)
+          container_name=$(tfvar container_name)
+          blob_name=$(tfvar key)
+
+          set +e
+          AZURE_STORAGE_KEY=$(az storage account keys list \
+            --resource-group "$resource_group" \
+            --account-name "$AZURE_STORAGE_ACCOUNT" \
+            --query "[0].value" -o tsv)
+          az_code=$?
+          set -e
+          if [ "$az_code" -ne 0 ] || [ -z "$AZURE_STORAGE_KEY" ]; then
+            echo "::error::Could not read the state storage account key"
+            finish failed 1
+          fi
+          echo "::add-mask::$AZURE_STORAGE_KEY"
+          export AZURE_STORAGE_KEY
+
+          blob_status() {
+            az storage blob show \
+              --container-name "$container_name" \
+              --name "$blob_name" \
+              --query "{lease: properties.lease.state, lock: metadata.terraformlockid}" -o json
+          }
+
+          set +e
+          status=$(blob_status)
+          az_code=$?
+          set -e
+          if [ "$az_code" -ne 0 ]; then
+            echo "::error::Could not read the state blob"
+            finish failed 1
+          fi
+
+          lease_state=$(jq -r '.lease // ""' <<< "$status")
+          lock_meta=$(jq -r '.lock // ""' <<< "$status")
+          echo "State blob lease state: ${lease_state}"
+
+          case "$lease_state" in
+            available|expired|broken)
+              echo "State was already unlocked for ${ENVIRONMENT} (no active lease)"
+              finish already_unlocked 0
+              ;;
+            leased|breaking)
+              ;;
+            *)
+              echo "::error::Unexpected state blob lease state '${lease_state}'"
+              finish failed 1
+              ;;
+          esac
+
+          if [ -n "$lock_meta" ]; then
+            echo "State is locked by Terraform:"
+            base64 -d <<< "$lock_meta" 2>/dev/null \
+              | jq -r '"  ID: \(.ID)\n  Operation: \(.Operation)\n  Who: \(.Who)\n  Created: \(.Created)"' 2>/dev/null \
+              || echo "  (could not decode lock info)"
+            echo "::error::State has a Terraform lock. Re-run with the lock ID shown above (check it is stale first)."
+            finish locked 1
+          fi
+
+          if [ "$BREAK_STUCK_LEASE" != "true" ]; then
+            echo "::error::State blob has a ${lease_state} lease but no Terraform lock on it, so force-unlock cannot clear it. Re-run with break_stuck_lease ticked to break the lease."
+            finish stuck_lease 1
+          fi
+
+          echo "Breaking ${lease_state} lease on ${container_name}/${blob_name}"
+          set +e
+          az storage blob lease break \
+            --container-name "$container_name" \
+            --blob-name "$blob_name" \
+            --lease-break-period 0 -o none
+          az_code=$?
+          set -e
+          if [ "$az_code" -ne 0 ]; then
+            echo "::error::Could not break the state blob lease"
+            finish failed 1
+          fi
+
+          set +e
+          status=$(blob_status)
+          az_code=$?
+          set -e
+          lease_state=$(jq -r '.lease // ""' <<< "$status")
+          echo "State blob lease state after break: ${lease_state}"
+          if [ "$az_code" -ne 0 ] || [ "$lease_state" = "leased" ]; then
+            echo "::error::Could not confirm the state blob lease was released"
+            finish failed 1
+          fi
+
+          finish lease_broken 0
+
       - name: Notify teams channel
-        if: always() && (steps.unlock.conclusion == 'success' || steps.unlock.conclusion == 'failure')
+        if: >-
+          always() && (
+            steps.unlock.conclusion == 'success' || steps.unlock.conclusion == 'failure' ||
+            steps.lease.conclusion == 'success' || steps.lease.conclusion == 'failure'
+          )
         uses: DFE-Digital/github-actions/send-to-teams-channel@master
         with:
           teams-webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
@@ -175,6 +260,7 @@ jobs:
           message: |
             Actor: ${{ github.actor }}
             Environment: ${{ inputs.environment }}
-            Lock ID: ${{ inputs.lock_id }}
-            Result: ${{ steps.unlock.outputs.result || 'failed' }}
+            Lock ID: ${{ inputs.lock_id || 'none given' }}
+            Break stuck lease: ${{ inputs.break_stuck_lease }}
+            Result: ${{ steps.lease.outputs.result || steps.unlock.outputs.result || 'failed' }}
             Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
