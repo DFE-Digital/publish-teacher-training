@@ -77,6 +77,99 @@ RSpec.describe PublishPublicAPI::Client do
     end
   end
 
+  describe "#accredited_courses" do
+    let(:cycle_courses_url) { "https://publish.test/api/public/v1/recruitment_cycles/2027/courses" }
+
+    def cycle_course(code, provider_id:, accredited_body_code:)
+      {
+        "id" => code.downcase,
+        "type" => "courses",
+        "attributes" => { "code" => code, "accredited_body_code" => accredited_body_code },
+        "relationships" => { "provider" => { "data" => { "type" => "providers", "id" => provider_id } } },
+      }
+    end
+
+    def provider(id, code)
+      { "id" => id, "type" => "providers", "attributes" => { "code" => code } }
+    end
+
+    def cycle_page(courses, providers, count:, year: 2027)
+      {
+        "data" => courses,
+        "included" => [*providers, { "id" => "73", "type" => "recruitment_cycles", "attributes" => { "year" => year } }],
+        "meta" => { "count" => count },
+      }.to_json
+    end
+
+    def stub_cycle_page(page, body)
+      stub_request(:get, cycle_courses_url)
+        .with(query: { "filter" => { "findable" => "true" }, "include" => "provider,recruitment_cycle", "page" => page.to_s, "per_page" => "500" })
+        .to_return(status: 200, body:, headers: { "Content-Type" => "application/json" })
+    end
+
+    it "groups the findable courses the provider accredits by the provider that runs them" do
+      stub_cycle_page(1, cycle_page(
+                           [
+                             cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55"),
+                             cycle_course("37L2", provider_id: "2", accredited_body_code: "C55"),
+                             cycle_course("2684", provider_id: "1", accredited_body_code: "C55"),
+                           ],
+                           [provider("1", "1KQ"), provider("2", "1HQ")],
+                           count: 3,
+                         ))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.transform_values { |list| list.map { |c| c.dig("attributes", "code") } })
+        .to eq("1KQ" => %w[2HW2 2684], "1HQ" => %w[37L2])
+    end
+
+    it "leaves out courses accredited by someone else and the provider's own courses" do
+      stub_cycle_page(1, cycle_page(
+                           [
+                             cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55"),
+                             cycle_course("X100", provider_id: "1", accredited_body_code: "A01"),
+                             cycle_course("RX41", provider_id: "3", accredited_body_code: "C55"),
+                           ],
+                           [provider("1", "1KQ"), provider("3", "C55")],
+                           count: 3,
+                         ))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.transform_values { |list| list.map { |c| c.dig("attributes", "code") } }).to eq("1KQ" => %w[2HW2])
+    end
+
+    it "follows pages until it has every course" do
+      stub_cycle_page(1, cycle_page([cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55")], [provider("1", "1KQ")], count: 2))
+      stub_cycle_page(2, cycle_page([cycle_course("37L2", provider_id: "2", accredited_body_code: "C55")], [provider("2", "1HQ")], count: 2))
+
+      courses = client.accredited_courses(year: 2027, accredited_provider_code: "C55")
+
+      expect(courses.keys).to eq(%w[1KQ 1HQ])
+    end
+
+    it "raises when the API answers with a different cycle" do
+      stub_cycle_page(1, cycle_page([cycle_course("2HW2", provider_id: "1", accredited_body_code: "C55")], [provider("1", "1KQ")], count: 1, year: 2026))
+
+      expect { client.accredited_courses(year: 2027, accredited_provider_code: "C55") }
+        .to raise_error(PublishPublicAPI::Client::Error, /2026/)
+    end
+  end
+
+  describe "#provider" do
+    it "returns the provider's details" do
+      stub_request(:get, "https://publish.test/api/public/v1/recruitment_cycles/2027/providers/1KQ")
+        .to_return(
+          status: 200,
+          body: { "data" => { "id" => "22944", "type" => "providers", "attributes" => { "code" => "1KQ", "name" => "Wade Deacon Trust" } } }.to_json,
+          headers: { "Content-Type" => "application/json" },
+        )
+
+      expect(client.provider(year: 2027, provider_code: "1KQ")).to eq("code" => "1KQ", "name" => "Wade Deacon Trust")
+    end
+  end
+
   describe "#course_locations" do
     let(:location) { { "id" => "740039", "attributes" => { "code" => "-", "urn" => "133802" } } }
 
