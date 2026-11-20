@@ -11,6 +11,23 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
     # Unconditional validations (when support agent generates the form request)
     it { is_expected.to validate_presence_of(:form_name) }
     it { is_expected.to belong_to(:support_agent).class_name("User").optional }
+    it { is_expected.to belong_to(:provider).optional }
+
+    it "requires a provider when the request has been onboarded" do
+      request = build(:providers_onboarding_form_request, status: "onboarded")
+
+      expect(request).not_to be_valid
+      expect(request.errors[:provider]).to be_present
+    end
+
+    it "shows support labels without changing the stored status" do
+      expect(build(:providers_onboarding_form_request, status: "pending").status_label).to eq("Sent")
+      expect(build(:providers_onboarding_form_request, status: "submitted").status_label).to eq("Ready for review")
+      expect(build(:providers_onboarding_form_request, status: "closed").status_label).to eq("Onboarded")
+      expect(build(:providers_onboarding_form_request, status: "rejected").status_label).to eq("Rejected")
+      expect(build(:providers_onboarding_form_request, status: "expired").status_label).to eq("Expired")
+      expect(build(:providers_onboarding_form_request, status: "onboarded").status_label).to eq("Onboarded")
+    end
 
     it "raises an error when status is not in the enum keys" do
       expect {
@@ -140,6 +157,51 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
           expect(record).to be_valid
         end
 
+        it "accepts an accredited university without a URN" do
+          university = build(
+            :providers_onboarding_form_request,
+            :ready_to_onboard,
+            accredited_provider: true,
+            provider_type: "university",
+            accredited_provider_number: "1234",
+            urn: nil,
+          )
+
+          expect(university).to be_valid
+        end
+
+        it "allows a blank accredited provider number" do
+          request = build(
+            :providers_onboarding_form_request,
+            :ready_to_onboard,
+            accredited_provider: true,
+            provider_type: "university",
+            accredited_provider_number: nil,
+            urn: nil,
+          )
+
+          expect(request).to be_valid
+        end
+
+        it "rejects a university accredited provider number that does not start with 1" do
+          record.provider_type = "university"
+          record.accredited_provider = true
+          record.accredited_provider_number = "5678"
+
+          expect(record).not_to be_valid
+          expect(record.errors[:accredited_provider_number]).to include(
+            "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
+          )
+        end
+
+        it "rejects an accredited school" do
+          record.accredited_provider = true
+          record.accredited_provider_number = "1234"
+
+          expect(record).not_to be_valid
+          expect(record.errors[:provider_type]).to include("Accredited provider cannot be a school")
+        end
+
         it "accepts a valid provider website URL" do
           record.website = "https://www.provider.org"
           expect(record).to be_valid
@@ -184,6 +246,22 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
       expect(record).not_to be_valid
       expect(record.errors[:provider_name]).to include("Enter your organisation name")
       expect(record.errors[:postcode]).to be_present
+    end
+  end
+
+  describe "#submit" do
+    it "marks a pending request as submitted" do
+      request = create(:providers_onboarding_form_request, :ready_to_onboard, status: "pending")
+
+      expect(request.submit).to be true
+      expect(request.reload).to be_submitted
+    end
+
+    it "leaves a request that is already submitted as submitted" do
+      request = create(:providers_onboarding_form_request, :ready_to_onboard)
+
+      expect(request.submit).to be true
+      expect(request.reload).to be_submitted
     end
   end
 
