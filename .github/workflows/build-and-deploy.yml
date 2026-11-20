@@ -302,6 +302,9 @@ jobs:
 
   deploy-aks-production:
     name: Production deployment
+    concurrency:
+      group: deploy-or-database-restore-production
+      cancel-in-progress: false
     environment:
       name: production
       url: ${{ steps.deploy_app.outputs.deploy-url }}
@@ -325,6 +328,9 @@ jobs:
 
   deploy-aks-sandbox:
     name: Sandbox deployment
+    concurrency:
+      group: deploy-or-database-restore-sandbox
+      cancel-in-progress: false
     environment:
       name: sandbox
       url: ${{ steps.deploy_sandbox.outputs.deploy-url }}
