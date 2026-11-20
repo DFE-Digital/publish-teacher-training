@@ -125,7 +125,7 @@
     <% row.with_value { @onboarding_request.last_name } %>
   <% end %>
 <% end %>
-<% unless already_onboarded? %>
+<% unless @onboarding_request.already_onboarded? || @onboarding_request.rejected? %>
   <p class="govuk-body"><%= t(".onboard_explanation_html") %></p>
   <p class="govuk-body"><%= t(".reject_explanation_html") %></p>
   <div class="govuk-button-group" id="onboard-provider">
