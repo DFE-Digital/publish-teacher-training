@@ -81,6 +81,11 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     provider_type == "lead_school"
   end
 
+  # Closed is the status stored for requests onboarded before a provider was created here.
+  def already_onboarded?
+    onboarded? || closed? || provider_id.present?
+  end
+
   # The form allows a blank accredited provider number. Onboarding does not, so
   # the support error-summary link asks the form to show that failure on the field.
   def add_accredited_provider_number_onboarding_error
