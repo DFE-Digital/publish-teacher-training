@@ -82,19 +82,27 @@ module Sandbox
 
     # Only the partner's courses the provider accredits are in scope.
     def import_partner(provider, partner_code, prod_courses, details)
-      partner, status = find_or_create_partner(provider.recruitment_cycle, partner_code, details)
+      begin
+        partner, status = find_or_create_partner(provider.recruitment_cycle, partner_code, details)
+      rescue *PROVIDER_ERRORS => e
+        # Only partners never here have production's details fetched.
+        action = details ? "create" : "restore"
+        return skip_partner(partner_code, prod_courses, "couldn't #{action} provider #{partner_code}: #{e.message}")
+      end
 
       import_provider(partner, prod_courses, partner.courses.where(accredited_provider_code: provider.provider_code))
       @reports[partner_code].provider_status = status
-    rescue *PROVIDER_ERRORS => e
+    end
+
+    def skip_partner(partner_code, prod_courses, reason)
       report = @reports[partner_code] = ImportReport.new
-      prod_courses.map(&:first).each do |prod_course|
-        report.skipped << "#{prod_course.dig('attributes', 'code')}: couldn't create provider #{partner_code}: #{e.message}"
-      end
+      prod_courses.map(&:first).each { |prod_course| report.skipped << "#{prod_course.dig('attributes', 'code')}: #{reason}" }
     end
 
     # A partner missing here is created empty: production's details, with no
-    # users, contacts or organisation. A deleted one is restored.
+    # users, contacts or organisation. A deleted one is restored; deleting it
+    # deleted its courses and sites too, and only the courses in scope come
+    # back, as the import restores them.
     def find_or_create_partner(recruitment_cycle, partner_code, details)
       partner = Provider.with_discarded.find_or_initialize_by(recruitment_cycle:, provider_code: partner_code)
 
