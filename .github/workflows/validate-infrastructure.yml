@@ -9,6 +9,9 @@ jobs:
   validate:
     name: ${{ matrix.display }}
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-or-database-restore-production
+      cancel-in-progress: false
     environment: production
     permissions:
       id-token: write
