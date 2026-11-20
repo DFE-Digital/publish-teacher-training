@@ -1,6 +1,6 @@
+@use "../settings" as *;
 // Loads the GOV.UK Frontend CSS so this file can @extend its selectors.
 @use "govuk-frontend/dist/govuk";
-@use "../settings" as *;
 
 .app-callout {
   @extend .govuk-inset-text;
