@@ -10,3 +10,12 @@ en:
         never_signed_in: "Never signed in"
         managing_users_heading: "Managing users"
         managing_users_body: "You can click 'Remove user' to remove those who no longer work at your organisation, or need access to Publish."
+      delete:
+        title_yourself: "Are you sure you want to be removed from %{provider_name}?"
+        title_other: "Are you sure you want to remove %{name} from %{provider_name}?"
+        warning_yourself: "You will no longer be able to add or publish courses for %{provider_name}."
+        warning_other: "%{name} will be sent an email to tell them you removed them from %{provider_name}."
+        remove_user: "Remove user"
+      destroy:
+        removed_yourself: "You have been removed from %{provider_name}."
+        removed_other: "%{name} has been removed from %{provider_name}."

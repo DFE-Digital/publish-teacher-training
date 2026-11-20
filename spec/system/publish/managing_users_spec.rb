@@ -120,8 +120,19 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
       given_i_visit_the_publish_users_index_page
       when_i_click_on_user_two
       and_i_click_remove_user
-      and_i_confirm
+      then_i_am_asked_to_confirm_removing_user_two
+      when_i_confirm
       then_the_user_should_be_deleted
+      and_i_am_told_user_two_was_removed
+    end
+
+    scenario "Removing myself" do
+      given_i_belong_to_another_provider
+      when_i_visit_the_publish_users_delete_page_for_myself
+      then_i_am_asked_to_confirm_removing_myself
+      when_i_confirm
+      then_i_am_on_my_remaining_provider
+      and_i_am_told_i_was_removed
     end
 
     scenario "From the users list" do
@@ -361,8 +372,40 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
     publish_users_delete_page.remove_user_button.click
   end
 
+  alias_method :when_i_confirm, :and_i_confirm
+
   def then_the_user_should_be_deleted
-    expect(publish_provider_users_page).to have_no_text "Mr Cool"
+    expect(publish_provider_users_page).to have_no_text @user2.email
+  end
+
+  def then_i_am_asked_to_confirm_removing_user_two
+    expect(page).to have_css("h1", text: "Are you sure you want to remove Mr Cool from #{@provider.provider_name}?")
+    expect(page).to have_text("Mr Cool will be sent an email to tell them you removed them from #{@provider.provider_name}.")
+  end
+
+  def and_i_am_told_user_two_was_removed
+    expect(page).to have_text("Mr Cool has been removed from #{@provider.provider_name}.")
+  end
+
+  def given_i_belong_to_another_provider
+    @other_provider = create(:provider, provider_name: "Robin's Toffee Academy", users: [@user])
+  end
+
+  def when_i_visit_the_publish_users_delete_page_for_myself
+    publish_users_delete_page.load(provider_code: @provider.provider_code, user_id: @user.id)
+  end
+
+  def then_i_am_asked_to_confirm_removing_myself
+    expect(page).to have_css("h1", text: "Are you sure you want to be removed from #{@provider.provider_name}?")
+    expect(page).to have_text("You will no longer be able to add or publish courses for #{@provider.provider_name}.")
+  end
+
+  def then_i_am_on_my_remaining_provider
+    expect(page).to have_current_path(%r{\A/publish/organisations/#{@other_provider.provider_code}})
+  end
+
+  def and_i_am_told_i_was_removed
+    expect(page).to have_text("You have been removed from #{@provider.provider_name}.")
   end
 
   def and_the_new_email_is_displayed
