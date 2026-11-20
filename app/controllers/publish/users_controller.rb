@@ -33,7 +33,7 @@ module Publish
     def create
       @user_form = UserForm.new(current_user, user, params: user_params, provider:)
       if @user_form.stash
-        redirect_to publish_provider_check_user_path(provider_code: params[:provider_code], **user_add_flow_params)
+        redirect_to publish_provider_check_user_path(provider_code: params[:provider_code], **support_return_params)
       else
         render(:new)
       end
@@ -52,7 +52,7 @@ module Publish
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
       flash[:success] = user_removal_success_message
-      redirect_to users_return_path(support_users_list_params_after_removal)
+      redirect_to return_path(support_users_list_params_after_removal)
     end
 
   private
@@ -97,7 +97,7 @@ module Publish
 
     def user_delete_return_path
       if returning_to_support?
-        return users_return_path if params[:from] == "index"
+        return return_path if params[:from] == "index"
 
         support_recruitment_cycle_provider_user_path(
           provider.recruitment_cycle_year,
@@ -140,6 +140,33 @@ module Publish
       return 1 if total.zero?
 
       (total.to_f / Support::Providers::UsersController::USERS_PER_PAGE).ceil
+    end
+
+    def support_flow_params
+      {}.tap do |permitted|
+        if params[:recruitment_cycle_year].present?
+          permitted[:recruitment_cycle_year] = params[:recruitment_cycle_year]
+        end
+      end
+    end
+
+    def support_list_params
+      {}.tap do |permitted|
+        permitted[:page] = params[:page] if params[:page].present?
+        permitted[:sort] = params[:sort] if params[:sort].present?
+      end
+    end
+
+    def support_return_path(**list_params)
+      support_recruitment_cycle_provider_users_path(
+        provider.recruitment_cycle_year,
+        provider,
+        **list_params,
+      )
+    end
+
+    def publish_return_path
+      publish_provider_users_path(params[:provider_code])
     end
   end
 end

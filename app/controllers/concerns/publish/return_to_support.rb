@@ -5,9 +5,9 @@ module Publish
     extend ActiveSupport::Concern
 
     included do
-      helper_method :user_add_flow_params,
-                    :users_return_path,
-                    :returning_to_support?
+      helper_method :returning_to_support?,
+                    :support_return_params,
+                    :return_path
     end
 
   private
@@ -16,32 +16,32 @@ module Publish
       params[:return_to] == "support" && current_user.admin?
     end
 
-    def user_add_flow_params
-      {}.tap do |permitted|
-        permitted[:return_to] = "support" if returning_to_support?
-        if params[:recruitment_cycle_year].present?
-          permitted[:recruitment_cycle_year] = params[:recruitment_cycle_year]
-        end
-      end
+    def support_return_params
+      return {} unless returning_to_support?
+
+      { return_to: "support", **support_flow_params }
     end
 
-    def users_return_path(list_params = support_list_page_param)
+    # Override in the controller to carry extra params through the Publish flow.
+    def support_flow_params
+      {}
+    end
+
+    def return_path(list_params = nil)
       if returning_to_support?
-        support_recruitment_cycle_provider_users_path(
-          provider.recruitment_cycle_year,
-          provider,
-          **list_params,
-        )
+        support_return_path(**(list_params.nil? ? support_list_params : list_params))
       else
-        publish_provider_users_path(params[:provider_code])
+        publish_return_path
       end
     end
 
-    def support_list_page_param
-      {}.tap do |permitted|
-        permitted[:page] = params[:page] if params[:page].present?
-        permitted[:sort] = params[:sort] if params[:sort].present?
-      end
+    # Override in the controller when returning to a paginated/sorted Support list.
+    def support_list_params
+      {}
     end
+
+    # Controllers including this concern must implement:
+    # - support_return_path(**list_params)
+    # - publish_return_path
   end
 end
