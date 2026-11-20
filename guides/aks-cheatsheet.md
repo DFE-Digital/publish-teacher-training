@@ -195,7 +195,19 @@ If a deploy fails with `Error acquiring the state lock` / `state blob is already
    - Type the environment name again in `confirm` (e.g. `production`)
 4. Re-run the failed deploy (or use the Deploy workflow).
 
-The workflow uses the same GitHub Environment protection and `deploy-or-database-restore-<env>` concurrency group as Deploy, Build and Deploy (including production and sandbox), database restore, and Validate Infra. Do not unlock while a real apply is running.
+If the workflow reports a **stuck lease** (blob leased, but no Terraform lock metadata), `terraform force-unlock` cannot clear it. Break the lease using values from `terraform/aks/workspace_variables/<env>_backend.tfvars`:
+
+```bash
+az storage blob lease break \
+  --account-name <storage_account_name> \
+  --container-name <container_name> \
+  --blob-name <key> \
+  --auth-mode login
+```
+
+Then re-run the deploy.
+
+The workflow shares the `deploy-or-database-restore-<env>` concurrency group with Deploy, Build and Deploy (including production and sandbox), database restore, and Validate Infra. There is no GitHub Environment approval step on these environments. Do not unlock while a real apply is running.
 
 ## More info
 
