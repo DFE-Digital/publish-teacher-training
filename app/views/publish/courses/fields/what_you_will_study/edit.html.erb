@@ -40,16 +40,6 @@
       </h1>
 
       <%= render(
-        partial: "publish/courses/fields/last_cycle_recap",
-        locals: {
-          texts: [
-            [t(".about_this_course"), @course&.about_course],
-            [t(".how_placements_work"), @course&.how_school_placements_work],
-          ],
-        },
-      ) %>
-
-      <%= render(
         partial: "publish/courses/markdown_formatting",
         locals: {
           course: @course,

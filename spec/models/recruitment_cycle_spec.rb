@@ -135,16 +135,6 @@ describe RecruitmentCycle, travel: mid_cycle(2025) do
       end
     end
 
-    describe "#previous" do
-      it "return previous cycle" do
-        expect(next_cycle.previous).to eq(current_cycle)
-      end
-
-      it "is nil for the previous cycle" do
-        expect(current_cycle.previous).to be_nil
-      end
-    end
-
     describe ".next_recruitment_cycle" do
       it "returns the next cycle after the current one" do
         expect(described_class.next_recruitment_cycle).to eq(next_cycle)

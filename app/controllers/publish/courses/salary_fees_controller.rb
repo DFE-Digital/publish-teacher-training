@@ -6,8 +6,6 @@ module Publish
       include CopyCourseContent
       include GotoPreview
 
-      before_action :previous_cycle_enrichment, only: :edit
-
       def edit
         @course_salary_fees_form = ::Publish::CourseSalaryFeesForm.new(course_enrichment)
         @course_salary_fees_form.valid? if show_errors_on_publish?
@@ -59,16 +57,6 @@ module Publish
 
       def course_enrichment
         @course_enrichment ||= course.enrichments.find_or_initialize_draft
-      end
-
-      def previous_cycle_enrichment
-        @previous_cycle_enrichment ||= course.recruitment_cycle.previous&.providers&.find_by(
-          provider_code: @provider.provider_code,
-        )&.courses&.find_by(
-          course_code: course.course_code,
-        )&.enrichments&.where(
-          status: "published",
-        )&.last
       end
 
       def param_form_key

@@ -71,10 +71,6 @@ class RecruitmentCycle < ApplicationRecord
     )
   }
 
-  def previous
-    RecruitmentCycle.find_by(year: year.to_i - 1)
-  end
-
   def next
     RecruitmentCycle.find_by(year: year.to_i + 1)
   end

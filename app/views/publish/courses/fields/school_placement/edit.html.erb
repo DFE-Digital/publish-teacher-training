@@ -43,10 +43,6 @@
         <%= t(".headline") %>
       </h1>
 
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [["About this course", @course.about_course], ["How placements work", @course.how_school_placements_work]],
-      } %>
-
       <aside data-qa="course__related_sidebar">
         <%= render(
         partial: "publish/courses/markdown_formatting",
