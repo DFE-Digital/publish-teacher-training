@@ -22,10 +22,10 @@ module Support
       ::FinancialIncentives::CreateYearService.call(year:)
 
       redirect_to_year(
-        success: t(
-          ".success",
-          year_range: Find::CycleTimetable.cycle_year_range(year),
-        ),
+        success: {
+          title: t(".success.title", year_range: Find::CycleTimetable.cycle_year_range(year)),
+          body: t(".success.body"),
+        },
       )
     rescue ::FinancialIncentives::CreateYearService::YearAlreadyExistsError
       redirect_to_year(warning: t(".already_exists", year:))

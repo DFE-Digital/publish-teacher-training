@@ -139,10 +139,16 @@ private
   end
 
   def then_financial_incentives_are_created_for_all_active_subjects
-    expect(page).to have_content(
-      "Financial incentives created for the #{next_year_range} recruitment cycle. " \
-      "The financial incentives from the previous recruitment cycle have been copied to this cycle.",
-    )
+    within(".govuk-notification-banner--success") do
+      expect(page).to have_css(
+        ".govuk-notification-banner__heading",
+        text: "Financial incentives created for the #{next_year_range} recruitment cycle",
+      )
+      expect(page).to have_css(
+        "p.govuk-body",
+        text: "The financial incentives from the previous recruitment cycle have been copied to this cycle.",
+      )
+    end
     expect(page).to have_no_content("translation missing")
     expect(FinancialIncentive.for_year(next_year).where(subject: Subject.active).count).to eq(Subject.active.count)
   end

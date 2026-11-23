@@ -80,7 +80,9 @@ en:
           none: None
           "yes": "Yes"
       create_year:
-        success: Financial incentives created for the %{year_range} recruitment cycle. The financial incentives from the previous recruitment cycle have been copied to this cycle.
+        success:
+          title: Financial incentives created for the %{year_range} recruitment cycle
+          body: The financial incentives from the previous recruitment cycle have been copied to this cycle.
         already_exists: Financial incentives for %{year} already exist
       create_missing:
         success: "%{count} blank financial incentives for %{year} created"
