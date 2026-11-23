@@ -548,7 +548,7 @@ GEM
       activesupport (>= 3.0.0)
     raabro (1.5.0)
     racc (1.8.1)
-    rack (3.2.8)
+    rack (3.2.9)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-oauth2 (2.3.0)
@@ -735,10 +735,10 @@ GEM
     securerandom (0.4.1)
     semantic_logger (5.1.0)
       concurrent-ruby (~> 1.0)
-    sentry-rails (7.2.0)
+    sentry-rails (7.3.0)
       railties (>= 5.2.0)
-      sentry-ruby (~> 7.2.0)
-    sentry-ruby (7.2.0)
+      sentry-ruby (~> 7.3.0)
+    sentry-ruby (7.3.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
