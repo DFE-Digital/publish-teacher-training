@@ -30,10 +30,6 @@
         <%= page_title %>
       </h1>
 
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [["", @previous_cycle_enrichment&.salary_details]],
-      } %>
-
       <%= render partial: "publish/courses/markdown_formatting" %>
 
       <div data-controller="input-preview">

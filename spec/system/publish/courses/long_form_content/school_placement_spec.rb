@@ -63,14 +63,6 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     expect(page).to have_content("'How will they be supported and mentored?' must be 50 words or less")
   end
 
-  scenario "A user can see his past cycles fields", :js do
-    given_there_is_a_draft_course
-    when_i_visit_the_school_placement_page
-    then_i_should_not_see_the_fields_from_the_last_cycle
-    then_i_should_see_a_collapsible_section_for_the_last_cycle_content
-    then_i_should_see_the_fields_from_the_last_cycle
-  end
-
   scenario "A user only updates the school placement activity field", :js do
     given_there_is_a_draft_course
     when_i_visit_the_school_placement_page
@@ -162,7 +154,7 @@ RSpec.describe "Publishing a course with long form content on the school placeme
     provider_in_cycle = create(:provider, recruitment_cycle: recruitment_cycle)
     user.providers << provider_in_cycle
 
-    @course_enrichment ||= build(:course_enrichment, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil, how_school_placements_work: "How placements work")
+    course_enrichment = build(:course_enrichment, :initial_draft, course_length: :TwoYears, placement_school_activities: nil, support_and_mentorship: nil)
 
     @course = create(
       :course,
@@ -171,27 +163,12 @@ RSpec.describe "Publishing a course with long form content on the school placeme
       :can_sponsor_student_visa,
       provider: provider_in_cycle,
       accrediting_provider: build(:accredited_provider),
-      enrichments: [@course_enrichment],
+      enrichments: [course_enrichment],
       sites: [create(:site, location_name: "location 1")],
       study_sites: [create(:site, :study_site)],
       applications_open_from: recruitment_cycle.application_start_date + 1.day,
       start_date: Date.new(recruitment_cycle.year.to_i, 9, 1),
     )
-  end
-
-  def then_i_should_not_see_the_fields_from_the_last_cycle
-    expect(page).not_to have_content("How placements work")
-    expect(page).not_to have_content(@course_enrichment.how_school_placements_work)
-  end
-
-  def then_i_should_see_a_collapsible_section_for_the_last_cycle_content
-    expect(page).to have_content("See what you wrote last cycle")
-    page.find("span", text: "See what you wrote last cycle").click
-  end
-
-  def then_i_should_see_the_fields_from_the_last_cycle
-    expect(page).to have_content("How placements work")
-    expect(page).to have_content(@course_enrichment.how_school_placements_work)
   end
 
   def generate_text(word_count)

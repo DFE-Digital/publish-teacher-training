@@ -43,10 +43,6 @@
         <%= t(".page_title") %>
       </h1>
 
-      <%= render partial: "publish/courses/fields/last_cycle_recap", locals: {
-        texts: [["Interview process", @previous_cycle_enrichment&.interview_process], ["Interview location", @previous_cycle_enrichment&.interview_location]],
-      } %>
-
       <%= render partial: "publish/courses/markdown_formatting" %>
 
       <div data-controller="input-preview">
