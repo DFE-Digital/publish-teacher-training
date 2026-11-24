@@ -95,6 +95,16 @@ RSpec.describe CustomLogFormatter do
     end
   end
 
+  it "logs the full backtrace of an exception, gem frames included" do
+    gem_frame = "#{Gem.loaded_specs['activerecord'].full_gem_path}/lib/active_record/relation.rb:1:in 'load'"
+    app_frame = Rails.root.join("app/services/example_service.rb:12:in 'call'").to_s
+    exception = StandardError.new("boom")
+    exception.set_backtrace([gem_frame, app_frame])
+    log.exception = exception
+
+    expect(log_hash[:exception][:stack_trace]).to eq([gem_frame, app_frame])
+  end
+
   it "does not redact arguments for non-Solid Queue adapters" do
     log.message = "Performed SomeJob"
     log.payload = {

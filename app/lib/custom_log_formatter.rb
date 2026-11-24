@@ -19,6 +19,10 @@ class CustomLogFormatter < SemanticLogger::Formatters::Json
 
 private
 
+  def default_backtrace_cleaner
+    false
+  end
+
   def format_payload_with_named_tags
     hash[:payload] ||= {}
     hash[:payload].merge!(log.named_tags)
