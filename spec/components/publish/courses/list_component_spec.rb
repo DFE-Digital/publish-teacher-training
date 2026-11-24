@@ -30,9 +30,9 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
     it "renders the self-accredited group first, without a heading, but with its table" do
       render_component
 
-      first_section = page.all("section.app-table--courses__section").first
+      first_section = page.first("section.app-table--courses__section")
       expect(first_section).to have_no_css("h2")
-      expect(first_section).to have_css("table.app-table--courses")
+      expect(first_section).to have_table(class: "app-table--courses")
     end
   end
 
@@ -50,10 +50,10 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
     it "keeps the heading and reports no courses, without a table" do
       render_component
 
-      emptied = page.all("section.app-table--courses__section").first
+      emptied = page.first("section.app-table--courses__section")
       expect(emptied.find("h2").text.squish).to eq("Accredited provider Aardvark University")
       expect(emptied.find(".app-table--courses__count").text.squish).to eq("0 courses")
-      expect(emptied).to have_no_css("table.app-table--courses")
+      expect(emptied).to have_no_table(class: "app-table--courses")
     end
 
     it "still renders the groups that do have courses" do
@@ -61,7 +61,7 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
 
       matched = page.all("section.app-table--courses__section").last
       expect(matched.find(".app-table--courses__count").text.squish).to eq("1 course")
-      expect(matched).to have_css("table.app-table--courses")
+      expect(matched).to have_table(class: "app-table--courses")
     end
   end
 
@@ -91,7 +91,7 @@ RSpec.describe Publish::Courses::ListComponent, type: :component do
       render_component
 
       expect(page).to have_no_css("section")
-      expect(page).to have_no_css("table")
+      expect(page).to have_no_table
     end
   end
 end

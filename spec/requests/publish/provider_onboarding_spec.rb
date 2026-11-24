@@ -8,7 +8,7 @@ RSpec.describe "PATCH /provider-onboarding/:uuid", type: :request do
   it "returns 422 for a public user" do
     patch publish_provider_onboarding_path(submitted_request.uuid), params: { providers_onboarding_form_request: { provider_name: "New Name" } }
 
-    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response).to have_http_status(:unprocessable_content)
   end
 
   it "returns 404 when UUID does not exist" do

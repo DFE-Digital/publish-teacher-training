@@ -181,7 +181,7 @@ RSpec.describe "Search results tracking", :js, service: :find do
   end
 
   def and_i_choose_the_first_subject_suggestion
-    page.find('input[name="subject_name"]').send_keys(:return)
+    page.find_field(name: "subject_name").send_keys(:return)
   end
 
   def and_i_click_search

@@ -20,7 +20,7 @@ RSpec.describe "Location autocomplete sanitization", :js, service: :find do
     fill_in "City, town or postcode", with: "Att"
 
     expect(page).to have_css("#location-field__listbox", visible: :visible)
-    expect(page.find("#location-field__listbox")).to have_content(malicious_location)
+    expect(page.find_by_id("location-field__listbox")).to have_content(malicious_location)
 
     within("#location-field__listbox") do
       expect(page).to have_no_css("a", text: "test.ca")

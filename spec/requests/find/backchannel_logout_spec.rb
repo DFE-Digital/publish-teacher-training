@@ -58,7 +58,7 @@ describe "/auth/one-login/backchannel-logout", service: :find do
 
         expect(@utility).to have_received(:get_sub)
         expect(auth.authenticable.sessions).to be_blank
-        expect(response).to have_http_status(:successful)
+        expect(response).to have_http_status(:success)
       end
     end
   end

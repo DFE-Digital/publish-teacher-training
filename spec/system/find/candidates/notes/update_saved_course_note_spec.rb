@@ -67,7 +67,7 @@ RSpec.describe "Updating a saved course note", service: :find do
   end
 
   def then_i_can_update_the_note
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       within ".govuk-summary-list__actions" do
         click_link_or_button "Edit"
       end
@@ -83,7 +83,7 @@ RSpec.describe "Updating a saved course note", service: :find do
   end
 
   def then_i_cannot_update_the_note_with_more_than_100_words
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       within ".govuk-summary-list__actions" do
         click_link_or_button "Edit"
       end

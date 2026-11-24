@@ -58,7 +58,7 @@ RSpec.describe "Publish provider schools check", service: :publish do
 
       expect { add_school }.not_to(change { provider.schools.count })
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("This school has already been added")
     end
 
@@ -67,7 +67,7 @@ RSpec.describe "Publish provider schools check", service: :publish do
 
       expect { add_school }.not_to(change { provider.schools.count })
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("The address we hold for this school is incomplete")
     end
 
