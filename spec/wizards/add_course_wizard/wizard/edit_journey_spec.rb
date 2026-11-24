@@ -11,13 +11,19 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
                           can_sponsor_skilled_worker_visa: false, visa_sponsorship_application_deadline_at: deadline)
   end
 
-  describe "#start" do
+  describe "#opening_step" do
     it "opens a funding type edit on the funding type question" do
       expect(start_edit_of(:funding_type)).to eq(:funding_type)
     end
 
     it "opens a visa edit on the first visa question on the path" do
       expect(start_edit_of(:visa)).to eq(:visa_sponsorship)
+    end
+
+    it "opens a visa edit on its first question when the question it names is not on the path" do
+      course.update!(can_sponsor_student_visa: false, visa_sponsorship_application_deadline_at: nil)
+
+      expect(start_edit_of(:visa_sponsorship_application_deadline_at)).to eq(:visa_sponsorship)
     end
 
     it "opens a visa edit on the visa question it names" do
@@ -33,7 +39,7 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
         %i[funding_type visa_sponsorship visa_sponsorship_application_deadline_required visa_sponsorship_application_deadline_at],
       )
       expect(wizard.question_steps).to all(satisfy { |step| wizard.valid?(step) })
-      expect(wizard.changes?).to be(false)
+      expect(changes?(wizard)).to be(false)
     end
 
     context "with a TDA course" do
@@ -54,29 +60,22 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
     end
   end
 
-  describe "#active?" do
-    it "is true for the course the edit started for" do
-      start_edit_of(:funding_type)
-
-      expect(edit_request).to be_active
+  describe ".unit_for" do
+    it "is the visa edit only for a visa link, so any other link gets the funding type check" do
+      expect(CourseWizard.unit_for("visa")).to eq(:visa)
+      expect(CourseWizard.unit_for("visa_sponsorship_application_deadline_at")).to eq(:visa)
+      expect(CourseWizard.unit_for("funding_type")).to eq(:funding_type)
+      expect(CourseWizard.unit_for(nil)).to eq(:funding_type)
+      expect(CourseWizard.unit_for("level")).to eq(:funding_type)
     end
+  end
 
-    it "is false when no edit was started, or the edit has ended" do
-      expect(edit_request).not_to be_active
-    end
-
-    it "is false when a change to the course's answers leaves the edit no question to ask" do
+  describe "#question_steps" do
+    it "is empty when a change to the course's answers leaves the edit no question to ask" do
       start_edit_of(:funding_type)
       edit_request.state_store.write(qualification: "undergraduate_degree_with_qts")
 
-      expect(edit_request).not_to be_active
-    end
-
-    it "is false for another course" do
-      start_edit_of(:funding_type)
-      other_course = create(:course, :fee, provider:)
-
-      expect(edit_request.tap { |wizard| wizard.record = other_course }).not_to be_active
+      expect(edit_request.question_steps).to be_empty
     end
   end
 
@@ -117,6 +116,14 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
       expect(wizard.accessible?(:check_answers)).to be(false)
     end
 
+    it "opens nothing when the URL names an opening step outside the edit" do
+      start_edit_of(:visa_sponsorship_application_deadline_required)
+      wizard = edit_request(:visa_sponsorship_application_deadline_required, { return_to_review: "level" })
+
+      expect(wizard.accessible?(:visa_sponsorship_application_deadline_required)).to be(false)
+      expect(wizard.question_steps.first).to eq(:visa_sponsorship)
+    end
+
     context "with a published course" do
       let(:course) { create(:course, :published, :fee, provider:, accrediting_provider: provider, can_sponsor_student_visa: false) }
 
@@ -150,7 +157,7 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
           start_edit_of(:visa_sponsorship_application_deadline_at)
           wizard = answer(:visa_sponsorship_application_deadline_at, deadline_params(deadline, padded: true))
 
-          expect(wizard.changes?).to be(false)
+          expect(changes?(wizard)).to be(false)
           expect(wizard.next_step).to eq(:course_page)
         end
       end
@@ -179,21 +186,13 @@ RSpec.describe "CourseWizard edit journey", type: :wizard do
     }
   end
 
-  describe "#changes?" do
+  describe "changes" do
     it "is true when the answers on the path change the course" do
       start_edit_of(:funding_type)
       answer(:funding_type, funding_type: "salary")
       answer(:skilled_worker_visa, can_sponsor_skilled_worker_visa: "true")
 
-      expect(edit_request.changes?).to be(true)
-    end
-  end
-
-  describe "#return_to_review" do
-    it "is the step the edit opened on, whatever the request params say" do
-      start_edit_of(:visa)
-
-      expect(edit_request(:visa_sponsorship, { return_to_review: "funding_type" }).return_to_review).to eq(:visa_sponsorship)
+      expect(changes?(edit_request)).to be(true)
     end
   end
 end

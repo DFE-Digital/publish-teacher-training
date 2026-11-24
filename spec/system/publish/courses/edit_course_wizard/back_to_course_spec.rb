@@ -49,7 +49,7 @@ private
   alias_method :when_i_click_back, :and_i_click_back
 
   def then_i_am_on_the_funding_type_page
-    expect(page).to have_current_path(%r{/edit/\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/funding_type\z})
+    expect(page).to have_current_path(%r{/edit/funding_type/\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/funding_type\?return_to_review=funding_type\z})
   end
 
   def then_i_am_on_the_course_details_page

@@ -2,20 +2,29 @@
 
 class CourseWizard
   module Operations
-    # Saves an edit of a saved course (the edit journey, see
-    # CourseWizard::Editing): its answers mapped to the course, then the
-    # funding and visa rules. The course and its draft enrichment are saved
-    # together. Nothing is saved when the answers do not change the course.
+    # Saves an edit of a saved course (the edit journey of CourseWizard): its
+    # answers mapped to the course, then the funding and visa rules. The
+    # course and its draft enrichment are saved together. Nothing is saved
+    # when the answers do not change the course.
     class UpdateCourse
-      # repository is part of the DfE::Wizard operation interface
+      # repository and step are the DfE::Wizard operation interface. The
+      # wizard builds one with wizard: to ask whether the edit changes the
+      # course.
       # rubocop:disable Lint/UnusedMethodArgument
-      def initialize(repository:, step:)
-        @wizard = step.wizard
+      def initialize(repository: nil, step: nil, wizard: step.wizard)
+        @wizard = wizard
       end
       # rubocop:enable Lint/UnusedMethodArgument
 
+      # The answers would change the course
+      def changes?
+        fresh_course = ::Course.find(course.id)
+        fresh_course.assign_attributes(Mapper.new.to_attributes(answers, fresh_course))
+        fresh_course.changed?
+      end
+
       def execute
-        course.assign_attributes(Mapper.new.to_attributes(@wizard.answers, course))
+        course.assign_attributes(Mapper.new.to_attributes(answers, course))
         return { success: true, changed: false } unless course.changed?
 
         funding_changed = course.funding_changed?
@@ -33,6 +42,13 @@ class CourseWizard
 
       def course
         @wizard.record
+      end
+
+      # The answers of the edit's questions on the path
+      def answers
+        (@wizard.flow_path(@wizard.check_answers_step) & CourseWizard::EDITABLE_STEPS)
+          .flat_map { |step_id| @wizard.find_step(step_id).attribute_names.map(&:to_sym) }
+          .index_with { |attribute| @wizard.state_store.public_send(attribute) }
       end
 
       def save(enrichment)

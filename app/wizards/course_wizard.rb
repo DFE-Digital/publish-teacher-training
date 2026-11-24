@@ -1,11 +1,28 @@
 # frozen_string_literal: true
 
 # Adds a course (the :create journey) or edits a saved one (the :edit
-# journey, see CourseWizard::Editing). Both ask the course questions of the
-# course_details flow, and each has its own ending.
+# journey). Both ask the course questions of the course_details flow, and each
+# has its own ending.
+#
+# An edit is a change from check answers that ends on the course page: it
+# starts from the course's answers, opens on the question its link names
+# (return_to_review), asks only the questions of its unit that need an
+# answer, and ends on the course page, after a confirm page for a published
+# course with changes, since they go live when saved.
 class CourseWizard
   include DfE::Wizard
-  include Editing
+
+  VISA_STEPS = %i[
+    visa_sponsorship
+    skilled_worker_visa
+    visa_sponsorship_application_deadline_required
+    visa_sponsorship_application_deadline_at
+  ].freeze
+
+  EDITABLE_STEPS = [:funding_type, *VISA_STEPS].freeze
+
+  # The questions each edit can ask
+  UNITS = { funding_type: EDITABLE_STEPS, visa: VISA_STEPS }.freeze
 
   TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern skilled_worker_visa].freeze
 
@@ -14,6 +31,17 @@ class CourseWizard
   SUBJECTS_ROW_STEPS = %i[modern_languages_specialisms design_technology_specialisms].freeze
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
+
+  # The edit: the saved course, and the unit edited (a key of UNITS)
+  attr_accessor :record, :unit
+
+  # The unit an edit link opens: :visa for the visa questions, otherwise the
+  # funding type, which comes with the visa questions a change brings. An
+  # unknown entry is the funding type, so it gets the funding type check.
+  def self.unit_for(entry)
+    entry = entry.to_s.to_sym
+    entry == :visa || VISA_STEPS.include?(entry) ? :visa : :funding_type
+  end
 
   delegate :accrediting_provider, to: :accreditation
 
@@ -35,12 +63,11 @@ class CourseWizard
     end
   end
 
-  # When creating, a change from check answers asks only the steps it
-  # affects, and the steps its row shows, then goes back to check answers.
-  # Back retraces the steps it showed. The gem tracks the change and clears
-  # the answers it takes off the path. The edit wires the review itself: its
-  # callbacks, and the controller tracking each step and clearing answers.
-  def review_navigation? = journey == :create
+  # A change from check answers asks only the steps it affects, and the steps
+  # its row shows, then goes back to check answers. Back retraces the steps it
+  # showed. The gem tracks the change and clears the answers it takes off the
+  # path. The edit's callbacks run first and end it on the course page.
+  def review_navigation? = true
 
   # Creating saves the course from check answers. The edit saves its
   # questions to the state store, and the course when it reaches the course
@@ -54,7 +81,47 @@ class CourseWizard
   end
 
   def route_strategy
-    journey == :edit ? edit_route_strategy : create_route_strategy
+    DfE::Wizard::RouteStrategy::DynamicRoutes.new(
+      state_store:,
+      path_builder: lambda { |step_id, _state_store, helpers, options|
+        case step_id
+        when :courses_index
+          helpers.publish_provider_recruitment_cycle_courses_path(provider_code:, recruitment_cycle_year:, **options.except(:state_key))
+        when :course_page
+          helpers.details_publish_provider_recruitment_cycle_course_path(provider_code, recruitment_cycle_year, record.course_code)
+        else
+          step_path(helpers, step_id, options)
+        end
+      },
+    )
+  end
+
+  # The questions the edit can ask: its unit's questions on the path, from
+  # the one it opened on
+  def question_steps
+    steps = flow_path(check_answers_step) & UNITS.fetch(unit)
+    steps.include?(return_to_review) ? steps.drop(steps.index(return_to_review)) : steps
+  end
+
+  # The step an edit link opens: the question it names, or else the first
+  # question of the visa edit. Nil when the course does not ask it (a TDA
+  # course has no funding type question, a further education course no visa
+  # questions).
+  def opening_step(entry)
+    entry = entry.to_s.to_sym
+    return entry if question_steps.include?(entry)
+
+    question_steps.first if unit == :visa
+  end
+
+  # Steps an edit URL can open: the edit's questions, from the one it opened
+  # on, and the confirm page once each question has an answer and the course
+  # would change
+  def accessible?(step_id)
+    return false unless question_steps.include?(return_to_review)
+    return question_steps.include?(step_id) unless step_id == :confirm_changes
+
+    confirm_due? && question_steps.all? { |question| valid?(question) }
   end
 
   def provider
@@ -117,6 +184,29 @@ class CourseWizard
   end
 
 private
+
+  def confirm_due?
+    record.is_published? && Operations::UpdateCourse.new(wizard: self).changes?
+  end
+
+  def next_step_in_edit
+    return :course_page if current_step_name == :confirm_changes
+
+    next_step_in_review(finish: confirm_due? ? :confirm_changes : :course_page, only: question_steps)
+  end
+
+  def previous_step_in_edit
+    return (question_steps & review_shown).last || return_to_review if current_step_name == :confirm_changes
+
+    previous_step_in_review(return_to_review, finish: :course_page)
+  end
+
+  def step_path(helpers, step_id, options)
+    route = { provider_code:, recruitment_cycle_year:, state_key:, step: step_id, **options }
+    return helpers.publish_provider_recruitment_cycle_course_wizard_path(**route) unless journey == :edit
+
+    helpers.edit_wizard_publish_provider_recruitment_cycle_course_path(code: record.course_code, unit:, **route)
+  end
 
   # Flow: the questions about a course, up to check answers. Both journeys
   # draw it.
@@ -257,30 +347,6 @@ private
     graph.add_edge from: :visa_sponsorship_application_deadline_at, to: :start_date
 
     graph.add_edge from: :start_date, to: :check_answers
-  end
-
-  def create_route_strategy
-    DfE::Wizard::RouteStrategy::DynamicRoutes.new(
-      state_store:,
-      path_builder: lambda { |step_id, _state_store, helpers, options|
-        case step_id
-        when :courses_index
-          helpers.publish_provider_recruitment_cycle_courses_path(
-            provider_code:,
-            recruitment_cycle_year:,
-            **options.except(:state_key),
-          )
-        else
-          helpers.publish_provider_recruitment_cycle_course_wizard_path(
-            provider_code:,
-            recruitment_cycle_year:,
-            state_key:,
-            step: step_id,
-            **options,
-          )
-        end
-      },
-    )
   end
 
   def ensure_review_step(steps, step_id)

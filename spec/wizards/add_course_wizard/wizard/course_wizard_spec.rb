@@ -10,20 +10,23 @@ RSpec.describe CourseWizard, type: :wizard do
       described_class.new(state_store:, journey:).steps_operator.operations_for(step_id)
     end
 
-    it "ends the create journey on the courses index, with review navigation and the course saved from check answers" do
+    it "ends the create journey on the courses index, saving the course from check answers" do
       expect(wizard.find_step(:courses_index)).to be_present
       expect(wizard.find_step(:confirm_changes)).to be_nil
-      expect(operations(:create, :level)).to include(DfE::Wizard::Operations::ReviewNavigation)
       expect(operations(:create, :check_answers)).to include(CourseWizard::Operations::CreateCourse)
     end
 
-    it "ends the edit journey on the course page, without review navigation or saving from check answers" do
+    it "has the gem's review navigation in both journeys" do
+      expect(operations(:create, :level)).to include(DfE::Wizard::Operations::ReviewNavigation)
+      expect(operations(:edit, :funding_type)).to include(DfE::Wizard::Operations::ReviewNavigation)
+    end
+
+    it "ends the edit journey on the course page, without saving from check answers" do
       edit = described_class.new(state_store:, journey: :edit)
 
       expect(edit.find_step(:courses_index)).to be_nil
       expect(edit.find_step(:confirm_changes)).to be_present
       expect(edit.find_step(:course_page)).to be_present
-      expect(operations(:edit, :level)).not_to include(DfE::Wizard::Operations::ReviewNavigation)
       expect(operations(:edit, :check_answers)).not_to include(CourseWizard::Operations::CreateCourse)
     end
   end

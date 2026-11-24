@@ -34,12 +34,12 @@ private
   end
 
   def and_i_visit_the_level_question_of_the_edit
-    @funding_type_path = page.current_path
-    visit @funding_type_path.sub(%r{/funding_type\z}, "/level")
+    @funding_type_url = URI.parse(page.current_url).request_uri
+    visit @funding_type_url.sub("/funding_type?", "/level?")
   end
 
   def then_i_am_on_the_funding_type_question_of_the_edit
-    expect(page).to have_current_path(@funding_type_path)
+    expect(page).to have_current_path(@funding_type_url)
   end
 
   def provider

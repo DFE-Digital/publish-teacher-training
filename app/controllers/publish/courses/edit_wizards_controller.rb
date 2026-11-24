@@ -3,11 +3,11 @@
 module Publish
   module Courses
     # Edits a saved course's funding type or visa sponsorship through the
-    # edit journey of CourseWizard. The entry point (new) seeds the edit under
-    # a new state_key. Each step then asks only the questions that need an
-    # answer, and when the edit reaches the course page its answers are saved
-    # to the course. An edit of a published course asks the user to confirm
-    # first.
+    # edit journey of CourseWizard: a change from check answers that ends on
+    # the course page. The entry point (new) seeds the answers from the
+    # course under a new state_key and opens the question its link names.
+    # When the edit reaches the course page its answers are saved to the
+    # course. An edit of a published course asks the user to confirm first.
     #
     # Behind the course_edit_wizard setting. A funding type edit is only for
     # draft or rolled over courses.
@@ -19,6 +19,7 @@ module Publish
       before_action -> { authorize(provider, :update?) }
       before_action :require_active_edit, except: :new
       before_action :authorize_funding_type
+      before_action :require_accessible_step, except: :new
 
       helper_method def current_step
         @wizard.current_step
@@ -28,23 +29,23 @@ module Publish
         params[:step].to_sym
       end
 
+      helper_method def course_page_path
+        @wizard.resolve_step_path(:course_page)
+      end
+
       def new
-        step = @wizard.start(entry: params[:unit], caller: course_page_path)
-        return redirect_to course_page_path unless step
+        @wizard.state_store.write(CourseWizard::Mapper.new.to_answers(course))
+        step = @wizard.opening_step(params[:unit])
+        return redirect_to(@wizard.change_path(step)) if step
 
-        redirect_to @wizard.resolve_step_path(step)
+        @wizard.clear_state
+        redirect_to course_page_path
       end
 
-      def show
-        redirect_to_entry unless @wizard.accessible?(current_step_name)
-      end
+      def show; end
 
       def update
-        return redirect_to_entry unless @wizard.accessible?(current_step_name)
-
         if @wizard.save_current_step
-          @wizard.track_review_step
-          @wizard.clear_off_path_answers
           return save_edit if @wizard.next_step == :course_page
 
           redirect_to @wizard.next_step_path
@@ -59,40 +60,40 @@ module Publish
         raise ActionController::RoutingError, "Not Found" unless FeatureService.enabled?(:course_edit_wizard)
       end
 
-      # The edit was saved, expired, or belongs to another course. The course
-      # page shows the saved values.
+      # Only a visa edit leaves the funding type alone. Any other edit gets
+      # the funding type check, on every request, so changing the URL cannot
+      # open a question the user may not edit.
+      def authorize_funding_type
+        authorize(course, :can_update_funding_type?) unless @wizard.unit == :visa
+      end
+
+      # The edit was saved, expired, or has no question left to ask. The
+      # course page shows the saved values. The edit seeds every answer of the
+      # course, so an edit without the first question's answer has ended, even
+      # if a late request wrote one of its answers back.
       def require_active_edit
-        return if @wizard.active?
+        return if @wizard.step_data_exists?(@wizard.root_step) && @wizard.question_steps.any?
 
         flash[:info] = t("publish.courses.edit_wizards.ended")
         redirect_to course_page_path
       end
 
-      # Only a visa edit leaves the funding type alone. Any other edit gets
-      # the funding type check.
-      def authorize_funding_type
-        unit = action_name == "new" ? CourseWizard.unit_for(params[:unit]) : @wizard.unit
-        authorize(course, :can_update_funding_type?) unless unit == :visa
+      def require_accessible_step
+        redirect_to @wizard.change_path(@wizard.question_steps.first) unless @wizard.accessible?(current_step_name)
       end
 
       # Saves the edit's answers to the course, and ends the edit
       def save_edit
-        unit = @wizard.unit
-        caller_url = @wizard.caller_url
         result = @wizard.execute_operation(operation_class: CourseWizard::Operations::UpdateCourse, step: @wizard.current_step)
         @wizard.clear_state
 
         if !result[:success]
           flash[:warning] = { "title" => t(".failed"), "body" => ERB::Util.html_escape(result[:errors].to_sentence) }
         elsif result[:changed]
-          flash[:success] = t(".committed.#{unit}")
+          flash[:success] = t(".committed.#{@wizard.unit}")
         end
 
-        redirect_to caller_url
-      end
-
-      def redirect_to_entry
-        redirect_to @wizard.resolve_step_path(@wizard.entry)
+        redirect_to course_page_path
       end
 
       def course
@@ -102,9 +103,12 @@ module Publish
       # The entry point (new) starts the edit under a new state_key
       def set_wizard
         state_key = action_name == "new" ? SecureRandom.uuid : params[:state_key]
+        unit = CourseWizard.unit_for(params[:unit])
         repository = CourseWizard::Repositories::CourseEdit.new(
           provider_code: provider.provider_code,
           recruitment_cycle_year: provider.recruitment_cycle_year,
+          course_code: course.course_code,
+          unit:,
           state_key:,
           expires_in: CACHE_EXPIRY,
         )
@@ -119,15 +123,8 @@ module Publish
           wizard.provider_code = provider.provider_code
           wizard.state_key = state_key
           wizard.record = course
+          wizard.unit = unit
         end
-      end
-
-      def course_page_path
-        details_publish_provider_recruitment_cycle_course_path(
-          provider.provider_code,
-          provider.recruitment_cycle_year,
-          course.course_code,
-        )
       end
     end
   end

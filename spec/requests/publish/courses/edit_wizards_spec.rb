@@ -20,17 +20,60 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 
   before { login_user(user) }
 
-  # The step an edit opened on decides whether the funding type policy
-  # applies. An edit that lost it has ended.
-  it "ends an edit with no stored entry step" do
+  # The course code is part of the edit's key, so one course's edit URL
+  # cannot open another course's answers
+  it "ends an edit opened from another course's URL" do
     get "#{course_path}/edit/funding_type"
-    step_path = URI.parse(response.location).path
-    remove_the_stored_entry(step_path.split("/")[-2])
+    other_course = create(:course, :fee, provider:)
 
-    get step_path
+    get response.location.sub("/courses/#{course.course_code}/", "/courses/#{other_course.course_code}/")
+
+    expect(response).to redirect_to("#{course_path.sub(course.course_code, other_course.course_code)}/details")
+    expect(flash[:info]).to eq("This change has already been saved or has expired. Check the course details.")
+  end
+
+  # The unit is part of the edit's key: a funding type answer cannot be saved
+  # through a visa URL, which skips the funding type check
+  it "ends an edit whose URL is changed to another unit, saving nothing" do
+    get "#{course_path}/edit/funding_type"
+    funding_type_url = response.location
+    patch funding_type_url, params: { funding_type: { funding_type: "salary" } }
+    create(:course_enrichment, :published, course:)
+
+    patch funding_type_url.sub("/edit/funding_type/", "/edit/visa/").sub("/funding_type?", "/skilled_worker_visa?"),
+          params: { skilled_worker_visa: { can_sponsor_skilled_worker_visa: "true" } }
 
     expect(response).to redirect_to("#{course_path}/details")
     expect(flash[:info]).to eq("This change has already been saved or has expired. Check the course details.")
+    expect(course.reload.funding).to eq("fee")
+  end
+
+  # An ended edit says so, even when the course can no longer change its
+  # funding type
+  it "ends an expired funding type edit of a course published since" do
+    get "#{course_path}/edit/funding_type"
+    funding_type_url = response.location
+    Rails.cache.clear
+    create(:course_enrichment, :published, course:)
+
+    get funding_type_url
+
+    expect(response).to redirect_to("#{course_path}/details")
+    expect(flash[:info]).to eq("This change has already been saved or has expired. Check the course details.")
+  end
+
+  # A request that finishes after the edit was saved can write one of its
+  # answers back. The edit stays ended.
+  it "ends an edit that a late request wrote an answer back to" do
+    get "#{course_path}/edit/funding_type"
+    funding_type_url = response.location
+    repository = edit_repository(state_key: URI.parse(funding_type_url).path.split("/")[-2])
+    repository.clear
+    repository.write(funding_type: "salary")
+
+    get funding_type_url
+
+    expect(response).to redirect_to("#{course_path}/details")
   end
 
   it "refuses a funding type edit of a course that cannot change its funding type" do
@@ -54,11 +97,10 @@ describe "Publish::Courses::EditWizardsController", service: :publish do
 
 private
 
-  def remove_the_stored_entry(state_key)
-    repository = CourseWizard::Repositories::CourseEdit.new(
-      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year, state_key:, expires_in: 1.hour,
+  def edit_repository(state_key:)
+    CourseWizard::Repositories::CourseEdit.new(
+      provider_code: provider.provider_code, recruitment_cycle_year: provider.recruitment_cycle_year,
+      course_code: course.course_code, unit: :funding_type, state_key:, expires_in: 1.hour
     )
-    repository.write(edit: repository.read.fetch(:edit).except(:entry))
-    expect(repository.read[:edit]).not_to have_key(:entry)
   end
 end

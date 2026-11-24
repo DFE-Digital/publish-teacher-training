@@ -55,7 +55,7 @@ private
   end
 
   def then_i_am_on_the_funding_type_page_for_the_course
-    expect(page).to have_current_path(%r{/courses/#{course.course_code}/edit/\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/funding_type\z})
+    expect(page).to have_current_path(%r{/courses/#{course.course_code}/edit/funding_type/\h{8}-\h{4}-\h{4}-\h{4}-\h{12}/funding_type\?return_to_review=funding_type\z})
     expect(page).to have_content(course.name_and_code)
     expect(page).to have_content("Funding type")
   end
