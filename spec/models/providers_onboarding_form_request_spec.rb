@@ -183,6 +183,22 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
           expect(request).to be_valid
         end
 
+        it "requires an accredited provider number when the request is onboarded" do
+          request = build(
+            :providers_onboarding_form_request,
+            :ready_to_onboard,
+            accredited_provider: true,
+            provider_type: "scitt",
+            accredited_provider_number: nil,
+            urn: nil,
+          )
+
+          expect(request).not_to be_valid(:onboard)
+          expect(request.errors[:accredited_provider_number]).to eq(
+            ["Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5"],
+          )
+        end
+
         it "rejects a university accredited provider number that does not start with 1" do
           record.provider_type = "university"
           record.accredited_provider = true
@@ -246,6 +262,26 @@ RSpec.describe ProvidersOnboardingFormRequest, type: :model do
       expect(record).not_to be_valid
       expect(record.errors[:provider_name]).to include("Enter your organisation name")
       expect(record.errors[:postcode]).to be_present
+    end
+  end
+
+  describe "onboard validation context" do
+    it "accepts a submitted request that has no provider" do
+      expect(build(:providers_onboarding_form_request, :ready_to_onboard)).to be_valid(:onboard)
+    end
+
+    it "rejects a request that has not been submitted" do
+      request = build(:providers_onboarding_form_request, :ready_to_onboard, status: "pending")
+
+      expect(request).not_to be_valid(:onboard)
+      expect(request.errors[:base]).to eq(["This onboarding form has not been submitted, so the provider cannot be onboarded"])
+    end
+
+    it "rejects a request that already has a provider" do
+      request = build(:providers_onboarding_form_request, :ready_to_onboard, provider: create(:provider))
+
+      expect(request).not_to be_valid(:onboard)
+      expect(request.errors[:base]).to eq(["This provider has already been onboarded"])
     end
   end
 

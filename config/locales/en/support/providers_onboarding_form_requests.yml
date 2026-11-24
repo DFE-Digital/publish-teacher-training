@@ -36,7 +36,6 @@ en:
         title: Provider details
         caption: Onboard a provider
         provider_details: Provider details for %{form_name}
-        error_summary_title: There is a problem
         onboarding_details: Onboarding details
         organisation_details: Organisation details
         contact_details: Contact details
@@ -73,7 +72,6 @@ en:
       onboard_from_form_request:
         success: "%{provider_name} onboarded"
         already_onboarded: This provider has already been onboarded
-        not_submitted: This onboarding form has not been submitted, so the provider cannot be onboarded
         no_recruitment_cycle: This provider could not be onboarded because there is no current recruitment cycle
         code_generation_failed: A unique provider code could not be generated for this recruitment cycle, so the provider cannot be onboarded
         provider_invalid: "This provider could not be onboarded. Organisation details:"

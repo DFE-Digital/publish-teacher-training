@@ -202,12 +202,12 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
       expect(page).to have_css(".govuk-error-summary__list li", count: 1)
       expect(page).to have_link(
         "Enter a valid SCITT accredited provider number - it must be 4 digits starting with a 5",
-        href: accredited_provider_number_error_path,
+        href: "#providers-onboarding-form-request-accredited-provider-number-field-error",
       )
       expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error", text: "1234")
     end
 
-    scenario "I can follow a missing accredited provider number error to the form" do
+    scenario "I can fix a missing accredited provider number after an onboard error" do
       onboarding_request.update_columns(
         accredited_provider: true,
         provider_type: "university",
@@ -217,16 +217,21 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
 
       when_i_click_onboard_provider
 
-      click_link(
+      expect(page).to have_link(
         "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
-        href: accredited_provider_number_error_path,
+        href: "#providers-onboarding-form-request-accredited-provider-number-field-error",
       )
+      expect(page).to have_css(".app-inset-text--error", text: "Enter accredited provider number")
 
-      expect(page).to have_css(
-        ".govuk-form-group--error .govuk-error-message",
-        text: "Enter a valid University accredited provider number - it must be 4 digits starting with a 1",
-      )
-      expect(page).to have_css("#providers-onboarding-form-request-accredited-provider-number-field-error.govuk-input--error")
+      click_link "Enter accredited provider number"
+
+      expect(page).not_to have_css(".govuk-error-summary")
+
+      fill_in "Accredited provider number", with: "1234"
+      click_button "Continue"
+      when_i_click_onboard_provider
+
+      then_i_am_on_the_new_provider_organisation_page(onboarding_request)
     end
 
     scenario "I can reject an onboarding request" do
@@ -249,15 +254,6 @@ RSpec.describe "Support - View Provider Details", service: :support, type: :syst
 
     def support_return_path(anchor:)
       publish_provider_onboarding_path(onboarding_request.uuid, return_to: "support", anchor:)
-    end
-
-    def accredited_provider_number_error_path
-      publish_provider_onboarding_path(
-        onboarding_request.uuid,
-        return_to: "support",
-        display_errors: "accredited_provider_number",
-        anchor: "providers-onboarding-form-request-accredited-provider-number-field-error",
-      )
     end
   end
 end

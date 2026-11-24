@@ -12,9 +12,7 @@ module Publish
     before_action :set_onboarding_request
     before_action :ensure_can_edit, only: %i[update confirm]
 
-    def show
-      @onboarding_request.add_accredited_provider_number_onboarding_error if display_accredited_provider_number_error?
-    end
+    def show; end
 
     # Handles the submission of the onboarding form by the provider
     def update
@@ -80,10 +78,6 @@ module Publish
     # successful save. Anyone else, and any other return_to value, continues to check your answers.
     def return_to_support?
       admin_user? && params[:return_to] == SUPPORT_RETURN_TO
-    end
-
-    def display_accredited_provider_number_error?
-      return_to_support? && params[:display_errors] == "accredited_provider_number"
     end
 
     def after_update_path
