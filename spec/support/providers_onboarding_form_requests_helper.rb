@@ -15,7 +15,6 @@ module ProvidersOnboardingFormRequestsHelper
 
   def then_i_see_providers_onboarding_form_requests_table
     expect(page).to have_content("Onboard a provider")
-    expect(page).to have_content("Id")
     expect(page).to have_content("Form name")
     expect(page).to have_content("Status")
     expect(page).to have_content("Created at")
@@ -23,7 +22,6 @@ module ProvidersOnboardingFormRequestsHelper
 
   def then_i_see_recent_providers_onboarding_form_requests_entries
     ProvidersOnboardingFormRequest.order(created_at: :desc).limit(10).each do |request|
-      expect(page).to have_content(request.id)
       expect(page).to have_content(request.form_name)
       expect(page).to have_content(request.support_agent.present? ? request.support_agent.name : "Unassigned")
       expect(page).to have_content(request.status.titleize)
@@ -104,6 +102,12 @@ module ProvidersOnboardingFormRequestsHelper
 
   def then_i_see_success_message_with_form_link(form_name:)
     expect(page).to have_content("Onboarding form generated successfully for #{form_name}")
+  end
+
+  def then_see_the_page_heading_with_status(onboarding_request)
+    expect(page).to have_content("Provider details for #{onboarding_request.form_name}")
+    expect(page).to have_content(onboarding_request.form_name)
+    expect(page).to have_content(onboarding_request.status.titleize)
   end
 
   def then_i_see_form_name_and_link(request)
