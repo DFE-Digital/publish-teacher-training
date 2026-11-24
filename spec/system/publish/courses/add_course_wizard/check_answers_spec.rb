@@ -229,7 +229,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     expect(page).to have_text("Accredited provider")
     expect(page).to have_text(provider.accredited_partners.first.provider_name)
-    expect(page).to have_no_selector("a[href*='return_to_review=accredited_provider']")
+    expect(page).to have_no_css("a[href*='return_to_review=accredited_provider']")
   end
 
   scenario "shows visa deadline question as no and hides date row when deadline step is skipped" do
@@ -632,9 +632,9 @@ private
     expect(page).to have_text("Full time")
     expect(page).to have_text("Skilled Worker visas")
     expect(page).to have_text("No - cannot sponsor")
-    expect(page).to have_no_selector("a[href*='return_to_review=funding_type']")
-    expect(page).to have_no_selector("a[href*='return_to_review=study_pattern']")
-    expect(page).to have_no_selector("a[href*='return_to_review=skilled_worker_visa']")
+    expect(page).to have_no_css("a[href*='return_to_review=funding_type']")
+    expect(page).to have_no_css("a[href*='return_to_review=study_pattern']")
+    expect(page).to have_no_css("a[href*='return_to_review=skilled_worker_visa']")
 
     rendered_text = page.text.gsub(/\s+/, " ")
     expect(rendered_text.index("Study site")).to be < rendered_text.index("Skilled Worker visas")

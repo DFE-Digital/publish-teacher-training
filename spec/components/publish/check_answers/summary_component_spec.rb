@@ -99,9 +99,9 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("No - cannot sponsor")
     expect(rendered_component).to have_text("Course start date")
     expect(rendered_component).to have_text("July 2027")
-    expect(rendered_component).to have_no_selector("a[href*='return_to_review=funding_type']")
-    expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_pattern']")
-    expect(rendered_component).to have_no_selector("a[href*='return_to_review=skilled_worker_visa']")
+    expect(rendered_component).to have_no_css("a[href*='return_to_review=funding_type']")
+    expect(rendered_component).to have_no_css("a[href*='return_to_review=study_pattern']")
+    expect(rendered_component).to have_no_css("a[href*='return_to_review=skilled_worker_visa']")
   end
 
   it "renders school and study-site rows with selected values and change links" do
@@ -153,7 +153,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     allow(wizard).to receive(:flow_steps).and_return([wizard.step(:study_sites)])
 
     expect(rendered_component).to have_css(".app-inset-text--important a", text: "Select a study site")
-    expect(rendered_component).to have_no_selector("a[href*='return_to_review=study_sites']", text: "Change")
+    expect(rendered_component).to have_no_css("a[href*='return_to_review=study_sites']", text: "Change")
   end
 
   it "renders accredited provider row with and without change link depending on saved state" do

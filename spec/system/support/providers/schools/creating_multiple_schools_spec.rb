@@ -177,7 +177,7 @@ RSpec.describe "Multiple schools" do
   end
 
   def when_i_click_remove_school
-    page.find(:link, "Remove school", match: :first).click
+    page.find_link("Remove school", match: :first).click
   end
 
   def then_there_is_only_one_school_on_the_page

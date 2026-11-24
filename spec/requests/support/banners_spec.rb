@@ -50,7 +50,7 @@ RSpec.describe "Support::BannersController" do
         } }
       }.not_to change(Banner, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
       expect(response.body).to include("Enter a valid publish date and time")
     end
 

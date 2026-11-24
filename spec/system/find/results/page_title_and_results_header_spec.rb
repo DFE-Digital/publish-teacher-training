@@ -128,14 +128,14 @@ RSpec.describe "Search results page title", :js, service: :find do
   end
 
   def and_i_choose_the_first_subject_suggestion
-    page.find('input[name="subject_name"]').send_keys(:return)
+    page.find_field(name: "subject_name").send_keys(:return)
   end
 
   def and_i_dismiss_location_suggestions
     # Wait for the async suggestion to open, otherwise Escape races the fetch
     # and the overlay reappears over the sidebar Search button.
     expect(page).to have_css("#location-field__listbox .autocomplete__option", wait: 5)
-    page.find('input[name="location"]').send_keys(:escape)
+    page.find_field(name: "location").send_keys(:escape)
     expect(page).to have_no_css("#location-field__listbox .autocomplete__option", visible: :visible, wait: 5)
   end
 

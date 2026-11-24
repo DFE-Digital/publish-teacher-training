@@ -59,7 +59,7 @@ RSpec.describe "Adding a saved course note", service: :find do
   end
 
   def then_i_can_add_a_note
-    within(all(".govuk-summary-card").first) do
+    within(first(".govuk-summary-card")) do
       click_link_or_button "Add a note"
     end
 

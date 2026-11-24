@@ -68,10 +68,10 @@ module Subjects
         { subject_name: "French", subject_code: "15" },
         { subject_name: "German", subject_code: "17" },
         { subject_name: "Italian", subject_code: "18" },
-        { subject_name: "Japanese", subject_code:  "19" },
-        { subject_name: "Mandarin", subject_code:  "20" },
-        { subject_name: "Russian", subject_code:  "21" },
-        { subject_name: "Spanish", subject_code:  "22" },
+        { subject_name: "Japanese", subject_code: "19" },
+        { subject_name: "Mandarin", subject_code: "20" },
+        { subject_name: "Russian", subject_code: "21" },
+        { subject_name: "Spanish", subject_code: "22" },
         { subject_name: "Modern languages (other)", subject_code: "24" },
       ]
 
