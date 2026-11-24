@@ -153,6 +153,20 @@ runs:
         environment: ${{ inputs.environment }}
         pr-number: ${{ inputs.pr-number }}
 
+    # First apply kept solid-queue-worker at 0 while use_db_setup_command was true.
+    # After a successful restore, clear that flag and re-apply so replicas come up
+    # against a finished database (and web drops the one-shot db:prepare command).
+    # Override USE_DB_SETUP_COMMAND inline (not step env) so the if above still sees
+    # the job-level true from the first-setup check — same pattern as K8 setup.
+    - name: Enable Solid Queue after first-setup restore
+      if: ${{ inputs.environment == 'review' && env.USE_DB_SETUP_COMMAND == 'true' }}
+      shell: bash
+      run: |
+        echo "USE_DB_SETUP_COMMAND=false" >> $GITHUB_ENV
+        USE_DB_SETUP_COMMAND=false make ci ${{ inputs.environment }} deploy
+      env:
+        IMAGE_TAG: ${{ inputs.sha }}
+
     - name: Run Smoke Tests for ${{ inputs.environment }}
       uses: ./.github/actions/smoke-test/
       with:

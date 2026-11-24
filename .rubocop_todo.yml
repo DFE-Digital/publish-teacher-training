@@ -196,6 +196,7 @@ Rails/SkipsModelValidations:
 Rails/UnknownEnv:
   Exclude:
     - 'app/services/providers/create_fake_provider_service.rb'
+    - 'app/services/sandbox/import_provider_courses.rb'
     - 'lib/tasks/sandbox.rake'
 
 # Offense count: 5

@@ -96,6 +96,25 @@ RSpec.describe Courses::ResultCards do
     end
   end
 
+  context "when searching for an accredited provider" do
+    let(:university) { create(:provider, :accredited_provider, provider_name: "Birmingham City University") }
+    let(:arthur_terry) { create(:provider, provider_name: "Arthur Terry School") }
+    let(:bishop_vesey) { create(:provider, provider_name: "Bishop Vesey's Grammar School") }
+    let(:teach_central) { create(:provider, provider_name: "Teach Central") }
+    let(:params) { { provider_name: university.provider_name, order: "provider_name_ascending" } }
+
+    before do
+      create_course(provider: arthur_terry, course_code: "A001", accredited_provider_code: university.provider_code)
+      create_course(provider: arthur_terry, course_code: "A002", accredited_provider_code: university.provider_code)
+      create_course(provider: bishop_vesey, course_code: "B001")
+      create_course(provider: teach_central, course_code: "T001", accredited_provider_code: university.provider_code)
+    end
+
+    it "gives each partner school its own card" do
+      expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[T001]])
+    end
+  end
+
   context "when searching for 2 subjects" do
     let(:params) { { subjects: [mathematics.subject_code, physics.subject_code], order: "provider_name_ascending" } }
 

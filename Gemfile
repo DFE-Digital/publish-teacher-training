@@ -24,7 +24,7 @@ gem "mission_control-jobs", "~> 1.3"
 gem "pundit"
 
 # Use Puma as the app server
-gem "puma", "~> 8.0"
+gem "puma", "~> 8.1"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -115,7 +115,7 @@ gem "govuk-components", "6.6.0"
 gem "govuk_design_system_formbuilder", "~> 6.6"
 
 # DfE Sign-In
-gem "omniauth", "~> 2.3"
+gem "omniauth", "~> 2.4"
 gem "omniauth_govuk_one_login", github: "DFE-Digital/omniauth-govuk-one-login", tag: "v1.5.1"
 gem "omniauth_openid_connect", "~> 0.8"
 gem "omniauth-rails_csrf_protection", "~> 2.0"

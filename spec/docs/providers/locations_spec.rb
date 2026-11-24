@@ -49,6 +49,8 @@ describe "API" do
 
         run_test!
       end
+
+      unauthorized_response
     end
   end
 end

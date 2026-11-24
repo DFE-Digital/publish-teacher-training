@@ -70,8 +70,11 @@ module "solid_queue_worker" {
     # start_when_ready waits for migrate/db:setup/restore so we never cache a missing PK.
     "DATABASE_CONNECTION_POOL_SIZE=$${DATABASE_CONNECTION_POOL_SIZE:-5} bundle exec rake solid_queue:start_when_ready",
   ]
-  max_memory      = var.solid_queue_worker_memory_max
-  replicas        = var.solid_queue_worker_replicas
+  max_memory = var.solid_queue_worker_memory_max
+  # First review setup runs db:prepare then a sanitised restore that drops every
+  # table. Keep the worker at 0 until that finishes — start_when_ready cannot
+  # stop Solid Queue reporting UndefinedTable to Sentry via Rails.error first.
+  replicas        = var.use_db_setup_command ? 0 : var.solid_queue_worker_replicas
   enable_logit    = var.enable_logit
   run_as_non_root = var.run_as_non_root
   # Match rake solid_queue:start(_when_ready) during boot and forked processes (`.` matches `_`).

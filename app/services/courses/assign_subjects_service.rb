@@ -6,6 +6,15 @@ module Courses
 
     attr_reader :course, :subject_ids
 
+    # Sets the course's main and second subject: the first two of the given
+    # subjects (in order) that can be a main subject for the course.
+    def self.assign_master_and_subordinate_subjects(course, subject_ids)
+      return if subject_ids.empty?
+
+      assignable_ids = course.assignable_master_subjects&.pluck(:id) || []
+      course.master_subject_id, course.subordinate_subject_id = subject_ids.select { |id| assignable_ids.include?(id) }
+    end
+
     def initialize(course:, subject_ids:)
       @course = course
       @subject_ids = subject_ids&.compact_blank&.map(&:to_i) || []
@@ -60,14 +69,7 @@ module Courses
     end
 
     def assign_master_and_subordinate_subject_ids
-      return if subject_ids.empty?
-
-      parent_ids = subject_ids.select { |id| assignable_parent_ids.include?(id) }
-      course.master_subject_id, course.subordinate_subject_id = parent_ids
-    end
-
-    def assignable_parent_ids
-      @assignable_parent_ids ||= course.assignable_master_subjects&.pluck(:id) || []
+      self.class.assign_master_and_subordinate_subjects(course, subject_ids)
     end
 
     def request_has_duplicate_subject_ids?

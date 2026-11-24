@@ -89,6 +89,8 @@ runs:
 
     # The restore drops and recreates every table (pg_dump --clean). Solid Queue must
     # not be running meanwhile or it hits UndefinedTable / UnknownPrimaryKey.
+    # Review first-setup already deploys this worker at 0; this scale-down still
+    # matters for QA/staging restores.
     - name: Stop solid-queue-worker before restore
       shell: bash
       run: |
@@ -150,6 +152,8 @@ runs:
         bin/konduit.sh -n ${NAMESPACE} -i "${ATOMIC_RESTORE_FILE}" -c -t 7200 -x ${{ env.app_name }} -- psql
         bin/konduit.sh -n ${NAMESPACE} -x -t 300 ${{ env.app_name }} -- psql -c 'drop publication airbyte_publication' || true
 
+    # Restore is one transaction, so a failed or cancelled psql leaves the old DB.
+    # always() brings QA/staging workers back after a failed nightly restore.
     - name: Restore solid-queue-worker replica count
       if: ${{ always() && env.SQ_WORKER_REPLICAS != '' }}
       shell: bash

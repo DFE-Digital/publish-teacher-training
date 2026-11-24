@@ -1,3 +1,5 @@
+@use "../../settings" as *;
+
 .copy-course-content {
   &__details {
     margin-top: govuk-spacing(3);

@@ -15,7 +15,15 @@ servers:
         enum:
           - v1
         default: v1
+security:
+  - {}
+  - bearerAuth: []
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: "Optional. Header validation is currently disabled and Authorization headers are ignored. When enabled, send an active API key in the Authorization header. Requests without a key are still supported. Never send a key in the URL."
   schemas:
     Sort:
       type: array

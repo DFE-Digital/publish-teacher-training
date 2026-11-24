@@ -1,0 +1,38 @@
+{
+  "id": "22944",
+  "type": "providers",
+  "attributes": {
+    "ukprn": "10007848",
+    "urn": "111435",
+    "postcode": "WA8 7TD",
+    "provider_type": "lead_school",
+    "region_code": "north_west",
+    "train_with_disability": "We aim to be a fully inclusive programme.",
+    "website": "https://www.wadedeacontrust.com/teaching-school/teacher-training-programme/",
+    "latitude": 53.3764973,
+    "longitude": -2.7351048,
+    "telephone": "01234 567890",
+    "email": "teacher.training@example.com",
+    "can_sponsor_skilled_worker_visa": false,
+    "can_sponsor_student_visa": false,
+    "selectable_school": true,
+    "train_with_us": "We are a community-driven organisation.",
+    "accredited_body": false,
+    "changed_at": "2026-11-20T07:12:15+00:00",
+    "city": "Widnes",
+    "code": "1KQ",
+    "county": "Cheshire",
+    "created_at": "2026-08-17T15:49:43+01:00",
+    "name": "Wade Deacon Trust",
+    "street_address_1": "Wade Deacon Trust ",
+    "street_address_2": "Wade Deacon High School, Birchfield Road",
+    "street_address_3": ""
+  },
+  "relationships": {
+    "recruitment_cycle": {
+      "meta": {
+        "included": false
+      }
+    }
+  }
+}

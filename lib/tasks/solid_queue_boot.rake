@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
-# Review apps (and any env) can bring the solid-queue-worker up before web
-# finishes db:setup / migrate / sanitised restore. Solid Queue then caches a
+# Workers can come up while web is still migrating. Solid Queue then caches a
 # missing primary key and Sentry floods for the life of the pod.
 #
-# Waiting only for solid_queue_* is not enough on review: db:setup creates those
-# tables quickly, the worker starts, then sanitised restore rewrites the DB
-# underneath it. On review we also wait until real sanitised data is present.
+# Review first-setup is handled in terraform/deploy: solid-queue-worker replicas
+# stay at 0 while use_db_setup_command is true, then a second apply enables them
+# after the sanitised restore. Rescuing UndefinedTable here does not help —
+# Solid Queue reports it to Rails.error (handled: false) before re-raising.
+#
+# Waiting only for solid_queue_* is not enough if a worker does start early:
+# empty prepare creates those tables quickly, then sanitised restore rewrites
+# the DB underneath it. On review we also wait until real sanitised data is
+# present as a safety net.
 module SolidQueueBoot
   REQUIRED_TABLES = %w[
     solid_queue_jobs
@@ -74,10 +79,9 @@ namespace :solid_queue do
         break if SolidQueueBoot.schema_ready?
 
         if Time.zone.now >= deadline
-          # Review workers start during terraform, before db:setup and the
-          # sanitised restore. This pod exits so Kubernetes starts another one;
-          # an exception here is an expected wait showing up as an unhandled
-          # rake error.
+          # Safety net if the schema still is not ready. This pod exits so
+          # Kubernetes starts another one; an exception here is an expected wait
+          # showing up as an unhandled rake error.
           message = "[solid_queue] timed out waiting for Solid Queue schema to be ready"
           if SolidQueueBoot.review_environment?
             Rails.logger.error(message)

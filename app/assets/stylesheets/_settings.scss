@@ -1,0 +1,32 @@
+// Shared Sass settings for Find and Publish.
+//
+// Use this module in any stylesheet that needs GOV.UK Frontend functions,
+// mixins or variables, or the app variables below:
+//
+//   @use "../settings" as *;
+//
+// This module outputs no CSS. It forwards GOV.UK Frontend's base layer
+// (settings, helpers and tools) and configures it.
+//
+// Sass only lets a module be configured on its first load, so each
+// entry point must load this module before GOV.UK Frontend, MOJ Frontend
+// or any other stylesheet that loads GOV.UK Frontend.
+//
+// Asset paths are "/" so Propshaft can resolve fonts and images by bare
+// filename against config.assets.paths.
+@forward "govuk-frontend/dist/govuk/base" with (
+  $govuk-fonts-path: "/",
+  $govuk-images-path: "/"
+);
+
+$mobile-small-start: 400px;
+$mobile-small-end: 401px;
+$mobile-big-start: 500px;
+$mobile-big-end: 501px;
+
+// Get Into Teaching rebrand colours
+$git-brand-colour: #54319f;
+$git-non-uk-colour: #ca357c;
+$git-support-colour: #aa98cf;
+
+$app-callout-light-blue-colour: #f3f8f6;

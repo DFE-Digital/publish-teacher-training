@@ -27,6 +27,16 @@ describe "API" do
 
         run_test!
       end
+
+      unauthorized_response do
+        before do
+          FeatureFlag.activate(:api_key_authentication)
+        end
+
+        let(:Authorization) { "Bearer YOUR_API_KEY" } # rubocop:disable RSpec/VariableName
+
+        run_test!
+      end
     end
   end
 end

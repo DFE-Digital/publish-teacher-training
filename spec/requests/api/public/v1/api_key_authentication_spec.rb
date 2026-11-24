@@ -4,10 +4,15 @@ require "rails_helper"
 
 RSpec.describe "Public API key authentication", service: :api do
   let(:path) { "/api/public/v1/subjects" }
+  let(:api_key_authentication_enabled) { true }
   let(:secret) { create(:api_key).secret }
   let(:unknown_key_header) { { "Authorization" => "Bearer #{APIKey::SECRET_PREFIX}#{'0' * 64}" } }
 
   def bearer(token) = { "Authorization" => "Bearer #{token}" }
+
+  before do
+    FeatureFlag.activate(:api_key_authentication) if api_key_authentication_enabled
+  end
 
   it "serves a request with no header, and a valid key exactly the same" do
     find_or_create(:primary_subject, :primary)
@@ -223,6 +228,93 @@ RSpec.describe "Public API key authentication", service: :api do
       get path, headers: bearer(api_key.secret)
 
       expect(api_key.reload.last_used_at).to be_nil
+    end
+  end
+
+  context "with API key authentication disabled" do
+    let(:api_key_authentication_enabled) { false }
+
+    it "is disabled when no flag state has been created" do
+      expect(FeatureFlagState.find_by(name: "api_key_authentication")).to be_nil
+
+      get path, headers: unknown_key_header
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "can be activated and deactivated between requests" do
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:ok)
+
+      FeatureFlag.activate(:api_key_authentication)
+
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:unauthorized)
+
+      FeatureFlag.deactivate(:api_key_authentication)
+
+      get path, headers: unknown_key_header
+      expect(response).to have_http_status(:ok)
+    end
+
+    ["", "Basic legacy-credentials", "Bearer unknown"].each do |header|
+      it "serves the same data anonymously with Authorization #{header.inspect}" do
+        find_or_create(:primary_subject, :primary)
+
+        get path
+        anonymous_body = response.parsed_body
+
+        get path, headers: { "Authorization" => header }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.headers["WWW-Authenticate"]).to be_nil
+        expect(anonymous_body["data"]).not_to be_empty
+        expect(response.parsed_body).to eq(anonymous_body)
+      end
+    end
+
+    it "accepts an unknown key without looking it up" do
+      allow(APIKey).to receive(:find_active_by_secret)
+
+      get path, headers: unknown_key_header
+
+      expect(response).to have_http_status(:ok)
+      expect(response.headers["WWW-Authenticate"]).to be_nil
+      expect(APIKey).not_to have_received(:find_active_by_secret)
+    end
+
+    it "does not record use of a valid key" do
+      api_key = create(:api_key, last_used_at: 1.day.ago)
+
+      expect { get path, headers: bearer(api_key.secret) }.not_to(change { api_key.reload.last_used_at })
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "accepts a revoked key without recording use" do
+      api_key = create(:api_key)
+      api_key.revoke!
+
+      get path, headers: bearer(api_key.secret)
+
+      expect(response).to have_http_status(:ok)
+      expect(api_key.reload.last_used_at).to be_nil
+    end
+
+    it "allows conditional requests with arbitrary credentials" do
+      get path
+      etag = response.headers["ETag"]
+
+      get path, headers: unknown_key_header.merge("If-None-Match" => etag)
+
+      expect(response).to have_http_status(:not_modified)
+      expect(response.headers["WWW-Authenticate"]).to be_nil
+    end
+
+    it "still rejects keys in URLs" do
+      get "#{path}?api_key=#{secret}"
+
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 

@@ -12,6 +12,7 @@ class FeatureFlags
       [:hide_subject_knowledge_enhancement_content, "Hides the subject knowledge enhancement (SKE) content on Find course pages. Government funded SKEs end on 29 September 2026", "Find and Publish team"],
       [:group_search_results, "Group courses of the same subject from the same provider into one card on Find search results", "Find and Publish team"],
       [:api_keys, "Let support users create, search and revoke API keys in the support console", "Find and Publish team"],
+      [:api_key_authentication, "Validate public API Authorization headers and record API key use", "Find and Publish team"],
     ]
   end
 end

@@ -104,14 +104,23 @@ module Courses
     end
 
     # Names of the accredited providers of the courses in these results, keyed
-    # by provider code. Find only shows them on provider searches. Loaded in one
-    # query rather than through Course#accrediting_provider, whose
-    # instance-dependent scope has to load each course's provider and cycle.
-    def accredited_provider_names
-      return {} unless @applied_scopes.key?(:provider)
+    # by provider code. Loaded in one query rather than through
+    # Course#accrediting_provider, whose instance-dependent scope has to load
+    # each course's provider and cycle.
+    #
+    # Provider searches get names for all the results. Other searches only get
+    # them for the given courses (a page of grouped results), where they show
+    # when they tell a card's courses apart.
+    def accredited_provider_names(courses = nil)
+      if @applied_scopes.key?(:provider)
+        accredited_provider_codes = @scope.unscope(:order, :select, :group).select(:accredited_provider_code)
+      else
+        accredited_provider_codes = Array(courses).filter_map(&:accredited_provider_code).uniq
+        return {} if accredited_provider_codes.empty?
+      end
 
       @current_recruitment_cycle.providers
-        .where(provider_code: @scope.unscope(:order, :select, :group).select(:accredited_provider_code))
+        .where(provider_code: accredited_provider_codes)
         .pluck(:provider_code, :provider_name)
         .to_h
     end

@@ -3,6 +3,8 @@
 module Publish
   module Providers
     class AccreditedProviderSearchController < ApplicationController
+      include ReturningToSupport
+
       helper_method :query, :search_result_title_component
 
       def new
@@ -15,6 +17,7 @@ module Publish
             provider_code: provider.provider_code,
             recruitment_cycle_year: recruitment_cycle.year,
             accredited_provider_id:,
+            **support_return_params,
           )
         else
 
@@ -38,6 +41,7 @@ module Publish
             provider_code: provider.provider_code,
             recruitment_cycle_year: provider.recruitment_cycle_year,
             accredited_provider_id: accredited_provider_select_params[:provider_id],
+            **support_return_params,
           )
         else
           @accredited_provider_search = ::AccreditedProviders::SearchService.call(query:, recruitment_cycle_year: params[:recruitment_cycle_year])
@@ -77,7 +81,7 @@ module Publish
           query:,
           results_limit: @accredited_provider_search.limit,
           results_count: @accredited_provider_search.providers.unscope(:limit).count,
-          return_path: search_publish_provider_recruitment_cycle_accredited_providers_path,
+          return_path: search_publish_provider_recruitment_cycle_accredited_providers_path(**support_return_params),
           search_resource: "accredited provider",
           caption_text: "Add accredited provider",
         )
