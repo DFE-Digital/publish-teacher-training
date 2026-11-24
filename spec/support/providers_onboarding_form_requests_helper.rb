@@ -160,7 +160,7 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_content(onboarding_request.accredited_provider ? "Yes" : "No")
     expect(page).to have_link("Change", href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-accredited-provider-field-error"))
     expect(page).to have_content("Provider type")
-    expect(page).to have_content(ProvidersOnboardingFormRequest.human_attribute_name(onboarding_request.provider_type))
+    expect(page).to have_content(onboarding_request.provider_type_label)
     expect(page).to have_link(
       "Change",
       href: support_onboarding_change_path(onboarding_request, "providers-onboarding-form-request-provider-type-field"),
