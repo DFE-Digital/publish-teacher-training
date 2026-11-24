@@ -67,6 +67,12 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     save
   end
 
+  def provider_type_label
+    return if provider_type.blank?
+
+    self.class.human_attribute_name(provider_type)
+  end
+
   # Support-facing label. The stored status values stay the same.
   def status_label
     I18n.t(
