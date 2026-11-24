@@ -2,20 +2,10 @@
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_providers_onboarding_form_requests_path) %>
 <% end %>
-<% if @onboarding_request.errors.any? %>
-  <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
-    <h2 class="govuk-error-summary__title" id="error-summary-title">
-      <%= t(".error_summary_title") %>
-    </h2>
-    <div class="govuk-error-summary__body">
-      <ul class="govuk-list govuk-error-summary__list">
-        <% @onboarding_request.errors.each do |error| %>
-          <li><%= onboarding_error_summary_item(@onboarding_request, error) %></li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
-<% end %>
+<%= form_with model: @onboarding_request,
+              url: support_providers_onboarding_form_request_path(@onboarding_request),
+              method: :patch do |f| %>
+<%= f.govuk_error_summary %>
 <span class="govuk-caption-l"><%= t(".caption") %></span>
 <h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
 <!-- Onboarding Details -->
@@ -65,7 +55,7 @@
            ) %>
       <% else %>
         <% row.with_value do %>
-          <%= govuk_inset_text(classes: "app-inset-text--narrow-border app-inset-text--important") do %>
+          <%= govuk_inset_text(classes: ["app-inset-text--narrow-border", @onboarding_request.errors.include?(:accredited_provider_number) ? "app-inset-text--error" : "app-inset-text--important"]) do %>
             <%= govuk_link_to(t(".enter_accredited_provider_number"), accredited_provider_number_change_path(@onboarding_request)) %>
           <% end %>
         <% end %>
@@ -128,19 +118,13 @@
 <% unless @onboarding_request.already_onboarded? || @onboarding_request.rejected? %>
   <p class="govuk-body"><%= t(".onboard_explanation_html") %></p>
   <p class="govuk-body"><%= t(".reject_explanation_html") %></p>
-  <div class="govuk-button-group" id="onboard-provider">
-    <%= button_to t(".onboard_provider"),
-        support_providers_onboarding_form_request_path(@onboarding_request),
-        method: :patch,
-        params: { status: "accept" },
-        class: "govuk-button",
-        form_class: "inline-form" %>
-    <%= button_to t(".reject_provider"),
-        support_providers_onboarding_form_request_path(@onboarding_request),
-        method: :patch,
-        params: { status: "reject" },
-        class: "govuk-link app-link--destructive app-button-link",
-        form_class: "inline-form" %>
+  <div id="onboard-provider">
+    <%= f.govuk_submit t(".onboard_provider"), name: "status", value: "accept" do %>
+      <%= f.button t(".reject_provider"),
+          name: "status",
+          value: "reject",
+          class: "govuk-link app-link--destructive app-button-link" %>
+    <% end %>
   </div>
   <p class="govuk-body">
     <%= govuk_link_to(
@@ -148,5 +132,6 @@
               support_providers_onboarding_form_requests_path,
             ) %>
   </p>
+<% end %>
 <% end %>
 </div>

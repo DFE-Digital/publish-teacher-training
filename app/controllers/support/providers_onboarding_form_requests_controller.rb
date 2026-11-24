@@ -73,20 +73,16 @@ module Support
     end
 
     def onboard_provider
-      result = Support::Providers::OnboardFromFormRequest.call(onboarding_request: @onboarding_request)
-
-      if result.success?
-        redirect_to support_recruitment_cycle_provider_path(result.provider.recruitment_cycle_year, result.provider),
+      if Support::Providers::OnboardFromFormRequest.call(onboarding_request: @onboarding_request)
+        provider = @onboarding_request.provider
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider),
                     flash: {
                       success: t(
                         "support.providers.onboard_from_form_request.success",
-                        provider_name: result.provider.provider_name,
+                        provider_name: provider.provider_name,
                       ),
                     }
       else
-        result.errors.each do |error|
-          @onboarding_request.errors.add(error[:attribute] || :base, error[:message])
-        end
         @onboarding_request = @onboarding_request.decorate
         render :show, status: :unprocessable_entity
       end
