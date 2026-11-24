@@ -2,7 +2,7 @@
 
 Date: 20 October 2026
 
-Last updated: 20 November 2026
+Last updated: 24 November 2026
 
 ## Status
 
@@ -10,126 +10,97 @@ Proposed
 
 ## Context
 
-`CourseEnrichment` was designed to support several versions of a course's
-content. A published enrichment could remain live while a provider edited a
-separate draft, then the draft could replace it at publication. The current
-workflow no longer creates that second draft. Providers edit published content
-in place, and the `DeleteSubsequentDraftEnrichments` migration removed the old
-unpublished-change rows.
+Providers used to edit a separate draft while the published version stayed
+live. Publishing replaced the live version with the draft. Providers now edit
+the published content in place, and the `DeleteSubsequentDraftEnrichments`
+migration removed the old drafts with unpublished changes. Some older courses
+can still have more than one enrichment.
 
-The versioned model remains in the schema and application behaviour, even
-though parallel versions are no longer part of the intended domain. Historical
-courses can still have several enrichments, so existing data and migration code
-cannot assume that every course has exactly one row.
-
-This ADR records the problems with the current model, the constraints on a
-replacement, and the options to evaluate. It does not yet select an option or
-decide where every enrichment field should ultimately live.
+This ADR looks at where to store publication state and what to do with
+`CourseEnrichment`. Once the team picks a direction, a follow-up ADR can cover
+which fields to move, how to split the work and how to migrate existing data.
 
 ## Problems raised by the development team
 
 ### CourseEnrichment data model
 
-#### Versioning no longer fits the domain
+#### Older versions make it hard to pick the right row
 
-Multiple enrichment rows and competing statuses remain possible even though
-providers no longer work on a draft alongside published content. It can be
-unclear which row is authoritative, and "latest" has different meanings in
-different parts of the application.
+A course can still have several enrichment rows with different statuses.
+Different parts of the app use different rules to decide which row is
+"latest", so the row they use can vary.
 
 #### Course and enrichment are tightly coupled
 
-Many consumers need both records to understand one course. This introduces
-associations, eager loading, subqueries and lateral joins for data that behaves
-as part of the current course rather than as an independently versioned entity.
+Many features need data from both the course and its enrichment. For example,
+Find uses subqueries, lateral joins and eager loading to read one course's
+status and content.
 
-#### Course content is weakly modelled
+#### JSON fields have fewer database constraints
 
-Most enrichment content is stored in one JSON column. The database cannot
-provide normal column types and constraints for those values, keys retain
-legacy naming such as `FeeUkEu`, and values such as `course_length` behave like
-an enum while remaining free text.
+Most enrichment content lives in one JSON column, so those fields lack their
+own column types and constraints. The JSON uses older names such as
+`FeeUkEu`, and `course_length` is stored as free text even though it has a
+set of standard values.
 
-#### Search-critical data is buried in the content JSON
+#### Find reads fees and interview location from JSON
 
-Find filters, sorts and result cards use scalar values such as fees and
-interview location. Reading and ordering by those values requires enrichment
-selection, JSON extraction and, for fees, casting values before comparison.
+Find has to pick an enrichment row and extract JSON values to filter, sort
+and display results. Sorting by fees also requires casting the values to
+integers.
 
 #### The API can drift from the model
 
-API attributes are mapped separately from the enrichment JSON. Adding,
-renaming or changing a content field can therefore require coordinated updates
-that are easy to miss.
+The API maps enrichment fields separately. When a field changes, its API
+mapping may need an update too.
 
-#### Audit responsibility is duplicated
+#### Enrichments duplicate audit information
 
-The enrichment carries `created_by` and `updated_by` ownership while the
-application also has audit history. We need to decide which information is
-domain data and which belongs to the audit mechanism before migrating it.
+Enrichments store who created and updated them. The app already has an audit
+system that could track who made changes in the replacement model.
 
 ### Publishing flow
 
 #### There is no single source of truth for publication state
 
-`Course#content_status`, `Course#is_published?`, Publish list SQL, Find
-visibility and API behaviour do not all ask the same question in the same way.
-They can disagree about whether a course is published or visible.
+The course methods, Publish list, Find and the API can disagree on whether a
+course is published or visible.
 
-#### Publishing changes several independent concerns
+#### Publishing does several things at once
 
-`PublishService` publishes draft or rolled-over enrichments, undiscarding the
-course, opening applications, setting first-publication data and recording the
-publishing user and timestamp. These side effects make it difficult to state
-what the publication transition itself owns.
+`PublishService` publishes draft or rolled-over enrichments, undiscards the
+course and opens applications. It also sets the first publication time and
+records who published the enrichment and when.
 
-#### Publication has no explicit transition or event model
+#### Publication rules are spread across workflows
 
-The workflow changes several fields, but there is no explicit state machine or
-single publish event. Similar actions have confusing names, and their permitted
-transitions and side effects are not represented in one place.
+To see when a course can change state and what happens when it does, you have
+to read several workflows. Similar action names make those rules harder to
+follow.
 
 #### Validation and feedback are spread across models
 
-Publishability is assembled from validations across the course and related
-models. Historical enrichment rows can therefore affect validation even though
-they are not intended to represent parallel editable versions. This complicates
-the publishing path and makes it harder to give a provider clear, timely
-feedback about what prevents publication.
+Publish checks run on the course and related models. Older enrichment rows
+can affect those checks. With the rules spread out, it's harder to tell
+providers what they need to fix before they can publish.
 
 #### Lifecycle actions reuse the content table
 
-Rollover and withdrawal are represented through enrichment statuses even
-though they describe the course lifecycle rather than a version of its
-content. Withdrawal also suspends site statuses in the legacy model, further
-coupling publication, content and availability behaviour.
+Rollover and withdrawal use enrichment statuses to track what happened to
+the course. Withdrawal also suspends legacy site statuses.
 
-#### Publication timestamps require manual coordination
+#### Several workflows maintain the publication timestamp
 
-The value used as the last-published or last-updated time is maintained as part
-of application workflows. Writers can miss it, and readers need to know which
-timestamp on which record carries the intended meaning.
+Code that changes a course has to update the right timestamp. Code that
+shows the last-published or last-updated date has to know which record and
+timestamp to read.
 
 ## Current behaviour and query dependencies
 
-Publication is currently derived from enrichment data. `Course#content_status`
-uses `Courses::ContentStatusService`; Find uses enrichment subqueries to decide
-visibility; and the Publish course list reproduces status derivation in a SQL
-`CASE` expression. A published enrichment is also used as evidence by Find and
-reporting, while the latest enrichment can change the derived status to
-withdrawn or rolled over.
-
-The publish transaction currently performs several changes together:
-
-- validates the course for publication;
-- changes draft and rolled-over enrichments to published;
-- undiscards the course;
-- sets `first_published_at` for a first publication;
-- sets `application_status` to open; and
-- records publication metadata on the enrichment.
-
-The candidate search result path reads a relatively small set of scalar values
-from enrichments:
+`Course#content_status` uses `Courses::ContentStatusService`. The Publish
+course list repeats the logic in a SQL `CASE` expression. Find and reporting
+check for a published enrichment and can exclude a course based on the
+status of its latest enrichment.
 
 | Use | Current enrichment dependency |
 | --- | --- |
@@ -139,187 +110,96 @@ from enrichments:
 | UK and international fee ordering | JSON extraction and integer casts |
 | Result-card fees | Preloaded latest published enrichment |
 
-Saved courses repeat some of the same status, ordering and fee lookups. A
-course detail page and the public API need the long-form content as well, so
-moving only the search-facing scalar values would not remove every enrichment
-read.
+Saved courses use some of the same status, ordering and fee lookups. Course
+pages and the public API also read the long-form content.
 
-Publication must remain distinguishable from other course state:
+Other fields and rules answer separate questions about the course.
 
-- `application_status` says whether a published course accepts applications;
-- a future-cycle published course can be presented as scheduled;
-- `discarded_at` records deletion; and
-- site status and vacancy data do not determine current Find visibility.
+- `application_status` says whether a published course accepts applications.
+- A published course in a future cycle can appear as scheduled.
+- `discarded_at` records deletion.
+- Find visibility is independent of site status and vacancy data.
 
 ## Decision drivers
 
-- Give publication state one authoritative owner and definition.
-- Make lifecycle transitions and their side effects explicit.
+- Use one source of truth for publication state.
+- Make it clear which actions change publication state and what else they do.
 - Keep publication, application availability, scheduling and deletion as
   separate concepts.
-- Remove version-selection behaviour that is no longer part of the domain.
+- Remove the need to pick a version of the content at runtime.
 - Reduce joins, JSON extraction and duplicated status logic on Find and Saved
   course paths.
-- Give frequently queried scalar data useful database types and constraints.
-- Avoid making common course queries unnecessarily load long-form content.
-- Keep the public API compatible or version changes deliberately.
-- Preserve required audit and historical information without keeping obsolete
-  runtime versioning.
-- Allow historical data to be migrated deterministically, including courses
-  with no enrichment or several enrichments.
+- Use typed columns and constraints for fields we query often.
+- Keep common course queries from loading long-form content they don't use.
+- Keep the public API compatible and make any version changes explicit.
+- Keep the audit and historical data we need.
+- Define how to migrate courses with zero, one or several enrichments.
 - Support a safe transition while providers continue editing and publishing
   courses.
-
-## Fields to evaluate separately
-
-Moving publication state does not require every content field to move at the
-same time. These fields have a stronger case for early extraction because they
-are used outside the course detail and editing paths:
-
-| Candidate field | Reason to evaluate it |
-| --- | --- |
-| Publication state | The whole course is published, and several consumers currently reimplement an enrichment-derived state. |
-| Last-published timestamp | Find ordering, alerts and last-updated displays should not require selecting an enrichment. |
-| UK fee | Find and Saved courses sort by it and result cards display it; a typed column avoids JSON casting. |
-| International fee | It is displayed and ordered with the UK fee and has course-level validation dependencies. |
-| Interview location | Find filters directly on it, so keeping it in JSON adds work to the result query. |
-| Course length | It is currently free text but behaves like structured data; its valid vocabulary and ownership need agreement first. |
-
-The remaining narrative fields do not have the same search-path benefit. Their
-destination should be chosen as part of the wider content-model decision,
-rather than assuming that all of them belong directly on `course`.
 
 ## Options
 
 ### 1. Keep publication and all content on CourseEnrichment
 
-Continue deriving course state and search values from the relevant enrichment.
-
-#### Pros
-
-- Requires no data migration or consumer cutover.
-- Leaves historical multi-enrichment behaviour untouched.
-- Keeps all content in one storage location.
-
-#### Cons
-
-- Retains versioning that no longer fits the workflow.
-- Leaves the course lifecycle owned by a related content record.
-- Allows Ruby, SQL, Find and API interpretations of state to diverge.
-- Keeps search joins, JSON extraction and content preloading for scalar data.
+Keep the current model. This avoids a migration and leaves the existing
+status rules, version selection and search queries in place.
 
 ### 2. Move only publication state to Course
 
-Add a text-backed state field to `course`, leaving timestamps and all content
-on the enrichment.
-
-#### Pros
-
-- Is the smallest change that makes publication an explicit course property.
-- Can simplify Find visibility and the Publish course-list query.
-- Makes the permitted publication values visible in the schema.
-
-#### Cons
-
-- Find still reads enrichments for newest ordering, alerts, fees and interview
-  location.
-- Leaves two storage models on the same high-traffic query path.
-- Does not address weakly typed JSON content or obsolete versioning by itself.
+Store publication state on `Course`. This is the smallest change that simplifies
+Find visibility and the Publish course list. Find still reads enrichments for
+fees, interview location and newest ordering.
 
 ### 3. Move publication and search-facing fields first
 
-Make `course` authoritative for publication and selected typed scalar values,
-then decide and migrate the remaining content separately.
-
-#### Pros
-
-- Can remove enrichment access from Find results and weekly-alert discovery.
-- Replaces repeated JSON extraction and fee casting with typed columns.
-- Creates a smaller first boundary than a complete content migration.
-- Allows fields to move according to how they are used rather than treating
-  the JSON document as indivisible.
-
-#### Cons
-
-- Creates an intentional intermediate split between two models.
-- Requires temporary synchronisation or a coordinated cutover for each moved
-  field.
-- Course editing, validation and API mappings must be updated carefully.
-- Does not decide the final home of narrative content.
+Move publication state and some fields used by Find onto `Course`. Storing
+fees, interview location or the last-published timestamp in typed columns
+could simplify filters, sorting and result cards. This is more work up front
+than moving state alone. Course pages and the API still read the enrichment
+for content.
 
 ### 4. Move all enrichment fields to Course
 
-Treat the enrichment as obsolete and migrate its content, status, timestamps
-and required audit data to `course`.
-
-#### Pros
-
-- Removes the current one-course/two-model split.
-- Can remove the enrichment association and table in one programme of work.
-- Gives all current course data one owner.
-
-#### Cons
-
-- Couples publication work to a much larger content and API migration.
-- Makes common `course.*` queries carry many long-form values unless they are
-  explicitly deferred.
-- Requires immediate decisions about every JSON field, historical version and
-  audit attribute.
-- Increases migration, rollback and verification risk.
+Move publication state and all current content onto `Course`, then retire
+`CourseEnrichment`. All current course data would live in one place. This
+requires a wider content and API migration, and queries that load the full
+course row would also load its long-form content.
 
 ### 5. Replace CourseEnrichment with a non-versioned content model
 
-Put publication and other course lifecycle state on `course`, while replacing
-the versioned enrichment with a one-to-one content model for narrative or less
-frequently queried fields.
+Keep publication state on `Course` and replace `CourseEnrichment` with one
+content record per course. This removes version selection and keeps long-form
+content off the main course row. Course pages and the API still need to load
+that content record.
 
-#### Pros
+Options 2 and 3 describe possible first steps. Either could lead to option 4
+or 5.
 
-- Removes obsolete version selection without making `course` carry all
-  long-form content.
-- Gives lifecycle state and content distinct ownership.
-- Provides an opportunity to replace the untyped JSON with explicit columns or
-  a deliberately defined document schema.
+### How publication could work on Course
 
-#### Cons
+- Use AASM, which we already use on `SiteStatus`, to manage a text column
+  with four proposed values (`draft`, `rolled_over`, `published` and
+  `withdrawn`). The team can choose the column name and decide whether to
+  keep `rolled_over` as a state or track it with a separate flag.
+- Publish a `draft` or `rolled_over` course, withdraw a `published` course, and
+  restore a `withdrawn` course to `published`. A normal copy starts in `draft`.
+  A rollover creates a new course in `rolled_over` under the four-state
+  proposal. `draft` is a starting state only.
+- Find search results include only published courses from the current
+  recruitment cycle and still apply the existing deletion checks. Application
+  status stays separate. Publishing a course in the current cycle opens
+  applications.
+- Keep `Course#publishable?` as the entry point for publish checks. The
+  checks could live in a concern. Use the audit system to track who made
+  changes when we replace the enrichment audit fields.
 
-- Still requires a join for course detail and API content.
-- Introduces and migrates to another model rather than simply removing one.
-- Requires agreement on the boundary between `course` and the content model.
-- Does not improve search unless search-facing fields move to `course` as well.
+### Rollout preference
 
-## Open questions
-
-- What does the publication state describe: published content, candidate
-  visibility, or the lifecycle of the whole course?
-- Should the state be a simple text-backed enum, an explicit state machine, or
-  an event-backed model?
-- Which transitions are valid, and which side effects belong to publish,
-  withdraw, reverse withdrawal, rollover and copy?
-- Are `withdrawn` and `rolled_over` publication states, separate course states,
-  or workflow events?
-- Should application opening remain a side effect of publication, or be an
-  explicit independent action?
-- Which model owns publishability validation and how should failures be shown
-  to providers?
-- If state is stored on `course`, should the column be named
-  `publication_status`, `published_status`, `visibility_status` or something
-  else? The name depends on the agreed semantics.
-- Which scalar fields should move with publication state, and which performance
-  improvements should be measured before and after the change?
-- Should remaining content live on `course`, in a one-to-one content model, or
-  in a more explicitly defined document?
-- Is enrichment `created_by`/`updated_by` data required after migration, or can
-  the audit system be authoritative?
-- What historical content must be retained, and does it belong in the live
-  course model or an archive?
-- During migration, is transactional dual writing preferable to a coordinated
-  write/read cutover for each group of fields? If dual writing is used, which
-  copy is authoritative at each stage and how will drift be detected?
-- What deterministic rule selects the effective values for historical courses
-  with no enrichment, one enrichment, or several enrichments?
-- How will Publish, Find, Saved courses, exports, alerts and the public API be
-  verified against the same definition before legacy logic is removed?
+If the team chooses to move data, the preference is to switch once and avoid
+dual writes. Merge the new code behind a feature flag, migrate the data, then
+enable the new reads, writes and validations together. Add comments to the
+legacy code so it's easy to find and remove after the switch. The follow-up
+ADR can cover field mapping, backfill, retention, verification and rollback.
 
 ## Related decisions
 
