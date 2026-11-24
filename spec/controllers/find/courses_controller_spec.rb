@@ -24,7 +24,6 @@ module Find
     describe "#apply" do
       it "redirects" do
         expect(Rails.logger).to receive(:info).with("Course apply conversion. Provider: #{course.provider.provider_code}. Course: #{course.course_code}").once
-        expect(Rails.logger).to receive(:info)
 
         get :apply, params: {
           provider_code: provider.provider_code,
