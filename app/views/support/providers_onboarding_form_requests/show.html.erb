@@ -64,7 +64,7 @@
   <% end %>
   <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-provider-type-field-error" }) do |row| %>
     <% row.with_key { t(".provider_type") } %>
-    <% row.with_value { @onboarding_request.provider_type_label } %>
+    <% row.with_value { ProvidersOnboardingFormRequest.human_attribute_name(@onboarding_request.provider_type) } %>
     <% row.with_action(
          text: t(".change"),
          href: support_onboarding_change_path(@onboarding_request, "providers-onboarding-form-request-provider-type-field"),

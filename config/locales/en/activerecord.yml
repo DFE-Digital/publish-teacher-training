@@ -27,6 +27,10 @@ en:
         non_uk_scholarship_eligible: Non-UK scholarship
         scholarship: Scholarship amount
         subject_knowledge_enhancement_course_available: SKE
+      providers_onboarding_form_request:
+        university: Higher education institution (HEI)
+        scitt: School centred initial teacher training (SCITT)
+        lead_school: School
     errors:
       models:
         api_key:

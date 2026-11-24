@@ -1,12 +1,8 @@
 class ProvidersOnboardingFormRequest < ApplicationRecord
   ZENDESK_URL_REGEX = %r{\Ahttps://becomingateacher\.zendesk\.com/.*\z}
-  PROVIDER_TYPES = {
-    "university" => "Higher education institution (HEI)",
-    "scitt" => "School centred initial teacher training (SCITT)",
-    "lead_school" => "School",
-  }.freeze
 
   enum :status, %w[pending submitted expired closed rejected onboarded].index_by(&:itself)
+  enum :provider_type, %w[university scitt lead_school].index_by(&:itself), validate: { allow_nil: true }
 
   # 3 fields need to be stored once the support team instantiate a form request
   # Every onboarding form request is optionally handled by/assigned a support agent (User)
@@ -30,7 +26,7 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     validates :provider_name, presence: true
     validates :ukprn, ukprn_format: { allow_blank: false }
     validates :accredited_provider, inclusion: { in: [true, false] }
-    validates :provider_type, presence: true, inclusion: { in: PROVIDER_TYPES.keys }
+    validates :provider_type, presence: true
     validates :contact_email_address, email_address: true
     validates :telephone, phone: { allow_blank: false }
     validates :website, presence: true, url: true
@@ -46,7 +42,9 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
             reference_number_format: { allow_blank: false, minimum: 5, maximum: 6, message: "Provider URN must be 5 or 6 numbers" },
             if: :validate_urn?
   validate :accredited_provider_cannot_be_a_school, if: :run_provider_validations
-  validate :accredited_provider_number_format, if: :run_provider_validations
+  validates :accredited_provider_number,
+            accredited_provider_number_format: { allow_blank: true },
+            if: :validate_accredited_provider_number?
 
   # Rules that apply only when support onboards the request. Run them with valid?(:onboard).
   validate :can_be_onboarded, on: :onboard
@@ -69,10 +67,6 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     save
   end
 
-  def provider_type_label
-    PROVIDER_TYPES[provider_type]
-  end
-
   # Support-facing label. The stored status values stay the same.
   def status_label
     I18n.t(
@@ -81,21 +75,9 @@ class ProvidersOnboardingFormRequest < ApplicationRecord
     )
   end
 
-  def lead_school?
-    provider_type == "lead_school"
-  end
-
   # Closed is the status stored for requests onboarded before a provider was created here.
   def already_onboarded?
     onboarded? || closed? || provider_id.present?
-  end
-
-  def university?
-    provider_type == "university"
-  end
-
-  def scitt?
-    provider_type == "scitt"
   end
 
 private
@@ -107,6 +89,10 @@ private
 
   def validate_urn?
     run_provider_validations && lead_school?
+  end
+
+  def validate_accredited_provider_number?
+    run_provider_validations && accredited_provider?
   end
 
   def accredited_provider_cannot_be_a_school
@@ -135,19 +121,6 @@ private
     return :scitt_format if scitt?
 
     :blank
-  end
-
-  def accredited_provider_number_format
-    return unless accredited_provider?
-    return if accredited_provider_number.blank?
-
-    if university?
-      errors.add(:accredited_provider_number, :university_format) unless accredited_provider_number.match?(/\A1\d{3}\z/)
-    elsif scitt?
-      errors.add(:accredited_provider_number, :scitt_format) unless accredited_provider_number.match?(/\A5\d{3}\z/)
-    else
-      errors.add(:accredited_provider_number, :invalid) unless accredited_provider_number.match?(/\A[15]\d{3}\z/)
-    end
   end
 
   # Custom validation to check if the support agent is an admin user
