@@ -215,9 +215,9 @@ module ProvidersOnboardingFormRequestsHelper
     expect(page).to have_css("p strong", exact_text: "Onboard provider")
     expect(page).to have_css("p strong", exact_text: "Reject provider")
     expect(page).to have_button("Onboard provider", class: "govuk-button")
-    expect(page).to have_css(
-      "button.govuk-link.app-link--destructive.app-button-link",
-      text: "Reject provider",
+    expect(page).to have_button(
+      "Reject provider",
+      class: "govuk-link app-link--destructive app-button-link",
     )
     expect(page).to have_link("Cancel", href: support_providers_onboarding_form_requests_path)
   end
