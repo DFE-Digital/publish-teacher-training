@@ -9,12 +9,13 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
   before { recruitment_cycle }
 
   describe ".call" do
-    subject(:result) { described_class.call(onboarding_request:) }
+    subject(:onboarded) { described_class.call(onboarding_request:) }
+
+    let(:provider) { onboarding_request.provider }
 
     it "creates the provider and first user, then marks the request as onboarded" do
-      expect(result).to be_success
+      expect(onboarded).to be(true)
 
-      provider = result.provider
       expect(provider).to have_attributes(
         provider_name: "Northshore Training",
         provider_type: "lead_school",
@@ -41,24 +42,25 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       )
       expect(onboarding_request.reload).to be_onboarded
       expect(onboarding_request.provider).to eq(provider)
+      expect(onboarding_request.errors).to be_empty
     end
 
     it "does not onboard the same request again" do
-      first = described_class.call(onboarding_request:)
+      described_class.call(onboarding_request:)
+      first_provider = onboarding_request.provider
+      second_attempt = ProvidersOnboardingFormRequest.find(onboarding_request.id)
 
-      second = described_class.call(onboarding_request: onboarding_request.reload)
-
-      expect(second).not_to be_success
-      expect(second.error_message).to eq("This provider has already been onboarded")
-      expect(Provider.where(id: first.provider.id).count).to eq(1)
+      expect(described_class.call(onboarding_request: second_attempt)).to be(false)
+      expect(second_attempt.errors[:base]).to eq(["This provider has already been onboarded"])
+      expect(Provider.where(provider_name: first_provider.provider_name).count).to eq(1)
     end
 
     it "retries when the generated code is already used in the recruitment cycle" do
       create(:provider, recruitment_cycle:, provider_code: "Z99")
       allow(Support::Providers::ProviderCode).to receive(:call).and_return("Z99", "A1B")
 
-      expect(result).to be_success
-      expect(result.provider.provider_code).to eq("A1B")
+      expect(onboarded).to be(true)
+      expect(provider.provider_code).to eq("A1B")
     end
 
     it "can use a provider code that exists in another recruitment cycle" do
@@ -66,9 +68,9 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       create(:provider, recruitment_cycle: other_cycle, provider_code: "A1B")
       allow(Support::Providers::ProviderCode).to receive(:call).and_return("A1B")
 
-      expect(result).to be_success
-      expect(result.provider.provider_code).to eq("A1B")
-      expect(result.provider.recruitment_cycle).to eq(recruitment_cycle)
+      expect(onboarded).to be(true)
+      expect(provider.provider_code).to eq("A1B")
+      expect(provider.recruitment_cycle).to eq(recruitment_cycle)
     end
 
     it "does not grant the first user access to an unrelated next-cycle provider with the same code" do
@@ -88,8 +90,8 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
       allow(NewUserAddedBySupportTeamMailer).to receive(:user_added_to_provider_email).and_return(mailer)
 
-      expect(result).to be_success
-      expect(result.provider.users).to contain_exactly(user)
+      expect(onboarded).to be(true)
+      expect(provider.users).to contain_exactly(user)
       expect(unrelated_provider.reload.users).to be_empty
       expect(NewUserAddedBySupportTeamMailer).to have_received(:user_added_to_provider_email).with(recipient: user)
       expect(mailer).to have_received(:deliver_later)
@@ -101,20 +103,17 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       existing_user = create(:user, email: "already.here@example.com", first_name: "Existing", last_name: "User")
       onboarding_request.update!(email_address: "already.here@example.com", first_name: "New", last_name: "Name")
 
-      expect { result }.not_to change(User, :count)
-      expect(result.provider.users).to contain_exactly(existing_user)
+      expect { onboarded }.not_to change(User, :count)
+      expect(provider.users).to contain_exactly(existing_user)
       expect(existing_user.reload).to have_attributes(first_name: "Existing", last_name: "User")
     end
 
     it "does not create a provider when the organisation details are invalid" do
       onboarding_request.update_column(:telephone, "bad")
 
-      expect(result).not_to be_success
-      expect(result.errors).to include(
-        hash_including(
-          attribute: :telephone,
-          message: "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192",
-        ),
+      expect(onboarded).to be(false)
+      expect(onboarding_request.errors[:telephone]).to include(
+        "Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192",
       )
       expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
       expect(onboarding_request.reload).to be_submitted
@@ -128,8 +127,8 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
         urn: nil,
       )
 
-      expect(result).to be_success
-      expect(result.provider).to have_attributes(
+      expect(onboarded).to be(true)
+      expect(provider).to have_attributes(
         provider_type: "university",
         accredited: true,
         accredited_provider_number: 1234,
@@ -145,8 +144,8 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
         urn: nil,
       )
 
-      expect(result).to be_success
-      expect(result.provider).to have_attributes(
+      expect(onboarded).to be(true)
+      expect(provider).to have_attributes(
         provider_type: "scitt",
         accredited: true,
         accredited_provider_number: 5678,
@@ -156,13 +155,8 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
     it "does not create an accredited school" do
       onboarding_request.update_columns(accredited_provider: true, accredited_provider_number: "1234")
 
-      expect(result).not_to be_success
-      expect(result.errors).to include(
-        hash_including(
-          attribute: :provider_type,
-          message: "Accredited provider must not have Provider type school",
-        ),
-      )
+      expect(onboarded).to be(false)
+      expect(onboarding_request.errors[:provider_type]).to include("Accredited provider cannot be a school")
       expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
       expect(onboarding_request.reload).to be_submitted
     end
@@ -170,10 +164,40 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
     it "does not onboard a request that has not been submitted" do
       pending_request = create(:providers_onboarding_form_request)
 
-      outcome = described_class.call(onboarding_request: pending_request)
+      expect(described_class.call(onboarding_request: pending_request)).to be(false)
+      expect(pending_request.errors[:base]).to eq(["This onboarding form has not been submitted, so the provider cannot be onboarded"])
+      expect(pending_request.reload.provider).to be_nil
+    end
 
-      expect(outcome).not_to be_success
-      expect(outcome.error_message).to eq("This onboarding form has not been submitted, so the provider cannot be onboarded")
+    it "does not onboard an accredited provider without an accredited provider number" do
+      onboarding_request.update!(
+        accredited_provider: true,
+        provider_type: "university",
+        accredited_provider_number: nil,
+        urn: nil,
+      )
+
+      expect(onboarded).to be(false)
+      expect(onboarding_request.errors[:accredited_provider_number]).to eq(
+        ["Enter a valid University accredited provider number - it must be 4 digits starting with a 1"],
+      )
+      expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
+    end
+
+    it "undoes the provider and puts the reason on base when the first user cannot be saved" do
+      allow(User).to receive(:find_or_initialize_by).and_wrap_original do |original, **args|
+        original.call(**args).tap do |user|
+          allow(user).to receive(:save) do
+            user.errors.add(:email, "^Email is not allowed")
+            false
+          end
+        end
+      end
+
+      expect(onboarded).to be(false)
+      expect(onboarding_request.errors[:base]).to eq(["This provider could not be onboarded. User details: Email is not allowed"])
+      expect(Provider.find_by(provider_name: onboarding_request.provider_name)).to be_nil
+      expect(onboarding_request.reload).to be_submitted
     end
   end
 end
