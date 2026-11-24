@@ -2,117 +2,71 @@
 
 module Support
   module Providers
+    # Creates a provider and its first user from a submitted onboarding request.
+    # Returns true on success. On failure it returns false and the reasons are on
+    # onboarding_request.errors, so the support page can render them with the
+    # form builder error summary.
     class OnboardFromFormRequest
       include ServicePattern
 
-      PROVIDER_ATTRIBUTES = {
-        "provider_name" => :provider_name,
-        "provider_type" => :provider_type,
-        "accredited" => :provider_type,
-        "ukprn" => :ukprn,
-        "urn" => :urn,
-        "accredited_provider_number" => :accredited_provider_number,
-        "email" => :contact_email_address,
-        "telephone" => :telephone,
-        "website" => :website,
-        "address1" => :address_line_1,
-        "address2" => :address_line_1,
-        "address3" => :address_line_1,
-        "town" => :address_line_1,
-        "address4" => :address_line_1,
-        "postcode" => :address_line_1,
-      }.freeze
-
-      USER_ATTRIBUTES = {
-        "email" => :email_address,
-        "first_name" => :first_name,
-        "last_name" => :last_name,
-      }.freeze
-
-      class Error < StandardError
-        attr_reader :errors
-
-        def initialize(errors)
-          items = errors.is_a?(Array) ? errors : [errors]
-          @errors = items.map { |error| error.is_a?(Hash) ? error : { message: error.to_s } }
-          super(@errors.pluck(:message).join(" "))
-        end
-      end
-
-      Result = Data.define(:provider, :errors) do
-        def success?
-          errors.blank?
-        end
-
-        def error_message
-          errors.pluck(:message).join(" ")
-        end
-      end
+      PROVIDER_CODE_ATTEMPTS = 5
 
       def initialize(onboarding_request:)
         @onboarding_request = onboarding_request
       end
 
       def call
-        provider = nil
+        # with_lock reloads the request, so the onboard checks use the latest row.
+        # requires_new gives a savepoint, so ActiveRecord::Rollback undoes the
+        # provider even when a caller already has a transaction open.
+        onboarded = onboarding_request.with_lock(requires_new: true) do
+          next false unless onboarding_request.valid?(:onboard)
 
-        onboarding_request.with_lock do
-          ensure_can_onboard!
-          provider = create_provider!
-          create_first_user!(provider)
+          provider = create_provider
+          create_first_user(provider)
           onboarding_request.update!(status: :onboarded, provider:)
         end
 
-        Result.new(provider:, errors: [])
-      rescue Error => e
-        Result.new(provider: nil, errors: e.errors)
+        onboarded == true
       end
 
     private
 
       attr_reader :onboarding_request
 
-      def ensure_can_onboard!
-        if onboarding_request.onboarded? || onboarding_request.provider_id.present?
-          raise Error, { attribute: :base, message: onboarding_error("already_onboarded") }
-        end
-
-        raise Error, { attribute: :base, message: onboarding_error("not_submitted") } unless onboarding_request.submitted?
-      end
-
-      def create_provider!
+      def create_provider
         recruitment_cycle = RecruitmentCycle.current_recruitment_cycle
-        raise Error, { attribute: :base, message: onboarding_error("no_recruitment_cycle") } if recruitment_cycle.nil?
+        fail_with!(onboarding_error("no_recruitment_cycle")) if recruitment_cycle.nil?
 
-        5.times do
+        PROVIDER_CODE_ATTEMPTS.times do
           code = ProviderCode.call(recruitment_cycle:)
-          raise Error, { attribute: :base, message: onboarding_error("code_generation_failed") } if code.blank?
+          break if code.blank?
 
           provider = recruitment_cycle.providers.new(provider_attributes(code))
           return provider if save_provider(provider)
         end
 
-        raise Error, { attribute: :base, message: onboarding_error("code_generation_failed") }
+        fail_with!(onboarding_error("code_generation_failed"))
       end
 
+      # Returns false when the provider code is taken, so the caller can try another code.
       def save_provider(provider)
-        unless provider.valid?
-          raise Error, field_errors(provider, PROVIDER_ATTRIBUTES) unless provider.errors.of_kind?(:provider_code, :taken)
-
-          return false
+        if provider.valid?
+          ActiveRecord::Base.transaction(requires_new: true) { provider.save! }
+          return true
         end
 
-        ActiveRecord::Base.transaction(requires_new: true) do
-          provider.save!
-        end
-
-        true
+        provider_invalid(provider)
       rescue ActiveRecord::RecordNotUnique
         false
-      rescue ActiveRecord::RecordInvalid => e
-        raise Error, field_errors(e.record, PROVIDER_ATTRIBUTES) unless e.record.errors.of_kind?(:provider_code, :taken)
+      rescue ActiveRecord::RecordInvalid
+        provider_invalid(provider)
+      end
 
-        false
+      def provider_invalid(provider)
+        return false if provider.errors.of_kind?(:provider_code, :taken)
+
+        fail_with!(*record_errors(provider, "provider_invalid"))
       end
 
       def provider_attributes(code)
@@ -123,7 +77,7 @@ module Support
           ukprn: onboarding_request.ukprn,
           urn: onboarding_request.urn,
           accredited: onboarding_request.accredited_provider,
-          accredited_provider_number: accredited_provider_number,
+          accredited_provider_number:,
           email: onboarding_request.contact_email_address,
           telephone: onboarding_request.telephone,
           website: onboarding_request.website,
@@ -137,13 +91,13 @@ module Support
         }
       end
 
-      def create_first_user!(provider)
+      def create_first_user(provider)
         user = User.find_or_initialize_by(email: normalized_email)
 
         if user.new_record?
           user.first_name = onboarding_request.first_name
           user.last_name = onboarding_request.last_name
-          raise Error, field_errors(user, USER_ATTRIBUTES) unless user.save
+          fail_with!(*record_errors(user, "user_invalid")) unless user.save
         end
 
         UserAssociationsService::Create.call(user:, provider:, limit_to_provider: true)
@@ -159,15 +113,17 @@ module Support
         onboarding_request.email_address.to_s.strip.downcase
       end
 
-      def field_errors(record, attributes)
-        record.errors.attribute_names.flat_map do |attribute|
-          record.errors.messages_for(attribute).map do |message|
-            {
-              attribute: attributes[attribute.to_s] || :base,
-              message: message.delete_prefix("^"),
-            }
-          end
-        end
+      # The request passed its own validations, so a provider or user failure here
+      # means the two sets of rules differ. These errors go on base.
+      def record_errors(record, prefix_key)
+        prefix = onboarding_error(prefix_key)
+        record.errors.map { |error| "#{prefix} #{error.message.delete_prefix('^')}" }
+      end
+
+      # Adds the messages to the request and undoes everything done in the lock.
+      def fail_with!(*messages)
+        messages.each { |message| onboarding_request.errors.add(:base, message) }
+        raise ActiveRecord::Rollback
       end
 
       def onboarding_error(key)
