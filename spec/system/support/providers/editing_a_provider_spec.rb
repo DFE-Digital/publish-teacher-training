@@ -66,7 +66,7 @@ private
       href: edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
       class: "govuk-!-font-weight-bold",
     )
-    expect(provider_table_cell("Provider name")).to have_css(".govuk-hint", text: "SCITT")
+    expect(provider_table_cell("Provider name")).to have_css("p.govuk-hint", text: "SCITT")
     expect(provider_table_cell("Provider code")).to have_text(@provider.provider_code)
     expect(provider_table_cell("Accredited provider number")).to have_text("5432")
     expect(provider_table_cell("UKPRN")).to have_text(@provider.ukprn)

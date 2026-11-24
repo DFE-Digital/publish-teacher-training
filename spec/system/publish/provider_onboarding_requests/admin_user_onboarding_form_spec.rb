@@ -50,8 +50,11 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
   end
 
   def then_i_see_the_completed_form_fields
-    expect(page).to have_field("Organisation name", with: onboarding_request.provider_name)
+    expect(page).to have_field("Provider name", with: onboarding_request.provider_name)
+    expect(page).to have_field("Accredited provider number", visible: :all)
+    expect(page).not_to have_content("If you don't know it, leave this blank and our support team will find this for you.")
     expect(page).to have_field("UK provider reference number (UKPRN)", with: onboarding_request.ukprn)
+    expect(page).to have_checked_field("School")
     expect(page).to have_field("Unique reference number (URN)", with: onboarding_request.urn)
     expect(page).to have_field("Contact email address", with: onboarding_request.contact_email_address)
     expect(page).to have_field("Telephone", with: onboarding_request.telephone)
@@ -73,7 +76,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
 
   def and_i_can_edit_the_form_if_needed
     @updated_name = "Updated #{onboarding_request.provider_name}"
-    fill_in "Organisation name", with: @updated_name
+    fill_in "Provider name", with: @updated_name
   end
 
   def then_i_click_the_continue_button
@@ -94,6 +97,7 @@ RSpec.describe "Provider facing onboarding form (publish side) - admin", type: :
     expect(page).to have_content(onboarding_request.ukprn)
     accredited_text = onboarding_request.accredited_provider ? "Yes" : "No"
     expect(page).to have_content(accredited_text)
+    expect(page).to have_content("School")
     expect(page).to have_content(onboarding_request.urn)
 
     expect(page).to have_content(onboarding_request.contact_email_address)

@@ -29,7 +29,7 @@
         <%= govuk_link_to @provider.provider_name,
               edit_support_recruitment_cycle_provider_path(@provider.recruitment_cycle_year, @provider),
               class: "govuk-!-font-weight-bold" %>
-        <span class="govuk-hint"><%= Provider.human_attribute_name(@provider.provider_type) %></span>
+        <p class="govuk-hint govuk-!-margin-bottom-0 govuk-!-margin-top-1"><%= Provider.human_attribute_name(@provider.provider_type) %></p>
       <% end %>
       <% row.with_cell(text: @provider.provider_code) %>
       <% row.with_cell(text: @provider.accredited_provider_number) %>

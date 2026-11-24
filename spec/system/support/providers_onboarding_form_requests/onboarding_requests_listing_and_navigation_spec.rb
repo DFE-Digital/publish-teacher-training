@@ -33,4 +33,26 @@ RSpec.describe "Support console providers onboarding form requests", service: :s
       end
     end
   end
+
+  scenario "the requests table shows the support status labels" do
+    labels = {
+      "pending" => "Sent",
+      "submitted" => "Ready for review",
+      "closed" => "Onboarded",
+      "rejected" => "Rejected",
+    }
+    requests = labels.map do |status, label|
+      request = create(:providers_onboarding_form_request, form_name: "#{label} form")
+      request.update_column(:status, status)
+      request
+    end
+
+    when_i_visit_the_providers_onboarding_form_requests_page
+
+    requests.each do |request|
+      within("tr", text: request.form_name) do
+        expect(page).to have_content(labels.fetch(request.status))
+      end
+    end
+  end
 end
