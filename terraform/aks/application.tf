@@ -26,11 +26,12 @@ module "web_application" {
   kubernetes_config_map_name = module.application_configuration.kubernetes_config_map_name
   kubernetes_secret_name     = module.application_configuration.kubernetes_secret_name
 
+  name                   = each.key == "main" ? null : each.key
   docker_image           = var.docker_image
   enable_logit           = var.enable_logit
   run_as_non_root        = var.run_as_non_root
   command                = var.use_db_setup_command ? local.db_setup_command : []
-  web_external_hostnames = var.app_environment == "review" ? local.review_additional_hostnames : var.additional_hostnames
+  web_external_hostnames = var.app_environment == "review" ? each.key == "find" ? local.review_additional_hostnames_find : local.review_additional_hostnames : each.value.hostnames
   max_memory             = each.value.max_memory
   replicas               = each.value.replicas
   probe_path             = "/ping"

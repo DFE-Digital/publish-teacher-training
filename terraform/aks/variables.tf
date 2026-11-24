@@ -108,6 +108,7 @@ variable "main_app" {
       probe_path      = optional(string, null)
       replicas        = optional(number, 1)
       max_memory      = optional(string, "1Gi")
+      hostnames       = optional(list(string), [])
     })
   )
   default = {}
