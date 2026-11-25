@@ -64,7 +64,7 @@ RSpec.describe "Adding user to provider as an admin", :publish_features, travel:
     visit new_publish_provider_user_path(
       provider_code: @provider.provider_code,
       return_to: "support",
-      recruitment_cycle_year: @provider.recruitment_cycle_year,
+      support_return: { recruitment_cycle_year: @provider.recruitment_cycle_year },
     )
   end
 
@@ -81,7 +81,7 @@ RSpec.describe "Adding user to provider as an admin", :publish_features, travel:
       publish_provider_users_path(
         @provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: @provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: @provider.recruitment_cycle_year },
       ),
     )
     expect(page).to have_css(".govuk-error-summary")

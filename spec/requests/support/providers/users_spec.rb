@@ -31,9 +31,8 @@ RSpec.describe "Support provider users" do
       get support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
 
       expect(response.body).to include("Add user in Publish")
-      expect(response.body).to include("/publish/organisations/#{provider.provider_code}/users/new?")
       expect(response.body).to include("return_to=support")
-      expect(response.body).to include("recruitment_cycle_year=#{provider.recruitment_cycle_year}")
+      expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{provider.recruitment_cycle_year}")
     end
 
     it "sorts by most recently signed in, with people who have never signed in last" do

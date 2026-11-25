@@ -6,6 +6,9 @@ module Publish
   # Controllers including this concern must implement:
   # - support_return_path
   # - publish_return_path
+  #
+  # List/flow state for the Support return trip lives under params[:support_return]
+  # so it cannot collide with Publish's own query params (e.g. page).
   module ReturnToSupport
     extend ActiveSupport::Concern
 
@@ -21,15 +24,36 @@ module Publish
       params[:return_to] == "support" && current_user.admin?
     end
 
-    # Override to carry extra params through the Publish flow.
+    # Keys permitted inside params[:support_return]. Override per flow.
+    def support_return_param_keys
+      []
+    end
+
+    # Override when the nested bag needs shaping beyond permit + compact.
     def support_flow_params
-      {}
+      permitted_support_return_params
+    end
+
+    def permitted_support_return_params
+      raw = params[:support_return]
+      return {} if raw.blank?
+
+      permitted = if raw.respond_to?(:permit)
+                    raw.permit(*support_return_param_keys)
+                  else
+                    ActionController::Parameters.new(raw).permit(*support_return_param_keys)
+                  end
+
+      permitted.to_h.compact_blank.symbolize_keys
     end
 
     def support_return_params
       return {} unless returning_to_support?
 
-      { return_to: "support", **support_flow_params }
+      flow = support_flow_params
+      { return_to: "support" }.tap do |result|
+        result[:support_return] = flow if flow.present?
+      end
     end
 
     def return_path

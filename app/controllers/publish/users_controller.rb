@@ -57,10 +57,6 @@ module Publish
 
   private
 
-    def cycle_year
-      params[:recruitment_cycle_year] || params[:year] || session[:cycle_year] || Find::CycleTimetable.current_year
-    end
-
     def user_params
       params.expect(publish_user_form: %i[first_name last_name email]).except(:code, :authenticity_token)
     end
