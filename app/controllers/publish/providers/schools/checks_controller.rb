@@ -4,7 +4,8 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        include SchoolsReturnPaths
+        include ReturnToSupport
+        include ReturnPaths::Schools
 
         before_action :check_form
 

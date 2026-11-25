@@ -3,7 +3,8 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      include SchoolsReturnPaths
+      include ReturnToSupport
+      include ReturnPaths::Schools
 
       before_action :school, only: %i[show delete destroy]
       before_action :reset_urn_form, only: %i[index]

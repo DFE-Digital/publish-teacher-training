@@ -4,7 +4,8 @@ module Publish
   module Providers
     module AccreditedPartnerships
       class ChecksController < ApplicationController
-        include AccreditedPartnershipsReturnPaths
+        include ReturnToSupport
+        include ReturnPaths::AccreditedPartnerships
 
         def show
           @partnership = provider.accredited_partnerships.build(accredited_provider:)

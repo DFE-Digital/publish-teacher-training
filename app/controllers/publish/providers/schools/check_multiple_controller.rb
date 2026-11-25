@@ -5,7 +5,8 @@ module Publish
     module Schools
       class CheckMultipleController < ApplicationController
         include SuccessMessage
-        include SchoolsReturnPaths
+        include ReturnToSupport
+        include ReturnPaths::Schools
 
         before_action :set_urns_and_schools, only: %i[show]
 

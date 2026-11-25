@@ -4,7 +4,8 @@ module Publish
   module Providers
     module Schools
       class SearchController < ApplicationController
-        include SchoolsReturnPaths
+        include ReturnToSupport
+        include ReturnPaths::Schools
 
         helper_method :query, :search_result_title_component
 
