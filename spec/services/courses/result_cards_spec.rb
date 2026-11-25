@@ -152,7 +152,7 @@ RSpec.describe Courses::ResultCards do
     end
 
     %w[salary apprenticeship].each do |funding|
-      context "when a provider has a #{funding} course of a subject it also offers for a fee" do
+      context "when a provider offers a subject for a fee and as #{funding}" do
         before do
           create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
           create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
@@ -183,6 +183,13 @@ RSpec.describe Courses::ResultCards do
 
       it "puts the salaried course at the bottom of the last one" do
         expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002 A003]])
+      end
+
+      it "shows each course exactly once across the pages" do
+        pages = [1, 2, 3, 4].map { |page| result_cards(page:, per_page: 1) }
+
+        expect(pages.map { |page| card_codes(page.cards) }).to eq([[%w[A001]], [%w[B001]], [%w[A002 A003]], []])
+        expect(pages.map(&:count).uniq).to eq([3])
       end
     end
 
@@ -345,6 +352,8 @@ RSpec.describe Courses::ResultCards do
       context "when ordering by #{order}" do
         let(:params) { { latitude: 52.4862, longitude: -1.8904, radius: 10, order: } }
 
+        # Every course here is fee-paying. Under the fee sorts, a salaried
+        # course can move up to its provider's card, ahead of the search's order.
         it "groups the results in the order of the search" do
           cards = result_cards
 
