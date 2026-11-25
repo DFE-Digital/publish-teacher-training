@@ -2,7 +2,7 @@
 
 module Publish
   class UsersCheckController < ApplicationController
-    include ReturnToSupport
+    include UsersReturnPaths
 
     def show
       @user_form = UserForm.new(current_user, user)
@@ -13,13 +13,7 @@ module Publish
       return unless @user_form.save!
 
       UserAssociationsService::Create.call(user: @user_form.model, provider:) if @user_form.model.providers.exclude?(provider)
-      redirect_to users_return_path, flash: { success: I18n.t("success.user_added") }
-    end
-
-  private
-
-    def user
-      User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)
+      redirect_to return_path, flash: { success: I18n.t("success.user_added") }
     end
   end
 end

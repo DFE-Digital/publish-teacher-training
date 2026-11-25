@@ -4,7 +4,7 @@ module Publish
   module Providers
     module Schools
       class ChecksController < ApplicationController
-        include ReturningToSupport
+        include SchoolsReturnPaths
 
         before_action :check_form
 
@@ -16,11 +16,11 @@ module Publish
 
             if returning_to_support?
               schools_added_message([gias_school])
-              redirect_to publish_or_support_schools_path
             else
-              redirect_to publish_provider_recruitment_cycle_schools_path,
-                          flash: { success_with_body: { title: t(".added"), body: gias_school.name } }
+              flash[:success_with_body] = { title: t(".added"), body: gias_school.name }
             end
+
+            redirect_to return_path
           else
             render :show, status: :unprocessable_entity
           end

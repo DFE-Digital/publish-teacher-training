@@ -2,7 +2,7 @@
 
 module Publish
   class UsersController < ApplicationController
-    include ReturnToSupport
+    include UsersReturnPaths
 
     USERS_PER_PAGE = 20
 
@@ -33,7 +33,7 @@ module Publish
     def create
       @user_form = UserForm.new(current_user, user, params: user_params, provider:)
       if @user_form.stash
-        redirect_to publish_provider_check_user_path(provider_code: params[:provider_code], **user_add_flow_params)
+        redirect_to publish_provider_check_user_path(provider_code: params[:provider_code], **support_return_params)
       else
         render(:new)
       end
@@ -59,10 +59,6 @@ module Publish
 
     def cycle_year
       params[:recruitment_cycle_year] || params[:year] || session[:cycle_year] || Find::CycleTimetable.current_year
-    end
-
-    def user
-      User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)
     end
 
     def user_params

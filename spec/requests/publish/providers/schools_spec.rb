@@ -271,6 +271,8 @@ RSpec.describe "Publish provider school show page", service: :publish do
     end
 
     it "keeps a return to support on the school page and the remove button" do
+      login_user(create(:user, :admin))
+
       get publish_provider_recruitment_cycle_school_path(
         provider.provider_code,
         recruitment_cycle.year,
@@ -412,6 +414,8 @@ RSpec.describe "Publish provider school show page", service: :publish do
     end
 
     it "returns to the support schools list when removal started there" do
+      login_user(create(:user, :admin))
+
       delete publish_provider_recruitment_cycle_school_path(
         provider.provider_code,
         provider.recruitment_cycle.year,
