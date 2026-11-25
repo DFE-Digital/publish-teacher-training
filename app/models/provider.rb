@@ -239,9 +239,23 @@ class Provider < ApplicationRecord
   attr_accessor :skip_geocoding
 
   after_commit :geocode_provider, unless: :skip_geocoding
+  after_commit :expire_find_providers_list_cache, if: :find_providers_list_stale?
 
   def geocode_provider
     GeocodeJob.perform_later("Provider", id) if needs_geolocation?
+  end
+
+  def find_providers_list_stale?
+    return false unless recruitment_cycle&.year.to_s == Find::CycleTimetable.current_year.to_s
+
+    destroyed? ||
+      saved_change_to_provider_code? ||
+      saved_change_to_provider_name? ||
+      saved_change_to_discarded_at?
+  end
+
+  def expire_find_providers_list_cache
+    ProvidersCache.new.expire_cache
   end
 
   def needs_geolocation?

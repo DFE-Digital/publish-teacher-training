@@ -52,6 +52,55 @@ RSpec.describe ProvidersCache do
 
         expect(providers_cache.providers_list).to eq(cached_data)
       end
+
+      it "shows the new provider code after the code changes" do
+        provider = create(:provider, provider_name: "Test Provider", provider_code: "TP1", recruitment_cycle: RecruitmentCycle.current)
+        expect(providers_cache.providers_list.map(&:name)).to eq(["Test Provider (TP1)"])
+
+        provider.update!(provider_code: "TP2")
+
+        expect(providers_cache.providers_list.map(&:code)).to eq(%w[TP2])
+        expect(providers_cache.providers_list.map(&:name)).to eq(["Test Provider (TP2)"])
+      end
+
+      it "shows the new provider name after the name changes" do
+        provider = create(:provider, provider_name: "Old Name", provider_code: "NM1", recruitment_cycle: RecruitmentCycle.current)
+        providers_cache.providers_list
+
+        provider.update!(provider_name: "New Name")
+
+        expect(providers_cache.providers_list.map(&:name)).to eq(["New Name (NM1)"])
+      end
+
+      it "drops a discarded provider from the list" do
+        provider = create(:provider, provider_name: "Going Provider", provider_code: "GP1", recruitment_cycle: RecruitmentCycle.current)
+        providers_cache.providers_list
+
+        provider.discard
+
+        expect(providers_cache.providers_list).to eq([])
+      end
+
+      it "keeps the cached list when an unrelated attribute changes" do
+        provider = create(:provider, provider_name: "Cached Provider", provider_code: "CP1", recruitment_cycle: RecruitmentCycle.current)
+        cached_data = [ProviderSuggestion.new(id: provider.id, name: "Cached Provider (CP1)", code: "CP1", value: "CP1")]
+        Rails.cache.write(cache_key, cached_data, expires_in: expires_in)
+
+        provider.update!(address1: "New address 1")
+
+        expect(providers_cache.providers_list.map(&:code)).to eq(%w[CP1])
+        expect(Rails.cache.read(cache_key)).to eq(cached_data)
+      end
+    end
+  end
+
+  describe "#expire_cache" do
+    it "deletes the providers list for the current recruitment cycle" do
+      Rails.cache.write(cache_key, [:cached], expires_in: expires_in)
+
+      providers_cache.expire_cache
+
+      expect(Rails.cache.read(cache_key)).to be_nil
     end
   end
 end
