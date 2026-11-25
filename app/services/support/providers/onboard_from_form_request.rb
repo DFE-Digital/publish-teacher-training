@@ -75,7 +75,7 @@ module Support
           provider_code: code,
           provider_type: onboarding_request.provider_type,
           ukprn: onboarding_request.ukprn,
-          urn: onboarding_request.urn,
+          urn: (onboarding_request.urn if onboarding_request.lead_school?),
           accredited: onboarding_request.accredited_provider,
           accredited_provider_number:,
           email: onboarding_request.contact_email_address,

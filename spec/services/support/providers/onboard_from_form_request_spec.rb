@@ -119,12 +119,12 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
       expect(onboarding_request.reload).to be_submitted
     end
 
-    it "creates an accredited university" do
+    it "creates an accredited university without copying a school URN" do
       onboarding_request.update!(
         accredited_provider: true,
         provider_type: "university",
         accredited_provider_number: "1234",
-        urn: nil,
+        urn: "999999",
       )
 
       expect(onboarded).to be(true)
@@ -134,14 +134,15 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
         accredited_provider_number: 1234,
         urn: nil,
       )
+      expect(onboarding_request.reload.urn).to eq("999999")
     end
 
-    it "creates an accredited SCITT" do
+    it "creates an accredited SCITT without copying a school URN" do
       onboarding_request.update!(
         accredited_provider: true,
         provider_type: "scitt",
         accredited_provider_number: "5678",
-        urn: nil,
+        urn: "999999",
       )
 
       expect(onboarded).to be(true)
@@ -149,6 +150,7 @@ RSpec.describe Support::Providers::OnboardFromFormRequest do
         provider_type: "scitt",
         accredited: true,
         accredited_provider_number: 5678,
+        urn: nil,
       )
     end
 

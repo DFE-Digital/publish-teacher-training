@@ -18,5 +18,19 @@ RSpec.describe Support::Providers::ProviderCode do
 
       expect(described_class.call(recruitment_cycle:)).not_to eq("Z99")
     end
+
+    it "loads the used codes in one query" do
+      create(:provider, recruitment_cycle:, provider_code: "Z99")
+
+      expect(count_queries { described_class.call(recruitment_cycle:) }).to eq(1)
+    end
+
+    it "returns nil when every valid code is already used" do
+      create(:provider, recruitment_cycle:, provider_code: "Z99")
+      service = described_class.send(:new, recruitment_cycle:)
+      allow(service).to receive(:valid_codes).and_return(%w[Z99])
+
+      expect(service.call).to be_nil
+    end
   end
 end

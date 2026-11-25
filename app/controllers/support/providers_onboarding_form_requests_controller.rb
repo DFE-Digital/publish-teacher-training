@@ -2,8 +2,8 @@
 
 module Support
   class ProvidersOnboardingFormRequestsController < Support::ApplicationController
-    UPDATE_STATUS = { reject: "rejected" }.freeze
     before_action :set_request, only: %i[show update]
+    helper_method :request_editable?
 
     def index
       # Fetches all requests ordered by creation date, paginated and passes to view to display as a table
@@ -36,9 +36,14 @@ module Support
     end
 
     def update
+      if @onboarding_request.already_onboarded?
+        redirect_to support_providers_onboarding_form_requests_path, flash: { error: already_onboarded_message }
+        return
+      end
+
       if params[:status] == "accept"
         onboard_provider
-      elsif updated_status && apply_rejection
+      elsif params[:status] == "reject" && reject_onboarding_request
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".rejected", provider_name: @onboarding_request.provider_name) }
       else
         redirect_to support_providers_onboarding_form_requests_path, flash: { error: rejection_error_message }
@@ -52,24 +57,31 @@ module Support
       @onboarding_request = ProvidersOnboardingFormRequest.find(params[:id])
     end
 
-    # Reject from a page opened before onboarding must not overwrite it. with_lock
-    # reloads the row under the same lock onboarding holds while it commits.
-    def apply_rejection
+    # Organisation changes and the onboard or reject actions stay available until the request is finished.
+    def request_editable?
+      !(@onboarding_request.already_onboarded? || @onboarding_request.rejected?)
+    end
+
+    # with_lock reloads the row. This catches an onboard that commits after update
+    # has already passed the already_onboarded? check above.
+    def reject_onboarding_request
       @onboarding_request.with_lock do
-        if @onboarding_request.already_onboarded?
-          false
-        else
-          @onboarding_request.update(status: updated_status)
-        end
+        next false if @onboarding_request.already_onboarded?
+
+        @onboarding_request.update(status: :rejected)
       end
     end
 
     def rejection_error_message
       if @onboarding_request.already_onboarded?
-        t("support.providers.onboard_from_form_request.already_onboarded")
+        already_onboarded_message
       else
         t(".error_message_html", form_name: @onboarding_request.form_name)
       end
+    end
+
+    def already_onboarded_message
+      t("support.providers.onboard_from_form_request.already_onboarded")
     end
 
     def onboard_provider
@@ -86,11 +98,6 @@ module Support
         @onboarding_request = @onboarding_request.decorate
         render :show, status: :unprocessable_content
       end
-    end
-
-    # Determines the updated status based on the status param passed in the request from the details/show page
-    def updated_status
-      @updated_status ||= UPDATE_STATUS.fetch(params[:status].to_sym, nil) # nil will be returned if no status
     end
 
     def request_params
