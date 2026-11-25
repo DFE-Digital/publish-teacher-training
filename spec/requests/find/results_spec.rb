@@ -109,6 +109,46 @@ describe "/results" do
     end
   end
 
+  describe "salaried courses under the fee sorts" do
+    let(:mathematics) { find_or_create(:secondary_subject, :mathematics) }
+    let(:page) { Nokogiri::HTML(response.body) }
+
+    let(:ashford) { create(:provider, provider_name: "Ashford Teacher Training") }
+    let(:bexley) { create(:provider, provider_name: "Bexley SCITT") }
+
+    def create_course(provider:, course_code:, funding: "fee", fee: nil)
+      create(:course, :secondary, :with_full_time_sites, :published, provider:, course_code:, funding:, name: "Mathematics", subjects: [mathematics], master_subject_id: mathematics.id, enrichments: [build(:course_enrichment, :published, fee_uk_eu: fee)])
+    end
+
+    def cards
+      page.css(".app-search-results__item").map { |card| card.css("h3 a").map { |link| link.text[/\((\w+)\)/, 1] } }
+    end
+
+    before do
+      create_course(provider: ashford, course_code: "A001", fee: 9_000)
+      create_course(provider: bexley, course_code: "B001", fee: 10_000)
+      create_course(provider: ashford, course_code: "A002", funding: "salary")
+    end
+
+    context "when the group_search_results flag is on" do
+      before { FeatureFlag.activate(:group_search_results) }
+
+      it "puts a provider's salaried course on its fee card" do
+        get "/results", params: { order: "fee_uk_ascending" }
+
+        expect(cards).to eq([%w[A001 A002], %w[B001]])
+      end
+    end
+
+    context "when the group_search_results flag is off" do
+      it "puts salaried courses last, as today" do
+        get "/results", params: { order: "fee_uk_ascending" }
+
+        expect(cards).to eq([%w[A001], %w[B001], %w[A002]])
+      end
+    end
+  end
+
   describe "tracking the start date filter" do
     let(:event) { instance_double(Find::Analytics::SearchResultsEvent, send_event: nil) }
 
