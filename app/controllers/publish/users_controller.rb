@@ -4,6 +4,7 @@ module Publish
   class UsersController < ApplicationController
     include ReturnToSupport
     include ReturnPaths::Users
+    include UsersCycleYear
 
     USERS_PER_PAGE = 20
 
@@ -57,14 +58,6 @@ module Publish
     end
 
   private
-
-    def cycle_year
-      params[:recruitment_cycle_year] ||
-        support_flow_params[:recruitment_cycle_year] ||
-        params[:year] ||
-        session[:cycle_year] ||
-        Find::CycleTimetable.current_year
-    end
 
     def user
       User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)
