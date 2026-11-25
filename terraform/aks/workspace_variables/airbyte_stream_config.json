@@ -1661,6 +1661,11 @@
           },
           {
             "fieldPath": [
+              "provider_id"
+            ]
+          },
+          {
+            "fieldPath": [
               "zendesk_link"
             ]
           },
@@ -1747,6 +1752,16 @@
           {
             "fieldPath": [
               "accredited_provider"
+            ]
+          },
+          {
+            "fieldPath": [
+              "accredited_provider_number"
+            ]
+          },
+          {
+            "fieldPath": [
+              "provider_type"
             ]
           },
           {

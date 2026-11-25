@@ -10,7 +10,51 @@ RSpec.describe "Support onboarding form requests" do
     login_user(create(:user, :admin))
   end
 
+  describe "GET /support/providers-onboarding-form-requests/:id" do
+    it "hides organisation changes once the provider is onboarded" do
+      provider = create(:provider)
+      onboarding_request = create(
+        :providers_onboarding_form_request,
+        :ready_to_onboard,
+        status: "onboarded",
+        provider:,
+      )
+
+      get support_providers_onboarding_form_request_path(onboarding_request)
+
+      document = Capybara.string(response.body)
+      expect(document).to have_content("Northshore Training")
+      expect(document).to have_link("View provider form")
+      expect(document).not_to have_link("Change")
+      expect(document).not_to have_button("Onboard provider")
+    end
+
+    it "hides organisation changes when the request is rejected" do
+      onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard, status: "rejected")
+
+      get support_providers_onboarding_form_request_path(onboarding_request)
+
+      document = Capybara.string(response.body)
+      expect(document).not_to have_link("Change")
+      expect(document).not_to have_button("Reject provider")
+    end
+  end
+
   describe "PATCH /support/providers-onboarding-form-requests/:id" do
+    it "links a base onboard error to the onboard actions" do
+      onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard, status: "pending")
+
+      patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "accept" }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      document = Capybara.string(response.body)
+      expect(document).to have_link(
+        "This onboarding form has not been submitted, so the provider cannot be onboarded",
+        href: "#providers-onboarding-form-request-onboard-provider-field",
+      )
+      expect(document).to have_css("#providers-onboarding-form-request-onboard-provider-field", text: "Onboard provider")
+    end
+
     it "rejects a submitted request" do
       onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard)
 

@@ -223,6 +223,8 @@ module ProvidersOnboardingFormRequestsHelper
   end
 
   def then_i_do_not_see_onboard_or_reject_actions
+    expect(page).not_to have_link("Change")
+    expect(page).not_to have_link("Enter accredited provider number")
     expect(page).not_to have_button("Onboard provider")
     expect(page).not_to have_button("Reject provider")
     expect(page).not_to have_content("Click Onboard provider to approve the request")

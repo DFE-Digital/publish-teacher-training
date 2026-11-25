@@ -6,7 +6,7 @@
 <%= form_with model: @onboarding_request,
               url: support_providers_onboarding_form_request_path(@onboarding_request),
               method: :patch do |f| %>
-  <%= f.govuk_error_summary %>
+  <%= f.govuk_error_summary link_base_errors_to: :onboard_provider %>
 
   <span class="govuk-caption-l"><%= t(".caption") %></span>
   <h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
@@ -31,7 +31,7 @@
 
   <!-- Organisation Details -->
   <h2 class="govuk-heading-m govuk-!-margin-top-6"><%= t(".organisation_details") %></h2>
-  <%= govuk_summary_list do |summary_list| %>
+  <%= govuk_summary_list(actions: request_editable?) do |summary_list| %>
     <% summary_list.with_row(html_attributes: { id: "providers-onboarding-form-request-provider-name-field-error" }) do |row| %>
       <% row.with_key { t(".provider_name") } %>
       <% row.with_value { @onboarding_request.provider_name } %>
@@ -57,12 +57,14 @@
                href: accredited_provider_number_change_path(@onboarding_request),
                visually_hidden_text: t(".accredited_provider_number"),
              ) %>
-        <% else %>
+        <% elsif request_editable? %>
           <% row.with_value do %>
             <%= govuk_inset_text(classes: ["app-inset-text--narrow-border", @onboarding_request.errors.include?(:accredited_provider_number) ? "app-inset-text--error" : "app-inset-text--important"]) do %>
               <%= govuk_link_to(t(".enter_accredited_provider_number"), accredited_provider_number_change_path(@onboarding_request)) %>
             <% end %>
           <% end %>
+        <% else %>
+          <% row.with_value { "" } %>
         <% end %>
       <% end %>
     <% end %>
@@ -122,10 +124,10 @@
     <% end %>
   <% end %>
 
-  <% unless @onboarding_request.already_onboarded? || @onboarding_request.rejected? %>
+  <% if request_editable? %>
     <p class="govuk-body"><%= t(".onboard_explanation_html") %></p>
     <p class="govuk-body"><%= t(".reject_explanation_html") %></p>
-    <div id="onboard-provider">
+    <div id="providers-onboarding-form-request-onboard-provider-field">
       <%= f.govuk_submit t(".onboard_provider"), name: "status", value: "accept" do %>
         <%= f.button t(".reject_provider"),
             name: "status",
