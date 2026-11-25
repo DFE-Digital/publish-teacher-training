@@ -4,7 +4,7 @@ module Publish
   module Providers
     module AccreditedPartnerships
       class ChecksController < ApplicationController
-        include ReturningToSupport
+        include AccreditedPartnershipsReturnPaths
 
         def show
           @partnership = provider.accredited_partnerships.build(accredited_provider:)
@@ -25,7 +25,7 @@ module Publish
             notify_accredited_provider_users
 
             flash[:success_with_body] = { "title" => t(".added"), "body" => accredited_provider.provider_name }
-            redirect_to publish_or_support_accredited_partnerships_path
+            redirect_to return_path
           else
             flash[:error] = { "message" => @partnership.errors[:accredited_provider].first }
             render :show

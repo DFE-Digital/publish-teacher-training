@@ -4,7 +4,7 @@ module Publish
   module Providers
     module Schools
       class MultipleController < ApplicationController
-        include ReturningToSupport
+        include SchoolsReturnPaths
 
         def new
           @urn_form = URNForm.new(provider)

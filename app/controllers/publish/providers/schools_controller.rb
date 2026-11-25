@@ -3,7 +3,7 @@
 module Publish
   module Providers
     class SchoolsController < ApplicationController
-      include ReturningToSupport
+      include SchoolsReturnPaths
 
       before_action :school, only: %i[show delete destroy]
       before_action :reset_urn_form, only: %i[index]
@@ -33,7 +33,7 @@ module Publish
       def destroy
         if school_removal.call
           flash[:success] = removal_success_message
-          redirect_to removal_success_path
+          redirect_to return_path
         else
           redirect_to school_delete_path_with_return,
                       flash: { warning: cannot_remove_school_message }
@@ -109,21 +109,12 @@ module Publish
         school_delete_return_params.except(:from, :return_to)
       end
 
-      def school_show_back_path
-        publish_or_support_schools_path
-      end
-      helper_method :school_show_back_path
-
       def removal_success_message
         if returning_to_support?
           t(".removed_from_provider", school_name: school.location_name, provider_name: provider.provider_name)
         else
           t(".removed", school_name: school.location_name)
         end
-      end
-
-      def removal_success_path
-        publish_or_support_schools_path
       end
 
       def reset_urn_form
