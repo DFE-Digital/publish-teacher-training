@@ -35,6 +35,19 @@ RSpec.describe "Support provider users" do
       expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{provider.recruitment_cycle_year}")
     end
 
+    it "keeps page and sort on the add user in Publish link" do
+      get support_recruitment_cycle_provider_users_path(
+        provider.recruitment_cycle_year,
+        provider,
+        page: 2,
+        sort: "last_signed_in",
+      )
+
+      expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{provider.recruitment_cycle_year}")
+      expect(response.body).to include("support_return%5Bpage%5D=2")
+      expect(response.body).to include("support_return%5Bsort%5D=last_signed_in")
+    end
+
     it "sorts by most recently signed in, with people who have never signed in last" do
       recent = create(:user, first_name: "Recent", last_name: "Person", providers: [provider], last_login_date_utc: 1.hour.ago)
       never = create(:user, first_name: "Never", last_name: "Signed", providers: [provider], last_login_date_utc: nil)

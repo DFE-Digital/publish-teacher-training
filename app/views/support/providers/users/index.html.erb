@@ -18,8 +18,11 @@
   t("support.providers.users.add_user_in_publish"),
   new_publish_provider_user_path(
     provider_code: @provider.provider_code,
-    return_to: "support",
-    support_return: { recruitment_cycle_year: @provider.recruitment_cycle_year },
+    **publish_return_to_support_params(
+      recruitment_cycle_year: @provider.recruitment_cycle_year,
+      page: params[:page].presence,
+      sort: params[:sort].presence,
+    ),
   ),
 ) %>
 <%= render Users::SortLinksComponent.new(

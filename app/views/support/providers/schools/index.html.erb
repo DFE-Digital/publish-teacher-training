@@ -20,7 +20,7 @@
     search_publish_provider_recruitment_cycle_schools_path(
       @provider.provider_code,
       @provider.recruitment_cycle_year,
-      { return_to: "support", support_return: { page: params[:page].presence }.compact_blank }.compact_blank,
+      publish_return_to_support_params(page: params[:page].presence),
     ),
     class: "govuk-button govuk-!-margin-bottom-3",
   ) %>
@@ -30,7 +30,7 @@
     new_publish_provider_recruitment_cycle_schools_multiple_path(
       @provider.provider_code,
       @provider.recruitment_cycle_year,
-      { return_to: "support", support_return: { page: params[:page].presence }.compact_blank }.compact_blank,
+      publish_return_to_support_params(page: params[:page].presence),
     ),
     class: "govuk-button govuk-button--secondary govuk",
   ) %>
@@ -84,7 +84,7 @@
                 @provider.provider_code,
                 @provider.recruitment_cycle_year,
                 school.uuid,
-                { return_to: :support, support_return: { page: params[:page].presence }.compact_blank }.compact_blank,
+                publish_return_to_support_params(page: params[:page].presence),
               ),
             ) %>
           </td>

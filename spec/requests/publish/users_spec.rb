@@ -151,6 +151,48 @@ RSpec.describe "Publish provider users", type: :request do
       expect(provider.users.reload.exists?(email: "ada@example.com")).to be(true)
     end
 
+    it "returns to the support users list with page and sort" do
+      list_state = {
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        page: 3,
+        sort: "last_signed_in",
+      }
+
+      get new_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        return_to: "support",
+        support_return: list_state,
+      )
+
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          page: 3,
+          sort: "last_signed_in",
+        ),
+      )
+      expect(response.body).to include("support_return%5Bpage%5D=3")
+      expect(response.body).to include("support_return%5Bsort%5D=last_signed_in")
+
+      stash_new_user_form(admin)
+
+      put publish_provider_check_user_path(
+        provider_code: provider.provider_code,
+        return_to: "support",
+        support_return: list_state,
+      ), params: { publish_user_form: { email: "ada@example.com" } }
+
+      expect(response).to redirect_to(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          page: 3,
+          sort: "last_signed_in",
+        ),
+      )
+    end
+
     it "still redirects to the publish users index without return_to" do
       stash_new_user_form(admin)
 
@@ -174,6 +216,21 @@ RSpec.describe "Publish provider users", type: :request do
         publish_provider_users_path(provider.provider_code),
       )
       expect(response.body).not_to include("return_to=support")
+    end
+
+    it "ignores a non-hash support_return without erroring" do
+      get new_publish_provider_user_path(
+        provider_code: provider.provider_code,
+        return_to: "support",
+        support_return: "not-a-hash",
+      )
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+        support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider),
+      )
+      expect(response.body).to include("return_to=support")
+      expect(response.body).not_to include("support_return")
     end
   end
 

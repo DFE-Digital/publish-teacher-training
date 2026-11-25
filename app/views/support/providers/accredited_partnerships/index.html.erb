@@ -19,7 +19,7 @@
   search_publish_provider_recruitment_cycle_accredited_providers_path(
     @provider.provider_code,
     @provider.recruitment_cycle_year,
-    return_to: "support",
+    **publish_return_to_support_params,
   ),
 ) %>
 

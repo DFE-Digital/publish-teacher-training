@@ -3,7 +3,8 @@
 module Publish
   module Providers
     class AccreditedProviderSearchController < ApplicationController
-      include AccreditedPartnershipsReturnPaths
+      include ReturnToSupport
+      include ReturnPaths::AccreditedPartnerships
 
       helper_method :query, :search_result_title_component
 

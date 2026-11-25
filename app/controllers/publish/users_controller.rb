@@ -2,7 +2,8 @@
 
 module Publish
   class UsersController < ApplicationController
-    include UsersReturnPaths
+    include ReturnToSupport
+    include ReturnPaths::Users
 
     USERS_PER_PAGE = 20
 
@@ -56,6 +57,18 @@ module Publish
     end
 
   private
+
+    def cycle_year
+      params[:recruitment_cycle_year] ||
+        support_flow_params[:recruitment_cycle_year] ||
+        params[:year] ||
+        session[:cycle_year] ||
+        Find::CycleTimetable.current_year
+    end
+
+    def user
+      User.find_or_initialize_by(email: params.dig(:publish_user_form, :email)&.downcase)
+    end
 
     def user_params
       params.expect(publish_user_form: %i[first_name last_name email]).except(:code, :authenticity_token)
