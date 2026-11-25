@@ -44,9 +44,7 @@ class FinancialIncentive < ApplicationRecord
   # FI years use the same integer as RecruitmentCycle#year, so the display
   # range matches RecruitmentCycle#year_range ("2026 to 2027" for year 2027).
   def self.year_range(year)
-    year = year.to_i
-
-    "#{year - 1} to #{year}"
+    RecruitmentCycle.year_range_for(year)
   end
 
   def display!

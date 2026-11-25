@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe "Financial incentives support" do
+RSpec.describe "Financial incentives support", travel: mid_cycle(2027) do
   include DfESignInUserHelper
   include SettingsPageSpecsHelper
 
@@ -81,7 +81,7 @@ RSpec.describe "Financial incentives support" do
     then_i_see_the_financial_incentives_landing_page
   end
 
-  scenario "I can navigate back to the settings page via the backlink", travel: mid_cycle do
+  scenario "I can navigate back to the settings page via the backlink" do
     given_i_visit_the_support_settings_page
     when_i_click_financial_incentives
     then_i_see_the_backlink_to_the_settings_page
@@ -301,11 +301,11 @@ private
   end
 
   def next_year_range
-    FinancialIncentive.year_range(next_year)
+    "2027 to 2028"
   end
 
   def current_year_label
-    "#{FinancialIncentive.year_range(current_year)} - current"
+    "2026 to 2027 - current"
   end
 
   def physics
