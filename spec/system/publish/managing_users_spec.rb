@@ -135,6 +135,13 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
       and_i_am_told_i_was_removed
     end
 
+    scenario "Removing myself from my only organisation" do
+      when_i_visit_the_publish_users_delete_page_for_myself
+      when_i_confirm
+      then_i_am_told_i_belong_to_no_organisation
+      and_i_am_told_i_was_removed
+    end
+
     scenario "From the users list" do
       given_i_visit_the_publish_users_index_page
       when_i_click_remove_user_for_user_two
@@ -402,6 +409,10 @@ RSpec.describe "Adding user to organisation as a provider user", travel: Find::C
 
   def then_i_am_on_my_remaining_provider
     expect(page).to have_current_path(%r{\A/publish/organisations/#{@other_provider.provider_code}})
+  end
+
+  def then_i_am_told_i_belong_to_no_organisation
+    expect(page).to have_css("h1", text: "Tell us which organisation you’re part of")
   end
 
   def and_i_am_told_i_was_removed
