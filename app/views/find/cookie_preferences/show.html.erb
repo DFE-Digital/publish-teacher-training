@@ -62,9 +62,9 @@
       </ul>
 
       <%= govuk_table(head: [t(".name"), t(".purpose"), t(".expires")],
-                      rows: t(".clarity_cookies").map { |cookie| cookie.values_at(:name, :purpose, :expires) }) do |table|
-                        table.with_caption(text: t(".clarity_caption"), size: "s")
-                      end %>
+                      rows: t(".clarity_cookies").map { |cookie| cookie.values_at(:name, :purpose, :expires) }) do |table| %>
+        <% table.with_caption(text: t(".clarity_caption"), size: "s") %>
+      <% end %>
 
       <h2 class="govuk-heading-m"><%= t(".change_heading") %></h2>
 
