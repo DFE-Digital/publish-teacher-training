@@ -8,8 +8,8 @@ module Publish
 
   private
 
-    def support_flow_params
-      params[:recruitment_cycle_year].present? ? { recruitment_cycle_year: params[:recruitment_cycle_year] } : {}
+    def support_return_param_keys
+      %i[recruitment_cycle_year]
     end
 
     def support_return_path
@@ -21,6 +21,14 @@ module Publish
 
     def publish_return_path
       publish_provider_users_path(params[:provider_code])
+    end
+
+    def cycle_year
+      params[:recruitment_cycle_year] ||
+        params.dig(:support_return, :recruitment_cycle_year) ||
+        params[:year] ||
+        session[:cycle_year] ||
+        Find::CycleTimetable.current_year
     end
 
     def user

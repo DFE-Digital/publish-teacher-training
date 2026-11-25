@@ -90,7 +90,7 @@ module Publish
           @provider.provider_code,
           school.recruitment_cycle.year,
           school.uuid,
-          **school_delete_return_params,
+          **school_delete_flow_params,
         )
       end
       helper_method :school_delete_path_with_return
@@ -99,14 +99,17 @@ module Publish
         params[:from] == "index"
       end
 
-      def school_delete_return_params
-        permitted = params.permit(:from, :filter, :page, :return_to).to_h.compact_blank.symbolize_keys
-        permitted.delete(:return_to) unless permitted[:return_to] == "support"
-        permitted
+      # Publish index uses top-level from/filter/page; Support uses support_return_params.
+      def school_delete_flow_params
+        if returning_to_schools_index?
+          { from: "index", **schools_index_return_params }
+        else
+          support_return_params
+        end
       end
 
       def schools_index_return_params
-        school_delete_return_params.except(:from, :return_to)
+        params.permit(:filter, :page).to_h.compact_blank.symbolize_keys
       end
 
       def removal_success_message

@@ -247,8 +247,9 @@ RSpec.describe "Publish provider school show page", service: :publish do
     let(:provider) { create(:provider, recruitment_cycle:) }
     let!(:provider_school) { create(:provider_school, provider:, gias_school:) }
     let!(:other_provider_school) { create(:provider_school, provider:) }
+    let(:user) { create(:user, providers: [provider]) }
 
-    before { login_provider_user(provider) }
+    before { login_user(user) }
 
     it "displays the delete page for the provider school" do
       get delete_publish_provider_recruitment_cycle_school_path(provider.provider_code, recruitment_cycle.year, provider_school.uuid)
@@ -270,44 +271,66 @@ RSpec.describe "Publish provider school show page", service: :publish do
       )
     end
 
-    it "keeps a return to support on the school page and the remove button" do
-      login_user(create(:user, :admin))
+    context "when returning to support" do
+      let(:user) { create(:user, :admin) }
 
-      get publish_provider_recruitment_cycle_school_path(
-        provider.provider_code,
-        recruitment_cycle.year,
-        provider_school.uuid,
-        return_to: "support",
-      )
-
-      expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
-        support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider),
-      )
-      expect(response.body).to include(
-        delete_publish_provider_recruitment_cycle_school_path(
+      it "keeps a return to support on the school page and the remove button" do
+        get publish_provider_recruitment_cycle_school_path(
           provider.provider_code,
           recruitment_cycle.year,
           provider_school.uuid,
           return_to: "support",
-        ),
-      )
+        )
 
-      get delete_publish_provider_recruitment_cycle_school_path(
-        provider.provider_code,
-        recruitment_cycle.year,
-        provider_school.uuid,
-        return_to: "support",
-      )
+        expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+          support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider),
+        )
+        expect(response.body).to include(
+          delete_publish_provider_recruitment_cycle_school_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            provider_school.uuid,
+            return_to: "support",
+          ),
+        )
 
-      expect(response.body).to include(
-        publish_provider_recruitment_cycle_school_path(
+        get delete_publish_provider_recruitment_cycle_school_path(
           provider.provider_code,
           recruitment_cycle.year,
           provider_school.uuid,
           return_to: "support",
-        ),
-      )
-      expect(response.body).to include("return_to=support")
+        )
+
+        expect(response.body).to include(
+          publish_provider_recruitment_cycle_school_path(
+            provider.provider_code,
+            recruitment_cycle.year,
+            provider_school.uuid,
+            return_to: "support",
+          ),
+        )
+        expect(response.body).to include("return_to=support")
+      end
+
+      it "keeps the support list page in support_return on the back link" do
+        get publish_provider_recruitment_cycle_school_path(
+          provider.provider_code,
+          recruitment_cycle.year,
+          provider_school.uuid,
+          return_to: "support",
+          support_return: { page: 6 },
+        )
+
+        expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
+          support_recruitment_cycle_provider_schools_path(
+            provider.recruitment_cycle_year,
+            provider,
+            page: 6,
+          ),
+        )
+        expect(response.body).to include("return_to=support")
+        expect(response.body).to include("support_return%5Bpage%5D=6")
+      end
     end
 
     it "links back to the filtered schools list when opened from the index" do
@@ -400,8 +423,9 @@ RSpec.describe "Publish provider school show page", service: :publish do
     end
     let!(:other_provider_school) { create(:provider_school, provider:) }
     let!(:exempt_course) { create(:course, :with_salary, provider:, publish_without_schools_allowed: true) }
+    let(:user) { create(:user, providers: [provider]) }
 
-    before { login_provider_user(provider) }
+    before { login_user(user) }
 
     def remove_school
       delete publish_provider_recruitment_cycle_school_path(provider.provider_code, provider.recruitment_cycle.year, provider_school.uuid)
@@ -413,23 +437,25 @@ RSpec.describe "Publish provider school show page", service: :publish do
       expect(response).to redirect_to(publish_provider_recruitment_cycle_schools_path(provider.provider_code, provider.recruitment_cycle.year))
     end
 
-    it "returns to the support schools list when removal started there" do
-      login_user(create(:user, :admin))
+    context "when returning to support" do
+      let(:user) { create(:user, :admin) }
 
-      delete publish_provider_recruitment_cycle_school_path(
-        provider.provider_code,
-        provider.recruitment_cycle.year,
-        provider_school.uuid,
-        return_to: "support",
-        page: 2,
-      )
+      it "returns to the support schools list when removal started there" do
+        delete publish_provider_recruitment_cycle_school_path(
+          provider.provider_code,
+          provider.recruitment_cycle.year,
+          provider_school.uuid,
+          return_to: "support",
+          support_return: { page: 2 },
+        )
 
-      expect(response).to redirect_to(
-        support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider, page: 2),
-      )
-      expect(flash[:success]).to eq(
-        "#{provider_school.decorate.location_name} has been removed from #{provider.provider_name}",
-      )
+        expect(response).to redirect_to(
+          support_recruitment_cycle_provider_schools_path(provider.recruitment_cycle_year, provider, page: 2),
+        )
+        expect(flash[:success]).to eq(
+          "#{provider_school.decorate.location_name} has been removed from #{provider.provider_name}",
+        )
+      end
     end
 
     # A course that is allowed to publish without schools is served by the API

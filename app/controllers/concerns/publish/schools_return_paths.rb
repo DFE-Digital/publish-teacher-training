@@ -8,8 +8,8 @@ module Publish
 
   private
 
-    def support_flow_params
-      params[:page].present? ? { page: params[:page] } : {}
+    def support_return_param_keys
+      %i[page]
     end
 
     def support_return_path

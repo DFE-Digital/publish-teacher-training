@@ -89,7 +89,7 @@ RSpec.describe "Support provider schools" do
           provider.provider_code,
           recruitment_cycle.year,
           return_to: "support",
-          page: 2,
+          support_return: { page: 2 },
         ),
       )
       expect(add_multiple_link["href"]).to eq(
@@ -97,7 +97,7 @@ RSpec.describe "Support provider schools" do
           provider.provider_code,
           recruitment_cycle.year,
           return_to: "support",
-          page: 2,
+          support_return: { page: 2 },
         ),
       )
     end

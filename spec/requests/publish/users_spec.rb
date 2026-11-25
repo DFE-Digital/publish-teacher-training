@@ -59,7 +59,7 @@ RSpec.describe "Publish provider users", type: :request do
       get new_publish_provider_user_path(
         provider_code: provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       )
 
       expect(response).to have_http_status(:ok)
@@ -67,14 +67,14 @@ RSpec.describe "Publish provider users", type: :request do
         support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider),
       )
       expect(response.body).to include("return_to=support")
-      expect(response.body).to include("recruitment_cycle_year=#{provider.recruitment_cycle_year}")
+      expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{provider.recruitment_cycle_year}")
 
       stash_new_user_form(admin)
 
       get publish_provider_check_user_path(
         provider_code: provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       )
 
       expect(response).to have_http_status(:ok)
@@ -83,7 +83,7 @@ RSpec.describe "Publish provider users", type: :request do
         new_publish_provider_user_path(
           provider_code: provider.provider_code,
           return_to: "support",
-          recruitment_cycle_year: provider.recruitment_cycle_year,
+          support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
         ),
       )
       expect(response.body).to include(
@@ -97,21 +97,21 @@ RSpec.describe "Publish provider users", type: :request do
       get new_publish_provider_user_path(
         provider_code: next_provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: next_provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: next_provider.recruitment_cycle_year },
       )
 
       expect(response).to have_http_status(:ok)
       expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
         support_recruitment_cycle_provider_users_path(next_provider.recruitment_cycle_year, next_provider),
       )
-      expect(response.body).to include("recruitment_cycle_year=#{next_provider.recruitment_cycle_year}")
+      expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{next_provider.recruitment_cycle_year}")
 
       stash_new_user_form(admin)
 
       put publish_provider_check_user_path(
         provider_code: next_provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: next_provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: next_provider.recruitment_cycle_year },
       ), params: { publish_user_form: { email: "ada@example.com" } }
 
       expect(response).to redirect_to(
@@ -125,7 +125,7 @@ RSpec.describe "Publish provider users", type: :request do
       post publish_provider_users_path(
         provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       ), params: { publish_user_form: { first_name: "", last_name: "", email: "" } }
 
       expect(response).to have_http_status(:ok)
@@ -141,7 +141,7 @@ RSpec.describe "Publish provider users", type: :request do
       put publish_provider_check_user_path(
         provider_code: provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       ), params: { publish_user_form: { email: "ada@example.com" } }
 
       expect(response).to redirect_to(
@@ -167,7 +167,7 @@ RSpec.describe "Publish provider users", type: :request do
       get new_publish_provider_user_path(
         provider_code: provider.provider_code,
         return_to: "support",
-        recruitment_cycle_year: provider.recruitment_cycle_year,
+        support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       )
 
       expect(response.parsed_body.at_css(".govuk-back-link")["href"]).to eq(
