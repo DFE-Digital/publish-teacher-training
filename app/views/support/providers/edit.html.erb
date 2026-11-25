@@ -21,10 +21,11 @@
   <%= f.govuk_text_field :provider_name,
   label: { text: "Provider name", size: "s" } %>
 
-  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
-    Provider code
-  </p>
-  <p class="govuk-body"><%= @provider.provider_code %></p>
+  <%= f.govuk_text_field :provider_code,
+    label: { text: t(".provider_code"), size: "s" },
+    hint: { text: t(".provider_code_hint_html") },
+    value: @update_provider_form&.submitted_provider_code || @provider.provider_code,
+    width: 5 %>
 
   <%= f.govuk_text_field :ukprn,
   label: { text: "UK provider reference number (UKPRN)", size: "s" },

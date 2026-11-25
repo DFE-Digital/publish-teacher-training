@@ -30,9 +30,9 @@ module Support
     end
 
     def update
-      update_form = UpdateProviderForm.new(provider, attributes: update_provider_params)
-      if update_form.save
-        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: t("support.flash.updated", resource: "Provider") }
+      @update_provider_form = UpdateProviderForm.new(provider, attributes: update_provider_params)
+      if @update_provider_form.save
+        redirect_to support_recruitment_cycle_provider_path(provider.recruitment_cycle_year, provider), flash: { success: update_success_message }
       else
         render :edit
       end
@@ -58,11 +58,20 @@ module Support
 
     def update_provider_params
       params.expect(provider: %i[provider_name
+                                 provider_code
                                  provider_type
                                  ukprn
                                  urn
                                  accredited
                                  accredited_provider_number])
+    end
+
+    def update_success_message
+      if @update_provider_form.provider_code_updated?
+        t("support.providers.edit.provider_code_updated", provider_code: provider.provider_code)
+      else
+        t("support.flash.updated", resource: "Provider")
+      end
     end
 
     def create_provider_params

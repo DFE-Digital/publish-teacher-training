@@ -35,10 +35,48 @@ RSpec.describe "Viewing and editing a provider" do
     end
   end
 
+  context "provider code" do
+    scenario "I can change a provider code" do
+      when_i_click_on_the_change_link
+      then_i_am_on_the_support_provider_edit_page
+      and_i_see_the_provider_code_hint
+      when_i_enter_a_provider_code("Z99")
+      and_i_click_the_submit_button
+      then_i_am_redirected_back_to_the_support_provider_show_page
+      and_i_see_the_provider_code_updated_banner("Z99")
+      and_the_provider_code_is_shown_as("Z99")
+    end
+
+    scenario "I cannot save a provider code that is already in use" do
+      given_another_provider_already_uses("Y88")
+      when_i_click_on_the_change_link
+      when_i_enter_a_provider_code("Y88")
+      and_i_click_the_submit_button
+      then_i_see_the_provider_code_error("Provider code already in use. Enter a new provider code")
+      and_the_stored_provider_code_is_unchanged
+    end
+
+    scenario "I see an error when the provider code is not 3 characters" do
+      when_i_click_on_the_change_link
+      when_i_enter_a_provider_code("Z9")
+      and_i_click_the_submit_button
+      then_i_see_the_provider_code_error("Provider code must be 3 characters")
+    end
+
+    scenario "I see an error when the provider code format is invalid" do
+      when_i_click_on_the_change_link
+      when_i_enter_a_provider_code("abc")
+      and_i_click_the_submit_button
+      then_i_see_the_provider_code_error("Enter a valid provider code. It must be exactly 3 characters with at least one number. All letters must be in upper case.")
+      and_the_provider_code_field_still_shows("abc")
+    end
+  end
+
 private
 
   def and_there_is_a_provider
     @provider = create(:provider, :accredited_provider, :scitt, provider_name: "Provider 1", accredited_provider_number: 5432)
+    @original_provider_code = @provider.provider_code
   end
 
   def provider_table_cell(heading)
@@ -115,5 +153,40 @@ private
 
   def then_i_see_the_error_summary
     expect(support_provider_edit_page.error_summary).to be_visible
+  end
+
+  def and_i_see_the_provider_code_hint
+    expect(page).to have_content("Provider code must be exactly 3 characters with at least one number. All letters must be in upper case.")
+    expect(page).to have_content("We’ll check that the provider code is valid and is not already in use on Publish for this recruitment cycle.")
+  end
+
+  def when_i_enter_a_provider_code(provider_code)
+    support_provider_edit_page.provider_code.set(provider_code)
+  end
+
+  def given_another_provider_already_uses(provider_code)
+    create(:provider, recruitment_cycle: @provider.recruitment_cycle, provider_code:)
+  end
+
+  def and_i_see_the_provider_code_updated_banner(provider_code)
+    expect(page).to have_css(".govuk-notification-banner__heading", text: "Provider code updated to #{provider_code}")
+  end
+
+  def and_the_provider_code_is_shown_as(provider_code)
+    expect(provider_table_cell("Provider code")).to have_text(provider_code)
+    expect(@provider.reload.provider_code).to eq(provider_code)
+  end
+
+  def then_i_see_the_provider_code_error(message)
+    expect(page).to have_css(".govuk-error-summary", text: message)
+    expect(page).to have_css(".govuk-error-message", text: message)
+  end
+
+  def and_the_stored_provider_code_is_unchanged
+    expect(@provider.reload.provider_code).to eq(@original_provider_code)
+  end
+
+  def and_the_provider_code_field_still_shows(provider_code)
+    expect(page).to have_field("Provider code", with: provider_code)
   end
 end
