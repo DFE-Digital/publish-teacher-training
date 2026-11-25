@@ -128,8 +128,14 @@ class RecruitmentCycle < ApplicationRecord
     providers.count.zero?
   end
 
+  def self.year_range_for(year)
+    year = year.to_i
+
+    "#{year - 1} to #{year}"
+  end
+
   def year_range
-    "#{year.to_i - 1} to #{year}"
+    self.class.year_range_for(year)
   end
 
   # TODO: remove once the 2022 rollover is complete
