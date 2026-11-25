@@ -172,6 +172,72 @@ RSpec.describe Courses::ResultCards do
         end
       end
     end
+
+    context "when the provider's fee courses are split across 2 cards" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_fee_course(provider: ashford, course_code: "A002", fee: 12_000)
+        create_course(provider: ashford, course_code: "A003", funding: "salary")
+      end
+
+      it "puts the salaried course at the bottom of the last one" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002 A003]])
+      end
+    end
+
+    context "when a provider has several salaried courses of the subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_course(provider: ashford, course_code: "A002", funding: "salary")
+        create_course(provider: ashford, course_code: "A003", funding: "apprenticeship")
+      end
+
+      it "keeps them in the order of the search, under the fee courses" do
+        search_order = Courses::Query.call(params: params.dup).map(&:course_code) & %w[A002 A003]
+
+        expect(card_codes(result_cards.cards)).to eq([["A001", *search_order], %w[B001]])
+      end
+    end
+
+    context "when a provider only has salaried courses of the subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_course(provider: camden, course_code: "C001", funding: "salary")
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+      end
+
+      it "leaves them at the end, on a card of their own" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[C001]])
+      end
+    end
+
+    context "when the provider's salaried course is of another subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_course(provider: ashford, course_code: "A002", subject: physics, funding: "salary")
+      end
+
+      it "leaves it at the end, on a card of its own" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002]])
+      end
+    end
+
+    context "when sorting by something other than fee" do
+      let(:params) { { order: "course_name_ascending" } }
+
+      before do
+        create_course(provider: ashford, course_code: "A001", name: "Mathematics")
+        create_course(provider: bexley, course_code: "B001", name: "Mathematics (SEND)")
+        create_course(provider: ashford, course_code: "A002", name: "Mathematics with Economics", funding: "salary")
+      end
+
+      it "leaves the salaried course where the sort puts it" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002]])
+      end
+    end
   end
 
   context "when a provider's subjects are at the same distance" do
