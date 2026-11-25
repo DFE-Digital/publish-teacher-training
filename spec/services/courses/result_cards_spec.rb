@@ -232,6 +232,26 @@ RSpec.describe Courses::ResultCards do
       end
     end
 
+    # The cards are counted and numbered over the search's own scope, so the
+    # same provider's courses in another cycle never join a card or the count.
+    context "when the provider has the same courses in the previous cycle" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_course(provider: ashford, course_code: "A002", funding: "salary")
+
+        previous_ashford = create(:provider, provider_name: ashford.provider_name, provider_code: ashford.provider_code, recruitment_cycle: find_or_create(:recruitment_cycle, :previous))
+        create_fee_course(provider: previous_ashford, course_code: "P001", fee: 8_000)
+        create_course(provider: previous_ashford, course_code: "P002", funding: "salary")
+      end
+
+      it "only shows this cycle's courses" do
+        cards = result_cards
+
+        expect(card_codes(cards.cards)).to eq([%w[A001 A002]])
+        expect(cards.count).to eq(1)
+      end
+    end
+
     context "when sorting by something other than fee" do
       let(:params) { { order: "course_name_ascending" } }
 
