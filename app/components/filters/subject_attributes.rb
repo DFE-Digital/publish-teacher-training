@@ -2,7 +2,7 @@
 
 module Filters
   class SubjectAttributes < ViewComponent::Base
-    attr_accessor :filters
+    attr_reader :filters
 
     def initialize(filters:)
       super()

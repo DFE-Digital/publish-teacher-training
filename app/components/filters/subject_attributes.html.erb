@@ -1,4 +1,17 @@
-<div class="govuk-form-group">
-  <%= label_tag "text_search", t("components.filter.subjects.text_search"), class: "govuk-label govuk-label--s" %>
-  <%= text_field_tag "text_search", (filters[:text_search] if filters), spellcheck: false, class: "govuk-input", autocomplete: false %>
-</div>
+<%= tag.div(
+  class: "govuk-form-group suggestions",
+  data: helpers.remote_autocomplete_data(
+    path: suggest_support_subjects_path,
+    format: "subject",
+    min_length: 3,
+  ),
+) do %>
+  <%= label_tag "text_search",
+                t("components.filter.subjects.text_search"),
+                class: "govuk-label govuk-label--s" %>
+  <%= text_field_tag "text_search",
+                     filters[:text_search],
+                     spellcheck: false,
+                     class: "govuk-input",
+                     autocomplete: "off" %>
+<% end %>
