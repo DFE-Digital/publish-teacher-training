@@ -42,7 +42,7 @@
 
     <% if @create_year.present? %>
       <%= govuk_button_to(
-            t(".create", year_range: Find::CycleTimetable.cycle_year_range(@create_year)),
+            t(".create", year_range: FinancialIncentive.year_range(@create_year)),
             create_year_support_financial_incentives_path(year: @create_year),
             method: :post,
           ) %>

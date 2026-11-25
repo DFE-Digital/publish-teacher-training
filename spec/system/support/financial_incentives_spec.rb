@@ -146,7 +146,7 @@ private
       )
       expect(page).to have_css(
         "p.govuk-body",
-        text: "The financial incentives from the previous recruitment cycle have been copied to this cycle.",
+        text: "The currently visible financial incentives have been copied to this cycle.",
       )
     end
     expect(page).to have_no_content("translation missing")
@@ -301,11 +301,11 @@ private
   end
 
   def next_year_range
-    Find::CycleTimetable.cycle_year_range(next_year)
+    FinancialIncentive.year_range(next_year)
   end
 
   def current_year_label
-    "#{Find::CycleTimetable.cycle_year_range(current_year)} - current"
+    "#{FinancialIncentive.year_range(current_year)} - current"
   end
 
   def physics

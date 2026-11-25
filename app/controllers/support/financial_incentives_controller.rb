@@ -23,7 +23,7 @@ module Support
 
       redirect_to_year(
         success: {
-          title: t(".success.title", year_range: Find::CycleTimetable.cycle_year_range(year)),
+          title: t(".success.title", year_range: FinancialIncentive.year_range(year)),
           body: t(".success.body"),
         },
       )

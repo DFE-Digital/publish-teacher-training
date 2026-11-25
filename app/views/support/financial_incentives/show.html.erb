@@ -1,10 +1,10 @@
-<% content_for :page_title, t(".page_title", year_range: Find::CycleTimetable.cycle_year_range(@year)) %>
+<% content_for :page_title, t(".page_title", year_range: FinancialIncentive.year_range(@year)) %>
 
 <% content_for :before_content do %>
   <%= govuk_back_link_to(support_financial_incentives_path) %>
 <% end %>
 
-<h1 class="govuk-heading-l"><%= t(".page_title", year_range: Find::CycleTimetable.cycle_year_range(@year)) %></h1>
+<h1 class="govuk-heading-l"><%= t(".page_title", year_range: FinancialIncentive.year_range(@year)) %></h1>
 
 <% if @financial_incentives.none? %>
   <div class="govuk-!-text-align-centre govuk-!-padding-6">

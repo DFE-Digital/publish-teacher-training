@@ -29,7 +29,7 @@ module Support
     end
 
     def financial_incentive_year_label(year)
-      label = Find::CycleTimetable.cycle_year_range(year)
+      label = FinancialIncentive.year_range(year)
       return label unless year == FinancialIncentive.current_year
 
       "#{label} - current"
