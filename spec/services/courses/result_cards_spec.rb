@@ -142,6 +142,38 @@ RSpec.describe Courses::ResultCards do
     end
   end
 
+  # The fee sorts put every salaried and apprenticeship course after the
+  # fee-paying ones, so a provider's would otherwise get a card of its own.
+  context "when sorting by lowest fee" do
+    let(:params) { { order: "fee_uk_ascending" } }
+
+    def create_fee_course(provider:, course_code:, fee:, **attributes)
+      create_course(provider:, course_code:, enrichments: [build(:course_enrichment, :published, fee_uk_eu: fee, fee_international: fee)], **attributes)
+    end
+
+    %w[salary apprenticeship].each do |funding|
+      context "when a provider has a #{funding} course of a subject it also offers for a fee" do
+        before do
+          create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+          create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+          create_course(provider: ashford, course_code: "A002", funding:)
+        end
+
+        it "puts it at the bottom of the provider's card" do
+          expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[B001]])
+        end
+
+        context "when sorting by lowest non-UK fee" do
+          let(:params) { { order: "fee_intl_ascending" } }
+
+          it "puts it at the bottom of the provider's card" do
+            expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[B001]])
+          end
+        end
+      end
+    end
+  end
+
   context "when a provider's subjects are at the same distance" do
     let(:params) { { latitude: 52.4862, longitude: -1.8904, radius: 10, order: "distance" } }
 

@@ -6,12 +6,16 @@ module Courses
   # A card is a run of courses that sit next to each other in the sorted
   # results and have the same training provider and main subject. The sort
   # comes first, so a provider whose courses are split by another provider's
-  # course gets more than one card.
+  # course gets more than one card. The fee sorts are the exception: they put
+  # salaried and apprenticeship courses last, so those join the bottom of their
+  # provider's last fee card for the subject instead.
   #
   # Cards are numbered in the database with window functions over the sorted
   # results, so only the courses on the requested page are loaded.
   class ResultCards
     Row = Data.define(:course_id, :card_number, :total_cards)
+
+    FEE_SORTS = %w[fee_uk_ascending fee_intl_ascending].freeze
 
     def initialize(query:, page:, per_page:)
       @query = query
@@ -24,9 +28,9 @@ module Courses
       @count ||= rows.first&.total_cards || 0
     end
 
-    # The courses on this page's cards, in the order of the search.
+    # The courses on this page's cards, in card order.
     def courses
-      @courses ||= card_numbers.empty? ? [] : @query.scope.where(course: { id: card_numbers.keys }).to_a
+      @courses ||= card_numbers.empty? ? [] : @query.scope.where(course: { id: card_numbers.keys }).sort_by { |course| card_positions.fetch(course.id) }
     end
 
     # The courses on this page, one array per card.
@@ -40,6 +44,10 @@ module Courses
       @card_numbers ||= rows
         .select { |row| row.card_number.between?(first_card, last_card) }
         .to_h { |row| [row.course_id, row.card_number] }
+    end
+
+    def card_positions
+      @card_positions ||= card_numbers.keys.each_with_index.to_h
     end
 
     # A Row for each course on this page, plus the first course in the results
@@ -70,7 +78,7 @@ module Courses
     # Marks each course that starts a new card: the first course, and any
     # course whose provider or main subject differs from the course before it.
     def marked_courses
-      Course.unscoped.from(ranked_courses, :ranked).select(<<~SQL)
+      Course.unscoped.from(positioned_courses, :ranked).select(<<~SQL)
         ranked.id, ranked.position,
         CASE WHEN (provider_id, master_subject_id) IS NOT DISTINCT FROM
                   (LAG(provider_id) OVER (ORDER BY position), LAG(master_subject_id) OVER (ORDER BY position))
@@ -78,11 +86,39 @@ module Courses
       SQL
     end
 
+    def positioned_courses
+      fee_sort? ? salaried_after_fee_courses : ranked_courses
+    end
+
+    # Moves each salaried or apprenticeship course to just after the last fee
+    # course with its provider and main subject. The fee sorts already put it
+    # after every fee course, so ordering by that position, then its own, keeps
+    # it below them. A course with no fee course to join stays where it was.
+    def salaried_after_fee_courses
+      Course.unscoped.from(anchored_courses, :anchored).select(<<~SQL)
+        anchored.id, anchored.provider_id, anchored.master_subject_id,
+        ROW_NUMBER() OVER (ORDER BY COALESCE(anchor, position), position) AS position
+      SQL
+    end
+
+    def anchored_courses
+      Course.unscoped.from(ranked_courses, :ranked).select(<<~SQL)
+        ranked.id, ranked.provider_id, ranked.master_subject_id, ranked.position,
+        CASE WHEN funding <> 'fee'
+             THEN MAX(position) FILTER (WHERE funding = 'fee') OVER (PARTITION BY provider_id, master_subject_id)
+        END AS anchor
+      SQL
+    end
+
     # Each course's position in the search's sort order.
     def ranked_courses
       @query.scope
         .unscope(:select, :order)
-        .select("course.id, course.provider_id, course.master_subject_id, ROW_NUMBER() OVER (ORDER BY #{@query.order_sql}) AS position")
+        .select("course.id, course.provider_id, course.master_subject_id, course.funding, ROW_NUMBER() OVER (ORDER BY #{@query.order_sql}) AS position")
+    end
+
+    def fee_sort?
+      FEE_SORTS.include?(@query.applied_scopes[:order])
     end
 
     def first_card
