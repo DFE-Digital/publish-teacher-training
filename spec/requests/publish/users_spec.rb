@@ -234,6 +234,34 @@ RSpec.describe "Publish provider users", type: :request do
     end
   end
 
+  describe "add user after switching to the next cycle" do
+    let(:next_provider) { create(:provider, :next_recruitment_cycle) }
+    let(:user) { create(:user, providers: [next_provider]) }
+
+    before do
+      next_provider.recruitment_cycle.update!(available_in_publish_from: 1.hour.ago)
+      get publish_provider_recruitment_cycle_path(next_provider.provider_code, next_provider.recruitment_cycle_year)
+    end
+
+    it "uses the session cycle on the check page as well as the new user page" do
+      get new_publish_provider_user_path(provider_code: next_provider.provider_code)
+
+      expect(response).to have_http_status(:ok)
+
+      stash_new_user_form(user)
+
+      get publish_provider_check_user_path(provider_code: next_provider.provider_code)
+
+      expect(response).to have_http_status(:ok)
+
+      put publish_provider_check_user_path(provider_code: next_provider.provider_code),
+          params: { publish_user_form: { email: "ada@example.com" } }
+
+      expect(response).to redirect_to(publish_provider_users_path(next_provider.provider_code))
+      expect(next_provider.users.reload.exists?(email: "ada@example.com")).to be(true)
+    end
+  end
+
   def stash_new_user_form(current_user)
     Publish::UserForm.new(
       current_user,
