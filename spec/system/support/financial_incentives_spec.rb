@@ -264,7 +264,7 @@ private
   end
 
   def and_i_do_not_see_the_incentives_table
-    expect(page).to have_no_css("table")
+    expect(page).to have_no_table
     expect(page).to have_no_content("Bursary")
   end
 
