@@ -37,7 +37,7 @@ module Support
 
     def update
       if @onboarding_request.already_onboarded?
-        redirect_to support_providers_onboarding_form_requests_path, flash: { error: already_onboarded_message }
+        redirect_to support_providers_onboarding_form_requests_path, flash: { error: error_flash(already_onboarded_message) }
         return
       end
 
@@ -46,7 +46,7 @@ module Support
       elsif params[:status] == "reject" && reject_onboarding_request
         redirect_to support_providers_onboarding_form_requests_path, flash: { success: t(".rejected", provider_name: @onboarding_request.provider_name) }
       else
-        redirect_to support_providers_onboarding_form_requests_path, flash: { error: rejection_error_message }
+        redirect_to support_providers_onboarding_form_requests_path, flash: { error: error_flash(rejection_error_message) }
       end
     end
 
@@ -82,6 +82,11 @@ module Support
 
     def already_onboarded_message
       t("support.providers.onboard_from_form_request.already_onboarded")
+    end
+
+    # The error summary reads message from a hash. A plain string leaves the heading with no text.
+    def error_flash(message)
+      { message: }
     end
 
     def onboard_provider

@@ -41,6 +41,22 @@ RSpec.describe "Support onboarding form requests" do
   end
 
   describe "PATCH /support/providers-onboarding-form-requests/:id" do
+    it "shows that the provider has already been onboarded" do
+      provider = create(:provider)
+      onboarding_request = create(
+        :providers_onboarding_form_request,
+        :ready_to_onboard,
+        status: "onboarded",
+        provider:,
+      )
+
+      patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "accept" }
+
+      expect(response).to redirect_to(support_providers_onboarding_form_requests_path)
+      follow_redirect!
+      expect(response.body).to include("This provider has already been onboarded")
+    end
+
     it "links a base onboard error to the onboard actions" do
       onboarding_request = create(:providers_onboarding_form_request, :ready_to_onboard, status: "pending")
 
@@ -82,7 +98,7 @@ RSpec.describe "Support onboarding form requests" do
       patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "reject" }
 
       expect(response).to redirect_to(support_providers_onboarding_form_requests_path)
-      expect(flash[:error]).to eq("This provider has already been onboarded")
+      expect(flash[:error]).to eq({ message: "This provider has already been onboarded" })
       expect(onboarding_request.reload).to be_onboarded
       expect(onboarding_request.provider).to eq(provider)
       expect(provider.reload.users).to be_present
@@ -93,7 +109,7 @@ RSpec.describe "Support onboarding form requests" do
 
       patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "reject" }
 
-      expect(flash[:error]).to eq("This provider has already been onboarded")
+      expect(flash[:error]).to eq({ message: "This provider has already been onboarded" })
       expect(onboarding_request.reload).to be_closed
     end
 
@@ -103,7 +119,7 @@ RSpec.describe "Support onboarding form requests" do
 
       patch support_providers_onboarding_form_request_path(onboarding_request), params: { status: "reject" }
 
-      expect(flash[:error]).to eq("This provider has already been onboarded")
+      expect(flash[:error]).to eq({ message: "This provider has already been onboarded" })
       expect(onboarding_request.reload.provider).to eq(provider)
       expect(onboarding_request).to be_submitted
     end
