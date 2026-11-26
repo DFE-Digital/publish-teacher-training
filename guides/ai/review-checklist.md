@@ -13,10 +13,10 @@ What to check when reviewing a change to this repository, whether a person or an
 
 ### Authorisation and security
 
-- New Publish or API actions are authorised with Pundit, and records are looked up through the signed-in user or provider rather than raw ids from params.
+- New Publish actions are authorised with Pundit, and records are looked up through the signed-in user or provider rather than raw ids from params. The public API allows anonymous reads on purpose, so don't ask for sign-in or ownership checks there.
 - Controllers that skip authentication or authorisation name the actions in `only:`.
 - Redirects to a URL from params or the session use an allow-list and reject protocol-relative URLs (`//example.com`).
-- Nothing writes to the database on a GET request.
+- GET requests don't change business data. Deliberate usage and history writes are fine, such as recording API key use or a candidate's recent searches.
 - No `html_safe` or `raw` on text that could contain user input. User text placed in GOV.UK Notify emails is sanitised.
 - If the code rescues an exception, it still reports it to Sentry. Prefer services that return a result over exceptions for normal outcomes.
 

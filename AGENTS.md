@@ -20,7 +20,7 @@ More detail is in [guides/ai](guides/ai/README.md).
 
 Follow the code around your change. The main patterns:
 
-- **Authorisation:** Pundit. Publish and the API check every action with `after_action :verify_authorized`. Support is for admins only.
+- **Authorisation:** Pundit. Publish checks every action with `after_action :verify_authorized`. The public API (`API::Public::V1`) is open to anonymous reads on purpose, with optional API keys behind the `api_key_authentication` flag. Support is for admins only.
 - **Services:** `include ServicePattern`, called as `Thing.call(...)`. Older services use `#execute`; match neighbouring code in those areas.
 - **Forms:** new forms inherit `ApplicationForm`. Flows that keep state across steps use DfE::Wizard ([guides/wizards.md](guides/wizards.md)).
 - **Soft delete:** Course, Provider and Site use discard. Query with `.kept`. Raw SQL must filter `discarded_at` itself.
