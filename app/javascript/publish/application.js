@@ -1,5 +1,4 @@
 // Entry point for the build script in your package.json
-import jQuery from 'jquery'
 import { initAll } from 'govuk-frontend'
 
 import FilterToggle from './filters'
@@ -12,9 +11,6 @@ import SchoolsChangesController from './controllers/schools_changes_controller'
 import CopyLinkController from './controllers/copy_link_controller'
 import RemoteAutocompleteController from '../shared/remote_autocomplete_controller'
 import CopyCourseContentController from './controllers/copy_course_content_controller'
-
-window.jQuery = jQuery
-window.$ = jQuery
 
 initAll()
 FilterToggle.init()
