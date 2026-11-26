@@ -14,6 +14,10 @@
 
 <%= render "support/providers/navigation" %>
 
+<%= render "support/providers/history/search",
+      path: support_recruitment_cycle_provider_history_index_path(@provider.recruitment_cycle_year, @provider),
+      search: @search %>
+
 <% if @history_entries.any? %>
   <table class="govuk-table govuk-!-font-size-16 app-table--history">
     <thead class="govuk-table__head">
@@ -45,6 +49,8 @@
   </table>
 
   <%= govuk_pagination(pagy: @pagy) %>
+<% elsif @search.present? %>
+  <p class="govuk-body"><%= t(".no_results", search: @search) %></p>
 <% else %>
   <p class="govuk-body"><%= t(".no_changes") %></p>
 <% end %>

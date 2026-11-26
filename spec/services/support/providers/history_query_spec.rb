@@ -215,4 +215,53 @@ RSpec.describe Support::Providers::HistoryQuery do
     expect(entries.first.user_name).to eq("Deleted user")
     expect(entries.first).not_to be_admin
   end
+
+  describe "searching" do
+    subject(:searched) do
+      described_class.for(provider, search:).call.map { |entry| [entry.change_type, entry.course&.course_code, entry.user_name] }
+    end
+
+    let(:other_course) { create(:course, provider:, name: "Mathematics", course_code: "B456") }
+
+    before do
+      create_audit!(auditable: provider, user: admin, changes: { "provider_name" => %w[A B] }, created_at: 4.days.ago)
+      create_audit!(auditable: course, user: provider_user, changes: { "application_status" => %w[open closed] }, created_at: 3.days.ago)
+      create_audit!(
+        auditable: create(:course_enrichment, :published, course:),
+        associated: course,
+        user: admin,
+        changes: { "status" => %w[rolled_over published] },
+        created_at: 2.days.ago,
+      )
+      create_audit!(auditable: other_course, user: admin, changes: { "application_status" => %w[closed open] }, created_at: 1.day.ago)
+    end
+
+    context "with part of a course name in mixed case" do
+      let(:search) { " pRIMa " }
+
+      it "returns the course and enrichment changes for that course" do
+        expect(searched).to eq([
+          [:enrichment_status, "A123", "System"],
+          [:enrichment_status, "A123", "James Turner"],
+          [:application_status, "A123", "Emily Banks"],
+        ])
+      end
+    end
+
+    context "with a course code" do
+      let(:search) { "b456" }
+
+      it "returns the changes for that course" do
+        expect(searched).to eq([[:application_status, "B456", "James Turner"]])
+      end
+    end
+
+    context "with a user name" do
+      let(:search) { "Emily Banks" }
+
+      it "returns the changes that user made" do
+        expect(searched).to eq([[:application_status, "A123", "Emily Banks"]])
+      end
+    end
+  end
 end

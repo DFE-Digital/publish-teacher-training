@@ -7,12 +7,15 @@ module Support
         new(provider:).call
       end
 
-      def self.for(provider)
-        new(provider:)
+      def self.for(provider, search: nil)
+        new(provider:, search:)
       end
 
-      def initialize(provider:)
+      attr_reader :search
+
+      def initialize(provider:, search: nil)
         @provider = provider
+        @search = search.to_s.strip.presence
       end
 
       def call
@@ -21,8 +24,9 @@ module Support
 
       def audits_scope
         Audited::Audit
-          .includes(:user)
           .where(auditable_condition)
+          .then { |audits| search ? audits.and(search_condition) : audits }
+          .includes(:user)
           .order(created_at: :desc, id: :desc)
       end
 
@@ -38,6 +42,23 @@ module Support
     private
 
       attr_reader :provider
+
+      def search_condition
+        audits = Audited::Audit
+        course_ids = matched_course_ids
+
+        audits.where(auditable_type: Course.name, auditable_id: course_ids)
+          .or(audits.where(auditable_type: CourseEnrichment.name, associated_type: Course.name, associated_id: course_ids))
+          .or(audits.where(user_type: User.name, user_id: User.search(search).reorder(nil).select(:id)))
+      end
+
+      def matched_course_ids
+        term = search.downcase
+
+        courses_by_id.values
+          .select { |course| [course.name, course.course_code].any? { |value| value.to_s.downcase.include?(term) } }
+          .map(&:id)
+      end
 
       # Provider/course creates are excluded here so pagy only counts audits that
       # Entry will render. Enrichment creates are kept (e.g. rollover status).
