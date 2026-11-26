@@ -21,11 +21,19 @@
   <%= f.govuk_text_field :provider_name,
   label: { text: "Provider name", size: "s" } %>
 
-  <%= f.govuk_text_field :provider_code,
-    label: { text: t(".provider_code"), size: "s" },
-    hint: { text: t(".provider_code_hint_html") },
-    value: @update_provider_form&.submitted_provider_code || @provider.provider_code,
-    width: 5 %>
+  <% if @provider.has_had_published_course? %>
+    <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+      <%= t(".provider_code") %>
+    </p>
+    <p class="govuk-body"><%= @provider.provider_code %></p>
+    <p class="govuk-hint"><%= t(".provider_code_locked_hint") %></p>
+  <% else %>
+    <%= f.govuk_text_field :provider_code,
+      label: { text: t(".provider_code"), size: "s" },
+      hint: { text: t(".provider_code_hint_html") },
+      value: @update_provider_form&.submitted_provider_code || @provider.provider_code,
+      width: 5 %>
+  <% end %>
 
   <%= f.govuk_text_field :ukprn,
   label: { text: "UK provider reference number (UKPRN)", size: "s" },

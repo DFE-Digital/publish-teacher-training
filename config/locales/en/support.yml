@@ -35,6 +35,7 @@ en:
       edit:
         provider_code: Provider code
         provider_code_hint_html: "Provider code must be exactly 3 characters with at least one number. All letters must be in upper case.<br><br>We’ll check that the provider code is valid and is not already in use on Publish for this recruitment cycle."
+        provider_code_locked_hint: "You cannot change the provider code because this provider has had a published course. Courses are sent to Apply when they are published and remain available there after they are withdrawn."
         provider_code_updated: "Provider code updated to %{provider_code}"
       provider_type:
         lead_school: "School"

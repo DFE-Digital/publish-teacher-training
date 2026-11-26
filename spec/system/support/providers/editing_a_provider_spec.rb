@@ -36,6 +36,13 @@ RSpec.describe "Viewing and editing a provider" do
   end
 
   context "provider code" do
+    scenario "I cannot change the provider code after a course has been published" do
+      given_the_provider_has_a_withdrawn_course
+      when_i_click_on_the_change_link
+      then_i_am_on_the_support_provider_edit_page
+      and_i_cannot_edit_the_provider_code
+    end
+
     scenario "I can change a provider code" do
       when_i_click_on_the_change_link
       then_i_am_on_the_support_provider_edit_page
@@ -153,6 +160,16 @@ private
 
   def then_i_see_the_error_summary
     expect(support_provider_edit_page.error_summary).to be_visible
+  end
+
+  def given_the_provider_has_a_withdrawn_course
+    create(:course, :withdrawn, provider: @provider)
+  end
+
+  def and_i_cannot_edit_the_provider_code
+    expect(page).to have_no_field("Provider code")
+    expect(page).to have_content(@original_provider_code)
+    expect(page).to have_content("You cannot change the provider code because this provider has had a published course. Courses are sent to Apply when they are published and remain available there after they are withdrawn.")
   end
 
   def and_i_see_the_provider_code_hint

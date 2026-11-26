@@ -31,6 +31,36 @@ module Support
           expect(provider.reload.provider_code).to eq("Z99")
         end
 
+        it "saves a new provider code when the provider only has a draft course" do
+          create(:course, provider:)
+
+          expect(subject.save).to be_truthy
+          expect(provider.reload.provider_code).to eq("Z99")
+        end
+
+        it "does not save a new provider code when a course has been published" do
+          create(:course, :published, provider:)
+
+          expect(subject.save).to be_falsey
+          expect(provider.reload.provider_code).to eq("Q10")
+          expect(provider.errors[:provider_code]).to eq(["Provider code cannot be changed because this provider has had a published course"])
+        end
+
+        it "does not save a new provider code when a published course has been withdrawn" do
+          create(:course, :withdrawn, provider:)
+
+          expect(subject.save).to be_falsey
+          expect(provider.reload.provider_code).to eq("Q10")
+          expect(provider.errors[:provider_code]).to eq(["Provider code cannot be changed because this provider has had a published course"])
+        end
+
+        it "does not save a new provider code when a withdrawn course has been discarded" do
+          create(:course, :withdrawn, provider:).discard
+
+          expect(subject.save).to be_falsey
+          expect(provider.reload.provider_code).to eq("Q10")
+        end
+
         it "allows the provider to keep its current code" do
           provider.update!(provider_code: "Z99")
           expect(subject.save).to be_truthy

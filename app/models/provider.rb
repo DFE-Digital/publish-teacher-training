@@ -400,6 +400,11 @@ class Provider < ApplicationRecord
     Provider.joins(:recruitment_cycle).where(recruitment_cycle: { year: Find::CycleTimetable.next_year.to_s }).find_by(provider_code:)
   end
 
+  # Set on publish and kept after withdrawal, including when the course is later discarded.
+  def has_had_published_course?
+    Course.with_discarded.where(provider_id: id).where.not(first_published_at: nil).exists?
+  end
+
 private
 
   def update_courses_program_type

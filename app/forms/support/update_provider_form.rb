@@ -49,6 +49,7 @@ module Support
 
     def provider_code_error
       return unless provider_code_submitted?
+      return :published_course if provider.will_save_change_to_provider_code? && provider.has_had_published_course?
 
       code = submitted_provider_code
       return :wrong_length unless code.length == 3
