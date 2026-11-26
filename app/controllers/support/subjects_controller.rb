@@ -14,10 +14,7 @@ module Support
       subjects = if query.length < 3
                    []
                  else
-                   search_term = "%#{ActiveRecord::Base.sanitize_sql_like(query)}%"
-
-                   Subject
-                     .where("subject_name ILIKE ?", search_term)
+                   matching_subjects(Subject.all, query)
                      .order(:subject_name)
                      .limit(10)
                      .map do |subject|
@@ -54,17 +51,19 @@ module Support
         .includes(:subject_group)
 
       if filter_params[:text_search].present?
-        search_term = ActiveRecord::Base.sanitize_sql_like(
-          filter_params[:text_search],
-        )
-
-        scope = scope.where(
-          "subject_name ILIKE ?",
-          "%#{search_term}%",
-        )
+        scope = matching_subjects(scope, filter_params[:text_search])
       end
 
       scope
+    end
+
+    def matching_subjects(scope, query)
+      search_term = ActiveRecord::Base.sanitize_sql_like(query)
+
+      scope.where(
+        "subject_name ILIKE ?",
+        "%#{search_term}%",
+      )
     end
 
     def filter_params
