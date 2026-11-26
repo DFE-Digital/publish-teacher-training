@@ -9,7 +9,9 @@ RSpec.describe Courses::Query do # rubocop:disable RSpec/SpecFilePathFormat
 
     expect(described_class.call(params: { provider_code: "Q10" })).to include(course)
 
-    Support::UpdateProviderForm.new(provider, attributes: { provider_code: "Z99" }).save
+    # The support form refuses this change once a course has been published.
+    # Find looks courses up through provider_id, so a changed code still matches.
+    provider.update!(provider_code: "Z99")
 
     expect(described_class.call(params: { provider_code: "Z99" })).to include(course)
     expect(described_class.call(params: { provider_code: "Q10" })).not_to include(course)
