@@ -9,7 +9,7 @@ module Support
       course_code name
     ].freeze
 
-    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :is_send, :can_sponsor_student_visa, :can_sponsor_skilled_worker_visa, :accredited_provider_code, :publish_without_schools_allowed)
+    attr_accessor(*FIELDS, :start_date_day, :start_date_month, :start_date_year, :course, :is_send, :accredited_provider_code, :publish_without_schools_allowed)
 
     validate :validate_start_date_format
 
@@ -23,8 +23,6 @@ module Support
         start_date_month: @course.start_date&.month,
         start_date_year: @course.start_date&.year,
         is_send: @course.is_send,
-        can_sponsor_student_visa: @course.can_sponsor_student_visa,
-        can_sponsor_skilled_worker_visa: @course.can_sponsor_skilled_worker_visa,
         accredited_provider_code: @course.accredited_provider_code,
         publish_without_schools_allowed: @course.publish_without_schools_allowed
       )
@@ -77,8 +75,6 @@ module Support
         name:,
         start_date: valid_date?(:start_date) ? start_date : nil,
         is_send: send?,
-        can_sponsor_student_visa:,
-        can_sponsor_skilled_worker_visa:,
         accredited_provider_code:,
         publish_without_schools_allowed: publish_without_schools_allowed?,
       }

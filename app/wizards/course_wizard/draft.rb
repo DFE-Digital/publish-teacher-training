@@ -13,6 +13,7 @@ class CourseWizard
              :secondary_master_subject_id,
              :subordinate_subject_id,
              :can_sponsor_student_visa,
+             :can_sponsor_skilled_worker_visa,
              :visa_sponsorship_application_deadline_required,
              :accredited_provider_code,
              to: :state_store
@@ -42,12 +43,6 @@ class CourseWizard
       return %w[full_time] if tda?
 
       []
-    end
-
-    def can_sponsor_skilled_worker_visa
-      return false if tda? && state_store.can_sponsor_skilled_worker_visa.nil?
-
-      state_store.can_sponsor_skilled_worker_visa
     end
 
     def study_patterns_for_display

@@ -53,6 +53,7 @@ RSpec.describe "Add course wizard with a school whose URN is duplicated", type: 
       study_sites_ids: [study_site.id.to_s],
       start_date: "#{Date::MONTHNAMES[Date.current.month]} #{Find::CycleTimetable.current_year}",
       can_sponsor_student_visa: false,
+      can_sponsor_skilled_worker_visa: false,
       visa_sponsorship_application_deadline_required: false,
     )
   end

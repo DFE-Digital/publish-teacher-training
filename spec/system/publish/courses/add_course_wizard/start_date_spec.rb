@@ -245,6 +245,7 @@ private
       qualification: "undergraduate_degree_with_qts",
       school_uuids: with_school ? [placement_site.uuid] : [],
       study_sites_ids: [study_site.id.to_s],
+      can_sponsor_skilled_worker_visa: false,
     )
   end
 end

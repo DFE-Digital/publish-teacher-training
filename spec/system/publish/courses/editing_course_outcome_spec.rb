@@ -194,7 +194,6 @@ RSpec.describe "Editing course outcome" do
     expect(course.undergraduate_degree_type?).to be(true)
     expect(course.full_time?).to be(true)
     expect(course.funding == "apprenticeship").to be(true)
-    expect(course.can_sponsor_skilled_worker_visa).to be false
     expect(course.can_sponsor_student_visa).to be false
   end
 

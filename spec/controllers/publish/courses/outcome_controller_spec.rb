@@ -67,10 +67,12 @@ RSpec.describe Publish::Courses::OutcomeController do
 
   describe "#update" do
     context "when changing from a QTS to teacher degree apprenticeship course" do
-      it "assigns teacher degree apprenticeship course defaults" do
+      it "assigns teacher degree apprenticeship course defaults and keeps the skilled worker visa answer" do
         course = create(
           :course,
           :resulting_in_qts,
+          :with_salary,
+          :can_sponsor_skilled_worker_visa,
           provider:,
           study_mode: :part_time,
           site_statuses: [build(:site_status, :part_time_vacancies, :findable)],
@@ -87,7 +89,7 @@ RSpec.describe Publish::Courses::OutcomeController do
         course.reload
 
         expect(course.funding).to eq("apprenticeship")
-        expect(course.can_sponsor_skilled_worker_visa).to be(false)
+        expect(course.can_sponsor_skilled_worker_visa).to be(true)
         expect(course.can_sponsor_student_visa).to be(false)
         expect(course.additional_degree_subject_requirements).to be(false)
         expect(course.degree_subject_requirements).to be_nil

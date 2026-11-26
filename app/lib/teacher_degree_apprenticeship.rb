@@ -5,5 +5,7 @@ class TeacherDegreeApprenticeship < Program
     def funding_type
       ActiveSupport::StringInquirer.new("apprenticeship")
     end
+
+    def sponsors_skilled_worker_visa? = true
   end
 end

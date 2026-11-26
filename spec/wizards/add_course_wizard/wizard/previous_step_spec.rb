@@ -268,8 +268,8 @@ RSpec.describe "CourseWizard#previous_step", type: :wizard do
       state_store.write(qualification: "undergraduate_degree_with_qts")
     end
 
-    it "goes back to study sites" do
-      expect(wizard).to have_previous_step(:study_sites)
+    it "goes back to skilled worker visa" do
+      expect(wizard).to have_previous_step(:skilled_worker_visa)
     end
   end
 

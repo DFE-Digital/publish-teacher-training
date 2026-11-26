@@ -3,7 +3,7 @@
 class CourseWizard
   include DfE::Wizard
 
-  TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern skilled_worker_visa].freeze
+  TDA_REVIEW_DEFAULTS = %i[funding_type study_pattern].freeze
 
   attr_accessor :recruitment_cycle_year, :provider_code, :state_key
 
@@ -108,9 +108,7 @@ class CourseWizard
           # School-based providers with multiple accredited partners need
           # to choose who is accrediting the course.
           { when: -> { accredited_provider_selection_required? }, then: :accredited_provider },
-          # TDA goes straight to start date when no accredited provider
-          # selection is required.
-          { when: :undergraduate_degree_with_qts?, then: :start_date },
+          { when: :undergraduate_degree_with_qts?, then: :skilled_worker_visa },
           { when: :salary_based?, then: :skilled_worker_visa },
         ],
         default: :visa_sponsorship,
@@ -119,7 +117,7 @@ class CourseWizard
       graph.add_multiple_conditional_edges(
         from: :accredited_provider,
         branches: [
-          { when: :undergraduate_degree_with_qts?, then: :start_date },
+          { when: :undergraduate_degree_with_qts?, then: :skilled_worker_visa },
           { when: :salary_based?, then: :skilled_worker_visa },
           { when: :fee_based?, then: :visa_sponsorship },
         ],
@@ -236,7 +234,6 @@ class CourseWizard
     anchor_steps = {
       funding_type: :qualifications,
       study_pattern: :funding_type,
-      skilled_worker_visa: :study_sites,
     }
 
     TDA_REVIEW_DEFAULTS.reduce(steps) do |ordered_steps, step_id|

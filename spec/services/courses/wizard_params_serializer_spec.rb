@@ -212,16 +212,6 @@ RSpec.describe Courses::WizardParamsSerializer do
     end
   end
 
-  describe "skilled worker visa defaults" do
-    context "when TDA and skilled worker visa is unset" do
-      let(:state_overrides) { { undergraduate_degree_with_qts?: true, can_sponsor_skilled_worker_visa: nil } }
-
-      it "defaults to cannot sponsor" do
-        expect(params["can_sponsor_skilled_worker_visa"]).to be(false)
-      end
-    end
-  end
-
   describe "site/study-site permutations" do
     context "when ids include blanks" do
       let(:state_overrides) do

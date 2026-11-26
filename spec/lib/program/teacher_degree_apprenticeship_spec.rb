@@ -20,6 +20,6 @@ RSpec.describe TeacherDegreeApprenticeship do
   end
 
   describe ".sponsors_skilled_worker_visa?" do
-    it { expect(described_class.sponsors_skilled_worker_visa?).to be_falsey }
+    it { expect(described_class.sponsors_skilled_worker_visa?).to be(true) }
   end
 end

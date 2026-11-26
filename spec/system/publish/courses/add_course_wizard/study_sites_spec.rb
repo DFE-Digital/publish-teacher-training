@@ -14,12 +14,12 @@ RSpec.describe "Add course wizard study sites step", type: :system do
     then_i_am_taken_to_the_visa_sponsorship_page
   end
 
-  scenario "choosing a study site and continues to start date page when qualification is TDA" do
+  scenario "choosing a study site and continues to skilled worker visa page when qualification is TDA" do
     and_i_have_wizard_state_for_study_sites(qualification: "undergraduate_degree_with_qts")
     when_i_visit_the_wizard_study_sites_page
     and_i_choose_a_study_site_from_the_list
     and_i_click_continue
-    then_i_am_taken_to_the_start_date_page
+    then_i_am_taken_to_the_skilled_worker_visa_page
   end
 
   scenario "choosing a study site and continues to start date page when level is further education" do
@@ -77,6 +77,18 @@ private
         provider_code: provider.provider_code,
         recruitment_cycle_year: provider.recruitment_cycle_year,
         step: :visa_sponsorship,
+        state_key: wizard_state_key,
+      ),
+      ignore_query: true,
+    )
+  end
+
+  def then_i_am_taken_to_the_skilled_worker_visa_page
+    expect(page).to have_current_path(
+      publish_provider_recruitment_cycle_course_wizard_path(
+        provider_code: provider.provider_code,
+        recruitment_cycle_year: provider.recruitment_cycle_year,
+        step: :skilled_worker_visa,
         state_key: wizard_state_key,
       ),
       ignore_query: true,

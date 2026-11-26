@@ -82,7 +82,7 @@ RSpec.describe Program do
 
   describe ".where_sponsor_skilled_worker_visa" do
     it "returns an array of program keys that sponsor skilled worker visas" do
-      expect(described_class.where_sponsor_skilled_worker_visa).to match_array(%i[school_direct_salaried_training_programme pg_teaching_apprenticeship])
+      expect(described_class.where_sponsor_skilled_worker_visa).to match_array(%i[school_direct_salaried_training_programme pg_teaching_apprenticeship teacher_degree_apprenticeship])
     end
   end
 

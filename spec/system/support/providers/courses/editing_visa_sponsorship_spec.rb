@@ -2,105 +2,28 @@
 
 require "rails_helper"
 
-RSpec.describe "Editing visa sponsorship" do
+RSpec.describe "Support course edit has no visa sponsorship question" do
   before do
-    given_i_am_authenticated_as_an_admin_user
-    and_there_is_a_provider_with_courses
-  end
-
-  context "Editing visa sponsorship" do
-    scenario "fee-paying course" do
-      when_i_navigate_to_the_fee_paying_course
-      and_the_skilled_worker_visa_question_is_not_rendered
-      and_i_see_that_the_student_visa_checkbox_is_not_checked
-      and_i_check_the_student_visa_check_box
-      and_i_submit_the_form
-      and_i_navigate_to_the_same_fee_paying_course
-      then_the_student_visa_checkbox_should_be_checked
-    end
-
-    scenario "salaried course" do
-      when_i_navigate_to_the_salaried_course
-      and_the_student_visa_question_is_not_rendered
-      and_i_see_that_the_skilled_worker_visa_checkbox_is_not_checked
-      and_i_check_the_skilled_worker_visa_check_box
-      and_i_submit_the_form
-      and_i_navigate_to_the_same_salaried_course
-      then_the_skilled_worker_visa_checkbox_should_be_checked
-    end
-
-    scenario "apprenticeship course" do
-      when_i_navigate_to_the_apprenticeship_course
-      and_the_student_visa_question_is_not_rendered
-      and_i_see_that_the_skilled_worker_visa_checkbox_is_not_checked
-      and_i_check_the_skilled_worker_visa_check_box
-      and_i_submit_the_form
-      and_i_navigate_to_the_same_apprenticeship_course
-      then_the_skilled_worker_visa_checkbox_should_be_checked
-    end
-  end
-
-  def and_i_submit_the_form
-    click_link_or_button "Update"
-  end
-
-  def and_i_check_the_student_visa_check_box
-    check("support-edit-course-form-can-sponsor-student-visa-true-field")
-  end
-
-  def and_i_check_the_skilled_worker_visa_check_box
-    check("support-edit-course-form-can-sponsor-skilled-worker-visa-true-field")
-  end
-
-  def and_i_see_that_the_student_visa_checkbox_is_not_checked
-    expect(page).to have_unchecked_field("support-edit-course-form-can-sponsor-student-visa-true-field")
-  end
-
-  def and_i_see_that_the_skilled_worker_visa_checkbox_is_not_checked
-    expect(page).to have_unchecked_field("support-edit-course-form-can-sponsor-skilled-worker-visa-true-field")
-  end
-
-  def then_the_student_visa_checkbox_should_be_checked
-    expect(page).to have_checked_field("support-edit-course-form-can-sponsor-student-visa-true-field")
-  end
-
-  def then_the_skilled_worker_visa_checkbox_should_be_checked
-    expect(page).to have_checked_field("support-edit-course-form-can-sponsor-skilled-worker-visa-true-field")
-  end
-
-  def and_the_skilled_worker_visa_question_is_not_rendered
-    expect(page).to have_no_css("#support-edit-course-form-can-sponsor-skilled-worker-visa-true-field")
-  end
-
-  def and_the_student_visa_question_is_not_rendered
-    expect(page).to have_no_css("#support-edit-course-form-can-sponsor-student-visa-true-field")
-  end
-
-  def given_i_am_authenticated_as_an_admin_user
     given_i_am_authenticated(user: create(:user, :admin))
   end
 
-  def provider
-    @provider ||= create(:provider, courses: [build(:course, id: 1, can_sponsor_student_visa: false, funding: "fee"), build(:course, id: 2, funding: "salary"), build(:course, id: 3, funding: "apprenticeship")])
+  scenario "fee-paying course" do
+    when_i_edit(build(:course, funding: "fee"))
+    then_there_is_no_visa_sponsorship_question
   end
 
-  def and_there_is_a_provider_with_courses
-    provider
+  scenario "teacher degree apprenticeship course" do
+    when_i_edit(build(:course, :with_teacher_degree_apprenticeship))
+    then_there_is_no_visa_sponsorship_question
   end
 
-  def when_i_navigate_to_the_apprenticeship_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 3, recruitment_cycle_year: Find::CycleTimetable.current_year)
+  def when_i_edit(course)
+    provider = create(:provider, courses: [course])
+    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: course.id, recruitment_cycle_year: provider.recruitment_cycle_year)
+    expect(page).to have_button("Update")
   end
 
-  def when_i_navigate_to_the_salaried_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 2, recruitment_cycle_year: Find::CycleTimetable.current_year)
+  def then_there_is_no_visa_sponsorship_question
+    expect(page).to have_no_text("Visa sponsorship")
   end
-
-  def when_i_navigate_to_the_fee_paying_course
-    visit edit_support_recruitment_cycle_provider_course_path(provider_id: provider.id, id: 1, recruitment_cycle_year: Find::CycleTimetable.current_year)
-  end
-
-  alias_method :and_i_navigate_to_the_same_fee_paying_course, :when_i_navigate_to_the_fee_paying_course
-  alias_method :and_i_navigate_to_the_same_salaried_course, :when_i_navigate_to_the_salaried_course
-  alias_method :and_i_navigate_to_the_same_apprenticeship_course, :when_i_navigate_to_the_apprenticeship_course
 end

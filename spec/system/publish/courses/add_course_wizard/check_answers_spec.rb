@@ -11,7 +11,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     given_i_have_completed_tda_wizard_state
     when_i_visit_check_answers_page
     then_i_am_taken_to_the_check_answers_page
-    then_i_see_tda_default_rows_without_change_links
+    then_i_see_tda_default_rows_and_the_skilled_worker_visa_answer
 
     tda_changeable_steps.each do |step|
       when_i_click_change_link_for(step)
@@ -112,7 +112,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
     expect(rendered_text.index(@design_technology.subject_name)).to be < rendered_text.index(@design_technology_specialism.subject_name)
   end
 
-  scenario "TDA flow still shows the skilled worker visa default row when study sites are skipped" do
+  scenario "TDA flow still asks the skilled worker visa question when study sites are skipped" do
     given_the_provider_has_no_study_sites
     given_i_have_completed_tda_wizard_state_without_study_sites
     when_i_visit_check_answers_page
@@ -120,8 +120,7 @@ RSpec.describe "Add course wizard check your answers navigation", type: :system 
 
     expect(page).to have_text("Funding type")
     expect(page).to have_text("Study pattern")
-    expect(page).to have_text("Skilled Worker visas")
-    expect(page).to have_text("No - cannot sponsor")
+    expect(page).to have_link("Select if Skilled Worker visas can be sponsored")
   end
 
   scenario "shows the select a study site call to action when provider has no study sites" do
@@ -337,6 +336,7 @@ private
       qualifications
       schools
       study_sites
+      skilled_worker_visa
       start_date
     ]
   end
@@ -447,6 +447,7 @@ private
       study_sites_ids: [study_site.id.to_s],
       start_date: current_cycle_current_month_label(cycle_year: Find::CycleTimetable.current_year),
       can_sponsor_student_visa: false,
+      can_sponsor_skilled_worker_visa: true,
       visa_sponsorship_application_deadline_required: false,
     )
   end
@@ -625,16 +626,15 @@ private
     expect(page).to have_text("No - cannot sponsor")
   end
 
-  def then_i_see_tda_default_rows_without_change_links
+  def then_i_see_tda_default_rows_and_the_skilled_worker_visa_answer
     expect(page).to have_text("Funding type")
     expect(page).to have_text("Salary (apprenticeship)")
     expect(page).to have_text("Study pattern")
     expect(page).to have_text("Full time")
     expect(page).to have_text("Skilled Worker visas")
-    expect(page).to have_text("No - cannot sponsor")
+    expect(page).to have_text("Yes - can sponsor")
     expect(page).to have_no_css("a[href*='return_to_review=funding_type']")
     expect(page).to have_no_css("a[href*='return_to_review=study_pattern']")
-    expect(page).to have_no_css("a[href*='return_to_review=skilled_worker_visa']")
 
     rendered_text = page.text.gsub(/\s+/, " ")
     expect(rendered_text.index("Study site")).to be < rendered_text.index("Skilled Worker visas")
