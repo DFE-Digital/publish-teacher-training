@@ -3383,13 +3383,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "jquery@npm:4.1.0"
-  checksum: 10c0/e4fff455c4f604b64594e14b75ceeb89647bdcc79def4cbaa1d6089d9ae81bdcef6f4dab5a795a196939926e2b81e3fb0a7cd762c736ab4aaddaa308ed6a99d6
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -5360,7 +5353,6 @@ __metadata:
     dfe-autocomplete: "DFE-Digital/dfe-autocomplete#v1.0.0"
     esbuild: "npm:^0.28.2"
     govuk-frontend: "npm:^6.6.0"
-    jquery: "npm:^4.1.0"
     jsdom: "npm:^31.0.1"
     lodash.throttle: "npm:^4.1.1"
     mustache: "npm:^4.2.0"
