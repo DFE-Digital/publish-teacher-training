@@ -3,7 +3,13 @@
   <%= govuk_back_link_to(support_providers_onboarding_form_requests_path) %>
 <% end %>
 <span class="govuk-caption-l"><%= t(".caption") %></span>
-<h1 class="govuk-heading-l"><%= t(".provider_details", form_name: @onboarding_request.form_name) %></h1>
+<h1 class="govuk-heading-l">
+  <%= t(".provider_details", form_name: @onboarding_request.form_name) %>
+  <%= govuk_tag(
+    text: @onboarding_request.status.titleize,
+    colour: status_colour(@onboarding_request.status),
+  ) %>
+</h1>
 <!-- Onboarding Details -->
 <%= govuk_summary_list do |summary_list| %>
   <% summary_list.with_row do |row| %>
