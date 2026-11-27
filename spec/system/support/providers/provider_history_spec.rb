@@ -40,7 +40,48 @@ RSpec.describe "Provider history" do
     then_i_see_the_second_page_of_history
   end
 
+  scenario "I can search the history and clear the search" do
+    and_there_are_history_entries
+    when_i_visit_the_history_page
+    and_i_search_the_history_for("a123")
+    then_i_see_only_the_course_changes
+    when_i_clear_the_search
+    then_i_see_the_provider_change_again
+  end
+
+  scenario "I see a no results message when nothing matches my search" do
+    and_there_are_history_entries
+    when_i_visit_the_history_page
+    and_i_search_the_history_for("Nonexistent")
+    then_i_see_no_results_for("Nonexistent")
+  end
+
 private
+
+  def and_i_search_the_history_for(term)
+    fill_in "Search history", with: term
+    click_link_or_button "Search"
+  end
+
+  def when_i_clear_the_search
+    click_link_or_button "Clear search"
+  end
+
+  def then_i_see_only_the_course_changes
+    expect(page).to have_field("Search history", with: "a123")
+    expect(page).to have_content("Course name changed from")
+    expect(page).to have_content("Applications status changed from")
+    expect(page).to have_no_content("Provider name changed from")
+  end
+
+  def then_i_see_the_provider_change_again
+    expect(page).to have_content("Provider name changed from")
+  end
+
+  def then_i_see_no_results_for(term)
+    expect(page).to have_content("No changes match ‘#{term}’.")
+    expect(page).to have_no_content("No changes have been recorded for this provider.")
+  end
 
   def and_there_are_history_entries
     Audited::Audit.create!(
