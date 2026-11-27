@@ -42,6 +42,7 @@ This repo is home to three services:
 - [Authentication](guides/authentication.md)
 - [API](guides/api.md)
 - [Data dictionary](guides/data-dictionary.md)
+- [Data retention](guides/data-retention.md)
 - [Monitoring](guides/monitoring.md)
 - [Healthchecks](guides/healthchecks.md)
 - [Sidekiq and Redis migration history](guides/adr/0023-complete-sidekiq-and-redis-retirement.md)

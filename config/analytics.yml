@@ -342,6 +342,13 @@ shared:
     - revoked_at
     - created_at
     - updated_at
+  retention_deletion:
+    - id
+    - entity_type
+    - entity_id
+    - deleted_records
+    - deleted_at
+    - created_at
   user:
     - id
     - email
