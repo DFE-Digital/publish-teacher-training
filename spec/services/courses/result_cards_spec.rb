@@ -142,6 +142,131 @@ RSpec.describe Courses::ResultCards do
     end
   end
 
+  # The fee sorts put every salaried and apprenticeship course after the
+  # fee-paying ones, so a provider's would otherwise get a card of its own.
+  context "when sorting by lowest fee" do
+    let(:params) { { order: "fee_uk_ascending" } }
+
+    def create_fee_course(provider:, course_code:, fee:, **attributes)
+      create_course(provider:, course_code:, enrichments: [build(:course_enrichment, :published, fee_uk_eu: fee, fee_international: fee)], **attributes)
+    end
+
+    %w[salary apprenticeship].each do |funding|
+      context "when a provider offers a subject for a fee and as #{funding}" do
+        before do
+          create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+          create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+          create_course(provider: ashford, course_code: "A002", funding:)
+        end
+
+        it "puts it at the bottom of the provider's card" do
+          expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[B001]])
+        end
+
+        context "when sorting by lowest non-UK fee" do
+          let(:params) { { order: "fee_intl_ascending" } }
+
+          it "puts it at the bottom of the provider's card" do
+            expect(card_codes(result_cards.cards)).to eq([%w[A001 A002], %w[B001]])
+          end
+        end
+      end
+    end
+
+    context "when the provider's fee courses are split across 2 cards" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_fee_course(provider: ashford, course_code: "A002", fee: 12_000)
+        create_course(provider: ashford, course_code: "A003", funding: "salary")
+      end
+
+      it "puts the salaried course at the bottom of the last one" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002 A003]])
+      end
+
+      it "shows each course exactly once across the pages" do
+        pages = [1, 2, 3, 4].map { |page| result_cards(page:, per_page: 1) }
+
+        expect(pages.map { |page| card_codes(page.cards) }).to eq([[%w[A001]], [%w[B001]], [%w[A002 A003]], []])
+        expect(pages.map(&:count).uniq).to eq([3])
+      end
+    end
+
+    context "when a provider has several salaried courses of the subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_course(provider: ashford, course_code: "A002", funding: "salary")
+        create_course(provider: ashford, course_code: "A003", funding: "apprenticeship")
+      end
+
+      it "keeps them in the order of the search, under the fee courses" do
+        search_order = Courses::Query.call(params: params.dup).map(&:course_code) & %w[A002 A003]
+
+        expect(card_codes(result_cards.cards)).to eq([["A001", *search_order], %w[B001]])
+      end
+    end
+
+    context "when a provider only has salaried courses of the subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_course(provider: camden, course_code: "C001", funding: "salary")
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+      end
+
+      it "leaves them at the end, on a card of their own" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[C001]])
+      end
+    end
+
+    context "when the provider's salaried course is of another subject" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_fee_course(provider: bexley, course_code: "B001", fee: 10_000)
+        create_course(provider: ashford, course_code: "A002", subject: physics, funding: "salary")
+      end
+
+      it "leaves it at the end, on a card of its own" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002]])
+      end
+    end
+
+    # The cards are counted and numbered over the search's own scope, so the
+    # same provider's courses in another cycle never join a card or the count.
+    context "when the provider has the same courses in the previous cycle" do
+      before do
+        create_fee_course(provider: ashford, course_code: "A001", fee: 9_000)
+        create_course(provider: ashford, course_code: "A002", funding: "salary")
+
+        previous_ashford = create(:provider, provider_name: ashford.provider_name, provider_code: ashford.provider_code, recruitment_cycle: find_or_create(:recruitment_cycle, :previous))
+        create_fee_course(provider: previous_ashford, course_code: "P001", fee: 8_000)
+        create_course(provider: previous_ashford, course_code: "P002", funding: "salary")
+      end
+
+      it "only shows this cycle's courses" do
+        cards = result_cards
+
+        expect(card_codes(cards.cards)).to eq([%w[A001 A002]])
+        expect(cards.count).to eq(1)
+      end
+    end
+
+    context "when sorting by something other than fee" do
+      let(:params) { { order: "course_name_ascending" } }
+
+      before do
+        create_course(provider: ashford, course_code: "A001", name: "Mathematics")
+        create_course(provider: bexley, course_code: "B001", name: "Mathematics (SEND)")
+        create_course(provider: ashford, course_code: "A002", name: "Mathematics with Economics", funding: "salary")
+      end
+
+      it "leaves the salaried course where the sort puts it" do
+        expect(card_codes(result_cards.cards)).to eq([%w[A001], %w[B001], %w[A002]])
+      end
+    end
+  end
+
   context "when a provider's subjects are at the same distance" do
     let(:params) { { latitude: 52.4862, longitude: -1.8904, radius: 10, order: "distance" } }
 
@@ -247,6 +372,8 @@ RSpec.describe Courses::ResultCards do
       context "when ordering by #{order}" do
         let(:params) { { latitude: 52.4862, longitude: -1.8904, radius: 10, order: } }
 
+        # Every course here is fee-paying. Under the fee sorts, a salaried
+        # course can move up to its provider's card, ahead of the search's order.
         it "groups the results in the order of the search" do
           cards = result_cards
 
