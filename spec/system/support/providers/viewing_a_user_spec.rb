@@ -68,6 +68,13 @@ private
   def and_i_see_the_users_details_with_last_login
     and_i_see_the_users_details
     expect(support_provider_user_show_page.date_last_signed_in.text).to eq(@user.last_login_date_utc.strftime("%d %B %Y at %I:%M%p"))
-    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(delete_support_recruitment_cycle_provider_user_path(Find::CycleTimetable.current_year, @user.providers.first, @user))
+    expect(support_provider_user_show_page.remove_user_link["href"]).to eq(
+      delete_publish_provider_user_path(
+        provider_code: @user.providers.first.provider_code,
+        id: @user.id,
+        return_to: "support",
+        support_return: { recruitment_cycle_year: Find::CycleTimetable.current_year },
+      ),
+    )
   end
 end

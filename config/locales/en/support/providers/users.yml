@@ -3,10 +3,12 @@ en:
     providers:
       users:
         add_user_in_publish: "Add user in Publish"
+        remove_user_in_publish: "Remove user in Publish"
         provider_user_list:
           name: "Name"
           email: "Email"
           last_signed_in: "Last signed in"
           remove_user: "Remove user"
+          remove_user_in_publish: "Remove user in Publish"
           remove_user_for: "for %{name}"
           never_signed_in: "Never signed in"

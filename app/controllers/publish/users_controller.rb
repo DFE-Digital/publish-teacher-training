@@ -54,7 +54,10 @@ module Publish
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
 
-      if removing_yourself?
+      if returning_to_support?
+        flash[:success] = t(".removed_other", name: provider_user.full_name, provider_name: provider.provider_name)
+        redirect_to support_return_path(support_users_list_params_after_removal)
+      elsif removing_yourself?
         flash[:success] = t(".removed_yourself", provider_name: provider.provider_name)
         redirect_to publish_root_path
       else
@@ -81,5 +84,58 @@ module Publish
       provider_user == current_user
     end
     helper_method :removing_yourself?
+
+    def user_delete_path_with_return
+      delete_publish_provider_user_path(
+        provider_code: params[:provider_code],
+        id: params[:id],
+        **user_delete_flow_params,
+      )
+    end
+    helper_method :user_delete_path_with_return
+
+    def user_delete_flow_params
+      support_return_params.tap do |permitted|
+        permitted[:from] = params[:from] if params[:from].present?
+      end
+    end
+    helper_method :user_delete_flow_params
+
+    def user_delete_return_path
+      if returning_to_support?
+        return return_path if params[:from] == "index"
+
+        support_recruitment_cycle_provider_user_path(
+          provider.recruitment_cycle_year,
+          provider,
+          provider_user,
+        )
+      else
+        publish_provider_user_path(id: params[:id])
+      end
+    end
+    helper_method :user_delete_return_path
+
+    def support_users_list_params_after_removal
+      support_flow_params.dup.tap do |state|
+        next if state[:page].blank?
+
+        page = [state[:page].to_i, last_support_users_page].min
+        if page > 1
+          state[:page] = page
+        else
+          state.delete(:page)
+        end
+      end
+    end
+
+    def last_support_users_page
+      # Association may already be loaded (e.g. via provider_user); reload so the
+      # post-removal count is accurate when clamping the return page.
+      total = provider.users.reload.count
+      return 1 if total.zero?
+
+      (total.to_f / Support::Providers::UsersController::USERS_PER_PAGE).ceil
+    end
   end
 end

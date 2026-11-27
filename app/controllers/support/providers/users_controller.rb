@@ -16,10 +16,6 @@ module Support
         provider_user
       end
 
-      def delete
-        provider_user
-      end
-
       def edit
         provider
         provider_user
@@ -35,12 +31,6 @@ module Support
         else
           render(:edit)
         end
-      end
-
-      def destroy
-        UserAssociationsService::Delete.call(user: provider_user, providers: provider)
-        flash[:success] = I18n.t("success.user_removed")
-        redirect_to support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
       end
 
     private
