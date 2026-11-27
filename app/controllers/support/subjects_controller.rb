@@ -8,6 +8,26 @@ module Support
       @pagy, @subjects = pagy(filtered_subjects)
     end
 
+    def suggest
+      query = params[:query].to_s.strip
+
+      subjects = if query.length < 3
+                   []
+                 else
+                   matching_subjects(Subject.all, query)
+                     .order(:subject_name)
+                     .limit(10)
+                     .map do |subject|
+                       {
+                         code: subject.subject_code,
+                         name: subject.subject_name,
+                       }
+                     end
+                 end
+
+      render json: subjects
+    end
+
     def show; end
 
     def edit; end
@@ -26,14 +46,24 @@ module Support
     end
 
     def filtered_subjects
-      scope = Subject.order(subject_name: :asc).includes(:subject_group)
+      scope = Subject
+        .order(subject_name: :asc)
+        .includes(:subject_group)
 
       if filter_params[:text_search].present?
-        search_term = "%#{filter_params[:text_search]}%"
-        scope = scope.where("subject_name ILIKE ?", search_term)
+        scope = matching_subjects(scope, filter_params[:text_search])
       end
 
       scope
+    end
+
+    def matching_subjects(scope, query)
+      search_term = ActiveRecord::Base.sanitize_sql_like(query)
+
+      scope.where(
+        "subject_name ILIKE ?",
+        "%#{search_term}%",
+      )
     end
 
     def filter_params

@@ -5,5 +5,6 @@ export const FORMATTERS = {
   provider: (result) => ({ ...result, name: `${result.name} (${result.code})` }),
   school: (result) => ({ ...result, append: `(${result.town}, ${result.postcode})` }),
   accredited: (result) => ({ ...result, name: `${result.provider_name} (${result.provider_code})` }),
+  subject: (result) => ({ ...result }),
   location: (result) => (typeof result === 'string' ? { name: result } : { ...result })
 }

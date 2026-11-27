@@ -11,7 +11,11 @@ namespace :support, constraints: { host: Settings.publish_hosts }, defaults: { h
   end
   resources :providers_onboarding_form_requests, only: %i[index new create show update], path: "providers-onboarding-form-requests", as: :providers_onboarding_form_requests
 
-  resources :subjects, except: %i[create destroy]
+  resources :subjects, except: %i[create destroy] do
+    collection do
+      get :suggest
+    end
+  end
   resources :financial_incentives, path: "financial-incentives", only: %i[index edit update] do
     collection do
       post :create_year, path: "create-year"
