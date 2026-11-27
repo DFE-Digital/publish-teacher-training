@@ -17,12 +17,9 @@
 <h1 class="govuk-heading-l"><%= t(".heading") %></h1>
 <% can_edit = editable_by_current_user? %>
 <%= form_with model: onboarding_request,
-              url: publish_provider_onboarding_path(onboarding_request.uuid),
+              url: publish_provider_onboarding_path(onboarding_request.uuid, **support_return_params),
               method: :patch,
               local: true do |f| %>
-  <% if return_to_support? %>
-    <%= hidden_field_tag :return_to, Publish::ProviderOnboardingController::SUPPORT_RETURN_TO %>
-  <% end %>
   <%= f.govuk_error_summary %>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

@@ -62,22 +62,12 @@ module Support
       !(@onboarding_request.already_onboarded? || @onboarding_request.rejected?)
     end
 
-    # with_lock reloads the row. This catches an onboard that commits after update
-    # has already passed the already_onboarded? check above.
     def reject_onboarding_request
-      @onboarding_request.with_lock do
-        next false if @onboarding_request.already_onboarded?
-
-        @onboarding_request.update(status: :rejected)
-      end
+      @onboarding_request.update(status: :rejected)
     end
 
     def rejection_error_message
-      if @onboarding_request.already_onboarded?
-        already_onboarded_message
-      else
-        t(".error_message_html", form_name: @onboarding_request.form_name)
-      end
+      t(".error_message_html", form_name: @onboarding_request.form_name)
     end
 
     def already_onboarded_message
