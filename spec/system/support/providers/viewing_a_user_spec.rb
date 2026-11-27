@@ -72,6 +72,7 @@ private
       delete_publish_provider_user_path(
         provider_code: @user.providers.first.provider_code,
         id: @user.id,
+        from: "show",
         return_to: "support",
         support_return: { recruitment_cycle_year: Find::CycleTimetable.current_year },
       ),

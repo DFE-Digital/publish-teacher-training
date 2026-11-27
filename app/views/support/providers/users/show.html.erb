@@ -52,6 +52,7 @@
         delete_publish_provider_user_path(
           provider_code: @provider.provider_code,
           id: @provider_user.id,
+          from: "show",
           **publish_return_to_support_params(
             recruitment_cycle_year: @provider.recruitment_cycle_year,
           ),

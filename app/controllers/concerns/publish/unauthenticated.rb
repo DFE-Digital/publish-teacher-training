@@ -6,6 +6,7 @@ module Publish
 
     included do
       skip_before_action :authenticate
+      skip_before_action :check_interrupt_redirects
       skip_after_action :verify_authorized
       skip_before_action :authorize_provider
     end

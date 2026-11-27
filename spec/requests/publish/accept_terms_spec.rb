@@ -44,4 +44,22 @@ RSpec.describe "Publish accept terms", type: :request do
     expect(response).to redirect_to(publish_root_path)
     expect(user.reload.accepted_terms?).to be(true)
   end
+
+  it "does not carry redirect_back_to into a later sign-in on the same browser" do
+    requested_path = delete_publish_provider_user_path(
+      provider_code: provider.provider_code,
+      id: create(:user, providers: [provider]).id,
+      return_to: "support",
+      support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
+    )
+
+    get requested_path
+    expect(response).to redirect_to(publish_accept_terms_path)
+    expect(session[:redirect_back_to]).to eq(requested_path)
+
+    next_user = create(:user, :admin, providers: [provider])
+    login_user(next_user)
+
+    expect(session[:redirect_back_to]).to be_nil
+  end
 end

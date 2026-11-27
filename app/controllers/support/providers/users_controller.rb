@@ -9,6 +9,7 @@ module Support
         @sort = params[:sort] == "last_signed_in" ? "last_signed_in" : "name"
         users = @sort == "last_signed_in" ? provider.users.by_most_recent_sign_in : provider.users.in_name_order
         @pagy, @users = pagy(users, limit: USERS_PER_PAGE)
+        redirect_to_last_page_if_overflow and return
       end
 
       def show
@@ -34,6 +35,17 @@ module Support
       end
 
     private
+
+      def redirect_to_last_page_if_overflow
+        return unless @pagy.overflow?
+
+        redirect_to support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          sort: params[:sort].presence,
+          page: (@pagy.last if @pagy.last > 1),
+        )
+      end
 
       def user_params
         params.expect(support_user_form: %i[first_name last_name email])

@@ -36,6 +36,8 @@ RSpec.describe "Support provider users" do
     end
 
     it "keeps page and sort on the add user in Publish link" do
+      create_list(:user, 21, providers: [provider])
+
       get support_recruitment_cycle_provider_users_path(
         provider.recruitment_cycle_year,
         provider,
@@ -43,6 +45,7 @@ RSpec.describe "Support provider users" do
         sort: "last_signed_in",
       )
 
+      expect(response).to have_http_status(:ok)
       expect(response.body).to include("support_return%5Brecruitment_cycle_year%5D=#{provider.recruitment_cycle_year}")
       expect(response.body).to include("support_return%5Bpage%5D=2")
       expect(response.body).to include("support_return%5Bsort%5D=last_signed_in")
@@ -76,6 +79,25 @@ RSpec.describe "Support provider users" do
       get support_recruitment_cycle_provider_users_path(provider.recruitment_cycle_year, provider)
 
       expect(response.body.scan('class="govuk-table__row user-row"').size).to eq(20)
+    end
+
+    it "redirects an overflow page to the last page" do
+      create_list(:user, 20, providers: [provider])
+
+      get support_recruitment_cycle_provider_users_path(
+        provider.recruitment_cycle_year,
+        provider,
+        page: 2,
+        sort: "last_signed_in",
+      )
+
+      expect(response).to redirect_to(
+        support_recruitment_cycle_provider_users_path(
+          provider.recruitment_cycle_year,
+          provider,
+          sort: "last_signed_in",
+        ),
+      )
     end
   end
 

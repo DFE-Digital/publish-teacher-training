@@ -272,6 +272,7 @@ RSpec.describe "Publish provider users", type: :request do
       get delete_publish_provider_user_path(
         provider_code: provider.provider_code,
         id: provider_user.id,
+        from: "show",
         return_to: "support",
         support_return: { recruitment_cycle_year: provider.recruitment_cycle_year },
       )
@@ -347,7 +348,7 @@ RSpec.describe "Publish provider users", type: :request do
       expect(provider.users.reload).not_to include(provider_user)
     end
 
-    it "clamps the support return page when removal empties that page" do
+    it "keeps the support return page after removal for Support to handle overflow" do
       # Outer `user` + provider_user + 19 => 21 before removal, 20 after (page 2 is empty).
       create_list(:user, 19, providers: [provider])
 
@@ -365,6 +366,7 @@ RSpec.describe "Publish provider users", type: :request do
         support_recruitment_cycle_provider_users_path(
           provider.recruitment_cycle_year,
           provider,
+          page: 2,
         ),
       )
       expect(provider.users.reload).not_to include(provider_user)
