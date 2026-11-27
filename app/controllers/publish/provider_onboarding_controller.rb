@@ -2,9 +2,8 @@
 
 module Publish
   class ProviderOnboardingController < ApplicationController
-    # Fixed token for support Change links. The redirect target is built from the
-    # onboarding request, so this value cannot be used as an open redirect.
-    SUPPORT_RETURN_TO = "support"
+    include ReturnToSupport
+    include ReturnPaths::ProviderOnboarding
 
     # Public link: skip authentication and authorisation for provider onboarding form
     skip_before_action :authenticate, only: %i[show update submitted check_answers confirm], raise: false
@@ -19,7 +18,7 @@ module Publish
       # Update the onboarding request with submitted form details and validate provider fields.
       # Support users who came from the request page return there. Everyone else goes to check your answers.
       if @onboarding_request.update_form_details(onboarding_request_params)
-        redirect_to after_update_path, flash: support_update_flash
+        redirect_to return_path, flash: support_update_flash
       else
         render :show
       end
@@ -40,7 +39,7 @@ module Publish
     # Page displayed after successful submission of the onboarding form by the provider
     def submitted; end
 
-    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?, :return_to_support?
+    helper_method :pending_for_public?, :admin_user?, :editable_by_current_user?, :show_already_submitted_notice?
 
   private
 
@@ -74,27 +73,13 @@ module Publish
       current_user&.admin?
     end
 
-    # Support users who opened the form from the request page return there after a
-    # successful save. Anyone else, and any other return_to value, continues to check your answers.
-    def return_to_support?
-      admin_user? && params[:return_to] == SUPPORT_RETURN_TO
-    end
-
-    def after_update_path
-      if return_to_support?
-        support_providers_onboarding_form_request_path(@onboarding_request)
-      else
-        check_answers_publish_provider_onboarding_path(uuid: @onboarding_request.uuid)
-      end
-    end
-
     def support_update_flash
       message = support_update_message
       message.present? ? { success: message } : {}
     end
 
     def support_update_message
-      return unless return_to_support?
+      return unless returning_to_support?
 
       labels = t("publish.provider_onboarding.update.fields").filter_map do |attribute, label|
         label if meaningful_support_update?(attribute)

@@ -53,6 +53,18 @@ RSpec.describe Publish::ReturnToSupport do
       end
     end
 
+    context "when nobody is signed in" do
+      before do
+        controller.current_user = nil
+        controller.params = parameters(return_to: "support")
+      end
+
+      it "returns no support_return_params and uses the Publish path" do
+        expect(controller.send(:support_return_params)).to eq({})
+        expect(controller.send(:return_path)).to eq(:publish_path)
+      end
+    end
+
     context "when the user is not an admin" do
       before do
         controller.current_user = non_admin

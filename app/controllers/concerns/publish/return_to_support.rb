@@ -22,7 +22,7 @@ module Publish
   private
 
     def returning_to_support?
-      params[:return_to] == "support" && current_user.admin?
+      params[:return_to] == "support" && current_user&.admin?
     end
 
     def support_flow_params

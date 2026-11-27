@@ -9,7 +9,7 @@ module Support
     def support_onboarding_change_path(onboarding_request, anchor)
       publish_provider_onboarding_path(
         onboarding_request.uuid,
-        return_to: Publish::ProviderOnboardingController::SUPPORT_RETURN_TO,
+        **publish_return_to_support_params,
         anchor:,
       )
     end
