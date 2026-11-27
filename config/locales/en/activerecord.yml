@@ -6,6 +6,8 @@ en:
         email: Email address
         prefix: Key prefix
         created_at: Date created
+      retention_deletion:
+        entity_id: Entity ID
       recruitment_cycle:
         year: Year
         start_date: Start date
@@ -42,6 +44,17 @@ en:
               blank: "Enter a name for the API key"
             submission_token:
               taken: "This API key was already created"
+        retention_deletion:
+          attributes:
+            entity_type:
+              blank: "is required"
+            entity_id:
+              blank: "is required"
+            deleted_records:
+              blank: "are required"
+              invalid: "must map each table name to a list of ID strings"
+            deleted_at:
+              blank: "is required"
         user:
           attributes:
             first_name:

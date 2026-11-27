@@ -400,6 +400,19 @@ A key an email address holds to authenticate against the public API, so its hold
 
 ---
 
+## RetentionDeletion
+
+**Table:** `retention_deletion`
+**Model:** [`app/models/retention_deletion.rb`](../app/models/retention_deletion.rb)
+
+An append-only record of what a data retention policy deleted, streamed to analytics so Data & Insights can apply the same deletion. See [Data retention](data-retention.md).
+
+- `entity_type` and `entity_id`: what the policy deleted, for example `candidate` and its id.
+- `deleted_records`: every row removed, as table name => array of id strings.
+- `deleted_at`: when the deletion happened.
+
+---
+
 ## Course::SchoolBulkUpdateDraft
 
 **Table:** `course_school_bulk_update_draft`

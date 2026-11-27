@@ -369,6 +369,13 @@ erDiagram
 		integer id PK
 		string year
 	}
+	RetentionDeletion {
+		datetime deleted_at
+		jsonb deleted_records
+		text entity_id
+		text entity_type
+		integer id PK
+	}
 	SavedCourse {
 		integer candidate_id FK
 		integer course_id FK
