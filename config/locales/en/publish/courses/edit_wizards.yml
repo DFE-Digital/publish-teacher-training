@@ -1,0 +1,14 @@
+en:
+  publish:
+    courses:
+      edit_wizards:
+        ended: This change has already been saved or has expired. Check the course details.
+        confirm_changes:
+          sections:
+            funding_type: Funding type
+            visa: Visa sponsorship
+        update:
+          committed:
+            funding_type: Funding type updated
+            visa: Visa sponsorship updated
+          failed: Your changes were not saved

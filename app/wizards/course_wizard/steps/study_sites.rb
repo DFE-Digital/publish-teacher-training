@@ -14,7 +14,7 @@ class CourseWizard
       review do |r|
         r.row(
           label: :study_site,
-          label_options: ->(draft) { { count: draft.selected_study_site_ids.count } },
+          label_options: ->(draft) { { count: Array(draft.study_site_ids).count } },
           value: ->(draft) { draft.study_sites.map(&:location_name) },
           format: Publish::CheckAnswers::Formatters::StudySites.new,
           show_when_blank: true,

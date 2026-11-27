@@ -13,7 +13,7 @@ class CourseWizard
       review do |r|
         r.row(
           label: :skilled_worker_visas,
-          value: ->(draft) { draft.can_sponsor_skilled_worker_visa },
+          value: ->(draft) { draft.can_sponsor_skilled_worker_visa_or_default },
           format: Publish::CheckAnswers::Formatters::Bool.new(
             yes_key: "course_wizard.steps.check_answers.answers.can_sponsor",
             no_key: "course_wizard.steps.check_answers.answers.cannot_sponsor",

@@ -75,7 +75,7 @@ module Publish
 
       class StudyPattern
         def call(_value, draft, _view)
-          patterns = draft.study_patterns_for_display
+          patterns = draft.study_modes
           return if patterns.blank?
           return I18n.t("course_wizard.steps.check_answers.answers.full_time_or_part_time") if patterns.sort == %w[full_time part_time]
 

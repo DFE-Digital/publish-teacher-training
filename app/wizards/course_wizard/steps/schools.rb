@@ -4,9 +4,6 @@ class CourseWizard
       include DfE::Wizard::Step
       include CourseWizard::Reviewable
 
-      FUNDING_TYPES_WITH_SALARY = %w[salary apprenticeship].freeze
-      QUALIFICATIONS_WITH_SALARY = %w[undergraduate_degree_with_qts].freeze
-
       attribute :school_uuids
 
       validate :school_uuids_selected
@@ -46,8 +43,10 @@ class CourseWizard
         schools.size > schools_collapse_threshold
       end
 
+      # The schools heading and warning say salaried or unsalaried
+      # (Publish::CourseSchoolsHelper, shared with a saved course)
       def salaried?
-        funding_type.in?(FUNDING_TYPES_WITH_SALARY) || qualification.in?(QUALIFICATIONS_WITH_SALARY)
+        wizard.state_store.employment_based?
       end
 
       def self.permitted_params
@@ -89,14 +88,6 @@ class CourseWizard
 
       def provider
         wizard.provider
-      end
-
-      def funding_type
-        wizard.state_store.funding_type
-      end
-
-      def qualification
-        wizard.state_store.qualification
       end
     end
   end

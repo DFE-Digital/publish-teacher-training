@@ -34,7 +34,6 @@ module Publish
 
     def update
       if @wizard.save_current_step
-        @wizard.clear_stale_specialism_answers
         return complete_course if @wizard.final_step?
 
         redirect_to @wizard.next_step_path
@@ -73,6 +72,7 @@ module Publish
         current_step: current_step_name,
         current_step_params: step_params,
         state_store:,
+        journey: :create,
       ).tap do |wizard|
         wizard.recruitment_cycle_year = params[:recruitment_cycle_year]
         wizard.provider_code = params[:provider_code]

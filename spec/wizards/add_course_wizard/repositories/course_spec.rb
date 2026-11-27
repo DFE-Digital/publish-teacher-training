@@ -18,6 +18,20 @@ RSpec.describe CourseWizard::Repositories::Course do
     )
   end
 
+  it "keeps an edit of a saved course apart from a course draft, and from an edit of another course or unit, with the same state_key" do
+    edit_of = lambda do |course_code, unit|
+      CourseWizard::Repositories::CourseEdit.new(
+        provider_code: "PROV", recruitment_cycle_year: 2026, course_code:, unit:, state_key: "test-state-key", expires_in: 24.hours, cache:,
+      )
+    end
+    edit_of.call("C1", :funding_type).write({ funding_type: "salary" })
+
+    expect(repository.read).to eq({})
+    expect(edit_of.call("C2", :funding_type).read).to eq({})
+    expect(edit_of.call("C1", :visa).read).to eq({})
+    expect(edit_of.call("C1", :funding_type).read).to eq({ funding_type: "salary" })
+  end
+
   describe "#write / #read" do
     it "keeps a single symbol key when merging string-keyed step writes" do
       repository.write({ "level" => "secondary" })
