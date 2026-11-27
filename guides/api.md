@@ -5,10 +5,12 @@ Our API is documented using [OpenAPI](https://swagger.io/specification/). You ca
 ## API key authentication rollout
 
 The database-backed `api_key_authentication` feature flag is off by default
-when no state exists. While disabled, the public API ignores
-`Authorization` headers: it neither looks up keys nor records their use. This
-avoids unexpected 401 responses while providers and third-party services adapt
-their requests.
+when no state exists. While disabled, the public API still serves requests
+whatever the `Authorization` header contains and does not record key use. If the
+header is not an active API key, the response carries an `API-Auth-Notice` header
+and a `Link` header with `rel="deprecation"` warning that such requests will be
+rejected in future. This avoids unexpected 401 responses while providers and
+third-party services adapt their requests.
 
 Activate or deactivate it through the support feature flags page, or run
 `FeatureFlag.activate(:api_key_authentication)` /

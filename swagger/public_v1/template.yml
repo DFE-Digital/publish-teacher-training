@@ -23,7 +23,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      description: "Optional. Header validation is currently disabled and Authorization headers are ignored. When enabled, send an active API key in the Authorization header. Requests without a key are still supported. Never send a key in the URL."
+      description: "Optional. Header validation is currently disabled and Authorization headers are not enforced; an invalid header still succeeds but the response includes an API-Auth-Notice header warning that it will be rejected in future. When enabled, send an active API key in the Authorization header. Requests without a key are still supported. Never send a key in the URL."
   schemas:
     Sort:
       type: array
