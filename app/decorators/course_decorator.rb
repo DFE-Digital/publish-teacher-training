@@ -437,10 +437,6 @@ class CourseDecorator < ApplicationDecorator
     is_withdrawn?
   end
 
-  def cannot_change_skilled_worker_visa?
-    is_withdrawn? || teacher_degree_apprenticeship?
-  end
-
   def show_sponsorship_deadline_required_row?
     visa_sponsorship.in?(%i[can_sponsor_student_visa can_sponsor_skilled_worker_visa])
   end

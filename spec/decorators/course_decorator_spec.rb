@@ -610,32 +610,6 @@ describe CourseDecorator do
     end
   end
 
-  describe "#cannot_change_skilled_worker_visa?" do
-    context "when withdrawn" do
-      before { allow(course).to receive(:is_withdrawn?).and_return(true) }
-
-      it "returns true" do
-        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
-      end
-    end
-
-    context "when course is teacher degree apprenticeship" do
-      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
-
-      it "returns true" do
-        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
-      end
-    end
-
-    context "when none of the conditions are met" do
-      before { allow(course).to receive(:teacher_degree_apprenticeship?).and_return(true) }
-
-      it "returns false" do
-        expect(decorated_course.cannot_change_skilled_worker_visa?).to be true
-      end
-    end
-  end
-
   describe "#a_level_change_path" do
     subject(:a_level_change_path) { course.decorate.a_level_change_path }
 

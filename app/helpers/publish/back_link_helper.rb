@@ -3,7 +3,7 @@
 module Publish
   module BackLinkHelper
     def visa_path(course)
-      if previously_basic_details?
+      if previously_basic_details? || course.teacher_degree_apprenticeship?
         details_publish_provider_recruitment_cycle_course_path(
           course.provider_code,
           course.recruitment_cycle_year,

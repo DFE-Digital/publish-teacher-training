@@ -19,7 +19,6 @@ class CourseWizard
             no_key: "course_wizard.steps.check_answers.answers.cannot_sponsor",
           ),
           show_when_blank: true,
-          changeable: ->(draft) { !draft.tda? },
         )
       end
 

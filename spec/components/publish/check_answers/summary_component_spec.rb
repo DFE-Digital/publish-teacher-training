@@ -60,7 +60,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(row.css(".govuk-summary-list__value").text.strip).to eq("No")
   end
 
-  it "renders TDA defaults for funding, study pattern and skilled worker visa without change links" do
+  it "renders TDA defaults for funding and study pattern without change links and skilled worker visa with one" do
     primary_subject = find_or_create(:primary_subject, :primary)
 
     state_store.write(
@@ -71,6 +71,7 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
       qualification: "undergraduate_degree_with_qts",
       funding_type: nil,
       study_pattern: [],
+      can_sponsor_skilled_worker_visa: "true",
       start_date: "July 2027",
     )
 
@@ -79,12 +80,14 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
         wizard.step(:age_range),
         wizard.step(:qualifications),
         wizard.step(:study_sites),
+        wizard.step(:skilled_worker_visa),
         wizard.step(:start_date),
       ],
     )
     allow(wizard).to receive(:saved?).with(:primary_subjects).and_return(true)
     allow(wizard).to receive(:saved?).with(:age_range).and_return(true)
     allow(wizard).to receive(:saved?).with(:qualifications).and_return(true)
+    allow(wizard).to receive(:saved?).with(:skilled_worker_visa).and_return(true)
     allow(wizard).to receive(:saved?).with(:start_date).and_return(true)
 
     expect(rendered_component).to have_text("Age range")
@@ -96,12 +99,12 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Study pattern")
     expect(rendered_component).to have_text("Full time")
     expect(rendered_component).to have_text("Skilled Worker visas")
-    expect(rendered_component).to have_text("No - cannot sponsor")
+    expect(rendered_component).to have_text("Yes - can sponsor")
     expect(rendered_component).to have_text("Course start date")
     expect(rendered_component).to have_text("July 2027")
     expect(rendered_component).to have_no_css("a[href*='return_to_review=funding_type']")
     expect(rendered_component).to have_no_css("a[href*='return_to_review=study_pattern']")
-    expect(rendered_component).to have_no_css("a[href*='return_to_review=skilled_worker_visa']")
+    expect(rendered_component).to have_css("a[href*='return_to_review=skilled_worker_visa']")
   end
 
   it "renders school and study-site rows with selected values and change links" do
@@ -196,7 +199,6 @@ RSpec.describe Publish::CheckAnswers::SummaryComponent, type: :component do
     expect(rendered_component).to have_text("Yes")
     expect(rendered_component).to have_text("Visa sponsorship deadline")
     expect(rendered_component).to have_text(Date.new(2027, 3, 1).to_fs(:govuk_date))
-    expect(rendered_component).to have_no_link("Change skilled worker visas")
   end
 
   it "renders a prompt for a blank row that is always shown" do

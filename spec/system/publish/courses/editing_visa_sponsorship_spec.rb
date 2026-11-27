@@ -39,6 +39,48 @@ RSpec.describe "Editing visa sponsorship" do
     end
   end
 
+  context "teacher degree apprenticeship course" do
+    scenario "i can update the skilled worker visa from basic details and go back to them" do
+      and_i_am_authenticated_as_a_lead_school_provider_user
+      given_there_is_a_tda_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+      when_i_visit_basic_details
+      and_i_change_the_skilled_worker_visa
+      and_i_choose_yes_to_the_skilled_worker_sponsorship_question
+      and_i_continue
+      then_i_see_the_visa_sponsorship_deadline_required_page
+
+      when_i_click_back
+      and_i_click_back
+      then_i_am_on_basic_details
+      and_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
+    end
+  end
+
+  def given_there_is_a_tda_course_i_want_to_edit_which_cant_sponsor_a_skilled_worker_visa
+    given_a_course_exists(:with_teacher_degree_apprenticeship, :can_not_sponsor_visa, accrediting_provider:)
+  end
+
+  def when_i_visit_basic_details
+    visit details_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, course.course_code)
+  end
+
+  def and_i_change_the_skilled_worker_visa
+    click_link "Change can sponsor skilled_worker visa"
+  end
+
+  def when_i_click_back
+    click_link "Back"
+  end
+  alias_method :and_i_click_back, :when_i_click_back
+
+  def then_i_am_on_basic_details
+    expect(page).to have_current_path(details_publish_provider_recruitment_cycle_course_path(provider.provider_code, provider.recruitment_cycle_year, course.course_code))
+  end
+
+  def and_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
+    then_i_should_see_that_the_skilled_worker_visa_can_be_sponsored
+  end
+
   def and_i_am_authenticated_as_a_lead_school_provider_user
     @user = create(:user, providers: [build(:provider, sites: [build(:site)])])
     @user.providers.first.courses << create(:course, :with_accrediting_provider)

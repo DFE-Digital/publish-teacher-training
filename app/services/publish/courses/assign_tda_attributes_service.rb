@@ -14,7 +14,6 @@ module Publish
           study_mode: "full_time",
           program_type: "teacher_degree_apprenticeship",
           can_sponsor_student_visa: false,
-          can_sponsor_skilled_worker_visa: false,
           degree_grade: "not_required",
           additional_degree_subject_requirements: false,
           degree_subject_requirements: nil,

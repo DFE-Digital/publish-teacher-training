@@ -79,14 +79,15 @@ describe Courses::CreationService do
         "is_send" => "1",
         "age_range_in_years" => "3_to_7",
         "qualification" => "undergraduate_degree_with_qts",
+        "can_sponsor_skilled_worker_visa" => "true",
       }
     end
 
-    it "creates the teacher degree apprenticeship course" do
+    it "creates the teacher degree apprenticeship course with the skilled worker visa answer" do
       expect(subject.program_type).to eq("teacher_degree_apprenticeship")
       expect(subject.funding).to eq("apprenticeship")
       expect(subject.can_sponsor_student_visa?).to be false
-      expect(subject.can_sponsor_skilled_worker_visa?).to be false
+      expect(subject.can_sponsor_skilled_worker_visa?).to be true
       expect(subject.additional_degree_subject_requirements).to be(false)
       expect(subject.degree_grade).to eq("not_required")
       expect(subject.enrichments.last).to be_present
