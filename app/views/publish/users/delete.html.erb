@@ -10,7 +10,7 @@
 <%= content_for :page_title, title %>
 
 <% content_for :before_content do %>
-  <%= govuk_back_link_to(publish_provider_user_path(id: params[:id])) %>
+  <%= govuk_back_link_to(user_delete_return_path) %>
 <% end %>
 
 <div class="govuk-grid-row">
@@ -28,12 +28,12 @@
     </div>
 
     <%= govuk_button_to t(".remove_user"),
-                        delete_publish_provider_user_path,
+                        user_delete_path_with_return,
         method: :delete,
         class: "govuk-button--warning" %>
 
     <p class="govuk-body">
-      <%= govuk_link_to(t("cancel"), publish_provider_user_path(id: params[:id])) %>
+      <%= govuk_link_to(t("cancel"), user_delete_return_path) %>
     </p>
   </div>
 </div>

@@ -12,6 +12,7 @@ module Publish
 
       def create
         update_user
+        reset_session
         start_user_session(user)
         record_first_login
         send_welcome_email

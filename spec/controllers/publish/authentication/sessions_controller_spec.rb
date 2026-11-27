@@ -89,6 +89,18 @@ module Publish
             request_callback
             expect(response).to redirect_to(publish_root_path)
           end
+
+          it "redirects to the saved post sign-in path" do
+            session["post_dfe_sign_in_path"] = "/publish/organisations"
+            request_callback
+            expect(response).to redirect_to("/publish/organisations")
+          end
+
+          it "clears redirect_back_to from the Rails session" do
+            session[:redirect_back_to] = "/publish/organisations/ABC/users"
+            request_callback
+            expect(session[:redirect_back_to]).to be_nil
+          end
         end
 
         context "non existing database user" do

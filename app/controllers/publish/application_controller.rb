@@ -37,13 +37,27 @@ module Publish
       params[:display_errors].present?
     end
 
-    def check_interrupt_redirects(use_redirect_back_to: true)
+    def check_interrupt_redirects
       if current_user && !current_user.accepted_terms?
+        store_location_before_terms_interrupt
         redirect_to publish_accept_terms_path
-      elsif use_redirect_back_to
-        redirect_to session[:redirect_back_to] if session[:redirect_back_to].present?
-        session.delete(:redirect_back_to)
+      elsif session[:redirect_back_to].present?
+        redirect_to session.delete(:redirect_back_to)
       end
+    end
+
+    def store_location_before_terms_interrupt
+      return unless request.get?
+      return if request.path == publish_accept_terms_path
+
+      path = request.fullpath
+      return unless internal_redirect_path?(path)
+
+      session[:redirect_back_to] = path
+    end
+
+    def internal_redirect_path?(path)
+      path.present? && path.start_with?("/") && !path.start_with?("//")
     end
 
     def clear_previous_cycle_year_in_session

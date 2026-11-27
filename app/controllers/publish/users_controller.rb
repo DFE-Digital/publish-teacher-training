@@ -54,7 +54,11 @@ module Publish
     def destroy
       UserAssociationsService::Delete.call(user: provider_user, providers: provider)
 
-      if removing_yourself?
+      if returning_to_support?
+        flash[:success] = t(".removed_other", name: provider_user.full_name, provider_name: provider.provider_name)
+        # Always the Support list after removal — not the deleted user show page.
+        redirect_to support_users_list_path(support_flow_params)
+      elsif removing_yourself?
         flash[:success] = t(".removed_yourself", provider_name: provider.provider_name)
         redirect_to publish_root_path
       else
@@ -81,5 +85,19 @@ module Publish
       provider_user == current_user
     end
     helper_method :removing_yourself?
+
+    def user_delete_path_with_return
+      delete_publish_provider_user_path(
+        provider_code: params[:provider_code],
+        id: params[:id],
+        **support_return_params,
+      )
+    end
+    helper_method :user_delete_path_with_return
+
+    def user_delete_return_path
+      returning_to_support? ? return_path : publish_provider_user_path(id: params[:id])
+    end
+    helper_method :user_delete_return_path
   end
 end

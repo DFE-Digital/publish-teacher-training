@@ -11,7 +11,7 @@ module PageObjects
       element :organisations, "#organisations"
       element :date_last_signed_in, "#date_last_signed_in"
 
-      element :remove_user_link, ".govuk-link", text: "Remove user"
+      element :remove_user_link, ".govuk-link", text: "Remove user in Publish"
 
       element :change_first_name, "a.govuk-link.first_name", text: "Change"
       element :change_last_name, "a.govuk-link.last_name", text: "Change"
