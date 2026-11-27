@@ -822,6 +822,10 @@ en:
             provider_code:
               blank: "Enter provider code"
               taken: "Provider code already taken"
+              wrong_length: "Provider code must be 3 characters"
+              invalid_format: "Enter a valid provider code. It must be exactly 3 characters with at least one number. All letters must be in upper case."
+              in_use: "Provider code already in use. Enter a new provider code"
+              published_course: "Provider code cannot be changed because this provider has had a published course"
             provider_type:
               blank: "Provider type can't be blank"
               format: Accredited provider cannot be a school

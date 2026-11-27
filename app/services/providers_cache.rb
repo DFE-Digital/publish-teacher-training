@@ -3,12 +3,16 @@
 class ProvidersCache
   attr_reader :expires_in
 
+  def self.cache_key(year = Find::CycleTimetable.current_year)
+    "providers:list:#{year}"
+  end
+
   def initialize(expires_in: 1.hour)
     @expires_in = expires_in
   end
 
   def providers_list
-    Rails.cache.fetch("providers:list:#{Find::CycleTimetable.current_year}", expires_in: expires_in) do
+    Rails.cache.fetch(self.class.cache_key, expires_in: expires_in) do
       RecruitmentCycle.current.providers
                       .by_name_ascending
                       .select(:id, :provider_name, :provider_code)
@@ -21,5 +25,9 @@ class ProvidersCache
                         )
                       end
     end
+  end
+
+  def expire_cache
+    Rails.cache.delete(self.class.cache_key)
   end
 end
