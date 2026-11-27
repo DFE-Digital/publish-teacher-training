@@ -27,6 +27,20 @@ RSpec.shared_context "add_course_wizard" do
   let(:state_key) { SecureRandom.uuid }
   let(:recruitment_cycle) { find_or_create(:recruitment_cycle, year: recruitment_cycle_year) }
 
+  # The GET for a "Change" link from check answers: starts a change
+  # journey for the step's unit, as the controller's show action does.
+  def start_change_journey(step_id)
+    course_wizard = CourseWizard.new(
+      state_store:,
+      current_step: step_id,
+      current_step_params: { return_to_review: step_id },
+    )
+    course_wizard.provider_code = provider_code
+    course_wizard.recruitment_cycle_year = recruitment_cycle_year
+    course_wizard.state_key = state_key
+    course_wizard.journey_start_redirect
+  end
+
   let!(:provider) do
     create(
       :provider,

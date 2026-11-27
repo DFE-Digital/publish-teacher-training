@@ -50,6 +50,10 @@ class CourseWizard
         secondary_subject_selected?(SecondarySubject.modern_languages&.id)
       end
 
+      # Context for the visa steps, read through the wizard. dfe-wizard
+      # sub-wizards read context only through the state store.
+      delegate :provider, :recruitment_cycle, :accrediting_provider, to: :wizard
+
     private
 
       def secondary_subject_selected?(subject_id)
