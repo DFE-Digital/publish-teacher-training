@@ -199,4 +199,99 @@ RSpec.describe Courses::ResultCardComponent, type: :component do
       end
     end
   end
+
+  describe "the age range" do
+    def age_range_text(course_code)
+      course_details(course_code)&.at_css("p.govuk-hint")&.text&.squish
+    end
+
+    context "with grouped results" do
+      before { FeatureFlag.activate(:group_search_results) }
+
+      context "when a secondary course is on its own card" do
+        let(:courses) { [fee_course] }
+
+        it "is hidden" do
+          expect(result_card).to have_no_text("Ages")
+        end
+      end
+
+      context "when every secondary course on the card has the same age range" do
+        before { courses.each { |course| course.update!(age_range_in_years: "11_to_16") } }
+
+        it "is hidden on every course" do
+          expect(result_card).to have_no_text("Ages")
+        end
+      end
+
+      context "when the secondary courses on the card have different age ranges" do
+        before do
+          fee_course.update!(age_range_in_years: "11_to_16")
+          salaried_course.update!(age_range_in_years: "11_to_18")
+        end
+
+        it "shows each course's own age range" do
+          expect(age_range_text("M001")).to eq("Ages 11 to 16")
+          expect(age_range_text("M002")).to eq("Ages 11 to 18")
+        end
+      end
+
+      # Design's 7 October mock-up shows the age range on every course once
+      # any of them differs, not only on the one that's different.
+      context "when only one course on the card has a different age range" do
+        let(:courses) do
+          [fee_course, salaried_course] + %w[M003 M004 M005].map do |course_code|
+            create(:course, :secondary, provider:, name: "Mathematics", course_code:, subjects: [mathematics])
+          end
+        end
+
+        before { fee_course.update!(age_range_in_years: "14_to_19") }
+
+        it "shows the age range on every course" do
+          expect(age_range_text("M001")).to eq("Ages 14 to 19")
+          %w[M002 M003 M004 M005].each { |course_code| expect(age_range_text(course_code)).to eq("Ages 11 to 18") }
+        end
+      end
+
+      context "with primary courses" do
+        let(:primary) { find_or_create(:primary_subject, :primary) }
+        let(:courses) do
+          %w[P001 P002].map do |course_code|
+            create(:course, :primary, provider:, name: "Primary", course_code:, age_range_in_years: "5_to_11", subjects: [primary])
+          end
+        end
+
+        it "shows it on every course, even when they share it" do
+          expect(age_range_text("P001")).to eq("Ages 5 to 11")
+          expect(age_range_text("P002")).to eq("Ages 5 to 11")
+        end
+
+        context "when a primary course is on its own card" do
+          let(:courses) { [create(:course, :primary, provider:, age_range_in_years: "5_to_11", subjects: [primary])] }
+
+          it "shows it" do
+            expect(result_card).to have_text("Ages 5 to 11")
+          end
+        end
+      end
+
+      context "when a further education course is on its own card" do
+        let(:courses) { [create(:course, :further_education, provider:, age_range_in_years: "14_to_19")] }
+
+        it "shows it" do
+          expect(result_card).to have_text("Ages 14 to 19")
+        end
+      end
+    end
+
+    context "without grouped results" do
+      let(:courses) { [fee_course] }
+
+      before { fee_course.update!(age_range_in_years: "11_to_16") }
+
+      it "shows it on a secondary course, as today" do
+        expect(result_card).to have_text("Ages 11 to 16")
+      end
+    end
+  end
 end

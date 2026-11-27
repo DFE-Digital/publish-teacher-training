@@ -7,7 +7,9 @@ module Courses
     # With card: false, only the course's details render. Given content, the
     # card shows it in place of the course's details. Together they let a
     # grouped result card list several courses under one provider heading.
-    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new, card: true)
+    # With show_age_range: false, the hint under the course name leaves out the
+    # age range.
+    def initialize(course:, candidate: nil, location: nil, visa_sponsorship: nil, short_address: nil, centre_of_location: false, accredited_provider_names: {}, accredited_provider_conflicts: Set.new, card: true, show_age_range: true)
       @course = course
       @candidate = candidate
       @location = location
@@ -17,6 +19,7 @@ module Courses
       @accredited_provider_names = accredited_provider_names
       @accredited_provider_conflicts = accredited_provider_conflicts
       @card = card
+      @show_age_range = show_age_range
 
       super()
     end
@@ -114,7 +117,7 @@ module Courses
     end
 
     def course_hint
-      age_range = t(".age_range", range: course.age_range_in_years.humanize) if course.age_range_in_years.present?
+      age_range = t(".age_range", range: course.age_range_in_years.humanize) if @show_age_range && course.age_range_in_years.present?
       return age_range unless accredited_provider_name.present? && accredited_provider_under_course?
       return t(".accredited_by", provider: accredited_provider_name) if age_range.blank?
 
