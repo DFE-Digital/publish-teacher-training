@@ -23,4 +23,10 @@
   <% end %>
 <% end %>
 
-<%= govuk_button_link_to(t("support.candidates.details.delete_button"), delete_support_candidate_path(@candidate), class: "govuk-button--warning") %>
+<p class="govuk-body">
+  <%= govuk_link_to(
+        t("support.candidates.details.delete_button"),
+        delete_support_candidate_path(@candidate),
+        class: "govuk-link app-link--destructive",
+      ) %>
+</p>

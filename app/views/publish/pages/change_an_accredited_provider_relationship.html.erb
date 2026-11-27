@@ -26,15 +26,14 @@
     <h2 class="govuk-heading-m">Adding and deleting an accredited provider</h2>
 
     <p class="govuk-body">
-        You need to select which accredited provider ratifies a course before you can publish it. You’ll also need to write a short description about the accredited provider. It’s a good idea to ask the accredited provider to check this content and approve it.
+        You need to select which accredited provider ratifies a course before you can publish it.
     </p>
 
     <p class="govuk-body">Go to the ‘Accredited providers’ tab in your account to:</p>
 
     <ul class="govuk-list govuk-list--bullet">
       <li>add new accredited providers</li>
-      <li>update descriptions</li>
-      <li>remove accredited providers from your account (unpublished courses only)</li>
+      <li>remove accredited providers from your account. You can only do this if they are not attached to any courses</li>
     </ul>
 
     <p class="govuk-body">
@@ -48,7 +47,7 @@
     <h2 class="govuk-heading-m">Changing your accredited provider</h2>
 
     <p class="govuk-body">
-        If the organisation you were working with is no longer an accredited provider, you’ll need to select a different provider before publishing any new courses. You’ll be prompted to do this when <%= govuk_link_to("publishing rolled over courses", roll_over_courses_to_a_new_recruitment_cycle_path) %>.
+        If the organisation you were working with is no longer an accredited provider, you’ll need to select a different accredited provider before publishing any new courses. You’ll be prompted to do this when <%= govuk_link_to("publishing rolled over courses", roll_over_courses_to_a_new_recruitment_cycle_path) %>.
     </p>
 
     <p class="govuk-body">
@@ -58,7 +57,7 @@
     </p>
 
     <p class="govuk-body">
-      <%= govuk_link_to("Read more about forming partnerships to provide initial teacher training (ITT)", t("links.initial_teacher_training_forming_partnerships")) %>.
+      You can read more about forming partnerships in the <%= govuk_link_to("ITT handbook", t("links.initial_teacher_training_forming_partnerships")) %>.
     </p>
 
   </div>

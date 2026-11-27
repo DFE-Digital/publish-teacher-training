@@ -2,19 +2,19 @@ en:
   support:
     candidates:
       delete:
-        title: Are you sure you want to remove this candidate?
+        title: Are you sure you want to delete this candidate?
         button: Delete this candidate
         cancel: Cancel
         cancel_link: Cancel
-        remove_candidate: Remove candidate
+        remove_candidate: Delete candidate
       destroy:
         deleted_successfully: Candidate deleted
         delete_failed: This candidate could not be deleted
       details:
         email_address: Email address
         created_at: Created at
-        last_logged_in: Last login date
-        never_logged_in: Never logged in
+        last_logged_in: Last signed in
+        never_logged_in: Never signed in
         details: Details
         saved_courses: Saved courses
         notes: Notes

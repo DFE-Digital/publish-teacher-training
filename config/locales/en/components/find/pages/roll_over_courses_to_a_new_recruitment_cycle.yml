@@ -24,5 +24,5 @@ en:
           </p>
         roll_over_recruitment_content_email: We’ll email you at the beginning of September to let you know when we’ve rolled over your courses.
         recruitment_cycle_heading: Recruitment cycle
-        recruitment_cycle_content: "The recruitment cycle is the year in which candidates are applying for courses and are recruited, for example, ‘Recruitment cycle %{cycle}’."
+        recruitment_cycle_content: "The recruitment cycle is the year in which candidates are applying for courses and are recruited."
         academic_year_heading: Academic year

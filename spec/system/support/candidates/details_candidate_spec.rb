@@ -17,7 +17,7 @@ RSpec.describe "Support console Candidates details" do
     then_i_see_tabs_to_saved_courses_and_notes
   end
 
-  scenario "user sees the last login date when a session exists" do
+  scenario "user sees the last signed in date when a session exists" do
     when_a_logged_in_candidate_exists
     and_i_visit_the_candidate_details
     then_i_see_the_last_login_date
@@ -38,7 +38,7 @@ RSpec.describe "Support console Candidates details" do
   def then_i_see_the_details_of_the_candidate
     expect(page).to have_content(@candidate.email_address)
     expect(page).to have_content(@candidate.created_at.to_fs(:govuk_date_and_time))
-    expect(page).to have_content("Never logged in")
+    expect(page).to have_content("Never signed in")
     expect(page).to have_link("Email alerts", href: support_candidate_email_alerts_path(@candidate))
   end
 

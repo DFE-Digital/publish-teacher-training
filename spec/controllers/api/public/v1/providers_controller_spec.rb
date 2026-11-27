@@ -499,7 +499,7 @@ RSpec.describe API::Public::V1::ProvidersController do
       end
     end
 
-    context "provider count" do
+    context "providers" do
       before do
         create_list(:provider, 4)
         get :index, params: {
