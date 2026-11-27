@@ -1,0 +1,12 @@
+---
+description: Use when asked to review a diff, branch or pull request in this repository
+alwaysApply: false
+---
+
+# Code review
+
+When reviewing changes in this repository:
+
+- Read `guides/ai/review-checklist.md` and follow it, including its reporting format.
+- Read `guides/ai/known-traps.md` and the guides or ADRs for the areas the change touches.
+- Don't edit files or post to GitHub during a review unless asked.
